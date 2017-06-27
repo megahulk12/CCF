@@ -10,6 +10,8 @@
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
+	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
+	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<title>Christ's Commission Fellowship</title>
 
@@ -18,7 +20,8 @@
 			background-color: #16A5B8;
 			color: #fff;
 		}
-
+		
+		/* containers*/
 		div {
 			display: block;
 		}
@@ -28,9 +31,16 @@
 			max-width: 1280px;
 			width: 80%;
 		}
+		/*=======END=======*/
 
+		/*logo*/
 		#logo {
 			margin-top: 10px;
+		}
+
+		img#loginlogo {
+			height: 150px;
+			width: 300px;
 		}
 
 		/*
@@ -67,15 +77,56 @@
 			font-size: 13px;
 		}
 
+		/*form*/
+		.endorsement {
+			width:600px;
+		}
+		/*=======END=======*/
+
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
-			color: #424242;
+			color: #777;
 			font-family: proxima-nova;
 			text-transform: uppercase;
 		}
 		/*=======END=======*/
 
-		/*=====FORM BUTTONS=====*/
+		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
+		/* input custom colors*/
+		/*Text inputs*/
+		input:not([type]):focus:not([readonly]),
+		input[type=text]:focus:not([readonly]),
+		input[type=password]:focus:not([readonly]),
+		input[type=email]:focus:not([readonly]),
+		input[type=url]:focus:not([readonly]),
+		input[type=time]:focus:not([readonly]),
+		input[type=date]:focus:not([readonly]),
+		input[type=datetime]:focus:not([readonly]),
+		input[type=datetime-local]:focus:not([readonly]),
+		input[type=tel]:focus:not([readonly]),
+		input[type=number]:focus:not([readonly]),
+		input[type=search]:focus:not([readonly]),
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		input:not([type]):focus:not([readonly])+label,
+		input[type=text]:focus:not([readonly])+label,
+		input[type=password]:focus:not([readonly])+label,
+		input[type=email]:focus:not([readonly])+label,
+		input[type=url]:focus:not([readonly])+label,
+		input[type=time]:focus:not([readonly])+label,
+		input[type=date]:focus:not([readonly])+label,
+		input[type=datetime]:focus:not([readonly])+label,
+		input[type=datetime-local]:focus:not([readonly])+label,
+		input[type=tel]:focus:not([readonly])+label,
+		input[type=number]:focus:not([readonly])+label,
+		input[type=search]:focus:not([readonly])+label,
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+
 		.btn, .btn-large {
 		  text-decoration: none;
 		  color: #777;
@@ -89,9 +140,27 @@
 		  /*border-radius: 20px;*/
 		}
 
-		.dgroup-leader-button {
+		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
+		}
+
+		.profile-next-or-submit-button {
+			margin-right: 9px;
+		}
+
+		/*background-color for icons if focus is inactive*/
+		.input-field .prefix {
+			position: absolute;
+			width: 3rem;
+			font-size: 2rem;
+		    transition: color .2s;
+		    color: #777;
+		}
+
+		/*background-color for icons if focus is active*/
+		.input-field .prefix.active {
+		  color: #16A5B8;
 		}
 
 		/*hover of button*/
@@ -105,6 +174,108 @@
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
 		}
+
+
+		.card-panel {
+		 	 transition: box-shadow .25s;
+		 	 padding: 24px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 border-radius: 2px;
+		 	 background-color: #fff;
+		}
+		/* ============================END=========================== */  
+
+		/*CUSTOM DATEPICKER*/
+		.picker__weekday-display {
+		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
+		 	padding: 10px;
+		 	font-weight: 200;
+		 	letter-spacing: .5;
+		 	font-size: 1rem;
+			margin-bottom: 15px;
+		}
+
+		.picker__date-display {
+			text-align: center;
+		  	background-color: #16A5B8;
+		 	color: #fff;
+		 	padding-bottom: 15px;
+		  	font-weight: 300;
+		}
+
+		.picker__day.picker__day--today {
+		 	color: #16A5B8;
+		}
+
+		.picker__day--selected,
+		.picker__day--selected:hover,
+		.picker--focused .picker__day--selected {
+		  	border-radius: 50%;
+		    -webkit-transform: scale(0.9);
+		          transform: scale(0.9);
+		 	 background-color: #16A5B8;
+		 	 color: #ffffff;
+		}
+
+		.picker__close, .picker__today {
+		  	font-size: 1.1rem;
+		  	padding: 0 1rem;
+		 	color: #16A5B8;
+		}
+		/*==========END==========*/
+
+		/*page progress bar*/
+		.progress {
+		 	 position: relative;
+		 	 height: 8px;
+		 	 display: block;
+		 	 width: 100%;
+		 	 max-width: 200px;
+		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
+		 	 border-radius: 2px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 overflow: hidden;
+		}
+
+		.progress .determinate {
+		  	position: absolute;
+		  	top: 0;
+		  	left: 0;
+		  	bottom: 0;
+		  	background-color: #16A5B8;
+		  	transition: width .3s linear;
+		}
+		/*==========END==========*/
+
+		/*radio buttons*/
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:before,
+		[type="radio"].with-gap:checked + label:after {
+		  	border: 2px solid #16A5B8;
+		}
+
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:after {
+		  	background-color: #16A5B8;
+		}
+
+		/*selects*/
+		.dropdown-content li > a, .dropdown-content li > span {
+		  	font-size: 16px;
+		  	color: #16A5B8;
+		  	display: block;
+		  	line-height: 22px;
+		  	padding: 14px 16px;
+		}
+
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
+		/*==========END==========*/
 
 		.dropdown-content-list {
 		 	 background-color: #fff;	
@@ -222,72 +393,6 @@
 			top: 19px;
 			left: 13px
 		}
-		/* for animation of notification
-		.notifications {
-			animation: notification ease-in-out 2s infinite;
-			/*
-			animation-name: notification;
-			animation-duration: 0.3s;
-			animation-iteration-count: infinite;
-			animation-timing-function: ease-in-out;
-			animation-direction: alternate;
-		}
-
-		@keyframes notification1 {
-			0% { transform: rotate(0deg) }
-			5% { transform: rotate(25deg) }
-			15% { transform: rotate(-17deg) }
-			25% { transform: rotate(13deg) }
-			35% { transform: rotate(-7deg) }
-			45% { transform: rotate(3deg) }
-			55% { transform: rotate(-1deg) }
-			60% { transform: rotate(0deg) }
-			100% { transform: rotate(0deg) }
-		}
-		*/
-		.prefix {
-			color: #16A5B8;
-		}
-
-		.prefix:hover {
-			color: #1bcde4;
-		}
-
-		.dgroup-icons {
-			font-size: 200px;
-		}
-
-		.dgroup-names {
-			font-family: proxima-nova;
-			color: #424242;
-			font-size: 13px;
-			text-transform: uppercase;
-		}
-
-		.dgroup-table-spacing {
-			margin-bottom: 100px;
-		}
-
-		.dgroup-view-profile {
-			position: relative;
-			right: 430px;
-			/* animation
-			animation-name: view-profile;
-			animation-duration: 2s;
-			animation-timing-function: ease-in-out;
-			*/
-		}
-
-		@keyframes view-profile {
-			from {
-				position: relative;
-				right: 0px;
-			}
-			to {
-				position: relative;
-				right: 450px;
-			}
-		}
 	</style>
 
 	<script type="text/javascript">
@@ -296,6 +401,53 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		}); 
+	</script>
+	<script>
+	$(document).ready(function(){
+			$('.datepicker').pickadate({
+				selectMonths: true, // Creates a dropdown to control month
+				selectYears: 15 // Creates a dropdown of 15 years to control year
+			});
+			 
+			$(document).ready(function() {
+				$('select').material_select();
+			}); 
+
+			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
+			$('#receivedChrist').val();
+  			$('#receivedChrist').trigger('autoresize');
+
+			$('#attendCCF').val();
+  			$('#attendCCF').trigger('autoresize');
+
+			$('#regularlyAttendsAt').val();
+  			$('#regularlyAttendsAt').trigger('autoresize');
+
+  			//old version of timepicker
+  			
+  			$('#timepicker1opt1').pickatime({
+  				autoclose: false
+  			});
+
+  			$('#timepicker1opt2').pickatime({
+  				autoclose: false
+  			});
+			
+  			//new version of timepicker
+  			/*
+			$('.timepicker').pickatime({
+				default: 'now', // Set default time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'OK', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: true, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker  
+			});
+			*/
+		});
 	</script>
 
 	<header class="top-nav">
@@ -340,9 +492,71 @@
 	</header>
 
 	<body>
+		<div class="row">
+			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
+				<form method="post" class="endorsement" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+					<div id="page1">
+						<h3 class="center">ENDORSEMENT</h3>
+						<h4 class="center">BAPTISMAL</h4>
+						<div class="row">
+							<div class="input-field col s12">
+								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
+								<label for="BaptismalDate" class>When were you baptized?</label>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" class="validate" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
+								<label for="BaptismalPlace">Where were you baptized?</label>
+							</div>
+							<h4 class="center">DGROUP</h4>
+							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
+								<div class="input-field col s12">
+									<select id="DgroupType" name="DgroupType">
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Youth">Youth</option>
+										<option value="Singles">Singles</option>
+										<option value="Single_Parents">Single Parents</option>
+										<option value="Married">Married</option>
+										<option value="Couples">Couples</option>
+									</select>
+									<label>Type of Dgroup</label>
+								</div>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" class="validate" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress'>
+								<label for="AgeBracket">Age Bracket</label>
+							</div>
+							<h4 class="center">MEETING</h4>
+							<div class="row" style="margin-bottom: 0px;">
+								<div class="input-field col s12">
+									<select id="MeetingDay" name="MeetingDay">
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Sunday">Sunnday</option>
+										<option value="Monday">Monday</option>
+										<option value="Tuesday">Tuesday</option>
+										<option value="Wednesday">Wednesday</option>
+										<option value="Thursday">Thursday</option>
+										<option value="Friday">Friday</option>
+										<option value="Saturday">Saturday</option>
+									</select>
+									<label>Day</label>
+								</div>
+							</div>
+							<div class="input-field col s6">
+								<label for="timepicker1opt1">Start Time</label>
+								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+							</div>
+							<div class="input-field col s6">
+								<label for="timepicker1opt2">End Time</label>
+								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</body>
-
-	<script>
-	</script>
 
 </html>

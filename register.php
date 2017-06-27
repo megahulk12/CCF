@@ -300,7 +300,7 @@
 
 			$('#regularlyAttendsAt').val();
   			$('#regularlyAttendsAt').trigger('autoresize');
-
+  			
   			//old version of timepicker
   			
   			$('#timepicker1opt1').pickatime({

@@ -269,24 +269,13 @@
 		}
 
 		.dgroup-view-profile {
-			position: relative;
-			right: 430px;
-			/* animation
 			animation-name: view-profile;
 			animation-duration: 2s;
-			animation-timing-function: ease-in-out;
-			*/
+			animation-timing-function: ease;
 		}
 
 		@keyframes view-profile {
-			from {
-				position: relative;
-				right: 0px;
-			}
-			to {
-				position: relative;
-				right: 450px;
-			}
+			
 		}
 	</style>
 
@@ -343,10 +332,10 @@
 		<div class="container">
 			<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" type="button">I WANT TO BE A DGROUP LEADER</button>
 			<div id="view-profile" style="display: none;">
-				<table class="centered dgroup-table-spacing dgroup-view-profile">
+				<table class="centered dgroup-table-spacing">
 					<tr>
 						<td>
-							<a class="dgroup-names" href="#small-group" onclick="viewProfile(0)"><i class="material-icons prefix dgroup-icons">person</i></a>
+							<a id="member" class="dgroup-names" href="#small-group" onclick="viewProfile(0)"><i class="material-icons prefix dgroup-icons">person</i></a>
 						</td>
 					</tr>
 				</table>
@@ -406,6 +395,7 @@
 			if(page==1) {
 				document.getElementById('small-group').style.display = "none";
 				document.getElementById('view-profile').style.display = "inline";
+				document.getElementById('member').setAttribute("class", "dgroup-names dgroup-view-profile");
 			}
 			else {
 				document.getElementById('small-group').style.display = "inline";

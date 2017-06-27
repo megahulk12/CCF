@@ -212,6 +212,7 @@
 		  	padding: 0 1rem;
 		 	color: #16A5B8;
 		}
+		/*==========END==========*/
 
 		/*page progress bar*/
 		.progress {
@@ -234,6 +235,7 @@
 		  	background-color: #16A5B8;
 		  	transition: width .3s linear;
 		}
+		/*==========END==========*/
 
 		/*radio buttons*/
 		[type="radio"]:checked + label:after,

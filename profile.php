@@ -533,7 +533,7 @@
 			});
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 15 // Creates a dropdown of 15 years to control year
+				selectYears: 50 // Creates a dropdown of 15 years to control year
 			});
 			 
 			$(document).ready(function() {
@@ -545,13 +545,13 @@
 				$('#receivedChrist').trigger('autoresize');
 
 			$('#attendCCF').val();
-				$('#attendCCF').trigger('autoresize');
+			$('#attendCCF').trigger('autoresize');
 
 			$('#regularlyAttendsAt').val();
 			$('#regularlyAttendsAt').trigger('autoresize');
 
 			//old version of timepicker
-			
+			/*
 			$('#timepicker1opt1').pickatime({
 				autoclose: false
 			});
@@ -566,9 +566,9 @@
 			$('#timepicker2opt2').pickatime({
 				autoclose: false
 			});
-		
+			*/
 				//new version of timepicker
-				/*
+				
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
@@ -580,7 +580,7 @@
 				ampmclickable: true, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
-			*/
+			
 		});
 
 		// Initialize collapse button
