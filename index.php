@@ -225,17 +225,17 @@
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
-	<!-- Dropdown Structure Notifications--> 
-		<ul id="notifications" class="dropdown-content dropdown-content-notification" style="max-height: 350px">
+	<!-- Dropdown Structure Notifications-->
+		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">

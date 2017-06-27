@@ -313,13 +313,11 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
