@@ -11,6 +11,11 @@
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
 
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<link rel="stylesheet" type="text/css" href="alerts/themes/google/google.css">
+
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
@@ -229,13 +234,13 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -258,5 +263,19 @@
 	<body>
 
 	</body>
-
+	<?php 
+		if(isset($_POST['submit'])) {
+			echo '
+				<script>
+				// for congratulations of being a dgroup leader
+					swal({
+						title: "Congratulations!",
+						text: "You are now a Dgroup leader!",
+						type: "success",
+						allowEscapeKey: true
+					});
+				</script>
+			';
+		}
+	?>
 </html>

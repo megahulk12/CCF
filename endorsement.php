@@ -465,13 +465,13 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -491,6 +491,7 @@
 		</nav>
 	</header>
 
+	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
@@ -552,11 +553,22 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit" onclick="endorsementComplete()">SUBMIT</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
+
+	<script>
+		function endorsementComplete() {
+			swal({
+				title: "Congratulations!",
+				text: "You are now a Dgroup leader!",
+				type: "success",
+				allowEscapeKey: true
+			});
+		}
+	</script>
 
 </html>

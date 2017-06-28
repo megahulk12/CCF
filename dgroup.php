@@ -2,6 +2,11 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
+
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<link rel="stylesheet" type="text/css" href="alerts/themes/google/google.css">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
@@ -302,13 +307,13 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -330,7 +335,7 @@
 
 	<body>
 		<div class="container">
-			<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" type="button">I WANT TO BE A DGROUP LEADER</button>
+			<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="hidden" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
 			<div id="view-profile" style="display: none;">
 				<table class="centered dgroup-table-spacing">
 					<tr>
@@ -401,6 +406,34 @@
 				document.getElementById('small-group').style.display = "inline";
 				document.getElementById('view-profile').style.display = "none";
 			}
+		}
+
+		function requestLeader() {
+			swal({
+				title: "Success!",
+				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+				type: "success",
+				allowEscapeKey: true
+			},
+				function() {
+					changeToPending();
+				}
+			);
+			
+		}
+
+		function changeToPending() {
+			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
+			document.getElementById("request_leader").style.color = "#777";
+			document.getElementById("request_leader").innerHTML = "PENDING";
+			document.getElementById("request_leader").disabled = true;
+		}
+
+		function changeBack() {
+			document.getElementById("request_leader").style.backgroundColor = "#16A5B8";
+			document.getElementById("request_leader").style.color = "#fff";
+			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
+			document.getElementById("request_leader").disabled = false;
 		}
 	</script>
 
