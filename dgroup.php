@@ -423,9 +423,11 @@
 		}
 
 		function changeToPending() {
+			/*
 			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
 			document.getElementById("request_leader").style.color = "#777";
 			document.getElementById("request_leader").innerHTML = "PENDING";
+			*/
 			document.getElementById("request_leader").disabled = true;
 		}
 
