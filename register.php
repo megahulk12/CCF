@@ -362,23 +362,23 @@
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20">
+								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Lastname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Firstname" id="Firstname" data-length="20" maxlength="20">
+								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">Firstname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Middlename" id="Middlename" data-length="20" maxlength="20">
+								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middlename</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20">
+								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="date" class="datepicker validate" id="Birthdate" name="Birthdate">
+								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
 								<label for="Birthdate" class>Birthdate</label>
 							</div>
 						</div>
@@ -396,7 +396,7 @@
 								</span>
 							</p>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
 								<label for="Citizenship">Citizenship</label>
 							</div>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
@@ -414,15 +414,15 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="mobilenumber" id="mobilenumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
-								<label for="mobilenumber" name="mobilenumber">Mobile Number</label>
+								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
+								<label for="MobileNumber">Mobile Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="email" class="validate" name="email" id="email" data-length="30" maxlength="30"> <!-- increase size of email address -->
-								<label for="email" name="nickname" data-error="Invalid email address">Email Address</label>
+								<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+								<label for="Email" data-error="Invalid email address">Email Address</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="profession" id="profession" data-length="30" maxlength="30">
+								<input type="text" name="profession" id="profession" data-length="30" maxlength="30">
 								<label for="profession" name="profession">Profession/Occupation</label>
 							</div>
 						</div>
@@ -432,51 +432,51 @@
 						<h4 class="center">Home</h4>
 						<div class="row" style="margin-top: 0px;">
 							<div class="input-field col s12">
-								<input type="text" class="validate" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+								<input type="text" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
 								<label for="HomeAddress" style=" font-size:14px;">Address</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+								<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
 								<label for="HomePhoneNumber">Home Phone Number</label>
 							</div>
 							<h4 class="center">Company</h4>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
 								<label for="CompanyName">Company Name</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+								<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
 								<label for="CompanyContactNum">Company Contact Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+								<input type="text" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
 								<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
 							</div>
 							<h4 class="center">School</h4>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
 								<label for="SchoolName">School Name</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+								<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
 								<label for="SchoolContactNum">School Contact Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+								<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
 								<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
 							</div>
 							<h4 class="center">Spouse</h4>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+								<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
 								<label for="SpouseName">Spouse Name</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+								<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
 								<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SpouseAddress" id="SpouseAddress" data-length="50" maxlength="50">
-								<label for="SpouseAddress" style=" font-size:14px;">Spouse Address</label>
+								<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+								<label for="SpouseBirthdate">Birthdate</label>
 							</div>
 						</div>
 					</div>
@@ -485,7 +485,7 @@
 						<h3 class="center">Preferences</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" class="validate" name=Language" id="Language" data-length="20" maxlength="20">
+								<input type="text" name="Language" id="Language" data-length="20" maxlength="20">
 								<label for="Language">Language</label>
 							</div>
 							<h4 class="center">Schedule</h4>
@@ -516,7 +516,7 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+								<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
 								<label for="Option1Venue" style=" font-size:14px;">Venue</label>
 							</div>
 							<h5 class="center">Option 2</h5>
@@ -544,7 +544,7 @@
 									<input type="date" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
 								</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
 								<label for="Option2Venue" style=" font-size:14px;">Venue</label>
 							</div>
 						</div>
@@ -554,19 +554,19 @@
 						<div class="row">
 							<div class="row">
 								<div class="input-field col s12">
-									<textarea id="receivedChrist" class="materialize-textarea validate" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+									<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 									<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
-									<textarea id="attendCCF" class="materialize-textarea validate" name="attendCCF" data-length="300" maxlength="300"></textarea>
+									<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
 									<label for="attendCCF">How long you have been attending CCF?</label>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
-									<textarea id="regularlyAttendsAt" class="materialize-textarea validate" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+									<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
 									<label for="regularlyAttendsAt">Where do you regularly attend?</label>
 								</div>
 							</div>
@@ -577,12 +577,12 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" class="validate" name="username" data-length="45" maxlength="45">
+								<input type="text" name="username" data-length="45" maxlength="45">
 								<label for="icon_prefix" name="lblusername">Username</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" class="validate" name="password" data-length="45" maxlength="45">
+								<input type="password" name="password" data-length="45" maxlength="45">
 								<label for="password" name="lblpassword">Password</label>
 							</div>
 						</div>
@@ -713,3 +713,53 @@
 	<footer>
 	</footer>
 </html>
+
+<?php
+	if(isset($_POST['submit_next'])) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$companyname = $_POST["CompanyName"];
+		$companyaddress = $_POST["CompanyAddress"];
+		$companycontactnum = $_POST["CompanyContactNum"];
+		$schoolname = $_POST["SchoolName"];
+		$schooladdress = $_POST["SchoolAddress"];
+		$schoolcontactnum = $_POST["SchoolContactNum"];
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = $_POST["SpouseBirthdate"];
+		$spousename = $_POST[""];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = $_POST["SpouseBirthdate"];
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = $_POST["SpouseBirthdate"];
+		$spousename = $_POST["SpouseName"];
+
+					
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
+		$sql_school = "INSERT INTO companydetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
+		$sql_spouse = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
+		$sql_preference = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus) VALUES('');";
+		if (mysqli_query($conn, $sql)) {
+			echo '
+			<script>
+				Materialize.toast("Record Inserted", 3000);
+			</script>';
+		}
+		else {
+			mysqli_error($conn);
+		}
+		mysqli_close($conn);
+		echo "<meta http-equiv='refresh' content='0'>";
+		
+	}
+?>

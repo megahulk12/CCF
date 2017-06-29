@@ -228,8 +228,6 @@
 				</form>
 				</main>
 			</div>
-<?php
-?>
 		<footer>
 		</footer>
 	</body>
