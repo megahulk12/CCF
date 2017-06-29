@@ -710,17 +710,71 @@
 		*/
 	}
 	</script>
+	<script>
+		// jquery form validation
+		// source: https://jqueryvalidation.org/
+		$("#registration").validate({
+		rules: {
+			firstname: {
+			required: true
+		},
+			middlename: {
+			required: true
+		},
+			usernname: {
+			required: true,
+			minlength: 5
+		},
+			email: {
+			required: true,
+			email:true
+		},
+			password: {
+			required: true,
+			minlength: 5
+		},
+			cpassword: {
+			required: true,
+			minlength: 5,
+			equalTo: "#password"
+		},
+			curl: {
+			required: true,
+			url:true
+		},
+			crole:"required",
+			ccomment: {
+			required: true,
+			minlength: 15
+		},
+			cgender:"required",
+			cagree:"required",
+		},
+		//For custom messages
+		messages: {
+			uname:{
+			required: "Enter a username",
+			minlength: "Enter at least 5 characters"
+			},
+			curl: "Enter your website",
+		  }
+		});
+	</script>
 	<footer>
 	</footer>
 </html>
 
 <?php
-	if(isset($_POST['submit_next'])) {
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
+	// database connection variables
 
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+
+	if(isset($_POST['submit_next'])) {
+		// database member_tbl field variables
+		// child table fields
 		$companyname = $_POST["CompanyName"];
 		$companyaddress = $_POST["CompanyAddress"];
 		$companycontactnum = $_POST["CompanyContactNum"];
@@ -729,14 +783,36 @@
 		$schoolcontactnum = $_POST["SchoolContactNum"];
 		$spousename = $_POST["SpouseName"];
 		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = $_POST["SpouseBirthdate"];
-		$spousename = $_POST[""];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = $_POST["SpouseBirthdate"];
-		$spousename = $_POST["SpouseName"];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = $_POST["SpouseBirthdate"];
-		$spousename = $_POST["SpouseName"];
+		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+		$language = $_POST["Language"];
+		$venue1 = $_POST["Option1Venue"];
+		$venue2 = $_POST["Option2Venue"];
+		$timepicker1opt1 = $_POST["timepicker1opt1"];
+		$timepicker1opt2 = $_POST["timepicker1opt2"];
+		$timepicker2opt2 = $_POST["timepicker2opt1"];
+		$timepicker2opt2 = $_POST["timepicker2opt2"];
+		$day1 = $_POST["Option1Day"];
+		$day2 = $_POST["Option2Day"];
+
+		// parent table fields
+		$firstname = $_POST["Firstname"];
+		$middlename = $_POST["Middlename"];
+		$lastname = $_POST["Lastname"];
+		$nickname = $_POST["Nickname"];
+		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if ($gender == "Male") $gender = 0;
+		else $gender = 1;
+		$civilstatus = $_POST["CivilStatus"];
+		$citizenship = $_POST["Citizenship"];
+		$homeaddress = $_POST["HomeAddress"];
+		$homephonenumber = $_POST["HomePhoneNumber"];
+		$mobilenumber = $_POST["MobileNumber"];
+		$email = $_POST["Email"];
+		$profession = $_POST["Profession"];
+		$dateJoined = date("Y-m-d");
+		$username = $_POST["username"];
+		$password = $_POST["password"]
+		$memberType = 1; // dgroup member type
 
 					
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -745,10 +821,10 @@
 		}
 
 		$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-		$sql_school = "INSERT INTO companydetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-		$sql_spouse = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-		$sql_preference = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus) VALUES('');";
+		$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($schoolname, $schooladdress, $schoolcontactnum);";
+		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES($spousename, $spousemobilenumber, $spousebirthdate);";		if($language!="" && )
+		$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, preferenceID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', $birthdate, $gender, $civilstatus, $citizenship, $homeaddress, $homephonenumber, $mobilenumber, $email, $profession, $dateJoined, $username, $password, "+getCompanyID()+", "+getSchoolID()+", "+getSpouseID()+");";
 		if (mysqli_query($conn, $sql)) {
 			echo '
 			<script>
@@ -761,5 +837,60 @@
 		mysqli_close($conn);
 		echo "<meta http-equiv='refresh' content='0'>";
 		
+	}
+
+	function getCompanyID() { // gets the recently added company id
+		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$companyID = $row["companyID"];
+			}
+		}
+		return $companyID;
+	}
+
+	function getSchoolID() { // gets the recently added school id
+		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schoolID = $row["schoolID"];
+			}
+		}
+		return $schoolID;
+	}
+
+	function getSpouseID() { // gets the recently added company id
+		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$spouseID = $row["spouseID"];
+			}
+		}
+		return $spouseID;
+	}
+
+	function gePreferenceID() { // gets the recently added company id
+		$query = "SELECT preferenceID FROM preferencedetails_tbl ORDER BY preferenceID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$preferenceID = $row["preferenceID"];
+			}
+		}
+		return $preferenceID;
+	}
+
+	function getMemberID() { // gets the recently added member id
+		$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$memberID = $row["memberID"];
+			}
+		}
+		return $memberID;
 	}
 ?>
