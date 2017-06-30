@@ -1,7 +1,15 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php include('globalfunctions.php'); ?>
+	<?php
+		include('globalfunctions.php'); 
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+	?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -608,11 +616,21 @@
 						<div class="row">
 							<table class="cursor centered" id="table" width="60%">
 								<thead>
-									<th style="width: <?php echo widthRow(3); ?>%">Name of Dgroup Leader</th>
-									<th style="width: <?php echo widthRow(3); ?>%">Day</th>
-									<th style="width: <?php echo widthRow(3); ?>%">Schedule</th>
+									<th style="width: <?php echo widthRow(4); ?>%">Name of Dgroup Leader</th>
+									<th style="width: <?php echo widthRow(4); ?>%">Type of Dgroup</th>
+									<th style="width: <?php echo widthRow(4); ?>%">Day</th>
+									<th style="width: <?php echo widthRow(4); ?>%">Schedule</th>
 								</thead>
+								<?php
+									function countDgroups() {
+										
+									}
+
+									echo ' ';
+								?>
+								<!--
 								<tr id="row1" onclick="cellActive('row1')">
+									<td>Sample 1</td>
 									<td>Sample 1</td>
 									<td>Sample 1</td>
 									<td>Sample 1</td>
@@ -621,12 +639,15 @@
 									<td>Sample 2</td>
 									<td>Sample 2</td>
 									<td>Sample 2</td>
+									<td>Sample 2</td>
 								</tr>
 								<tr id="row3" onclick="cellActive('row3')">
 									<td>Sample 3</td>
 									<td>Sample 3</td>
 									<td>Sample 3</td>
+									<td>Sample 3</td>
 								</tr>
+								-->
 							</table>
 						</div>
 					</div>
@@ -861,13 +882,6 @@
 </html>
 
 <?php
-	// database connection variables
-
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
 	$checkCompanyID = false;
 	$checkSchoolID = false;
 	$checkSpouseID = false;
