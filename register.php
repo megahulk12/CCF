@@ -11,8 +11,13 @@
 	<script src="jquery-3.2.1.js"></script>
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
+	<!-- timepicker link and script -->
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
+
+	<!-- form validation link and script -->
+	<script src="validation/dist/jquery.validate.js"></script>
+	<script src="validation/dist/additional-methods.js"></script>
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
@@ -278,6 +283,12 @@
 		  	border-radius: 0px; /* complete horizontal hightlight bar*/
 		}
 		/* ============================END=========================== */  
+
+		/*validation*/
+		.input-field div.error {
+			font-size: 0.8rem;
+			color: #16A5B8;
+		}
 	</style>
 
 	<script>
@@ -357,7 +368,7 @@
 				<a href="home.php"><img src="resources/CCF Logos3.png" id="loginlogo" /></a>
 			</div>
 			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
-				<form method="post" class="register" id="registration" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="register" id="registration" name="myForm" action> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
@@ -577,13 +588,18 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" name="username" data-length="45" maxlength="45">
-								<label for="icon_prefix" name="lblusername">Username</label>
+								<input type="text" name="username" id="username" data-length="16" maxlength="16">
+								<label for="username" name="lblusername">Username</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="password" data-length="45" maxlength="45">
-								<label for="password" name="lblpassword">Password</label>
+								<input type="password" name="password" id="password" data-length="16" maxlength="16">
+								<label for="password">Password</label>
+							</div>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+								<input type="password" name="cpassword" id="cpassword" data-length="16" maxlength="16">
+								<label for="cpassword">Confirm Password</label>
 							</div>
 						</div>
 					</div>
@@ -710,24 +726,102 @@
 		*/
 	}
 	</script>
-	<script>
+	<script type="text/javascript">
+	/*
 		// jquery form validation
 		// source: https://jqueryvalidation.org/
 		$("#registration").validate({
 		rules: {
-			firstname: {
+			Firstname: {
+			required: true,
+			minlength: 3
+		},
+			Middlename: {
 			required: true
 		},
-			middlename: {
+			Lastname: {
 			required: true
 		},
-			usernname: {
+			Nickname: {
+			required: true
+		},
+			Birthdate: {
+			required: true
+		},
+			Gender:"required",
+			Citizenship: {
+			required: true
+		},
+			CivilStatus: "required",
+			MobileNumber: {
+			required: true
+		},
+			Email: {
+			required: true,
+			email: true
+		},
+			Profession: {
+			required: true
+		},
+			HomeAddress: {
+			required: true
+		},
+			HomePhoneNumber: {
+			required: true
+		},
+			CompanyName: {
+			required: true
+		},
+			CompanyContactNum: {
+			required: true
+		},
+			CompanyAddress: {
+			required: true
+		},
+			SchoolName: {
+			required: true
+		},
+			SchoolContactNum: {
+			required: true
+		},
+			SchoolAddress: {
+			required: true
+		},
+			SpouseName: {
+			required: true
+		},
+			SpouseMobileNumber: {
+			required: true
+		},
+			SpouseBirthdate: {
+			required: true
+		},
+			Language: {
+			required: true
+		},
+			Option1Day: "required",
+			timepicker1opt1: {
+			required: true
+		},
+			timepicker1opt2: {
+			required: true
+		},
+			Option1Venue: {
+			required: true
+		},
+			Option2Day: "required",
+			timepicker2opt1: {
+			required: true
+		},
+			timepicker2opt2: {
+			required: true
+		},
+			Option2Venue: {
+			required: true
+		},
+			username: {
 			required: true,
 			minlength: 5
-		},
-			email: {
-			required: true,
-			email:true
 		},
 			password: {
 			required: true,
@@ -737,28 +831,30 @@
 			required: true,
 			minlength: 5,
 			equalTo: "#password"
-		},
-			curl: {
-			required: true,
-			url:true
-		},
-			crole:"required",
-			ccomment: {
-			required: true,
-			minlength: 15
-		},
-			cgender:"required",
-			cagree:"required",
+		}
 		},
 		//For custom messages
 		messages: {
-			uname:{
-			required: "Enter a username",
-			minlength: "Enter at least 5 characters"
+			username: {
+				required: "Enter a username",
+				minlength: "Enter at least 5 characters"
 			},
-			curl: "Enter your website",
-		  }
-		});
+			password: {
+				required: "Enter a password",
+				minlength: "Enter at least 5 characters"
+			}
+		  },
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+          var placement = $(element).data('error');
+          if (placement) {
+            $(placement).append(error)
+          } else {
+            error.insertAfter(element);
+          }
+        }
+     });
+     */
 	</script>
 	<footer>
 	</footer>
@@ -772,7 +868,12 @@
 	$password = "root";
 	$dbname = "dbccf";
 
-	if(isset($_POST['submit_next'])) {
+	$checkCompanyID = false;
+	$checkSchoolID = false;
+	$checkSpouseID = false;
+	$checkPreferenceID = false;
+	$checkMemberID = false;
+	if(isset($_POST['submit_nextt'])) {
 		// database member_tbl field variables
 		// child table fields
 		$companyname = $_POST["CompanyName"];
@@ -811,7 +912,7 @@
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
 		$username = $_POST["username"];
-		$password = $_POST["password"]
+		$password = $_POST["password"];
 		$memberType = 1; // dgroup member type
 
 					
@@ -819,21 +920,74 @@
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
 		}
-
-		$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-		$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($schoolname, $schooladdress, $schoolcontactnum);";
-		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES($spousename, $spousemobilenumber, $spousebirthdate);";		if($language!="" && )
-		$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
-		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, preferenceID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', $birthdate, $gender, $civilstatus, $citizenship, $homeaddress, $homephonenumber, $mobilenumber, $email, $profession, $dateJoined, $username, $password, "+getCompanyID()+", "+getSchoolID()+", "+getSpouseID()+");";
-		if (mysqli_query($conn, $sql)) {
+		if($companyname != ""){
+			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
+			$checkCompanyID = true;
+			$companyIDField = ", companyID";
+			if (mysqli_query($conn, $sql_company)) {
+				echo '
+				<script>
+					Materialize.toast("Company Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+		}
+		if($schoolname != "") {
+			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($schoolname, $schooladdress, $schoolcontactnum);";
+			$checkSchoolID = true;
+			$schoolIDField = ", schoolID";
+			if (mysqli_query($conn, $sql_school)) {
+				echo '
+				<script>
+					Materialize.toast("School Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+		}
+		if($spousename != "") {
+			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES($spousename, $spousemobilenumber, $spousebirthdate);";
+			$checkSpouseID = true;
+			$spouseIDField = ", spouseID";
+			if (mysqli_query($conn, $sql_spouse)) {
+				echo '
+				<script>
+					Materialize.toast("Spouse Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+		}
+		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
+			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
+			$checkPreferenceID = true;
+			$preferenceIDField = ", preferenceID";
+			if (mysqli_query($conn, $sql_preference)) {
+				echo '
+				<script>
+					Materialize.toast("Preference Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+		}
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password".$companyIDField."".$schoolIDField."".$spouseIDField."".$preferenceIDField.", memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$username', '$password', ".getCompanyID().", ".getSchoolID().", ".getSpouseID().", ".getPreferenceID().", $memberType);";
+		$checkMemberID = true;
+		if (mysqli_query($conn, $sql_company)) {
 			echo '
 			<script>
-				Materialize.toast("Record Inserted", 3000);
+				Materialize.toast("Member Details Inserted", 3000);
 			</script>';
 		}
 		else {
 			mysqli_error($conn);
 		}
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(memberID, dgrou) VALUES();";
 		mysqli_close($conn);
 		echo "<meta http-equiv='refresh' content='0'>";
 		
@@ -847,7 +1001,10 @@
 				$companyID = $row["companyID"];
 			}
 		}
-		return $companyID;
+		if($checkCompanyID)
+			return ", ".$companyID;
+		else
+			return "";
 	}
 
 	function getSchoolID() { // gets the recently added school id
@@ -858,7 +1015,10 @@
 				$schoolID = $row["schoolID"];
 			}
 		}
-		return $schoolID;
+		if($checkSchoolID)
+			return ", ".$schoolID;
+		else
+			return "";
 	}
 
 	function getSpouseID() { // gets the recently added company id
@@ -869,7 +1029,10 @@
 				$spouseID = $row["spouseID"];
 			}
 		}
-		return $spouseID;
+		if($checkSpouseID)
+			return ", ".$spouseID;
+		else
+			return "";
 	}
 
 	function gePreferenceID() { // gets the recently added company id
@@ -880,7 +1043,10 @@
 				$preferenceID = $row["preferenceID"];
 			}
 		}
-		return $preferenceID;
+		if($checkPreferenceID)
+			return ", ".$preferenceID;
+		else
+			return "";
 	}
 
 	function getMemberID() { // gets the recently added member id
@@ -891,6 +1057,9 @@
 				$memberID = $row["memberID"];
 			}
 		}
-		return $memberID;
+		if($checkMemberID)
+			return ", ".$memberID;
+		else
+			return "";
 	}
 ?>
