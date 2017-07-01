@@ -494,10 +494,10 @@
 	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div class="row">
-			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
+			<div class="col s12 z-depth-4 card-panel">
 				<form method="post" class="endorsement" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
-						<h3 class="center">ENDORSEMENT</h3>
+						<h3 class="center">ENDORSEMENT FORM</h3>
 						<h4 class="center">BAPTISMAL</h4>
 						<div class="row">
 							<div class="input-field col s12">

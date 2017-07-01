@@ -623,7 +623,18 @@
 								</thead>
 								<?php
 									function countDgroups() {
-										
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+
+										$sql = "SELECT count(dgroupID) FROM discipleshipgroup_tbl;"
+										if(mysqli_query($conn, $sql)){
+
+										}
+										else {
+
+										}
 									}
 
 									echo ' ';
