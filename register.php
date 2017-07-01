@@ -618,6 +618,7 @@
 						<div class="row">
 							<table class="cursor centered" id="table" width="60%">
 								<thead>
+									<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
 									<th style="width: <?php echo widthRow(4); ?>%">Name of Dgroup Leader</th>
 									<th style="width: <?php echo widthRow(4); ?>%">Type of Dgroup</th>
 									<th style="width: <?php echo widthRow(4); ?>%">Day</th>
@@ -630,15 +631,20 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$sql = "SELECT count(dgroupID) FROM discipleshipgroup_tbl;"
-										if(mysqli_query($conn, $sql)){
-
-										}
-										else {
-
+										$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
+										$result = mysqli_query($conn, $sql);
+										if(mysqli_num_rows($result) > 0){
+											while($row = mysqli_fetch_assoc($result)){
+												$count = $row["numOfDgroup"];
+											}
 										}
 									}
 
+									$sql_dgroups = "SELECT dgroupID, CONCAT(firstname, ' ', lastname) AS fullname, 
+													CASE
+														WHEN gender = '0' THEN 'Male'
+														ELSE 'Female'
+													END AS gender,  ";
 									echo ' ';
 								?>
 								<!--
