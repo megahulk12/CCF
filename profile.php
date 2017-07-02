@@ -1,12 +1,48 @@
 <?php include('session.php'); ?>
 <?php
-	// ====================LOADING DATA====================
-	
-
-	// ====================END====================
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
 
 	// ====================UPDATING DATA====================
+	if(isset($_POST["submit_cpinfo"])) {
+		$lastname = $_POST["Lastname"];
+		$firstname = $_POST["Firstname"];
+		$middlename = $_POST["Middlename"];
+		$nickname = $_POST["Nickname"];
+		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
 
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_cpinfo = "UPDATE member_tbl SET lastName = '$lastname', firstName = '$firstname', middleName = '$middlename', nickName = '$nickname', birthdate = '$birthdate' WHERE memberID = ".$_SESSION['userid'];
+		mysqli_query($conn, $sql_cpinfo);
+	}
+
+	if(isset($_POST["submit_coinfo"])) {
+		$lastname = $_POST["Lastname"];
+		$firstname = $_POST["Firstname"];
+		$middlename = $_POST["Middlename"];
+		$nickname = $_POST["Nickname"];
+		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+	}
+
+	if(isset($_POST["submit_cprefer"])) {
+		
+	}
+
+	if(isset($_POST["submit_cpass"])) {
+		
+	}
 	// ====================END====================
 ?>
 <?xml version = ″1.0″?>
@@ -24,8 +60,11 @@
 	<script src="universal.js"></script>
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
-	<title>Christ's Commission Fellowship</title>
 
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -736,7 +775,7 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_pinfo">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo">SUBMIT</button>
 											</div>
 										</div>
 									</div>
@@ -1092,11 +1131,31 @@
 								<form method="post">
 									<div id="cpass" style="display: none;">
 										<div class="row">
+											<?php
+												// database connection variables
+
+												$servername = "localhost";
+												$username = "root";
+												$password = "root";
+												$dbname = "dbccf";
+												$conn = mysqli_connect($servername, $username, $password, $dbname);
+												if (!$conn) {
+													die("Connection failed: " . mysqli_connect_error());
+												}
+												$query = "SELECT password FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
+												$result = mysqli_query($conn, $query);
+												if(mysqli_num_rows($result) > 0) {
+													while($row = mysqli_fetch_assoc($result)) {
+														$password = $row["password"];
+													}
+												}
+											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="password" data-length="45" maxlength="45">
+												<input type="password" name="password" data-length="16" maxlength="16" value="'.$password.'">
 												<label for="password" name="lblpassword">Password</label>
-											</div>
+											</div>';
+											?>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass">SUBMIT</button>
 											</div>
@@ -1242,3 +1301,18 @@
 	<footer>
 	</footer>
 </html>
+<?php
+	if(isset($_POST["submit_cpinfo"])) { // pop up for updates
+		echo '
+			<script>
+			// profile update success
+				swal({
+					title: "Success!",
+					text: "Profile Updated!",
+					type: "success",
+					allowEscapeKey: true
+				});
+			</script>
+		';
+	}
+?>
