@@ -10,6 +10,7 @@
    
    $login_session = $row['username'];
    $_SESSION['userid'] = $row['memberID'];
+   $_SESSION['username'] = $row['username'];
    $_SESSION['active'] = true;
    
    if(!isset($_SESSION['user'])){

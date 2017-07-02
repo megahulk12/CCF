@@ -1,4 +1,14 @@
 <?php include('session.php'); ?>
+<?php
+	// ====================LOADING DATA====================
+	
+
+	// ====================END====================
+
+	// ====================UPDATING DATA====================
+
+	// ====================END====================
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -668,26 +678,50 @@
 								<form method="post" class="forms">
 									<div id="cpinfo">
 										<div class="row">
-											<div class="input-field col s12">
-												<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20">
-												<label for="Lastname">Lastname</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="validate" name="Firstname" id="Firstname" data-length="20" maxlength="20">
-												<label for="Firstname">Firstname</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="validate" name="Middlename" id="Middlename" data-length="20" maxlength="20">
-												<label for="Middlename">Middlename</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20">
-												<label for="Nickname">Nickname</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
-												<label for="Birthdate" class>Birthdate</label>
-											</div>
+											<?php
+												// database connection variables
+
+												$servername = "localhost";
+												$username = "root";
+												$password = "root";
+												$dbname = "dbccf";
+												$conn = mysqli_connect($servername, $username, $password, $dbname);
+												if (!$conn) {
+													die("Connection failed: " . mysqli_connect_error());
+												}
+												$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
+												$result = mysqli_query($conn, $query);
+												if(mysqli_num_rows($result) > 0) {
+													while($row = mysqli_fetch_assoc($result)) {
+														$lastname = $row["lastName"];
+														$firstname = $row["firstName"];
+														$middlename = $row["middleName"];
+														$nickname = $row["nickName"];
+														$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+													}
+												}
+												echo '
+												<div class="input-field col s12">
+													<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
+													<label for="Lastname">Lastname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" class="validate" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
+													<label for="Firstname">Firstname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" class="validate" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
+													<label for="Middlename">Middlename</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
+													<label for="Nickname">Nickname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'">
+													<label for="Birthdate" class>Birthdate</label>
+												</div>';
+											?>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_pinfo">SUBMIT</button>
 											</div>
