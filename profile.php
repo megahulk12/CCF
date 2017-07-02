@@ -617,6 +617,10 @@
 				document.getElementById("sidenav"+i).setAttribute("class", "waves-effect waves-light btn btn-side-nav");
 			}
 		}
+
+		function setBirthdate(date) {
+			document.getElementById("Birthdate").value = date;
+		}
 	</script>
 
 	<header class="top-nav">
@@ -697,9 +701,15 @@
 														$firstname = $row["firstName"];
 														$middlename = $row["middleName"];
 														$nickname = $row["nickName"];
-														$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+														$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+														//$birthdate = $row["birthdate"];
 													}
 												}
+												echo '
+													<script>
+														setBirthdate("'.$birthdate.'");
+													</script>
+												';
 												echo '
 												<div class="input-field col s12">
 													<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
@@ -716,12 +726,12 @@
 												<div class="input-field col s12">
 													<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'">
-													<label for="Birthdate" class>Birthdate</label>
 												</div>';
 											?>
+											<div class="input-field col s12">
+												<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
+												<label for="Birthdate">Birthdate</label>
+											</div>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_pinfo">SUBMIT</button>
 											</div>
