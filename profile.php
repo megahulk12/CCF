@@ -543,8 +543,7 @@
 			});
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
+				selectYears: 100, // Creates a dropdown of 15 years to control year
 				max: true
 			});
 			 
@@ -702,14 +701,11 @@
 														$middlename = $row["middleName"];
 														$nickname = $row["nickName"];
 														$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+														if(is_null($row["birthdate"]))
+															$birthdate = "";
 														//$birthdate = $row["birthdate"];
 													}
 												}
-												echo '
-													<script>
-														setBirthdate("'.$birthdate.'");
-													</script>
-												';
 												echo '
 												<div class="input-field col s12">
 													<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
@@ -726,12 +722,13 @@
 												<div class="input-field col s12">
 													<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
-												</div>';
+												</div>
+												<div class="input-field col s12">
+													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
+													<label for="Birthdate">Birthdate</label>
+												</div>
+												';
 											?>
-											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
-												<label for="Birthdate">Birthdate</label>
-											</div>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_pinfo">SUBMIT</button>
 											</div>
@@ -741,98 +738,172 @@
 								<form method="post" class="forms">
 									<div id="coinfo" style="display: none;">
 										<div class="row">
-
 											<!-- page 1 -->
 											<div id="coinfo_page1">
+											<?php
+											// database connection variables
+
+											$servername = "localhost";
+											$username = "root";
+											$password = "root";
+											$dbname = "dbccf";
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+											$query = "SELECT (SELECT CASE
+															  WHEN gender = '0' THEN 'Male'
+															  ELSE 'Female'
+															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$gender = $row["gender"];
+													$male = "";
+													$female = "";
+													if($gender == "Male") $male = "checked";
+													else $female = "checked";
+													$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
+													$civilstatus = $row["civilStatus"];
+													if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
+													else if($civilstatus == "Single Parent") $selectedcivilstatus[2] = "selected";
+													else if($civilstatus == "Separated") $selectedcivilstatus[3] = "selected";
+													else if($civilstatus == "Married") $selectedcivilstatus[4] = "selected";
+													else if($civilstatus == "Annulled") $selectedcivilstatus[5] = "selected";
+													else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
+													else $selectedcivilstatus[0] = "selected";
+													$citizenship = $row["citizenship"];
+													$contactnum = $row["contactNum"];
+													$emailad = $row["emailAd"];
+													$occupation = $row["occupation"];
+												}
+											}
+											echo '
 												<p style="margin-top: 40px;">
 													<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-													<input type="radio" id="Gender_Male" name="Gender" value="Male"/>
+													<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.'/>
 													<label for="Gender_Male">Male</label>
-													<input type="radio" id="Gender_Female" name="Gender" value="Female"/>
+													<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.'/>
 													<label for="Gender_Female">Female</label>
 												</p>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+													<input type="text" class="validate" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
 													<label for="Citizenship">Citizenship</label>
 												</div>
 												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
 													<div class="input-field col s12">
 														<select id="CivilStatus" name="CivilStatus">
-															<option value="" disabled selected>Choose your option...</option>
-															<option value="Single">Single</option>
-															<option value="Single Parent">Single Parent</option>
-															<option value="Married">Married</option>
-															<option value="Annulled">Annulled</option>
-															<option value="Separated">Separated</option>
-															<option value="Widow/er">Widow/er</option>
+															<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
+															<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
+															<option value="Single Parent" '.$selectedcivilstatus[2].'>Single Parent</option>
+															<option value="Married" '.$selectedcivilstatus[3].'>Married</option>
+															<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
+															<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
+															<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
 														</select>
 														<label>Civil Status</label>
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="mobilenumber" id="mobilenumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
+													<input type="text" class="validate" name="mobilenumber" id="mobilenumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
 													<label for="mobilenumber" name="mobilenumber">Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" class="validate" name="email" id="email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+													<input type="email" class="validate" name="email" id="email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
 													<label for="email" name="nickname" data-error="Invalid email address">Email Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="profession" id="profession" data-length="30" maxlength="30">
+													<input type="text" class="validate" name="profession" id="profession" data-length="30" maxlength="30" value="'.$occupation.'">
 													<label for="profession" name="profession">Profession/Occupation</label>
-												</div>
+												</div>';
+												?>
 											</div>
 
 											<!-- page 2 -->
 											<div id="coinfo_page2" style="display: none;">
+											<?php
+											// database connection variables
+
+											$servername = "localhost";
+											$username = "root";
+											$password = "root";
+											$dbname = "dbccf";
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+											$query = "SELECT (SELECT CASE
+															  WHEN gender = '0' THEN 'Male'
+															  ELSE 'Female'
+															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$homeaddress = $row["homeAddress"];
+													$homephonenumber = $row["homePhoneNumber"];
+													$companyname = $row["companyName"];
+													$companycontactnum = $row["companyContactNum"];
+													$companyaddress = $row["companyAddress"];
+													$schoolname = $row["schoolName"];
+													$schoolcontactnum = $row["schoolContactNum"];
+													$schooladdress = $row["schoolAddress"];
+													$spousename = $row["spouseName"];
+													$spousecontactnum = $row["spouseContactNum"];
+													$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+													if(is_null($row["spouseBirthdate"]))
+														$spousebirthdate = "";
+												}
+											}
+											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+													<input type="text" class="validate" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
 													<label for="HomeAddress">Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+													<input type="text" class="validate" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
 													<label for="HomePhoneNumber">Home Phone Number</label>
 												</div>
 												<h4 class="center">Company</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+													<input type="text" class="validate" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
 													<label for="CompanyName">Company Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+													<input type="text" class="validate" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
 													<label for="CompanyContactNum">Company Contact Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+													<input type="text" class="validate" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 													<label for="CompanyAddress">Company Address</label>
 												</div>
 												<h4 class="center">School</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+													<input type="text" class="validate" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
 													<label for="SchoolName">School Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+													<input type="text" class="validate" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
 													<label for="SchoolContactNum">School Contact Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+													<input type="text" class="validate" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
 													<label for="SchoolAddress">School Address</label>
 												</div>
 												<h4 class="center">Spouse</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+													<input type="text" class="validate" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
 													<label for="SpouseName">Spouse Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+													<input type="text" class="validate" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
 													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SpouseAddress" id="SpouseAddress" data-length="50" maxlength="50">
-													<label for="SpouseAddress">Spouse Address</label>
-												</div>
+													<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
+													<label for="SpouseBirthdate">Birthdate</label>
+												</div>';
+											?>
 											</div>
 											<div class="row">
 												<div class="progress col s6 left" style=" margin-left: 3.3%;">
@@ -849,6 +920,40 @@
 										<div class="row">
 											<!-- page 1 -->
 											<div id="cprefer_page1">
+											<?php
+											// database connection variables
+
+											$servername = "localhost";
+											$username = "root";
+											$password = "root";
+											$dbname = "dbccf";
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+											$query = "SELECT (SELECT CASE
+															  WHEN gender = '0' THEN 'Male'
+															  ELSE 'Female'
+															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$homeaddress = $row["homeAddress"];
+													$homephonenumber = $row["homePhoneNumber"];
+													$companyname = $row["companyName"];
+													$companycontactnum = $row["companyContactNum"];
+													$companyaddress = $row["companyAddress"];
+													$schoolname = $row["schoolName"];
+													$schoolcontactnum = $row["schoolContactNum"];
+													$schooladdress = $row["schoolAddress"];
+													$spousename = $row["spouseName"];
+													$spousecontactnum = $row["spouseContactNum"];
+													$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+													if(is_null($row["spouseBirthdate"]))
+														$spousebirthdate = "";
+												}
+											}
+											echo '
 												<div class="input-field col s12">
 													<input type="text" class="validate" name=Language" id="Language" data-length="20" maxlength="20">
 													<label for="Language">Language</label>
@@ -909,7 +1014,8 @@
 												<div class="input-field col s12">
 													<input type="text" class="validate" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
 													<label for="Option2Venue" style=" font-size:14px;">Venue</label>
-												</div>
+												</div>';
+												?>
 											</div>
 
 											<!-- page 2 -->

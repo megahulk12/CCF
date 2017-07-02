@@ -691,7 +691,7 @@
 								<label for="Nickname">Nickname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
+								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="">
 								<label for="Birthdate" class>Birthdate</label>
 							</div>
 						</div>
