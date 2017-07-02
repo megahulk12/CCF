@@ -1,14 +1,302 @@
-<?xml version = ″1.0″?>
-<!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
-<html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php
-		include('globalfunctions.php'); 
+<?php
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+	if(isset($_POST['submit_next'])) {
+		// database member_tbl field variables
+		// child table fields
+		$companyname = $_POST["CompanyName"];
+		$companyaddress = $_POST["CompanyAddress"];
+		$companycontactnum = $_POST["CompanyContactNum"];
+		$schoolname = $_POST["SchoolName"];
+		$schooladdress = $_POST["SchoolAddress"];
+		$schoolcontactnum = $_POST["SchoolContactNum"];
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+		$language = $_POST["Language"];
+		$venue1 = $_POST["Option1Venue"];
+		$venue2 = $_POST["Option2Venue"];
+		$timepicker1opt1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$timepicker1opt2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$timepicker2opt1 = date("H:i:s", strtotime($_POST["timepicker2opt1"]));
+		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
+		$day1 = $_POST["Option1Day"];
+		$day2 = $_POST["Option2Day"];
+
+		// parent table fields
+		$firstname = $_POST["Firstname"];
+		$middlename = $_POST["Middlename"];
+		$lastname = $_POST["Lastname"];
+		$nickname = $_POST["Nickname"];
+		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if ($gender == "Male") $gender = 0;
+		else $gender = 1;
+		$civilstatus = $_POST["CivilStatus"];
+		$citizenship = $_POST["Citizenship"];
+		$homeaddress = $_POST["HomeAddress"];
+		$homephonenumber = $_POST["HomePhoneNumber"];
+		$mobilenumber = $_POST["MobileNumber"];
+		$email = $_POST["EmailAd"];
+		$profession = $_POST["Profession"];
+		$dateJoined = date("Y-m-d");
+		$dgroupid = $_POST["dgroupID"];
+		$receivedChrist = $_POST["receivedChrist"];
+		$attendCCF = $_POST["attendCCF"];
+		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
+		$dgorupmemberstatus = 1;
+		$regusername = $_POST["username"];
+		$regpassword = $_POST["password"];
+		$memberType = 1; // dgroup member type
+
+		$checkCompanyID = false;
+		$checkSchoolID = false;
+		$checkSpouseID = false;
+		$checkPreferenceID = false;
+		$checkMemberID = false;
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$companyIDField = "";
+		$schoolIDField = "";
+		$spouseIDField = "";
+		$preferenceIDField = "";
+		if($companyname != ""){
+			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
+			$checkCompanyID = true;
+			$companyIDField = ", companyID";
+			mysqli_query($conn, $sql_company);
+			/*
+			if (mysqli_query($conn, $sql_company)) {
+				echo '
+				<script>
+					Materialize.toast("Company Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		if($schoolname != "") {
+			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
+			$checkSchoolID = true;
+			$schoolIDField = ", schoolID";
+			mysqli_query($conn, $sql_school);
+			/*
+			if (mysqli_query($conn, $sql_school)) {
+				echo '
+				<script>
+					Materialize.toast("School Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		if($spousename != "") {
+			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
+			$checkSpouseID = true;
+			$spouseIDField = ", spouseID";
+			mysqli_query($conn, $sql_spouse);
+			/*
+			if (mysqli_query($conn, $sql_spouse)) {
+				echo '
+				<script>
+					Materialize.toast("Spouse Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
+			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
+			$checkPreferenceID = true;
+			$preferenceIDField = ", prefID";
+			mysqli_query($conn, $sql_preference);
+			/*
+			if (mysqli_query($conn, $sql_preference)) {
+				echo '
+				<script>
+					Materialize.toast("Preference Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, prefID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", ".getSpouseID($checkSpouseID).", ".getPreferenceID($checkPreferenceID).", $memberType);";
+		$checkMemberID = true;
+		mysqli_query($conn, $sql_parent);
+		/*
+		if (mysqli_query($conn, $sql_parent)) {
+			echo '
+			<script>
+				Materialize.toast("Member Details Inserted", 3000);
+			</script>';
+		}
+		else {
+			mysqli_error($conn);
+		}
+		*/
+		$sql_dgroupmember = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES(".getMemberID($checkMemberID).", $dgroupid, $dgorupmemberstatus, '$receivedChrist', '$attendCCF', '$regularlyAttendsAt', '$dateJoined');";
+		mysqli_query($conn, $sql_dgroupmember);
+		/*
+		if (mysqli_query($conn, $sql_dgroupmember)) {
+			echo '
+			<script>
+				Materialize.toast("Dgroup Member Details Inserted", 3000);
+			</script>';
+		}
+		else {
+			mysqli_error($conn);
+		}
+		*/
+		mysqli_close($conn);
+		//echo "<meta http-equiv='refresh' content='0'>";
+		include("config.php");
+		session_start();
+		$myusername = mysqli_real_escape_string($db,$_POST['username']);
+		$_SESSION['user'] = $myusername;
+		sleep(1);
+		header("Location: index.php");
+		exit();
+	}
+
+	function getCompanyID($checkCompanyID) { // gets the recently added company id
 		// database connection variables
 
 		$servername = "localhost";
 		$username = "root";
 		$password = "root";
 		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$companyID = $row["companyID"];
+			}
+		}
+		if($checkCompanyID)
+			return $companyID;
+		else
+			return "NULL";
+	}
+
+	function getSchoolID($checkSchoolID) { // gets the recently added school id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schoolID = $row["schoolID"];
+			}
+		}
+		if($checkSchoolID)
+			return $schoolID;
+		else
+			return "NULL";
+	}
+
+	function getSpouseID($checkSpouseID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$spouseID = $row["spouseID"];
+			}
+		}
+		if($checkSpouseID)
+			return $spouseID;
+		else
+			return "NULL";
+	}
+
+	function getPreferenceID($checkPreferenceID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT prefID FROM preferencedetails_tbl ORDER BY prefID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$preferenceID = $row["prefID"];
+			}
+		}
+		if($checkPreferenceID)
+			return $preferenceID;
+		else
+			return "NULL";
+	}
+
+	function getMemberID($checkMemberID) { // gets the recently added member id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$memberID = $row["memberID"];
+			}
+		}
+		if($checkMemberID)
+			return $memberID;
+		else
+			return "NULL";
+	}
+?>
+<?xml version = ″1.0″?>
+<!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
+<html xmlns = ″http://www.w3.org/1999/xhtml″>
+	<?php
+		include('globalfunctions.php');
 	?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -297,6 +585,10 @@
 			font-size: 0.8rem;
 			color: #16A5B8;
 		}
+
+		th {
+			color: #424242;
+		}
 	</style>
 
 	<script>
@@ -323,7 +615,7 @@
   			$('#regularlyAttendsAt').trigger('autoresize');
   			
   			//old version of timepicker
-  			
+  			/*
   			$('#timepicker1opt1').pickatime({
   				autoclose: false
   			});
@@ -338,21 +630,21 @@
   			$('#timepicker2opt2').pickatime({
   				autoclose: false
   			});
-			
+			*/
   			//new version of timepicker
-  			/*
+  			
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: true, // Use AM/PM or 24-hour format
-				donetext: 'OK', // text for done-button
+				twelvehour: false, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
-				aftershow: function(){} //Function for after opening timepicker  
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker
 			});
-			*/
+			
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -378,7 +670,7 @@
 				<a href="home.php"><img src="resources/CCF Logos3.png" id="loginlogo" /></a>
 			</div>
 			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
-				<form method="post" class="register" id="registration" name="myForm" action> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="register" id="registration" name="myForm"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
@@ -439,12 +731,12 @@
 								<label for="MobileNumber">Mobile Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
-								<label for="Email" data-error="Invalid email address">Email Address</label>
+								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
+								<label for="EmailAd" data-error="Invalid email address">Email Address</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="profession" id="profession" data-length="30" maxlength="30">
-								<label for="profession" name="profession">Profession/Occupation</label>
+								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
+								<label for="Profession" name="profession">Profession/Occupation</label>
 							</div>
 						</div>
 					</div>
@@ -453,7 +745,7 @@
 						<h4 class="center">Home</h4>
 						<div class="row" style="margin-top: 0px;">
 							<div class="input-field col s12">
-								<input type="text" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+								<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
 								<label for="HomeAddress" style=" font-size:14px;">Address</label>
 							</div>
 							<div class="input-field col s12">
@@ -470,7 +762,7 @@
 								<label for="CompanyContactNum">Company Contact Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+								<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
 								<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
 							</div>
 							<h4 class="center">School</h4>
@@ -506,7 +798,7 @@
 						<h3 class="center">Preferences</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" name="Language" id="Language" data-length="20" maxlength="20">
+								<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
 								<label for="Language">Language</label>
 							</div>
 							<h4 class="center">Schedule</h4>
@@ -515,7 +807,7 @@
 								<div class="input-field col s12">
 									<select id="Option1Day" name="Option1Day">
 										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
+										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
 										<option value="Tuesday">Tuesday</option>
 										<option value="Wednesday">Wednesday</option>
@@ -529,11 +821,11 @@
 							<div class="row">
 								<div class="input-field col s6">
 									<label for="timepicker1opt1">Start Time</label>
-									<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
 								</div>
 								<div class="input-field col s6 right">
 									<label for="timepicker2opt1">End Time</label>
-									<input type="date" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
 								</div>
 							</div>
 							<div class="input-field col s12">
@@ -545,7 +837,7 @@
 								<div class="input-field col s12">
 									<select id="Option2Day" name="Option2Day">
 										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
+										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
 										<option value="Tuesday">Tuesday</option>
 										<option value="Wednesday">Wednesday</option>
@@ -558,11 +850,11 @@
 							</div>
 								<div class="input-field col s6">
 									<label for="timepicker1opt2">Start Time</label>
-									<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
 								</div>
 								<div class="input-field col s6">
 									<label for="timepicker2opt2">End Time</label>
-									<input type="date" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
 								</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
@@ -616,15 +908,29 @@
 					<div id="page7" style="display: none;">
 						<h3 class="center">Choose a Dgroup Leader</h3>
 						<div class="row">
-							<table class="cursor centered" id="table" width="60%">
+							<table class="cursor centered" id="table">
 								<thead>
 									<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
-									<th style="width: <?php echo widthRow(4); ?>%">Name of Dgroup Leader</th>
-									<th style="width: <?php echo widthRow(4); ?>%">Type of Dgroup</th>
-									<th style="width: <?php echo widthRow(4); ?>%">Day</th>
-									<th style="width: <?php echo widthRow(4); ?>%">Schedule</th>
+									<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
+									<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
+									<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
+									<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+									<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
 								</thead>
 								<?php
+									// database connection variables
+
+									$servername = "localhost";
+									$username = "root";
+									$password = "root";
+									$dbname = "dbccf";
+
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+
+									/*
 									function countDgroups() {
 										$conn = mysqli_connect($servername, $username, $password, $dbname);
 										if (!$conn) {
@@ -638,13 +944,41 @@
 												$count = $row["numOfDgroup"];
 											}
 										}
-									}
+									}*/
 
-									$sql_dgroups = "SELECT dgroupID, CONCAT(firstname, ' ', lastname) AS fullname, 
+									$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
 													CASE
 														WHEN gender = '0' THEN 'Male'
 														ELSE 'Female'
-													END AS gender,  ";
+													END) AS gender,
+													(SELECT CASE
+														WHEN dgroupType = '0' THEN 'Youth'
+														WHEN dgroupType = '1' THEN 'Singles'
+														WHEN dgroupType = '2' THEN 'Single Parents'
+														WHEN dgroupType = '3' THEN 'Married'
+														WHEN dgroupType = '4' THEN 'Couples'
+													END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+									$result = mysqli_query($conn, $sql_dgroups);
+									if(mysqli_num_rows($result) > 0) {
+										$count = 1;
+										while($row = mysqli_fetch_assoc($result)) {
+											echo '<tr id="row'.$count.'" onclick="cellActive('."'".'row'.$count.''."'".')">';
+											$dgroupid = $row["dgroupID"];
+											$fullname = $row["fullname"];
+											$gender = $row["gender"];
+											$dgrouptype = $row["dgroupType"];
+											$schedday = $row["schedDay"];
+											$schedule = $row["schedule"];
+											echo '<td style="display: none;"><input type="hidden" name="dgroupID" value="'.$dgroupid.'" />
+											<td>'.$fullname.'</td>
+											<td>'.$gender.'</td>
+											<td>'.$dgrouptype.'</td>
+											<td>'.$schedday.'</td>
+											<td>'.$schedule.'</td>';
+											echo '</tr>';
+											$count++;
+										}
+									}
 									echo ' ';
 								?>
 								<!--
@@ -899,200 +1233,3 @@
 	<footer>
 	</footer>
 </html>
-
-<?php
-	$checkCompanyID = false;
-	$checkSchoolID = false;
-	$checkSpouseID = false;
-	$checkPreferenceID = false;
-	$checkMemberID = false;
-	if(isset($_POST['submit_nextt'])) {
-		// database member_tbl field variables
-		// child table fields
-		$companyname = $_POST["CompanyName"];
-		$companyaddress = $_POST["CompanyAddress"];
-		$companycontactnum = $_POST["CompanyContactNum"];
-		$schoolname = $_POST["SchoolName"];
-		$schooladdress = $_POST["SchoolAddress"];
-		$schoolcontactnum = $_POST["SchoolContactNum"];
-		$spousename = $_POST["SpouseName"];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
-		$language = $_POST["Language"];
-		$venue1 = $_POST["Option1Venue"];
-		$venue2 = $_POST["Option2Venue"];
-		$timepicker1opt1 = $_POST["timepicker1opt1"];
-		$timepicker1opt2 = $_POST["timepicker1opt2"];
-		$timepicker2opt2 = $_POST["timepicker2opt1"];
-		$timepicker2opt2 = $_POST["timepicker2opt2"];
-		$day1 = $_POST["Option1Day"];
-		$day2 = $_POST["Option2Day"];
-
-		// parent table fields
-		$firstname = $_POST["Firstname"];
-		$middlename = $_POST["Middlename"];
-		$lastname = $_POST["Lastname"];
-		$nickname = $_POST["Nickname"];
-		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
-		if ($gender == "Male") $gender = 0;
-		else $gender = 1;
-		$civilstatus = $_POST["CivilStatus"];
-		$citizenship = $_POST["Citizenship"];
-		$homeaddress = $_POST["HomeAddress"];
-		$homephonenumber = $_POST["HomePhoneNumber"];
-		$mobilenumber = $_POST["MobileNumber"];
-		$email = $_POST["Email"];
-		$profession = $_POST["Profession"];
-		$dateJoined = date("Y-m-d");
-		$username = $_POST["username"];
-		$password = $_POST["password"];
-		$memberType = 1; // dgroup member type
-
-					
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		if($companyname != ""){
-			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES($companyname, $companyaddress, $companycontactnum);";
-			$checkCompanyID = true;
-			$companyIDField = ", companyID";
-			if (mysqli_query($conn, $sql_company)) {
-				echo '
-				<script>
-					Materialize.toast("Company Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-		}
-		if($schoolname != "") {
-			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES($schoolname, $schooladdress, $schoolcontactnum);";
-			$checkSchoolID = true;
-			$schoolIDField = ", schoolID";
-			if (mysqli_query($conn, $sql_school)) {
-				echo '
-				<script>
-					Materialize.toast("School Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-		}
-		if($spousename != "") {
-			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES($spousename, $spousemobilenumber, $spousebirthdate);";
-			$checkSpouseID = true;
-			$spouseIDField = ", spouseID";
-			if (mysqli_query($conn, $sql_spouse)) {
-				echo '
-				<script>
-					Materialize.toast("Spouse Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-		}
-		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
-			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
-			$checkPreferenceID = true;
-			$preferenceIDField = ", preferenceID";
-			if (mysqli_query($conn, $sql_preference)) {
-				echo '
-				<script>
-					Materialize.toast("Preference Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-		}
-		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password".$companyIDField."".$schoolIDField."".$spouseIDField."".$preferenceIDField.", memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$username', '$password', ".getCompanyID().", ".getSchoolID().", ".getSpouseID().", ".getPreferenceID().", $memberType);";
-		$checkMemberID = true;
-		if (mysqli_query($conn, $sql_company)) {
-			echo '
-			<script>
-				Materialize.toast("Member Details Inserted", 3000);
-			</script>';
-		}
-		else {
-			mysqli_error($conn);
-		}
-		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(memberID, dgrou) VALUES();";
-		mysqli_close($conn);
-		echo "<meta http-equiv='refresh' content='0'>";
-		
-	}
-
-	function getCompanyID() { // gets the recently added company id
-		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$companyID = $row["companyID"];
-			}
-		}
-		if($checkCompanyID)
-			return ", ".$companyID;
-		else
-			return "";
-	}
-
-	function getSchoolID() { // gets the recently added school id
-		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$schoolID = $row["schoolID"];
-			}
-		}
-		if($checkSchoolID)
-			return ", ".$schoolID;
-		else
-			return "";
-	}
-
-	function getSpouseID() { // gets the recently added company id
-		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$spouseID = $row["spouseID"];
-			}
-		}
-		if($checkSpouseID)
-			return ", ".$spouseID;
-		else
-			return "";
-	}
-
-	function gePreferenceID() { // gets the recently added company id
-		$query = "SELECT preferenceID FROM preferencedetails_tbl ORDER BY preferenceID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$preferenceID = $row["preferenceID"];
-			}
-		}
-		if($checkPreferenceID)
-			return ", ".$preferenceID;
-		else
-			return "";
-	}
-
-	function getMemberID() { // gets the recently added member id
-		$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$memberID = $row["memberID"];
-			}
-		}
-		if($checkMemberID)
-			return ", ".$memberID;
-		else
-			return "";
-	}
-?>

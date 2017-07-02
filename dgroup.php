@@ -2,11 +2,6 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-
-	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	<link rel="stylesheet" type="text/css" href="alerts/themes/google/google.css">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
@@ -15,6 +10,10 @@
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
+
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
 

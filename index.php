@@ -14,7 +14,6 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	<link rel="stylesheet" type="text/css" href="alerts/themes/google/google.css">
 
 	<title>Christ's Commission Fellowship</title>
 
@@ -276,6 +275,56 @@
 					});
 				</script>
 			';
+		}
+
+		if(getWelcome() == 0)  {
+			echo '
+			<script>
+			// to inform that you have been registered
+				swal({
+					title: "Welcome to CCF!",
+					text: "Thank you for filling up the registration form!\nFeel free to explore this website and God bless! :)",
+					timer: 10000,
+					confirmButtonText: "OK"
+				});
+			</script>
+			';
+			setWelcome();
+		}
+
+		function getWelcome() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+
+			$sql = "SELECT welcome FROM member_tbl WHERE memberID = ".$_SESSION["userid"];
+			$result = mysqli_query($conn, $sql);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$welcome = $row["welcome"];
+				}
+			}
+			return $welcome;
+		}
+
+		function setWelcome() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$sql = "UPDATE member_tbl SET welcome = 1 WHERE memberID = ".$_SESSION["userid"];
+			mysqli_query($conn, $sql);
 		}
 	?>
 </html>

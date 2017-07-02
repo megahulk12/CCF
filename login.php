@@ -12,6 +12,7 @@
 			$_SESSION['user'] = $myusername;
 			sleep(1);
 			header("Location: index.php");
+			exit();
 			/*
 			if($active == 1) {
 					
@@ -49,6 +50,11 @@
 	<script src="jquery-3.2.1.min.js"></script>
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
+
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+
 	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {

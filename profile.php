@@ -533,7 +533,9 @@
 			});
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 50 // Creates a dropdown of 15 years to control year
+				selectYears: 50, // Creates a dropdown of 15 years to control year
+				formatSubmit: 'yyyy-mm-dd',
+				max: true
 			});
 			 
 			$(document).ready(function() {
@@ -572,12 +574,12 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: true, // Use AM/PM or 24-hour format
+				twelvehour: false, // Use AM/PM or 24-hour format
 				donetext: 'OK', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
+				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 			
