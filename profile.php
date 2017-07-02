@@ -24,24 +24,61 @@
 	}
 
 	if(isset($_POST["submit_coinfo"])) {
-		$lastname = $_POST["Lastname"];
-		$firstname = $_POST["Firstname"];
-		$middlename = $_POST["Middlename"];
-		$nickname = $_POST["Nickname"];
-		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if ($gender == "Male") $gender = 0;
+		else $gender = 1;
+		$civilstatus = $_POST["CivilStatus"];
+		$citizenship = $_POST["Citizenship"];
+		$mobilenumber = $_POST["MobileNumber"];
+		$email = $_POST["Email"];
+		$profession = $_POST["Profession"];
+		$homeaddress = $_POST["HomeAddress"];
+		$homephonenumber = $_POST["HomePhoneNumber"];
+		$companyname = $_POST["CompanyName"];
+		$companyaddress = $_POST["CompanyAddress"];
+		$companycontactnum = $_POST["CompanyContactNum"];
+		$schoolname = $_POST["SchoolName"];
+		$schooladdress = $_POST["SchoolAddress"];
+		$schoolcontactnum = $_POST["SchoolContactNum"];
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
 		}
+
+		$sql_coinfo = "UPDATE member_tbl SET gender = '$gender', civilStatus = '$civilstatus', citizenship = '$citizenship', contactNum = '$mobilenumber', emailAd = '$email', occupation = '$profession', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber' WHERE memberID = ".$_SESSION['userid'];
+		mysqli_query($conn, $sql_coinfo);
 	}
 
 	if(isset($_POST["submit_cprefer"])) {
-		
+		$language = $_POST["Language"];
+		$venue1 = $_POST["Option1Venue"];
+		$venue2 = $_POST["Option2Venue"];
+		$timepicker1opt1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$timepicker1opt2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$timepicker2opt1 = date("H:i:s", strtotime($_POST["timepicker2opt1"]));
+		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
+		$day1 = $_POST["Option1Day"];
+		$day2 = $_POST["Option2Day"];
+		$receivedChrist = $_POST["receivedChrist"];
+		$attendCCF = $_POST["attendCCF"];
+		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_cprefer = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$timepicker1opt1', prefEndTime1 = '$timepicker1opt2', prefStartTime2 = '$timepicker2opt1', prefEndTime2 = '$timepicker2opt2', prefDay1 = '$day1', prefDay2 = '$day2' WHERE prefID = ".$_SESSION['prefID'];
+		$sql_dgroupmember = "UPDATE discipleshipgroupmembers_tbl SET receivedChrist = '$receivedChrist', attendCCF = '$attendCCF', regularlyAttendsAt = '$regularlyAttendsAt' WHERE memberID = ".$_SESSION['userid'];
+		mysqli_query($conn, $sql_cprefer);
+		mysqli_query($conn, $sql_dgroupmember);
 	}
 
 	if(isset($_POST["submit_cpass"])) {
-		
+		$pass
 	}
 	// ====================END====================
 ?>
@@ -850,16 +887,16 @@
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="mobilenumber" id="mobilenumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
-													<label for="mobilenumber" name="mobilenumber">Mobile Number</label>
+													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
+													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" name="email" id="email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
-													<label for="email" name="nickname" data-error="Invalid email address">Email Address</label>
+													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+													<label for="Email" data-error="Invalid email address">Email Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="profession" id="profession" data-length="30" maxlength="30" value="'.$occupation.'">
-													<label for="profession" name="profession">Profession/Occupation</label>
+													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'">
+													<label for="Profession">Profession/Occupation</label>
 												</div>';
 												?>
 											</div>
@@ -902,7 +939,7 @@
 											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
+													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
 													<label for="HomeAddress">Address</label>
 												</div>
 												<div class="input-field col s12">
@@ -919,7 +956,7 @@
 													<label for="CompanyContactNum">Company Contact Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
+													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 													<label for="CompanyAddress">Company Address</label>
 												</div>
 												<h4 class="center">School</h4>
@@ -1011,7 +1048,7 @@
 											}
 											echo '
 												<div class="input-field col s12">
-													<input type="text" name=Language" id="Language" data-length="20" maxlength="20" value="'.$preflanguage.'">
+													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'">
 													<label for="Language">Language</label>
 												</div>
 												<h4 class="center">Schedule</h4>
@@ -1302,7 +1339,7 @@
 	</footer>
 </html>
 <?php
-	if(isset($_POST["submit_cpinfo"])) { // pop up for updates
+	if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_cprefer"])) { // pop up for updates
 		echo '
 			<script>
 			// profile update success
