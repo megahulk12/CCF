@@ -551,16 +551,6 @@
 				$('select').material_select();
 			}); 
 
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-				$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-			$('#regularlyAttendsAt').trigger('autoresize');
-
 			//old version of timepicker
 			/*
 			$('#timepicker1opt1').pickatime({
@@ -581,7 +571,7 @@
 				//new version of timepicker
 				
 			$('.timepicker').pickatime({
-				default: 'now', // Set default time
+				//default: 'now', // Set default time; do not set default time in viewing of time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
 				twelvehour: false, // Use AM/PM or 24-hour format
 				donetext: 'OK', // text for done-button
@@ -619,6 +609,22 @@
 
 		function setBirthdate(date) {
 			document.getElementById("Birthdate").value = date;
+		}
+
+		function reTextArea(a, b, c) {
+			// re-initializes text areas
+
+			$(document).ready(function(){
+				// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
+				$('#receivedChrist').val(a);
+				$('#receivedChrist').trigger('autoresize');
+
+				$('#attendCCF').val(b);
+				$('#attendCCF').trigger('autoresize');
+
+				$('#regularlyAttendsAt').val(c);
+				$('#regularlyAttendsAt').trigger('autoresize');
+			});
 		}
 	</script>
 
@@ -708,19 +714,19 @@
 												}
 												echo '
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
+													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
 													<label for="Lastname">Lastname</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
+													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
 													<label for="Firstname">Firstname</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
+													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
 													<label for="Middlename">Middlename</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
+													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
 												</div>
 												<div class="input-field col s12">
@@ -787,7 +793,7 @@
 													<label for="Gender_Female">Female</label>
 												</p>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
+													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
 													<label for="Citizenship">Citizenship</label>
 												</div>
 												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
@@ -805,15 +811,15 @@
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="mobilenumber" id="mobilenumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
+													<input type="text" name="mobilenumber" id="mobilenumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
 													<label for="mobilenumber" name="mobilenumber">Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" class="validate" name="email" id="email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+													<input type="email" name="email" id="email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
 													<label for="email" name="nickname" data-error="Invalid email address">Email Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="profession" id="profession" data-length="30" maxlength="30" value="'.$occupation.'">
+													<input type="text" name="profession" id="profession" data-length="30" maxlength="30" value="'.$occupation.'">
 													<label for="profession" name="profession">Profession/Occupation</label>
 												</div>';
 												?>
@@ -857,46 +863,46 @@
 											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
+													<input type="text" name=HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
 													<label for="HomeAddress">Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
+													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
 													<label for="HomePhoneNumber">Home Phone Number</label>
 												</div>
 												<h4 class="center">Company</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
+													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
 													<label for="CompanyName">Company Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
+													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
 													<label for="CompanyContactNum">Company Contact Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
+													<input type="text" name=CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 													<label for="CompanyAddress">Company Address</label>
 												</div>
 												<h4 class="center">School</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
+													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
 													<label for="SchoolName">School Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
+													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
 													<label for="SchoolContactNum">School Contact Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
+													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
 													<label for="SchoolAddress">School Address</label>
 												</div>
 												<h4 class="center">Spouse</h4>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
+													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
 													<label for="SpouseName">Spouse Name</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
+													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
 													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
@@ -931,31 +937,42 @@
 											if (!$conn) {
 												die("Connection failed: " . mysqli_connect_error());
 											}
-											$query = "SELECT (SELECT CASE
-															  WHEN gender = '0' THEN 'Male'
-															  ELSE 'Female'
-															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2 FROM member_tbl LEFT OUTER JOIN preferencedetails_tbl ON member_tbl.prefID = preferencedetails_tbl.prefID WHERE memberID = ".$_SESSION['userid'];
 											$result = mysqli_query($conn, $query);
 											if(mysqli_num_rows($result) > 0) {
 												while($row = mysqli_fetch_assoc($result)) {
-													$homeaddress = $row["homeAddress"];
-													$homephonenumber = $row["homePhoneNumber"];
-													$companyname = $row["companyName"];
-													$companycontactnum = $row["companyContactNum"];
-													$companyaddress = $row["companyAddress"];
-													$schoolname = $row["schoolName"];
-													$schoolcontactnum = $row["schoolContactNum"];
-													$schooladdress = $row["schoolAddress"];
-													$spousename = $row["spouseName"];
-													$spousecontactnum = $row["spouseContactNum"];
-													$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
-													if(is_null($row["spouseBirthdate"]))
-														$spousebirthdate = "";
+													$preflanguage = $row["prefLanguage"];
+													$prefvenue1 = $row["prefVenue1"];
+													$prefvenue2 = $row["prefVenue2"];
+													$prefstarttime1 = date("H:i", strtotime($row["prefStartTime1"]));
+													$prefendtime1 = date("H:i", strtotime($row["prefEndTime1"]));
+													$prefstarttime2 = date("H:i", strtotime($row["prefStartTime2"]));
+													$prefendtime2 = date("H:i", strtotime($row["prefEndTime2"]));
+													$selectedprefday1 = array("", "", "", "", "", "", "", "");
+													$prefday1 = $row["prefDay1"];
+													if($prefday1 == "Sunday") $selectedprefday1[1] = "Sunday";
+													else if($prefday1 == "Monday") $selectedprefday1[2] = "Monday";
+													else if($prefday1 == "Tuesday") $selectedprefday1[3] = "Tuesday";
+													else if($prefday1 == "Wednesday") $selectedprefday1[4] = "Wednesday";
+													else if($prefday1 == "Thursday") $selectedprefday1[5] = "Thursday";
+													else if($prefday1 == "Friday") $selectedprefday1[6] = "Friday";
+													else if($prefday1 == "Saturday") $selectedprefday1[7] = "Saturday";
+													else $selectedprefday1[0] = "selected";
+													$selectedprefday2 = array("", "", "", "", "", "", "", "");
+													$prefday2 = $row["prefDay2"];
+													if($prefday2 == "Sunday") $selectedprefday2[1] = "Sunday";
+													else if($prefday2 == "Monday") $selectedprefday2[2] = "Monday";
+													else if($prefday2 == "Tuesday") $selectedprefday2[3] = "Tuesday";
+													else if($prefday2 == "Wednesday") $selectedprefday2[4] = "Wednesday";
+													else if($prefday2 == "Thursday") $selectedprefday2[5] = "Thursday";
+													else if($prefday2 == "Friday") $selectedprefday2[6] = "Friday";
+													else if($prefday2 == "Saturday") $selectedprefday2[7] = "Saturday";
+													else $selectedprefday2[0] = "selected";
 												}
 											}
 											echo '
 												<div class="input-field col s12">
-													<input type="text" class="validate" name=Language" id="Language" data-length="20" maxlength="20">
+													<input type="text" name=Language" id="Language" data-length="20" maxlength="20" value="'.$preflanguage.'">
 													<label for="Language">Language</label>
 												</div>
 												<h4 class="center">Schedule</h4>
@@ -963,56 +980,56 @@
 												<div class="row" style="margin: 0">
 													<div class="input-field col s12">
 														<select id="Option1Day" name="Option1Day">
-															<option value="" disabled selected>Choose your option...</option>
-															<option value="Sunday">Sunnday</option>
-															<option value="Monday">Monday</option>
-															<option value="Tuesday">Tuesday</option>
-															<option value="Wednesday">Wednesday</option>
-															<option value="Thursday">Thursday</option>
-															<option value="Friday">Friday</option>
-															<option value="Saturday">Saturday</option>
+															<option value="" disabled '.$selectedprefday1[0].'>Choose your option...</option>
+															<option value="Sunday" '.$selectedprefday1[1].'>Sunday</option>
+															<option value="Monday" '.$selectedprefday1[2].'>Monday</option>
+															<option value="Tuesday" '.$selectedprefday1[3].'>Tuesday</option>
+															<option value="Wednesday" '.$selectedprefday1[4].'>Wednesday</option>
+															<option value="Thursday" '.$selectedprefday1[5].'>Thursday</option>
+															<option value="Friday" '.$selectedprefday1[6].'>Friday</option>
+															<option value="Saturday" '.$selectedprefday1[7].'>Saturday</option>
 														</select>
 														<label>Day</label>
 													</div>
 												</div>
 													<div class="input-field col s6">
 														<label for="timepicker1opt1">Start Time</label>
-														<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt1">End Time</label>
-														<input type="date" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefendtime1.'">
 													</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
 													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
 												</div>
 												<h5 class="center">Option 2</h5>
 												<div class="row" style="margin: 0">
 													<div class="input-field col s12">
 														<select id="Option2Day" name="Option2Day">
-															<option value="" disabled selected>Choose your option...</option>
-															<option value="Sunday">Sunnday</option>
-															<option value="Monday">Monday</option>
-															<option value="Tuesday">Tuesday</option>
-															<option value="Wednesday">Wednesday</option>
-															<option value="Thursday">Thursday</option>
-															<option value="Friday">Friday</option>
-															<option value="Saturday">Saturday</option>
+															<option value="" disabled '.$selectedprefday2[0].'>Choose your option...</option>
+															<option value="Sunday" '.$selectedprefday2[1].'>Sunday</option>
+															<option value="Monday" '.$selectedprefday2[2].'>Monday</option>
+															<option value="Tuesday" '.$selectedprefday2[3].'>Tuesday</option>
+															<option value="Wednesday" '.$selectedprefday2[4].'>Wednesday</option>
+															<option value="Thursday" '.$selectedprefday2[5].'>Thursday</option>
+															<option value="Friday" '.$selectedprefday2[6].'>Friday</option>
+															<option value="Saturday" '.$selectedprefday2[7].'>Saturday</option>
 														</select>
 														<label>Day</label>
 													</div>
 												</div>
 													<div class="input-field col s6">
 														<label for="timepicker1opt2">Start Time</label>
-														<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefstarttime2.'">
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
-														<input type="date" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
 													</div>
 												<div class="input-field col s12">
-													<input type="text" class="validate" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
 													<label for="Option2Venue" style=" font-size:14px;">Venue</label>
 												</div>';
 												?>
@@ -1020,18 +1037,45 @@
 
 											<!-- page 2 -->
 											<div id="cprefer_page2" style="display: none;">
+											<?php
+												// database connection variables
+
+												$servername = "localhost";
+												$username = "root";
+												$password = "root";
+												$dbname = "dbccf";
+												$conn = mysqli_connect($servername, $username, $password, $dbname);
+												if (!$conn) {
+													die("Connection failed: " . mysqli_connect_error());
+												}
+												$query = "SELECT receivedChrist, attendCCF, regularlyAttendsAt FROM discipleshipgroupmembers_tbl WHERE memberID = ".$_SESSION['userid'];
+												$result = mysqli_query($conn, $query);
+												if(mysqli_num_rows($result) > 0) {
+													while($row = mysqli_fetch_assoc($result)) {
+														$receivedChrist = $row["receivedChrist"];
+														$attendCCF = $row["attendCCF"];
+														$regularlyAttendsAt = $row["regularlyAttendsAt"];
+													}
+												}
+											echo '
+												<script>
+													reTextArea("'.$receivedChrist.'", "'.$attendCCF.'", "'.$regularlyAttendsAt.'");
+												</script>
+												';
+											echo '
 												<div class="input-field col s12">
-													<textarea id="receivedChrist" class="materialize-textarea validate" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+													<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 													<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
 												</div>
 												<div class="input-field col s12">
-													<textarea id="attendCCF" class="materialize-textarea validate" name="attendCCF" data-length="300" maxlength="300"></textarea>
+													<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
 													<label for="attendCCF">How long you have been attending CCF?</label>
 												</div>
 												<div class="input-field col s12">
-													<textarea id="regularlyAttendsAt" class="materialize-textarea validate" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+													<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
 													<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-												</div>
+												</div>';
+											?>
 											</div>
 
 											<!-- progressbar & buttons -->
@@ -1050,7 +1094,7 @@
 										<div class="row">
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" class="validate" name="password" data-length="45" maxlength="45">
+												<input type="password" name="password" data-length="45" maxlength="45">
 												<label for="password" name="lblpassword">Password</label>
 											</div>
 											<div class="row">
