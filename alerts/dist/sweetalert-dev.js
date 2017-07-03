@@ -331,7 +331,6 @@ var defaultParams = {
   html: false,
   animation: true,
   allowEscapeKey: true,
-  allowEnterKey: true, //please remove after if not used, not original
   inputType: 'text',
   inputPlaceholder: '',
   inputValue: '',
@@ -720,9 +719,6 @@ var handleKeyDown = function handleKeyDown(event, params, modal) {
         $targetElement = undefined;
       }
     } else if (keyCode === 27 && params.allowEscapeKey === true) {
-      $targetElement = $cancelButton;
-      (0, _handleDom.fireClick)($targetElement, e);
-    } else if (keyCode === 13 && params.allowEnterKey === true) { //please remove after if not used, not original
       $targetElement = $cancelButton;
       (0, _handleDom.fireClick)($targetElement, e);
     } else {
