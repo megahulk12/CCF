@@ -219,7 +219,7 @@
 						<div class="input-field col s12">
 							<i class="material-icons prefix">lock</i><!-- lock_outline -->
 							<input type="password" id="password" name="password">
-							<label for="password">Password</label>
+							<label for="password">Password</label> <!-- qdaas -->
 						</div>
 					</div>
 					<div class="row">
