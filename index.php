@@ -269,9 +269,10 @@
 				// for congratulations of being a dgroup leader
 					swal({
 						title: "Congratulations!",
-						text: "You are now a Dgroup leader!",
+						text: "You are now a Dgroup leader! :)",
 						type: "success",
-						allowEscapeKey: true
+						allowEscapeKey: true,
+						timer: 10000
 					});
 				</script>
 			';
