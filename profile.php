@@ -24,6 +24,7 @@
 	}
 
 	if(isset($_POST["submit_coinfo"])) {
+		$gender = $_POST["Gender"];
 		if ($gender == "Male") $gender = 0;
 		else $gender = 1;
 		$civilstatus = $_POST["CivilStatus"];
@@ -49,7 +50,13 @@
 		}
 
 		$sql_coinfo = "UPDATE member_tbl SET gender = '$gender', civilStatus = '$civilstatus', citizenship = '$citizenship', contactNum = '$mobilenumber', emailAd = '$email', occupation = '$profession', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber' WHERE memberID = ".$_SESSION['userid'];
+		$sql_company = "UPDATE companydetails_tbl SET companyName = '$companyname', companyContactNum = '$companycontactnum', companyAddress = '$companyaddress' WHERE companyID = ".$_SESSION['companyID'];
+		$sql_school = "UPDATE schooldetails_tbl SET schoolName = '$schoolname', schoolContactNum = '$schoolcontactnum', schoolAddress = '$schooladdress' WHERE schoolID = ".$_SESSION['schoolID'];
+		$sql_spouse = "UPDATE spousedetails_tbl SET spouseName = '$spousename', spouseContactNum = '$spousemobilenumber', spouseBirthdate = '$spousebirthdate' WHERE spouseID = ".$_SESSION['spouseID'];
 		mysqli_query($conn, $sql_coinfo);
+		mysqli_query($conn, $sql_company);
+		mysqli_query($conn, $sql_school);
+		mysqli_query($conn, $sql_spouse);
 	}
 
 	if(isset($_POST["submit_cprefer"])) {
@@ -78,7 +85,15 @@
 	}
 
 	if(isset($_POST["submit_cpass"])) {
-		$pass
+		$regpassword = $_POST["password"];
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_pass = "UPDATE member_tbl SET password = '$regpassword'";
+		mysqli_query($conn, $sql_pass);
 	}
 	// ====================END====================
 ?>
@@ -1339,7 +1354,7 @@
 	</footer>
 </html>
 <?php
-	if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_cprefer"])) { // pop up for updates
+	if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_coinfo"])||isset($_POST["submit_cprefer"])||isset($_POST["submit_cpass"])) { // pop up for updates
 		echo '
 			<script>
 			// profile update success
