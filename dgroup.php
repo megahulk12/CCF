@@ -1,6 +1,20 @@
 <?php include('session.php'); ?>
 <?php
-	
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+
+	if(isset($_POST['request_leader'])) {
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
+		mysqli_query($conn, $sql_endorsement_request);
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -99,6 +113,11 @@
 		.dgroup-leader-button {
 		  	background-color: #16A5B8;
 		  	color: #fff;
+		}
+
+		.wait-request {
+		  	background-color: #ebebeb;
+		  	color: #777;
 		}
 
 		/*hover of button*/
@@ -337,8 +356,19 @@
 
 	<body>
 		<div class="container">
+			<?php 
+			if($_SESSION['memberType'] <= 1) {
+			echo '
+			<form method="post">
 			<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="hidden" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
-			<div id="view-profile" style="display: none;">
+			</form>';
+			}
+			if($_SESSION['endorsementStatus'] == 0) {
+			echo '
+			<button class="waves-effect waves-light btn col s2 right wait-request" id="request_leader" type="button" disabled>PENDING</button>';
+			}
+			?>
+			<div id="view-profilee" style="display: none;"> <!-- remove e -->
 				<table class="centered dgroup-table-spacing">
 					<tr>
 						<td>
@@ -372,6 +402,9 @@
 					</table>
 				</div>
 				<div id="own-dgroup">
+				<?php
+					if($_SESSION['memberType'] >= 2 ) {
+					echo '
 					<h3>Own Dgroup</h3>
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
 						<tr>
@@ -392,7 +425,9 @@
 								Dodong Laboriki</a>
 							</td>
 						</tr>
-					</table>
+					</table>';
+					}
+				?>
 				</div>
 			</div>
 	</body>
