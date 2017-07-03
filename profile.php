@@ -1368,7 +1368,6 @@
 					text: "Profile Updated!",
 					type: "success",
 					allowEscapeKey: true,
-					allowEnterKey: true,
 					timer: 10000
 				});
 			</script>
