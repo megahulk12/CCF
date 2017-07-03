@@ -37,8 +37,12 @@
 		$lastname = $_POST["Lastname"];
 		$nickname = $_POST["Nickname"];
 		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
-		if ($gender == "Male") $gender = 0;
-		else $gender = 1;
+		if ($gender == "Male") {
+			$gender = 0;
+		}
+		else {
+			$gender = 1;
+		}
 		$civilstatus = $_POST["CivilStatus"];
 		$citizenship = $_POST["Citizenship"];
 		$homeaddress = $_POST["HomeAddress"];
@@ -599,9 +603,8 @@
 	<script>
 		$(document).ready(function(){
 			$('.datepicker').pickadate({
-				selectMonths: true, // Creates a dropdown to control month
+				selectMonths: false, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
 				max: true
 			});
 			 
@@ -896,7 +899,7 @@
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
 								<input type="text" name="username" id="username" data-length="16" maxlength="16">
-								<label for="username" name="lblusername">Username</label>
+								<label for="username">Username</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->

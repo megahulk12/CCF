@@ -214,12 +214,12 @@
 						<div class="input-field col s12">
 							<i class="material-icons prefix">account_circle</i><!-- person_outline -->
 							<input type="text" id="username" name="username">
-							<label for="icon_prefix" name="lblusername">Username</label>
+							<label for="username">Username</label>
 						</div>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">lock</i><!-- lock_outline -->
 							<input type="password" id="password" name="password">
-							<label for="password" name="lblpassword">Password</label>
+							<label for="password">Password</label>
 						</div>
 					</div>
 					<div class="row">
