@@ -1362,7 +1362,8 @@
 					title: "Success!",
 					text: "Profile Updated!",
 					type: "success",
-					allowEscapeKey: true
+					allowEscapeKey: true,
+					timer: 10000
 				});
 			</script>
 		';
