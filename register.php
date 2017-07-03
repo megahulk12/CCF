@@ -37,6 +37,7 @@
 		$lastname = $_POST["Lastname"];
 		$nickname = $_POST["Nickname"];
 		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		$gender = $_POST["Gender"];
 		if ($gender == "Male") {
 			$gender = 0;
 		}
@@ -710,9 +711,9 @@
 							<p style="margin-top: 40px;">
 								<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
 								<spans>
-									<input type="radio" id="Gender_Male" name="Gender" value="Male"/>
+									<input type="radio" id="Gender_Male" name="Gender" value="Male" />
 									<label for="Gender_Male">Male</label>
-									<input type="radio" id="Gender_Female" name="Gender" value="Female"/>
+									<input type="radio" id="Gender_Female" name="Gender" value="Female" />
 									<label for="Gender_Female">Female</label>
 								</span>
 							</p>

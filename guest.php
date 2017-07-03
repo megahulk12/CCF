@@ -21,8 +21,13 @@
 		$lastname = $_POST["Lastname"];
 		$nickname = $_POST["Nickname"];
 		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
-		if ($gender == "Male") $gender = 0;
-		else $gender = 1;
+		$gender = $_POST["Gender"];
+		if ($gender == "Male") {
+			$gender = 0;
+		}
+		else {
+			$gender = 1;
+		}
 		$civilstatus = $_POST["CivilStatus"];
 		$mobilenumber = $_POST["MobileNumber"];
 		$profession = $_POST["Profession"];
@@ -552,12 +557,12 @@
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
 								<input type="text" name="username" data-length="16" maxlength="16">
-								<label for="icon_prefix" name="lblusername">Username</label>
+								<label for="username">Username</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" name="password" data-length="16" maxlength="16">
-								<label for="password" name="lblpassword">Password</label>
+								<label for="password">Password</label>
 							</div>
 						</div>
 					</div>
