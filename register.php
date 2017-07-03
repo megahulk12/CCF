@@ -1,4 +1,9 @@
 <?php
+	/*
+		REMINDERS:
+		1. set data-length maxlength to length of sql fields dynamically
+
+	*/
 	// database connection variables
 	$servername = "localhost";
 	$username = "root";

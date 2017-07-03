@@ -1,5 +1,10 @@
 <?php include('session.php'); ?>
 <?php
+	/*
+		REMINDERS:
+		1. set data-length maxlength to length of sql fields dynamically
+
+	*/
 	// database connection variables
 	$servername = "localhost";
 	$username = "root";
@@ -92,7 +97,7 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_pass = "UPDATE member_tbl SET password = '$regpassword'";
+		$sql_pass = "UPDATE member_tbl SET password = '$regpassword' WHERE memberID = ".$_SESSION['userid'];
 		mysqli_query($conn, $sql_pass);
 	}
 	// ====================END====================
@@ -1363,6 +1368,7 @@
 					text: "Profile Updated!",
 					type: "success",
 					allowEscapeKey: true,
+					allowEnterKey: true,
 					timer: 10000
 				});
 			</script>

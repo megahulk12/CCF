@@ -1,3 +1,155 @@
+<?php
+	/*
+		REMINDERS:
+		1. set data-length maxlength to length of sql fields dynamically
+
+	*/
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+	if(isset($_POST['submit_next'])) {
+		// database member_tbl field variables
+		// child table fields
+		$companyname = $_POST["CompanyName"];
+		$schoolname = $_POST["SchoolName"];
+
+		// parent table fields
+		$firstname = $_POST["Firstname"];
+		$middlename = $_POST["Middlename"];
+		$lastname = $_POST["Lastname"];
+		$nickname = $_POST["Nickname"];
+		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if ($gender == "Male") $gender = 0;
+		else $gender = 1;
+		$civilstatus = $_POST["CivilStatus"];
+		$mobilenumber = $_POST["MobileNumber"];
+		$profession = $_POST["Profession"];
+		$dateJoined = date("Y-m-d");
+		$dgorupmemberstatus = 1;
+		$regusername = $_POST["username"];
+		$regpassword = $_POST["password"];
+		$memberType = 0; // dgroup member type
+
+		$checkCompanyID = false;
+		$checkSchoolID = false;
+		$checkMemberID = false;
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$companyIDField = "";
+		$schoolIDField = "";
+		if($companyname != ""){
+			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
+			$checkCompanyID = true;
+			$companyIDField = ", companyID";
+			mysqli_query($conn, $sql_company);
+			/*
+			if (mysqli_query($conn, $sql_company)) {
+				echo '
+				<script>
+					Materialize.toast("Company Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		if($schoolname != "") {
+			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
+			$checkSchoolID = true;
+			$schoolIDField = ", schoolID";
+			mysqli_query($conn, $sql_school);
+			/*
+			if (mysqli_query($conn, $sql_school)) {
+				echo '
+				<script>
+					Materialize.toast("School Details Inserted", 3000);
+				</script>';
+			}
+			else {
+				mysqli_error($conn);
+			}
+			*/
+		}
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, contactNum, occupation, dateJoined, username, password, companyID, schoolID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$mobilenumber', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", $memberType);";
+		$checkMemberID = true;
+		mysqli_query($conn, $sql_parent);
+		/*
+		if (mysqli_query($conn, $sql_parent)) {
+			echo '
+			<script>
+				Materialize.toast("Member Details Inserted", 3000);
+			</script>';
+		}
+		else {
+			mysqli_error($conn);
+		}
+		*/
+		mysqli_close($conn);
+		//echo "<meta http-equiv='refresh' content='0'>";
+		include("config.php");
+		session_start();
+		$myusername = mysqli_real_escape_string($db,$_POST['username']);
+		$_SESSION['user'] = $myusername;
+		sleep(1);
+		header("Location: index.php");
+		exit();
+	}
+
+	function getCompanyID($checkCompanyID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$companyID = $row["companyID"];
+			}
+		}
+		if($checkCompanyID)
+			return $companyID;
+		else
+			return "NULL";
+	}
+
+	function getSchoolID($checkSchoolID) { // gets the recently added school id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schoolID = $row["schoolID"];
+			}
+		}
+		if($checkSchoolID)
+			return $schoolID;
+		else
+			return "NULL";
+	}
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -285,56 +437,13 @@
 		$(document).ready(function(){
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
+				selectYears: 100, // Creates a dropdown of 15 years to control year
 				max: true
 			});
 			 
 			$(document).ready(function() {
 				$('select').material_select();
 			}); 
-
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
-
-  			//old version of timepicker
-  			
-  			$('#timepicker1opt1').pickatime({
-  				autoclose: false
-  			});
-
-  			$('#timepicker2opt1').pickatime({
-  				autoclose: false
-  			});
-  			$('#timepicker1opt2').pickatime({
-  				autoclose: false
-  			});
-
-  			$('#timepicker2opt2').pickatime({
-  				autoclose: false
-  			});
-			
-  			//new version of timepicker
-  			/*
-			$('.timepicker').pickatime({
-				default: 'now', // Set default time
-				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: true, // Use AM/PM or 24-hour format
-				donetext: 'OK', // text for done-button
-				cleartext: 'Clear', // text for clear-button
-				canceltext: 'Cancel', // Text for cancel-button
-				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
-				aftershow: function(){} //Function for after opening timepicker  
-			});
-			*/
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -360,29 +469,29 @@
 				<a href="home.php"><img src="resources/CCF Logos3.png" id="loginlogo" /></a>
 			</div>
 			<div class="col s12 z-depth-4 card-panel" style="margin-top: 10%;">
-				<form method="post" class="register" id="registration" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="register" id="registration" name="myForm"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Lastname" id="Lastname" data-length="20" maxlength="20">
+								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Lastname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Firstname" id="Firstname" data-length="20" maxlength="20">
+								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">Firstname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Middlename" id="Middlename" data-length="20" maxlength="20">
+								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middlename</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="Nickname" id="Nickname" data-length="20" maxlength="20">
+								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="date" class="datepicker validate" id="Birthdate" name="Birthdate">
-								<label for="Birthdate" class>Birthdate</label>
+								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
+								<label for="Birthdate">Birthdate</label>
 							</div>
 						</div>
 					</div>
@@ -413,12 +522,12 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="mobilenumber" id="mobilenumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
-								<label for="mobilenumber" name="mobilenumber">Mobile Number</label>
+								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
+								<label for="MobileNumber">Mobile Number</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="profession" id="profession" data-length="30" maxlength="30">
-								<label for="profession" name="profession">Profession/Occupation</label>
+								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
+								<label for="Profession">Profession/Occupation</label>
 							</div>
 						</div>
 					</div>
@@ -427,12 +536,12 @@
 						<div class="row" style="margin-top: 0px;">
 							<h4 class="center">Company</h4>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
 								<label for="CompanyName">Company Name</label>
 							</div>
 							<h4 class="center">School</h4>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
 								<label for="SchoolName">School Name</label>
 							</div>
 						</div>
@@ -442,12 +551,12 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" class="validate" name="username" data-length="45" maxlength="45">
+								<input type="text" name="username" data-length="16" maxlength="16">
 								<label for="icon_prefix" name="lblusername">Username</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" class="validate" name="password" data-length="45" maxlength="45">
+								<input type="password" name="password" data-length="16" maxlength="16">
 								<label for="password" name="lblpassword">Password</label>
 							</div>
 						</div>

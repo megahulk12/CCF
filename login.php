@@ -213,17 +213,17 @@
 					<div class="row">
 						<div class="input-field col s12">
 							<i class="material-icons prefix">account_circle</i><!-- person_outline -->
-							<input type="text" class="validate" id="username" name="username">
+							<input type="text" id="username" name="username">
 							<label for="icon_prefix" name="lblusername">Username</label>
 						</div>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">lock</i><!-- lock_outline -->
-							<input type="password" class="validate" id="password" name="password">
+							<input type="password" id="password" name="password">
 							<label for="password" name="lblpassword">Password</label>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s12" type="submit">Login</button>
+						<button class="waves-effect waves-light btn col s12" type="submit" name="login-submit">Login</button>
 					</div>
 					<div class="row">
 						<a href="guest.php" class="col s12 center">LOGIN AS GUEST</a>
@@ -238,3 +238,19 @@
 		</footer>
 	</body>
 </html>
+<?php
+	if(isset($_POST['login-submit'])) {
+		echo '
+			<script>
+			// popup for wrong credentials
+				swal({
+					title: "Error!",
+					text: "Wrong username or password. Please try again!",
+					type: "error",
+					allowEscapeKey: true,
+					timer: 10000
+				});
+			</script>
+		';
+	}
+?>
