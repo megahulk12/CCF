@@ -1,4 +1,7 @@
-<?php include('session.php'); ?>
+<?php
+	include('session.php');
+	include('globalfunctions.php');
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -17,6 +20,25 @@
 
 	<title>Christ's Commission Fellowship</title>
 
+	<?php
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'y') {
+				// database connection variables
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+
+				$sql_pass = "UPDATE endorsement_tbl SET endorsementStatus = 1 WHERE memberID = ".$_SESSION['userid'];
+				mysqli_query($conn, $sql_pass);
+			}
+		}
+	?>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -238,10 +260,36 @@
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
 			<?php
-				 
+				if(getNotificationType($_SESSION['userid']) == 0) {
+					// checks if notification type is endorsement,
+					// then gets notifications from the database that are endorsement related
+					echo '<li><a onclick="approval()">'.getNotificationDesc($_SESSION['userid']).'</a></li>';
+				}
+
+				// database connection variables
+
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+				$query = "SELECT notificationDesc, notificationType FROM notification_tbl WHERE notificationStatus <= 1 AND memberID = ".$_SESSION['userid'];
+				$result = mysqli_query($conn, $query);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						$notificationDesc = $row['notificationDesc'];
+						$notificationType = $row['notificationType'];
+						if($notificationType == 0) {
+							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+						}
+						echo '<li class="divider"></li>';
+					}
+				}
 			?>
-			<!--
-		  	<li class="divider"></li>
+			<!--		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
@@ -338,4 +386,27 @@
 			mysqli_query($conn, $sql);
 		}
 	?>
+	<script>
+		function approval() {
+			swal({
+				  title: "Do you approve?",
+				  type: "info",
+				  showCancelButton: true,
+				  confirmButtonColor: "#66ff66",
+				  confirmButtonText: "Yes",
+				  cancelButtonText: "No",
+				  closeOnConfirm: false
+				},
+				function(){
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { window.location.href + "?apr=y"; }
+						), 1000);
+				});
+		}
+	</script>
 </html>
