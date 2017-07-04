@@ -4,7 +4,7 @@
    
    $user_check = $_SESSION['user'];
    
-   $ses_sql = mysqli_query($db,"SELECT memberID, username, password, memberType FROM member_tbl WHERE username = '$user_check';");
+   $ses_sql = mysqli_query($db,"SELECT memberID, lastName, firstName, username, memberType FROM member_tbl WHERE username = '$user_check';");
    $sql_companyID = mysqli_query($db,"SELECT companyID FROM member_tbl WHERE username = '$user_check';");
    $sql_schoolID = mysqli_query($db,"SELECT schoolID FROM member_tbl WHERE username = '$user_check';");
    $sql_spouseID = mysqli_query($db,"SELECT spouseID FROM member_tbl WHERE username = '$user_check';");
@@ -18,6 +18,8 @@
    
    $login_session = $row['username'];
    $_SESSION['userid'] = $row['memberID']; //userID is memberID
+   $_SESSION['firstName'] = $row['firstName'];
+   $_SESSION['lastName'] = $row['lastName'];
    $_SESSION['memberType'] = $row['memberType'];
    $_SESSION['companyID'] = $row_company['companyID'];
    $_SESSION['schoolID'] = $row_school['schoolID'];

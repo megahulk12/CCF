@@ -103,6 +103,10 @@
 		  	padding: 14px 16px;
 		}
 
+		.notifcation-new {
+			background-color: #ebebeb;
+		}
+
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -233,13 +237,19 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+			<?php
+				 
+			?>
+			<!--
 		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">

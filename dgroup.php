@@ -1,7 +1,10 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php include('session.php'); ?>
+	<?php
+		include('session.php'); 
+		include('globalfunctions.php'); 
+	?>
 	<?php
 		// database connection variables
 		$servername = "localhost";
@@ -18,6 +21,14 @@
 			$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
 			mysqli_query($conn, $sql_endorsement_request);
 
+			// notifications
+
+			// notificationStatus: 0 implies not read, 1 implies already read
+			// notificationType: 
+			// 0 = endorsement; 1 = event; 2 = ministry;
+			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
+			$sql_notifications = "INSERT INTO notifications_tbl(endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".getDgroupLeaderID($_SESSION['userid']).", '$notificationDesc', 0, 0);";
+			mysqli_query($conn, $sql_notifications);
 		}
 	?>
 	<meta charset="utf-8">
