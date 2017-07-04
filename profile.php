@@ -30,8 +30,12 @@
 
 	if(isset($_POST["submit_coinfo"])) {
 		$gender = $_POST["Gender"];
-		if ($gender == "Male") $gender = 0;
-		else $gender = 1;
+		if ($gender == "Male") {
+			$gender = 0;
+		}
+		else {
+			$gender = 1;
+		}
 		$civilstatus = $_POST["CivilStatus"];
 		$citizenship = $_POST["Citizenship"];
 		$mobilenumber = $_POST["MobileNumber"];
