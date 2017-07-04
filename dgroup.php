@@ -18,9 +18,6 @@
 			$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
 			mysqli_query($conn, $sql_endorsement_request);
 		}
-		else {
-
-		}
 	?>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -359,10 +356,11 @@
 	<body>
 		<div class="container">
 			<?php 
-			if($_SESSION['memberType'] <= 1 && getRequestSeen() == "") {
+			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
 			<form method="post">
 				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="submit" name="request_leader">I WANT TO BE A DGROUP LEADER</button>
+				<input type="hidden" name="seen-request" />
 			</form>';
 			}
 			?>
@@ -443,6 +441,7 @@
 			}
 		}
 
+		/*
 		function requestLeader() {
 			swal({
 				title: "Success!",
@@ -458,11 +457,9 @@
 		}
 
 		function changeToPending() {
-			/*
 			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
 			document.getElementById("request_leader").style.color = "#777";
 			document.getElementById("request_leader").innerHTML = "PENDING";
-			*/
 			document.getElementById("request_leader").disabled = true;
 		}
 
@@ -472,56 +469,58 @@
 			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
 			document.getElementById("request_leader").disabled = false;
 		}
+		*/
 	</script>
-<?php
-	if(getRequestSeen() == "") { }
-	else if(getRequestSeen() == 0) {
-		echo '
-		<script>
-			swal({
-					title: "Success!",
-					text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-					type: "success",
-					allowEscapeKey: true
-				});
-		</script>';
-		setRequestSeen();
-	}
 
-	function getRequestSeen() {
-		// database connection variables
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
+	<?php
+		if(isset($_POST['seen-request'])) {
+			echo '
+			<script>
+				swal({
+						title: "Success!",
+						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+						type: "success",
+						allowEscapeKey: true
+					});
+			</script>';
+			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
+			setRequestSeen();
 		}
 
-		$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-		$result = mysqli_query($conn, $sql);
-		$request = "";
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$request = $row["request"];
+		function getRequestSeen() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
 			}
-		}
-		return $request;
-	}
 
-	function setRequestSeen() {
-		// database connection variables
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
+			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+			$result = mysqli_query($conn, $sql);
+			$request = "";
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$request = $row["request"];
+				}
+			}
+			return $request;
 		}
-		$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-		mysqli_query($conn, $sql);
-	}
-?>
+
+		function setRequestSeen() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+			mysqli_query($conn, $sql);
+		}
+	?>
 </html>
