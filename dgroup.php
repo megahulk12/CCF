@@ -17,6 +17,7 @@
 
 			$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
 			mysqli_query($conn, $sql_endorsement_request);
+
 		}
 	?>
 	<meta charset="utf-8">
@@ -275,6 +276,7 @@
 		}
 
 		.prefix:hover {
+			transition: 0.3s ease-out;
 			color: #1bcde4;
 		}
 
@@ -358,7 +360,7 @@
 			<?php 
 			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
-			<form method="post">
+			<form method="post" action="dgroup.php">
 				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="submit" name="request_leader">I WANT TO BE A DGROUP LEADER</button>
 				<input type="hidden" name="seen-request" />
 			</form>';
@@ -379,19 +381,19 @@
 					<table class="centered dgroup-table-spacing">
 						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
 							<td>
-								<a class="dgroup-names" href="#view-profile" onclick="viewProfile(1)"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
 								Dodong Laboriki</a>
 							</td>
 							<td>
-								<a class="dgroup-names" href="#view-profile" onclick="viewProfile(1)"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
 								Dodong Laboriki</a>
 							</td>
 							<td>
-								<a class="dgroup-names" href="#view-profile" onclick="viewProfile(1)"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
 								Dodong Laboriki</a>
 							</td>
 							<td>
-								<a class="dgroup-names" href="#view-profile" onclick="viewProfile(1)"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
 								Dodong Laboriki</a>
 							</td>
 						</tr>
@@ -474,14 +476,18 @@
 
 	<?php
 		if(isset($_POST['seen-request'])) {
+			// script also prevents to confirm form resubmission para there are no duplicates in the data
 			echo '
 			<script>
+			setTimeout( 
 				swal({
 						title: "Success!",
 						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
 						type: "success",
 						allowEscapeKey: true
-					});
+					},
+					function() { window.location = "dgroup.php"; }
+					), 1000);
 			</script>';
 			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
 			setRequestSeen();
