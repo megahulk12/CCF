@@ -1,24 +1,27 @@
-<?php include('session.php'); ?>
-<?php
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
-	if(isset($_POST['request_leader'])) {
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
-		mysqli_query($conn, $sql_endorsement_request);
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
+	<?php include('session.php'); ?>
+	<?php
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		if(isset($_POST['request_leader'])) {
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+
+			$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
+			mysqli_query($conn, $sql_endorsement_request);
+		}
+		else {
+
+		}
+	?>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
@@ -33,7 +36,6 @@
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
-
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -357,15 +359,11 @@
 	<body>
 		<div class="container">
 			<?php 
-			if($_SESSION['memberType'] <= 1) {
+			if($_SESSION['memberType'] <= 1 && getRequestSeen() == "") {
 			echo '
 			<form method="post">
-			<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="hidden" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
+				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="submit" name="request_leader">I WANT TO BE A DGROUP LEADER</button>
 			</form>';
-			}
-			if($_SESSION['endorsementStatus'] == 0) {
-			echo '
-			<button class="waves-effect waves-light btn col s2 right wait-request" id="request_leader" type="button" disabled>PENDING</button>';
 			}
 			?>
 			<div id="view-profilee" style="display: none;"> <!-- remove e -->
@@ -453,7 +451,7 @@
 				allowEscapeKey: true
 			},
 				function() {
-					changeToPending();
+					//changeToPending();
 				}
 			);
 			
@@ -475,5 +473,55 @@
 			document.getElementById("request_leader").disabled = false;
 		}
 	</script>
+<?php
+	if(getRequestSeen() == "") { }
+	else if(getRequestSeen() == 0) {
+		echo '
+		<script>
+			swal({
+					title: "Success!",
+					text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+					type: "success",
+					allowEscapeKey: true
+				});
+		</script>';
+		setRequestSeen();
+	}
 
+	function getRequestSeen() {
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+		$result = mysqli_query($conn, $sql);
+		$request = "";
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$request = $row["request"];
+			}
+		}
+		return $request;
+	}
+
+	function setRequestSeen() {
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+		mysqli_query($conn, $sql);
+	}
+?>
 </html>
