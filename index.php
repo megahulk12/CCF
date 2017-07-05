@@ -36,31 +36,9 @@
 
 				$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
 				mysqli_query($conn, $sql_pass);
-				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE requestMemberID = ".$_SESSION['userid'];
+				$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE requestMemberID = ".$_SESSION['userid'];
 				mysqli_query($conn, $sql_notificationtype);
-
 			}
-		}
-
-		function getRequestDgMemberID() {
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT requestdgmemberID FROM notifications_tbl WHERE requestMemberID = ".$_SESSION['userid'];
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$requestdgmemberID = $row["requestdgmemberID"];
-				}
-			}
-			return $requestdgmemberID;
 		}
 	?>
 	<style>
@@ -163,6 +141,7 @@
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
 		 	 margin-top: 97px;
+		 	 height: 350px;
 		}
 
 		.dropdown-content-notification li {
@@ -296,14 +275,15 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
 						//$requestMemberID = $row['requestMemberID']; testing muna ito
 						$notificationDesc = $row['notificationDesc'];
+						$notificationStatus = $row['notificationStatus'];
 						$notificationType = $row['notificationType'];
-						if($notificationType == 0) {
+						if($notificationStatus <= 1) {
 							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
 						}
 						echo '<li class="divider"></li>';
@@ -415,13 +395,11 @@
 							title: "Approved!",
 							text: "You have approved this request.",
 							type: "success"
-						},
-						function() {
-							window.
 						});
 				</script>
 				';
 			}
+			echo '<script> alert("asdas"); </script>';
 		}
 	?>
 	<script>

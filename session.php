@@ -27,6 +27,7 @@
    $_SESSION['prefID'] = $row_pref['prefID'];
    $_SESSION['username'] = $row['username'];
    $_SESSION['active'] = true;
+   $_SESSION['approval'] = true; // flag for approval alert
    
    if(!isset($_SESSION['user'])){
       header("Location: login.php");
