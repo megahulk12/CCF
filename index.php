@@ -15,14 +15,14 @@
 	<link href="universal.css" rel="stylesheet">
 
 	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert.min.js"></script>
+	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
 
 	<?php
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y') {
+		if(isset($_GET["apr"])) {
+			if($_GET["apr"] == "y") {
 				// database connection variables
 				$servername = "localhost";
 				$username = "root";
@@ -36,8 +36,9 @@
 
 				$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
 				mysqli_query($conn, $sql_pass);
-				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE memberID = $_SESSION['userid']";
+				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE requestMemberID = ".$_SESSION['userid'];
 				mysqli_query($conn, $sql_notificationtype);
+
 			}
 		}
 
@@ -52,14 +53,14 @@
 			if (!$conn) {
 				die("Connection failed: " . mysqli_connect_error());
 			}
-			$query = "SELECT requestdgmemberID FROM notification_tbl WHERE memberID = ".$_SESSION['userid'];
+			$query = "SELECT requestdgmemberID FROM notifications_tbl WHERE requestMemberID = ".$_SESSION['userid'];
 			$result = mysqli_query($conn, $query);
 			if(mysqli_num_rows($result) > 0) {
 				while($row = mysqli_fetch_assoc($result)) {
 					$requestdgmemberID = $row["requestdgmemberID"];
 				}
 			}
-			return $requestdgroupmemberID;
+			return $requestdgmemberID;
 		}
 	?>
 	<style>
@@ -405,6 +406,23 @@
 			$sql = "UPDATE member_tbl SET welcome = 1 WHERE memberID = ".$_SESSION["userid"];
 			mysqli_query($conn, $sql);
 		}
+
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'y') {
+				echo '
+				<script> //reminder: reload
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() {
+							window.
+						});
+				</script>
+				';
+			}
+		}
 	?>
 	<script>
 		function approval() {
@@ -418,14 +436,17 @@
 				  closeOnConfirm: false
 				},
 				function(){
+					window.location = window.location.href + "?apr=y";
+					/*
 				setTimeout( 
 					swal({
 							title: "Approved!",
 							text: "You have approved this request.",
 							type: "success"
 						},
-						function() { window.location.href + "?apr=y"; }
+						function() { //window.location here ?apr=y }
 						), 1000);
+						*/
 				});
 		}
 	</script>

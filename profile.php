@@ -123,7 +123,7 @@
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert.min.js"></script>
+	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 	<title>Christ's Commission Fellowship</title>
 	<style>
