@@ -3,7 +3,7 @@
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<?php
 		include('session.php'); 
-		include('globalfunctions.php'); 
+		include('globalfunctions.php');
 	?>
 	<?php
 		// database connection variables
@@ -27,7 +27,7 @@
 			// notificationType: 
 			// 0 = endorsement; 1 = event; 2 = ministry;
 			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, requestMemberID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", '$notificationDesc', 0, 0);";
+			$sql_notifications = "INSERT INTO notifications_tbl(memberID, requestMemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0);";
 			mysqli_query($conn, $sql_notifications);
 		}
 	?>

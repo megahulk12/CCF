@@ -56,7 +56,7 @@
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
 		}
-		$query = "SELECT dgleader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON memberID = dgleader WHERE memberID = ".$memberID;
+		$query = "SELECT dgleader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID WHERE memberID = $memberID";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
@@ -106,5 +106,27 @@
 			}
 		}
 		return $notificationType;
+	}
+
+	function getEndorsementID() {
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement = "SELECT endorsementID FROM endorsement_tbl ORDER BY endorsementID DESC LIMIT 1";
+		$result = mysqli_query($conn, $sql_endorsement);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$endorsementID = $row["endorsementID"];
+			}
+		}
+		return $endorsementID;
 	}
 ?>
