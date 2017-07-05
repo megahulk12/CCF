@@ -1,27 +1,10 @@
+<?php
+	include('session.php');
+	include('globalfunctions.php');
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php include('session.php'); ?>
-	<?php
-		// database connection variables
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-
-		if(isset($_POST['request_leader'])) {
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
-			mysqli_query($conn, $sql_endorsement_request);
-		}
-		else {
-
-		}
-	?>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
@@ -32,10 +15,30 @@
 	<link href="universal.css" rel="stylesheet">
 
 	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<script src="alerts/dist/sweetalert.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
+
+	<?php
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'y') {
+				// database connection variables
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+
+				$sql_pass = "UPDATE endorsement_tbl SET endorsementStatus = 1 WHERE memberID = ".$_SESSION['userid'];
+				mysqli_query($conn, $sql_pass);
+			}
+		}
+	?>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -51,6 +54,10 @@
 			max-width: 1280px;
 			width: 80%;
 		}
+
+		.card-small {
+			width:400px;
+	    }
 
 		#logo {
 			margin-top: 10px;
@@ -90,55 +97,10 @@
 			font-size: 13px;
 		}
 
-		/*headers*/
-		h1, h2, h3, h4, h5, h6 {
-			color: #424242;
-			font-family: proxima-nova;
-			text-transform: uppercase;
-		}
-		/*=======END=======*/
-
-		/*=====FORM BUTTONS=====*/
-		.btn, .btn-large {
-		  text-decoration: none;
-		  color: #777;
-		  background-color: #ebebeb;
-		  text-align: center;
-		  letter-spacing: .5px;
-		  transition: .2s ease-out;
-		  cursor: pointer;
-		  font-family: proxima-nova;
-		  font-size: 13px;
-		  /*border-radius: 20px;*/
-		}
-
-		.dgroup-leader-button {
-		  	background-color: #16A5B8;
-		  	color: #fff;
-		}
-
-		.wait-request {
-		  	background-color: #ebebeb;
-		  	color: #777;
-		}
-
-		/*hover of button*/
-		.btn:hover, .btn-large:hover {
-			background-color: #1bcde4;
-			color: #fff;
-		}
-
-		/*focus of button*/
-		.btn:focus, .btn-large:focus,
-		.btn-floating:focus {
-		  	background-color: #1bcde4;
-		}
-
 		.dropdown-content-list {
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
 			 overflow-y: auto;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
@@ -167,6 +129,10 @@
 		  	padding: 14px 16px;
 		}
 
+		.notifcation-new {
+			background-color: #ebebeb;
+		}
+
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -176,7 +142,6 @@
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
-		 	 will-change: width, height;
 		 	 margin-top: 97px;
 		}
 
@@ -219,7 +184,7 @@
 		.notifications {
 			padding-top: 15px;
 			height: 100%;
-			position: relative;
+			position: relative !important;
 		}
 
 		.notifications-header, .notifications-body {
@@ -273,38 +238,6 @@
 			100% { transform: rotate(0deg) }
 		}
 		*/
-		.prefix {
-			color: #16A5B8;
-		}
-
-		.prefix:hover {
-			color: #1bcde4;
-		}
-
-		.dgroup-icons {
-			font-size: 200px;
-		}
-
-		.dgroup-names {
-			font-family: proxima-nova;
-			color: #424242;
-			font-size: 13px;
-			text-transform: uppercase;
-		}
-
-		.dgroup-table-spacing {
-			margin-bottom: 100px;
-		}
-
-		.dgroup-view-profile {
-			animation-name: view-profile;
-			animation-duration: 2s;
-			animation-timing-function: ease;
-		}
-
-		@keyframes view-profile {
-			
-		}
 	</style>
 
 	<script type="text/javascript">
@@ -312,5 +245,204 @@
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		}); 
+		});
 	</script>
+
+	<header class="top-nav">
+	<!-- Dropdown Structure Account--> 
+		<ul id="account" class="dropdown-content dropdown-content-list">
+		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  	<li class="divider"></li>
+		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
+		</ul>
+	<!-- Dropdown Structure Notifications-->
+		<ul id="notifications" class="dropdown-content dropdown-content-notification">
+			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
+		  	<li class="divider"></li>
+			<?php
+				if(getNotificationType($_SESSION['userid']) == 0) {
+					// checks if notification type is endorsement,
+					// then gets notifications from the database that are endorsement related
+					echo '<li><a onclick="approval()">'.getNotificationDesc($_SESSION['userid']).'</a></li>';
+				}
+
+				// database connection variables
+
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+				$query = "SELECT notificationDesc, notificationType FROM notification_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].")";
+				$result = mysqli_query($conn, $query);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						$requestMemberID = $row['requestMemberID'];
+						$notificationDesc = $row['notificationDesc'];
+						$notificationType = $row['notificationType'];
+						if($notificationType == 0) {
+							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+						}
+						echo '<li class="divider"></li>';
+					}
+				}
+			?>
+			<!-- <li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+			-->
+		</ul>
+		<nav style="margin-bottom: 50px;">
+			<div class="container">
+			    <div class="nav-wrapper">
+			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
+			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+			      		<!-- FOR DGROUP MEMERS
+			        	<li><a href="profile.php">PROFILE</a></li>
+			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
+						<li><a href="events.php">EVENTS</a></li>
+						<li><a href="ministry.php">MINISTRIES</a></li>
+						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
+						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+			     	 </ul>
+			    </div>
+			</div>
+		</nav>
+	</header>
+
+	<body>
+		<div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Card Title</span>
+              <p>I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">Card Title</span>
+              <p>I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>
+            
+	</body>
+	<?php 
+		if(isset($_POST['submit'])) {
+			echo '
+				<script>
+				// for congratulations of being a dgroup leader
+					swal({
+						title: "Congratulations!",
+						text: "You are now a Dgroup leader! :)",
+						type: "success",
+						allowEscapeKey: true,
+						timer: 10000
+					});
+				</script>
+			';
+		}
+
+		if(getWelcome() == 0)  {
+			echo '
+			<script>
+			// to inform that you have been registered
+				swal({
+					title: "Welcome to CCF!",
+					text: "Thank you for filling up the registration form!\nFeel free to explore this website and God bless! :)",
+					timer: 10000,
+					confirmButtonText: "OK"
+				});
+			</script>
+			';
+			setWelcome();
+		}
+
+		function getWelcome() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+
+			$sql = "SELECT welcome FROM member_tbl WHERE memberID = ".$_SESSION["userid"];
+			$result = mysqli_query($conn, $sql);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$welcome = $row["welcome"];
+				}
+			}
+			return $welcome;
+		}
+
+		function setWelcome() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$sql = "UPDATE member_tbl SET welcome = 1 WHERE memberID = ".$_SESSION["userid"];
+			mysqli_query($conn, $sql);
+		}
+	?>
+	<script>
+		function approval() {
+			swal({
+				  title: "Do you approve?",
+				  type: "info",
+				  showCancelButton: true,
+				  confirmButtonColor: "#66ff66",
+				  confirmButtonText: "Yes",
+				  cancelButtonText: "No",
+				  closeOnConfirm: false
+				},
+				function(){
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { window.location.href + "?apr=y"; }
+						), 1000);
+				});
+		}
+	</script>
+</html>
