@@ -34,9 +34,32 @@
 					die("Connection failed: " . mysqli_connect_error());
 				}
 
-				$sql_pass = "UPDATE endorsement_tbl SET endorsementStatus = 1 WHERE memberID = ".$_SESSION['userid'];
+				$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
+				mysqli_query($conn, $sql_pass);
+				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE dgmemberID = ".getRequestDgMemberID();
 				mysqli_query($conn, $sql_pass);
 			}
+		}
+
+		function getRequestDgMemberID() {
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$query = "SELECT requestdgmemberID FROM notification_tbl WHERE memberID = ".$_SESSION['userid'];
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$requestdgmemberID = $row["requestdgmemberID"];
+				}
+			}
+			return $requestdgroupmemberID;
 		}
 	?>
 	<style>
@@ -260,12 +283,6 @@
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
 			<?php
-				if(getNotificationType($_SESSION['userid']) == 0) {
-					// checks if notification type is endorsement,
-					// then gets notifications from the database that are endorsement related
-					echo '<li><a onclick="approval()">'.getNotificationDesc($_SESSION['userid']).'</a></li>';
-				}
-
 				// database connection variables
 
 				$servername = "localhost";
@@ -276,15 +293,17 @@
 				if (!$conn) {
 					die("Connection failed: " . mysqli_connect_error());
 				}
-				$query = "SELECT notificationDesc, notificationType FROM notification_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].")";
+
+				// insert code set notificationStatus = 1 when user clicks notification area
+				$query = "SELECT notificationDesc, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
-						$requestMemberID = $row['requestMemberID'];
+						//$requestMemberID = $row['requestMemberID']; testing muna ito
 						$notificationDesc = $row['notificationDesc'];
 						$notificationType = $row['notificationType'];
 						if($notificationType == 0) {
-							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
 						}
 						echo '<li class="divider"></li>';
 					}
