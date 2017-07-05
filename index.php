@@ -36,8 +36,8 @@
 
 				$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
 				mysqli_query($conn, $sql_pass);
-				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-				mysqli_query($conn, $sql_pass);
+				$sql_notificationtype = "UPDATE notifications_tbl SET notificationType = 1 WHERE memberID = $_SESSION['userid']";
+				mysqli_query($conn, $sql_notificationtype);
 			}
 		}
 
