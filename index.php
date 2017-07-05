@@ -276,10 +276,11 @@
 				if (!$conn) {
 					die("Connection failed: " . mysqli_connect_error());
 				}
-				$query = "SELECT notificationDesc, notificationType FROM notification_tbl WHERE notificationStatus <= 1 AND memberID = ".$_SESSION['userid'];
+				$query = "SELECT notificationDesc, notificationType FROM notification_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].")";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
+						$requestMemberID = $row['requestMemberID'];
 						$notificationDesc = $row['notificationDesc'];
 						$notificationType = $row['notificationType'];
 						if($notificationType == 0) {
@@ -289,7 +290,7 @@
 					}
 				}
 			?>
-			<!--		  	<li class="divider"></li>
+			<!-- <li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
