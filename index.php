@@ -2,6 +2,32 @@
 	include('session.php');
 	include('globalfunctions.php');
 ?>
+<?php
+	if(isset($_GET["apr"])) {
+		if($_GET["apr"] == "y" && getNotificationSuccess() == 0) {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+
+			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
+			mysqli_query($conn, $sql_pass);
+
+			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
+			mysqli_query($conn, $sql_notificationtype);
+
+			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." approved your request to be a Dgroup Leader";
+			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0);";
+			mysqli_query($conn, $sql_notifications);
+		}
+	}
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -19,28 +45,6 @@
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
-
-	<?php
-		if(isset($_GET["apr"])) {
-			if($_GET["apr"] == "y") {
-				// database connection variables
-				$servername = "localhost";
-				$username = "root";
-				$password = "root";
-				$dbname = "dbccf";
-
-				$conn = mysqli_connect($servername, $username, $password, $dbname);
-				if (!$conn) {
-					die("Connection failed: " . mysqli_connect_error());
-				}
-
-				$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-				mysqli_query($conn, $sql_pass);
-				$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE requestMemberID = ".$_SESSION['userid'];
-				mysqli_query($conn, $sql_notificationtype);
-			}
-		}
-	?>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -275,16 +279,22 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR receivermemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
-						//$requestMemberID = $row['requestMemberID']; testing muna ito
+						//$receivermemberID = $row['receivermemberID']; testing muna ito
 						$notificationDesc = $row['notificationDesc'];
 						$notificationStatus = $row['notificationStatus'];
 						$notificationType = $row['notificationType'];
-						if($notificationStatus <= 1) {
+						if($notificationStatus <= 1 && $notificationType == 0) { // loads notifications if both seen or not seen and endorsement request type
 							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+
 						}
 						echo '<li class="divider"></li>';
 					}
@@ -386,9 +396,11 @@
 			$sql = "UPDATE member_tbl SET welcome = 1 WHERE memberID = ".$_SESSION["userid"];
 			mysqli_query($conn, $sql);
 		}
-
+	?>
+	<!-- this section is for notification approval of requests -->
+	<?php
 		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y') {
+			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
 				echo '
 				<script> //reminder: reload
 					swal({
@@ -398,8 +410,23 @@
 						});
 				</script>
 				';
+				setNotificationSuccess();
 			}
-			echo '<script> alert("asdas"); </script>';
+		}
+
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
+				echo '
+				<script> //reminder: reload
+					swal({
+							title: "Rejected!",
+							text: "You have rejected this request.",
+							type: "error"
+						});
+				</script>
+				';
+				setNotificationSuccess();
+			}
 		}
 	?>
 	<script>
@@ -411,10 +438,14 @@
 				  confirmButtonColor: "#66ff66",
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
-				  closeOnConfirm: false
+				  closeOnConfirm: false,
+				  closeOnCancel: false
 				},
-				function(){
-					window.location = window.location.href + "?apr=y";
+				function(isConfirm){
+					if(isConfirm)
+						window.location = window.location.href + "?apr=y";
+					else
+						window.location = window.location.href + "?apr=n";
 					/*
 				setTimeout( 
 					swal({
