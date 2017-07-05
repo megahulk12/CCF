@@ -279,7 +279,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {

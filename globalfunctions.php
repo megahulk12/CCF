@@ -47,7 +47,7 @@
 		return $resultID;
 	}
 
-	function getDgroupMemberID($memberID) {
+	function getDgroupMemberIDRequest($memberID) {
 		// database connection variables
 
 		$servername = "localhost";
