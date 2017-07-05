@@ -293,7 +293,8 @@
 				if (!$conn) {
 					die("Connection failed: " . mysqli_connect_error());
 				}
-				$sql_notificationtype = "UPDATE notification_tbl"
+
+				// insert code set notificationStatus = 1 when user clicks notification area
 				$query = "SELECT notificationDesc, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR requestMemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
