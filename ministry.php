@@ -336,7 +336,7 @@
 					if (!$conn) {
 						die("Connection failed: " . mysqli_connect_error());
 					}
-					$query = "SELECT ministryName, ministryDescription, ministryStatus, lastName, schedDay, schedTime, schedVenue FROM member_tbl INNER JOIN ministryassignment_tbl ON member_tbl.memberID=ministryassignment_tbl.memberID INNER JOIN ministrydetails_tbl ON ministryassignment_tbl.ministryID=ministryID JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID=scheduledmeeting_tbl.schedID WHERE memberID = ".$_SESSION['userid'] AND memberType = "4" AND schedID = "1";
+					$query = "SELECT ministryName, ministryDescription, ministryStatus, lastName, schedDay, schedTime, schedVenue FROM member_tbl INNER JOIN ministryassignment_tbl ON member_tbl.memberID=ministryassignment_tbl.memberID INNER JOIN ministrydetails_tbl ON ministryassignment_tbl.ministryID=ministryID INNER JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID=scheduledmeeting_tbl.schedID WHERE memberID = ".$_SESSION['userid'] /*AND memberType = "4" AND schedID = "1"*/;
 					$result = mysqli_query($conn, $query);
 					if(mysqli_num_rows($result) > 0) {
 						while($row = mysqli_fetch_assoc($result)) {
@@ -349,7 +349,9 @@
 							$schedVenue = $row["schedVenue"];
 						}
 					}
-					echo "<span class = "card-title">'.$minName.'";
+					echo '<h1 name="Ministryname" id="Ministryname" value="'.$minName.'">
+						  <label for="minName">Ministryname</label>
+					';
               ?>
               <p>I am a very simple card. I am good at containing small bits of information.
               I am convenient because I require little markup to use effectively.</p>
