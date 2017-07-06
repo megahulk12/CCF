@@ -173,7 +173,7 @@
 		*/
 		mysqli_close($conn);
 		//echo "<meta http-equiv='refresh' content='0'>";
-		include("config.php");
+		inclutde("config.php");
 		session_start();
 		$myusername = mysqli_real_escape_string($db,$_POST['username']);
 		$_SESSION['user'] = $myusername;
@@ -369,6 +369,7 @@
 			height: 97px;
 			line-height: 97px;
 		}
+
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
