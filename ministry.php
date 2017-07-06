@@ -327,7 +327,30 @@
         <div class="col s12 m6">
           <div class="card blue-grey darken-1">
             <div class="card-content white-text">
-              <span class="card-title">Card Title</span>
+              <?php
+              		$servername = "localhost";
+					$username = "root";
+					$password = "root";
+					$dbname = "dbccf";
+					$conn = mysqli_connect($servername, $username, $password, $dbname);
+					if (!$conn) {
+						die("Connection failed: " . mysqli_connect_error());
+					}
+					$query = "SELECT ministryName, ministryDescription, ministryStatus, lastName, schedDay, schedTime, schedVenue FROM member_tbl INNER JOIN ministryassignment_tbl ON member_tbl.memberID=ministryassignment_tbl.memberID INNER JOIN ministrydetails_tbl ON ministryassignment_tbl.ministryID=ministryID JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID=scheduledmeeting_tbl.schedID WHERE memberID = ".$_SESSION['userid'] AND memberType = "4" AND schedID = "1";
+					$result = mysqli_query($conn, $query);
+					if(mysqli_num_rows($result) > 0) {
+						while($row = mysqli_fetch_assoc($result)) {
+							$lastname = $row["lastName"];
+							$minName = $row["minName"];
+							$minDes = $row["mniDes"];
+							$minStat = $row["minStat"];
+							$schedDay = $row["SchedDay"];
+							$schedTime = $row["schedTime"];
+							$schedVenue = $row["schedVenue"];
+						}
+					}
+					echo "<span class = "card-title">'.$minName.'";
+              ?>
               <p>I am a very simple card. I am good at containing small bits of information.
               I am convenient because I require little markup to use effectively.</p>
             </div>
