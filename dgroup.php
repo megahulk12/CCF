@@ -24,7 +24,7 @@
 		// notificationType: 
 		// 0 = endorsement; 1 = event; 2 = ministry;
 		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0);";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
 		mysqli_query($conn, $sql_notifications);
 	}
 ?>
@@ -44,8 +44,35 @@
 
 			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
 			mysqli_query($conn, $sql_pass);
+
 			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
 			mysqli_query($conn, $sql_notificationtype);
+
+			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." has approved your request to be a Dgroup Leader";
+			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getRequestDgMemberID()).", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
+			mysqli_query($conn, $sql_notifications);
+		}
+		else if($_GET["apr"] == "n" && getNotificationSuccess() == 0) {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+
+			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 3 WHERE dgmemberID = ".getRequestDgMemberID();
+			mysqli_query($conn, $sql_pass); //sets endorsement request status as rejected/reconsideration
+
+			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
+			mysqli_query($conn, $sql_notificationtype); // sets notification as already completed
+
+			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." disapproved your request to be a Dgroup Leader";
+			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getRequestDgMemberID().", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
+			mysqli_query($conn, $sql_notifications);
 		}
 	}
 ?>
@@ -208,6 +235,7 @@
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
+		 	 height: 350px;
 		}
 
 		.dropdown-content-notification li {
@@ -374,7 +402,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType FROM notifications_tbl WHERE notificationStatus <= 1 AND (memberID = ".$_SESSION['userid']." OR receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -382,8 +410,12 @@
 						$notificationDesc = $row['notificationDesc'];
 						$notificationStatus = $row['notificationStatus'];
 						$notificationType = $row['notificationType'];
-						if($notificationStatus <= 1 && $notificationType == 0) { // loads notifications if both seen or not seen and endorsement request type
+						$request = $row['request'];
+						if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type
 							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 0) { // for result notifs of request
+							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
 						}
 						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
 
@@ -597,4 +629,66 @@
 			mysqli_query($conn, $sql);
 		}
 	?>
+	<!-- this section is for notification approval of requests -->
+	<?php
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
+				echo '
+				<script> //reminder: reload
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						});
+				</script>
+				';
+				setNotificationSuccess();
+			}
+		}
+
+		if(isset($_GET['apr'])) {
+			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
+				echo '
+				<script> //reminder: reload
+					swal({
+							title: "disapproved!",
+							text: "You have disapproved this request.",
+							type: "error"
+						});
+				</script>
+				';
+				setNotificationSuccess();
+			}
+		}
+	?>
+	<script>
+		function approval() {
+			swal({
+				  title: "Do you approve?",
+				  type: "info",
+				  showCancelButton: true,
+				  confirmButtonColor: "#66ff66",
+				  confirmButtonText: "Yes",
+				  cancelButtonText: "No",
+				  closeOnConfirm: false,
+				  closeOnCancel: false
+				},
+				function(isConfirm){
+					if(isConfirm)
+						window.location = window.location.href + "?apr=y";
+					else
+						window.location = window.location.href + "?apr=n";
+					/*
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { //window.location here ?apr=y }
+						), 1000);
+						*/
+				});
+		}
+	</script>
 </html>
