@@ -255,13 +255,13 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  	<li><a href="ministryregister.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
+			<li><h6 class="notifications-header">Notifications<span class="new badge">1</span></h6></li>
 		  	<li class="divider"></li>
 			<?php
 				if(getNotificationType($_SESSION['userid']) == 0) {
@@ -315,7 +315,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">1</sup></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -327,38 +327,12 @@
         <div class="col s12 m6">
           <div class="card blue-grey darken-1">
             <div class="card-content white-text">
-              <?php
-              		$servername = "localhost";
-					$username = "root";
-					$password = "root";
-					$dbname = "dbccf";
-					$conn = mysqli_connect($servername, $username, $password, $dbname);
-					if (!$conn) {
-						die("Connection failed: " . mysqli_connect_error());
-					}
-					$query = "SELECT ministryName, ministryDescription, ministryStatus, lastName, schedDay, schedTime, schedVenue FROM member_tbl INNER JOIN ministryassignment_tbl ON member_tbl.memberID=ministryassignment_tbl.memberID INNER JOIN ministrydetails_tbl ON ministryassignment_tbl.ministryID=ministryID INNER JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID=scheduledmeeting_tbl.schedID WHERE memberID = ".$_SESSION['userid'] /*AND memberType = "4" AND schedID = "1"*/;
-					$result = mysqli_query($conn, $query);
-					if(mysqli_num_rows($result) > 0) {
-						while($row = mysqli_fetch_assoc($result)) {
-							$lastname = $row["lastName"];
-							$minName = $row["minName"];
-							$minDes = $row["mniDes"];
-							$minStat = $row["minStat"];
-							$schedDay = $row["SchedDay"];
-							$schedTime = $row["schedTime"];
-							$schedVenue = $row["schedVenue"];
-						}
-					}
-					echo '<h1 name="Ministryname" id="Ministryname" value="'.$minName.'">
-						  <label for="minName">Ministryname</label>
-					';
-              ?>
+              <span class="card-title">Gaming Ministry</span>
               <p>I am a very simple card. I am good at containing small bits of information.
               I am convenient because I require little markup to use effectively.</p>
             </div>
             <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
+              <a href="#">More Info</a>
             </div>
           </div>
         </div>
@@ -368,7 +342,7 @@
         <div class="col s12 m6">
           <div class="card blue-grey darken-1">
             <div class="card-content white-text">
-              <span class="card-title">Card Title</span>
+              <span class="card-title">Sports Ministry</span>
               <p>I am a very simple card. I am good at containing small bits of information.
               I am convenient because I require little markup to use effectively.</p>
             </div>

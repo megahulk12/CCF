@@ -792,7 +792,7 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
+			<li><h6 class="notifications-header">Notifications<span class="new badge">1</span></h6></li>
 		  	<li class="divider"></li>
 			<?php
 				// database connection variables
@@ -856,7 +856,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account" style="position: relative;">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">1</sup></a></li>
 					</ul>
 			    </div>
 			</div>
@@ -1454,6 +1454,7 @@
 		} 
 	</script>
 	<footer>
+
 	</footer>
 	
 	<?php
