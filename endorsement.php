@@ -1,4 +1,41 @@
-<?php include('session.php'); ?>
+<?php
+	include('session.php');
+	include('globalfunctions.php');
+?>
+<?php
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+	if(isset($_POST['submit'])) {
+		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
+		$baptismalplace = $_POST["BaptismalPlace"];
+		$dgrouptype = $_POST["DgroupType"];
+		if($dgrouptype=="Youth") $dgrouptype = 0;
+		else if($dgrouptype=="Singles") $dgrouptype = 1;
+		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
+		else if($dgrouptype=="Married") $dgrouptype = 3;
+		else if($dgrouptype=="Couples") $dgrouptype = 4;
+		$agebracket = $_POST["AgeBracket"];
+		$meetingday = $_POST["MeetingDay"];
+		$meetingplace = $_POST["MeetingPlace"];
+		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$dateendorsed = date("Y-m-d");
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', dateEndorsed = '$dateendorsed' WHERE dgmemberID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
+		$sql_sched = "INSERT INTO scheduledmeetings_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType)";
+		mysqli_query($conn, $sql_endorsement);
+		mysqli_query($conn, $sql_sched);
+	}
+?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -466,13 +503,56 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+			<?php
+				// database connection variables
+
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+
+				// insert code set notificationStatus = 1 when user clicks notification area
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$result = mysqli_query($conn, $query);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						//$receivermemberID = $row['receivermemberID']; testing muna ito
+						$notificationDesc = $row['notificationDesc'];
+						$notificationStatus = $row['notificationStatus'];
+						$notificationType = $row['notificationType'];
+						$request = $row['request'];
+						if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
+							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 1) { // for result notifs of request approve
+							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+
+						}
+						echo '<li class="divider"></li>';
+					}
+				}
+			?>
+			<!-- <li class="divider"></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
+			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -506,7 +586,7 @@
 								<label for="BaptismalDate" class>When were you baptized?</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
+								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
 								<label for="BaptismalPlace">Where were you baptized?</label>
 							</div>
 							<h4 class="center">DGROUP</h4>
@@ -524,7 +604,7 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" class="validate" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress'>
+								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 && event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress'>
 								<label for="AgeBracket">Age Bracket</label>
 							</div>
 							<h4 class="center">MEETING</h4>
@@ -550,6 +630,10 @@
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+							</div>
+							<div class="input-field col s12">
+								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
+								<label for="MeetingPlace">Place</label>
 							</div>
 						</div>
 					</div>

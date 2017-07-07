@@ -263,4 +263,26 @@
 		}
 		return $success;
 	}
+
+	function getSchedID() {
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT schedID FROM scheduledmeetings_tbl ORDER BY schedID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schedID = $row["schedID"];
+			}
+		}
+		return $schedID;
+	}
 ?>
