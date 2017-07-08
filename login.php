@@ -153,6 +153,10 @@
 		  color: #16A5B8;
 		}
 
+		input:-webkit-text-fill-color {
+		    -webkit-box-shadow: 0 0 0px 1000px white inset;
+		}
+
 		.btn, .btn-large {
 		  text-decoration: none;
 		  color: #fff;
