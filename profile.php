@@ -1129,7 +1129,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" name="cpass">
+								<form method="post" name="cpass" onsubmit="return submit_form('submit_cpass');">
 									<div id="cpass" style="display: none;">
 										<div class="row">
 											<?php
@@ -1158,7 +1158,7 @@
 											</div>';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="button" name="submit_cpass" onclick="submit_form('submit_cpass')">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" onclick="submit_form('submit_cpass')">SUBMIT</button>
 											</div>
 										</div>
 									</div>
