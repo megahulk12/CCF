@@ -724,7 +724,7 @@
 						</td>
 						<td class="content">
 							<div class="container">
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="cpinfo" onsubmit="return submit_form('submit_cpinfo')">
 									<div id="cpinfo">
 										<div class="row">
 											<?php
@@ -776,12 +776,12 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="button" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('submit_cpinfo')">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
 											</div>
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="coinfo" onsubmit="return submit_form('submit_coinfo')">
 									<div id="coinfo" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -961,7 +961,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="cprefer" onsubmit="return submit_form('submit_cprefer');">
 									<div id="cprefer" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1038,7 +1038,7 @@
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt1">End Time</label>
-														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefendtime1.'">
+														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
@@ -1062,7 +1062,7 @@
 												</div>
 													<div class="input-field col s6">
 														<label for="timepicker1opt2">Start Time</label>
-														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefstarttime2.'">
+														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
@@ -1129,7 +1129,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post">
+								<form method="post" name="cpass">
 									<div id="cpass" style="display: none;">
 										<div class="row">
 											<?php
@@ -1153,8 +1153,8 @@
 											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="password" data-length="16" maxlength="16" value="'.$password.'">
-												<label for="password" name="lblpassword">Password</label>
+												<input type="text" name="password" data-length="16" maxlength="16" value="'.$password.'">
+												<label for="text" name="lblpassword">Password</label>
 											</div>';
 											?>
 											<div class="row">
@@ -1175,6 +1175,7 @@
 	</footer>
 
 	<script>
+	"use strict";
 		var currentpage = 1, no_of_pages = 2, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 		function setNavPage(navpage, num_of_pages) {
 			// re-initialize every after visit of side navigation page
@@ -1244,7 +1245,8 @@
 					document.getElementById(navpage+'_back').style.display = "inline";
 					document.getElementById(navpage+'_next').href = "#"+navpage+"page"+currentpage;
 
-					document.getElementById(navpage+'_next').onclick = submitOnClick(navpage);
+					// originally .onclick event
+					document.getElementById(navpage+'_next').onsubmit = submitOnClick(navpage);
 				}
 				else {
 					document.getElementById(navpage+'_page'+currentpage).style.display = "none";
@@ -1267,8 +1269,8 @@
 
 		function submitOnClick(navpage) {
 			// if not using ajax, use this
-			// document.getElementById(navpage+'_next').setAttribute("type", "button");
-			submit_form(navpage);
+			document.getElementById(navpage+'_next').setAttribute("type", "submit");
+			//submit_form("submit_"+navpage);
 			//document.myForm.submit();
 			/*
 			$["#next"].click(function() {
@@ -1307,7 +1309,7 @@
 
 
 		function submit_form(submit_name) {
-			var xhttp;
+			var xhttp, params;
 			xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
@@ -1316,7 +1318,15 @@
 			};
 			xhttp.open("POST", "update_profile.php", true);
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send(submit_name+"asd");
+			if(submit_name=="submit_cpinfo")
+				params = getSubmitCpinfo();
+			else if(submit_name=="submit_coinfo")
+				params = getSubmitCoinfo();
+			else if(submit_name=="submit_cprefer")
+				params = getSubmitCprefer();
+			else if(submit_name=="submit_cpass")
+				params = getSubmitCpass();
+			xhttp.send(submit_name+"=g&"+params);
 			swal({
 				title: "Success!",
 				text: "Profile Updated!",
@@ -1324,6 +1334,55 @@
 				allowEscapeKey: true,
 				timer: 10000
 			});
+			return false;
+		}
+
+		function getSubmitCpinfo() {
+			var params="", element=document.cpinfo, length=$("#cpinfo input").length;
+			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
+				if(i==length-1)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCoinfo() {
+			var params="", element=document.coinfo, length=$("#coinfo input").length;
+			for(var i = 0; i < length+1; i++) { // replace commas in date inputs because year won't update in database, always current year
+			// length is plus 1 because the maximum is SpouseMobileNumber; ugh hardcoded, please fix
+			// selects are +1
+				if(i==length)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCprefer() {
+			var params="", element=document.cprefer, length=$("#cprefer input").length;
+			for(var i = 0; i < length+5; i++) { // replace commas in date inputs because year won't update in database, always current year
+			// selects are +1
+			// textareas are +1
+				if(i==length+4)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCpass() {
+			var params="", element=document.cpass, length=$("#cpass input").length;
+			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
+				if(i==length)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
 		}
 	</script>
 	<?php

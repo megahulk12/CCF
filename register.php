@@ -21,6 +21,8 @@
 		$spousename = $_POST["SpouseName"];
 		$spousemobilenumber = $_POST["SpouseMobileNumber"];
 		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+		if($spousebirthdate=="")
+			$spousebirthdate="";
 		$language = $_POST["Language"];
 		$venue1 = $_POST["Option1Venue"];
 		$venue2 = $_POST["Option2Venue"];
@@ -37,6 +39,8 @@
 		$lastname = $_POST["Lastname"];
 		$nickname = $_POST["Nickname"];
 		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if($birthdate=="")
+			$birthdate="";
 		$gender = $_POST["Gender"];
 		if ($gender == "Male") {
 			$gender = 0;
@@ -76,7 +80,7 @@
 		$schoolIDField = "";
 		$spouseIDField = "";
 		$preferenceIDField = "";
-		if($companyname != ""){
+		//if($companyname != ""){
 			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
 			$checkCompanyID = true;
 			$companyIDField = ", companyID";
@@ -92,8 +96,8 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
-		if($schoolname != "") {
+		//}
+		//if($schoolname != "") {
 			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
 			$checkSchoolID = true;
 			$schoolIDField = ", schoolID";
@@ -109,8 +113,8 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
-		if($spousename != "") {
+		//}
+		//if($spousename != "") {
 			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
 			$checkSpouseID = true;
 			$spouseIDField = ", spouseID";
@@ -126,7 +130,7 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
+		//}
 		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
 			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
 			$checkPreferenceID = true;
@@ -173,7 +177,7 @@
 		*/
 		mysqli_close($conn);
 		//echo "<meta http-equiv='refresh' content='0'>";
-		inclutde("config.php");
+		include("config.php");
 		session_start();
 		$myusername = mysqli_real_escape_string($db,$_POST['username']);
 		$_SESSION['user'] = $myusername;
@@ -605,7 +609,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.datepicker').pickadate({
-				selectMonths: false, // Creates a dropdown to control month
+				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
 				max: true
 			});
