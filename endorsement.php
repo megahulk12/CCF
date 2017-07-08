@@ -29,11 +29,14 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', dateEndorsed = '$dateendorsed' WHERE dgmemberID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
-		$sql_sched = "INSERT INTO scheduledmeetings_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
-		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType)";
+		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', dateEndorsed = '$dateendorsed' WHERE endorsementID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
+		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
+		$sql_notifications = "";
 		mysqli_query($conn, $sql_endorsement);
 		mysqli_query($conn, $sql_sched);
+		mysqli_query($conn, $sql_dgroup);
+		mysqli_close($conn);
 	}
 ?>
 <?xml version = ″1.0″?>
@@ -358,6 +361,7 @@
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
+		 	 height: 350px;
 		}
 
 		.dropdown-content-notification li {
@@ -604,7 +608,7 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 && event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress'>
+								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
 								<label for="AgeBracket">Age Bracket</label>
 							</div>
 							<h4 class="center">MEETING</h4>
@@ -638,7 +642,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit" onclick="endorsementComplete()">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
 					</div>
 				</form>
 			</div>
@@ -655,5 +659,18 @@
 			});
 		}
 	</script>
-
+	<?php
+		if(isset($_POST['submit'])) {
+			echo '
+		<script>
+			swal({
+				title: "Congratulations!",
+				text: "You are now a Dgroup leader!",
+				type: "success",
+				allowEscapeKey: true
+			});
+		</script>
+			';
+		}
+	?>
 </html>

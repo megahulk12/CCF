@@ -930,7 +930,7 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
 											</div>
 										</div>
 									</div>
@@ -1461,13 +1461,16 @@
 			echo '
 				<script>
 				// profile update success
-					swal({
+				setTimeout( 
+				swal({
 						title: "Success!",
 						text: "Profile Updated!",
 						type: "success",
 						allowEscapeKey: true,
 						timer: 10000
-					});
+					},
+					function() { window.location = "profile.php"; }
+					), 1000);
 				</script>
 			';
 		}

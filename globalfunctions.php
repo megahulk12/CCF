@@ -276,7 +276,7 @@
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
 		}
-		$query = "SELECT schedID FROM scheduledmeetings_tbl ORDER BY schedID DESC LIMIT 1";
+		$query = "SELECT schedID FROM scheduledmeeting_tbl ORDER BY schedID DESC LIMIT 1";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
