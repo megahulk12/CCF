@@ -422,7 +422,7 @@
 						xhttp.open("GET", "request.php?apr=n", true);
 						xhttp.send();
 						swal({
-								title: "disapproved!",
+								title: "Disapproved!",
 								text: "You have disapproved this request.",
 								type: "error"
 							}, function() {

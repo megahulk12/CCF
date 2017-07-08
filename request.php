@@ -82,3 +82,29 @@
 		}
 	}
 ?>
+<?php
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+
+	if(isset($_POST['request_leader'])) {
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
+		mysqli_query($conn, $sql_endorsement_request);
+
+		// notifications
+
+		// notificationStatus: 0 implies not read, 1 implies already read
+		// notificationType: 
+		// 0 = endorsement; 1 = event; 2 = ministry;
+		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
+		mysqli_query($conn, $sql_notifications);
+	}
+?>

@@ -2,161 +2,6 @@
 	include('session.php');
 	include('globalfunctions.php');
 ?>
-<?php
-	/*
-		REMINDERS:
-		1. set data-length maxlength to length of sql fields dynamically
-
-	*/
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
-	// ====================UPDATING DATA====================
-	if(isset($_POST["submit_cpinfo"])) {
-		$lastname = $_POST["Lastname"];
-		$firstname = $_POST["Firstname"];
-		$middlename = $_POST["Middlename"];
-		$nickname = $_POST["Nickname"];
-		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_cpinfo = "UPDATE member_tbl SET lastName = '$lastname', firstName = '$firstname', middleName = '$middlename', nickName = '$nickname', birthdate = '$birthdate' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_cpinfo);
-	}
-
-	if(isset($_POST["submit_coinfo"])) {
-		$gender = $_POST["Gender"];
-		if ($gender == "Male") {
-			$gender = 0;
-		}
-		else {
-			$gender = 1;
-		}
-		$civilstatus = $_POST["CivilStatus"];
-		$citizenship = $_POST["Citizenship"];
-		$mobilenumber = $_POST["MobileNumber"];
-		$email = $_POST["Email"];
-		$profession = $_POST["Profession"];
-		$homeaddress = $_POST["HomeAddress"];
-		$homephonenumber = $_POST["HomePhoneNumber"];
-		$companyname = $_POST["CompanyName"];
-		$companyaddress = $_POST["CompanyAddress"];
-		$companycontactnum = $_POST["CompanyContactNum"];
-		$schoolname = $_POST["SchoolName"];
-		$schooladdress = $_POST["SchoolAddress"];
-		$schoolcontactnum = $_POST["SchoolContactNum"];
-		$spousename = $_POST["SpouseName"];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_coinfo = "UPDATE member_tbl SET gender = '$gender', civilStatus = '$civilstatus', citizenship = '$citizenship', contactNum = '$mobilenumber', emailAd = '$email', occupation = '$profession', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber' WHERE memberID = ".$_SESSION['userid'];
-		$sql_company = "UPDATE companydetails_tbl SET companyName = '$companyname', companyContactNum = '$companycontactnum', companyAddress = '$companyaddress' WHERE companyID = ".$_SESSION['companyID'];
-		$sql_school = "UPDATE schooldetails_tbl SET schoolName = '$schoolname', schoolContactNum = '$schoolcontactnum', schoolAddress = '$schooladdress' WHERE schoolID = ".$_SESSION['schoolID'];
-		$sql_spouse = "UPDATE spousedetails_tbl SET spouseName = '$spousename', spouseContactNum = '$spousemobilenumber', spouseBirthdate = '$spousebirthdate' WHERE spouseID = ".$_SESSION['spouseID'];
-		mysqli_query($conn, $sql_coinfo);
-		mysqli_query($conn, $sql_company);
-		mysqli_query($conn, $sql_school);
-		mysqli_query($conn, $sql_spouse);
-	}
-
-	if(isset($_POST["submit_cprefer"])) {
-		$language = $_POST["Language"];
-		$venue1 = $_POST["Option1Venue"];
-		$venue2 = $_POST["Option2Venue"];
-		$timepicker1opt1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
-		$timepicker1opt2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
-		$timepicker2opt1 = date("H:i:s", strtotime($_POST["timepicker2opt1"]));
-		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
-		$day1 = $_POST["Option1Day"];
-		$day2 = $_POST["Option2Day"];
-		$receivedChrist = $_POST["receivedChrist"];
-		$attendCCF = $_POST["attendCCF"];
-		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_cprefer = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$timepicker1opt1', prefEndTime1 = '$timepicker1opt2', prefStartTime2 = '$timepicker2opt1', prefEndTime2 = '$timepicker2opt2', prefDay1 = '$day1', prefDay2 = '$day2' WHERE prefID = ".$_SESSION['prefID'];
-		$sql_dgroupmember = "UPDATE discipleshipgroupmembers_tbl SET receivedChrist = '$receivedChrist', attendCCF = '$attendCCF', regularlyAttendsAt = '$regularlyAttendsAt' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_cprefer);
-		mysqli_query($conn, $sql_dgroupmember);
-	}
-
-	if(isset($_POST["submit_cpass"])) {
-		$regpassword = $_POST["password"];
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_pass = "UPDATE member_tbl SET password = '$regpassword' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_pass);
-	}
-	// ====================END====================
-?>
-<?php
-	if(isset($_GET["apr"])) {
-		if($_GET["apr"] == "y" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass);
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype);
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." has approved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getRequestDgMemberID()).", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-		else if($_GET["apr"] == "n" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 3 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass); //sets endorsement request status as rejected/reconsideration
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype); // sets notification as already completed
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." disapproved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getRequestDgMemberID().", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -864,6 +709,7 @@
 	</header>
 
 	<body onload="defaultActive()">
+		<div id="response"></div>
 		<div class="row row-profile">
 			<div class="col col-profile s12 card-panel z-depth-4">
 				<table>
@@ -930,7 +776,7 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="button" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('submit_cpinfo')">SUBMIT</button>
 											</div>
 										</div>
 									</div>
@@ -1312,7 +1158,7 @@
 											</div>';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="button" name="submit_cpass" onclick="submit_form('submit_cpass')">SUBMIT</button>
 											</div>
 										</div>
 									</div>
@@ -1324,6 +1170,10 @@
 			</div>
 		</div>
 	</body>
+
+	<footer>
+	</footer>
+
 	<script>
 		var currentpage = 1, no_of_pages = 2, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 		function setNavPage(navpage, num_of_pages) {
@@ -1416,7 +1266,9 @@
 		}
 
 		function submitOnClick(navpage) {
-			document.getElementById(navpage+'_next').setAttribute("type", "submit");
+			// if not using ajax, use this
+			// document.getElementById(navpage+'_next').setAttribute("type", "button");
+			submit_form(navpage);
 			//document.myForm.submit();
 			/*
 			$["#next"].click(function() {
@@ -1451,13 +1303,31 @@
 				document.getElementById('cprefer').style.display = "none";
 				document.getElementById('cpass').style.display = "inline";
 			}
-		} 
-	</script>
-	<footer>
+		}
 
-	</footer>
-	
+
+		function submit_form(submit_name) {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "update_profile.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send(submit_name+"asd");
+			swal({
+				title: "Success!",
+				text: "Profile Updated!",
+				type: "success",
+				allowEscapeKey: true,
+				timer: 10000
+			});
+		}
+	</script>
 	<?php
+		/*
 		if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_coinfo"])||isset($_POST["submit_cprefer"])||isset($_POST["submit_cpass"])) { // pop up for updates
 			echo '
 				<script>
@@ -1475,39 +1345,9 @@
 				</script>
 			';
 		}
+		*/
 	?>
-	<!-- this section is for notification approval of requests -->
-	<?php
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "disapproved!",
-							text: "You have disapproved this request.",
-							type: "error"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-	?>
+	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
 			swal({
@@ -1517,14 +1357,47 @@
 				  confirmButtonColor: "#66ff66",
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
+				  allowEscapeKey: false,
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
 				function(isConfirm){
-					if(isConfirm)
-						window.location = window.location.href + "?apr=y";
-					else
-						window.location = window.location.href + "?apr=n";
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success"
+							}, function() {
+								window.location.reload();
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error"
+							}, function() {
+								window.location.reload();
+							});
+					}
 					/*
 				setTimeout( 
 					swal({

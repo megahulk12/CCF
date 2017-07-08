@@ -2,80 +2,6 @@
 	include('session.php'); 
 	include('globalfunctions.php');
 ?>
-<?php
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
-	if(isset($_POST['request_leader'])) {
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
-		mysqli_query($conn, $sql_endorsement_request);
-
-		// notifications
-
-		// notificationStatus: 0 implies not read, 1 implies already read
-		// notificationType: 
-		// 0 = endorsement; 1 = event; 2 = ministry;
-		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
-		mysqli_query($conn, $sql_notifications);
-	}
-?>
-<?php
-	if(isset($_GET["apr"])) {
-		if($_GET["apr"] == "y" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass);
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype);
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." has approved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getRequestDgMemberID()).", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-		else if($_GET["apr"] == "n" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 3 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass); //sets endorsement request status as rejected/reconsideration
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype); // sets notification as already completed
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." disapproved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getRequestDgMemberID().", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -459,12 +385,13 @@
 	</header>
 
 	<body>
+		<div id="response"></div>
 		<div class="container">
 			<?php 
 			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
-			<form method="post" action="dgroup.php">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="submit" name="request_leader">I WANT TO BE A DGROUP LEADER</button>
+			<form method="post">
+				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
 				<input type="hidden" name="seen-request" />
 			</form>';
 			}
@@ -576,94 +503,87 @@
 		}
 		*/
 	</script>
-
-	<?php
-		if(isset($_POST['seen-request'])) {
-			// script also prevents to confirm form resubmission para there are no duplicates in the data
-			echo '
-			<script>
-			setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-						type: "success",
-						allowEscapeKey: true
-					},
-					function() { window.location = "dgroup.php"; }
-					), 1000);
-			</script>';
-			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
-			setRequestSeen();
-		}
-
-		function getRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			$result = mysqli_query($conn, $sql);
-			$request = "";
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$request = $row["request"];
+	<script>
+		function requestLeader() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
 				}
-			}
-			return $request;
+			};
+			xhttp.open("POST", "request.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("request_leader");
+			swal({
+				title: "Success!",
+				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+				type: "success",
+				allowEscapeKey: true
+			},
+				function() { window.location.reload(); }
+			);
+		}
+	</script>
+
+<?php
+	if(isset($_POST['seen-request'])) {
+		// script also prevents to confirm form resubmission para there are no duplicates in the data
+		/*
+		echo '
+		<script>
+		setTimeout( 
+			swal({
+					title: "Success!",
+					text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+					type: "success",
+					allowEscapeKey: true
+				},
+				function() { window.location = "dgroup.php"; }
+				), 1000);
+		</script>';
+		//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
+		*/
+		setRequestSeen();
+	}
+
+	function getRequestSeen() {
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		function setRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			mysqli_query($conn, $sql);
-		}
-	?>
-	<!-- this section is for notification approval of requests -->
-	<?php
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						});
-				</script>
-				';
-				setNotificationSuccess();
+		$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+		$result = mysqli_query($conn, $sql);
+		$request = "";
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$request = $row["request"];
 			}
 		}
+		return $request;
+	}
 
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "disapproved!",
-							text: "You have disapproved this request.",
-							type: "error"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
+	function setRequestSeen() {
+		// database connection variables
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
 		}
-	?>
+		$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+		mysqli_query($conn, $sql);
+	}
+?>
+	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
 			swal({
@@ -673,14 +593,47 @@
 				  confirmButtonColor: "#66ff66",
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
+				  allowEscapeKey: false,
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
 				function(isConfirm){
-					if(isConfirm)
-						window.location = window.location.href + "?apr=y";
-					else
-						window.location = window.location.href + "?apr=n";
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success"
+							}, function() {
+								window.location.reload();
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error"
+							}, function() {
+								window.location.reload();
+							});
+					}
 					/*
 				setTimeout( 
 					swal({
