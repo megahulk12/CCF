@@ -238,7 +238,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge"><?php echo notifCount(); ?></span></h6></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
 			<?php
 				// database connection variables
 
@@ -301,7 +302,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 ) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -406,8 +407,6 @@
 								title: "Approved!",
 								text: "You have approved this request.",
 								type: "success"
-							}, function() {
-								window.location.reload();
 							});
 					}
 					else {
@@ -424,8 +423,6 @@
 								title: "Disapproved!",
 								text: "You have disapproved this request.",
 								type: "error"
-							}, function() {
-								window.location.reload();
 							});
 					}
 					/*
@@ -439,6 +436,25 @@
 						), 1000);
 						*/
 				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
 		}
 	</script>
 </html>
