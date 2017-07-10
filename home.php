@@ -89,8 +89,8 @@
 			      	<a href="home.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 						<li><a href="events.php" onclick="">EVENTS</a></li>
-						<li><a href="" onclick="">ABOUT US</a></li>'
-						<li><a href="login.php" onclick="">LOGIN</a></li>'
+						<li><a href="" onclick="">ABOUT US</a></li>
+						<li><a href="login.php" onclick="">LOGIN</a></li>
 			     	 </ul>
 			    </div>
 			</div>

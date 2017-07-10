@@ -281,15 +281,6 @@
 					}
 				}
 			?>
-			<!-- <li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">

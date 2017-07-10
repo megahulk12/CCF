@@ -505,8 +505,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
-		  	<li class="divider"></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
 			<?php
 				// database connection variables
 
@@ -548,15 +548,6 @@
 					}
 				}
 			?>
-			<!-- <li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -569,7 +560,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -673,4 +664,87 @@
 			';
 		}
 	?>
+	
+	 <!-- this section is for notification approval of requests -->
+	<script>
+		function approval() {
+			 $('.dropdown-button').dropdown('close');
+			swal({
+				  title: "Do you approve?",
+				  type: "info",
+				  showCancelButton: true,
+				  confirmButtonColor: "#66ff66",
+				  confirmButtonText: "Yes",
+				  cancelButtonText: "No",
+				  allowEscapeKey: false,
+				  closeOnConfirm: false,
+				  closeOnCancel: false
+				},
+				function(isConfirm){
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success",
+								allowOutsideClick: true
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error",
+								allowOutsideClick: true
+							});
+					}
+					/*
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { //window.location here ?apr=y }
+						), 1000);
+						*/
+				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
+		}
+	</script>
 </html>

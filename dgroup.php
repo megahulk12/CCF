@@ -313,8 +313,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
-		  	<li class="divider"></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
 			<?php
 				// database connection variables
 
@@ -356,15 +356,6 @@
 					}
 				}
 			?>
-			<!-- <li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -377,7 +368,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -526,66 +517,68 @@
 		}
 	</script>
 
-<?php
-	if(isset($_POST['seen-request'])) {
-		// script also prevents to confirm form resubmission para there are no duplicates in the data
-		/*
-		echo '
-		<script>
-		setTimeout( 
-			swal({
-					title: "Success!",
-					text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-					type: "success",
-					allowEscapeKey: true
-				},
-				function() { window.location = "dgroup.php"; }
-				), 1000);
-		</script>';
-		//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
-		*/
-		setRequestSeen();
-	}
-
-	function getRequestSeen() {
-		// database connection variables
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
+	<?php
+		if(isset($_POST['seen-request'])) {
+			// script also prevents to confirm form resubmission para there are no duplicates in the data
+			/*
+			echo '
+			<script>
+			setTimeout( 
+				swal({
+						title: "Success!",
+						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+						type: "success",
+						allowEscapeKey: true
+					},
+					function() { window.location = "dgroup.php"; }
+					), 1000);
+			</script>';
+			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
+			*/
+			setRequestSeen();
 		}
 
-		$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-		$result = mysqli_query($conn, $sql);
-		$request = "";
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$request = $row["request"];
+		function getRequestSeen() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
 			}
-		}
-		return $request;
-	}
 
-	function setRequestSeen() {
-		// database connection variables
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
+			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+			$result = mysqli_query($conn, $sql);
+			$request = "";
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$request = $row["request"];
+				}
+			}
+			return $request;
 		}
-		$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-		mysqli_query($conn, $sql);
-	}
-?>
+
+		function setRequestSeen() {
+			// database connection variables
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
+			mysqli_query($conn, $sql);
+		}
+	?>
+	
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
+			 $('.dropdown-button').dropdown('close');
 			swal({
 				  title: "Do you approve?",
 				  type: "info",
@@ -611,9 +604,8 @@
 						swal({
 								title: "Approved!",
 								text: "You have approved this request.",
-								type: "success"
-							}, function() {
-								window.location.reload();
+								type: "success",
+								allowOutsideClick: true
 							});
 					}
 					else {
@@ -629,9 +621,8 @@
 						swal({
 								title: "Disapproved!",
 								text: "You have disapproved this request.",
-								type: "error"
-							}, function() {
-								window.location.reload();
+								type: "error",
+								allowOutsideClick: true
 							});
 					}
 					/*
@@ -645,6 +636,25 @@
 						), 1000);
 						*/
 				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
 		}
 	</script>
 </html>
