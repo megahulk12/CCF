@@ -69,6 +69,28 @@
 		return $dgleader;
 	}
 
+	function getDgroupID() {
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT dgroupID FROM discipleshipgroupmembers_tbl WHERE dgroupmemberID = ".getDgroupMemberID($_SESSION['userid']);
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$dgroupID = $row["dgroupID"];
+			}
+		}
+		return $dgroupID;
+	}
+
 	function getNotificationDesc($memberID) {
 		// database connection variables
 

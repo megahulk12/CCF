@@ -266,6 +266,15 @@
 			color: #1bcde4;
 		}
 
+		.prefix-leader {
+			color: #777;
+		}
+
+		.prefix-leader:hover {
+			transition: 0.3s ease-out;
+			color: #999;
+		}
+
 		.dgroup-icons {
 			font-size: 200px;
 		}
@@ -401,23 +410,58 @@
 					<h3>Dgroup</h3>
 					<table class="centered dgroup-table-spacing">
 						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
+					<?php
+						// database connection variables
+
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+
+						// insert code set notificationStatus = 1 when user clicks notification area
+						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
+
+						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
+						$lresult = mysqli_query($conn, $lquery);
+						if(mysqli_num_rows($lresult) > 0) {
+							while($lrow = mysqli_fetch_assoc($lresult)) {
+								$leader = $lrow["leader"];
+							}
+						}
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+								echo '
+						<td>
+							<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
+							'.$leader.'<br><br><label>LEADER</label></a>
+						</td>
+								';
+							$counter_row = 1;
+							while($row = mysqli_fetch_assoc($result)) {
+								$fullname = $row["fullname"];
+								echo '
 							<td>
 								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
+								'.$fullname.'<br><br>&nbsp;</a>
 							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
+								';
+								$counter_row++;
+								if($counter_row == 4) {
+									echo'
 						</tr>
+						<tr>
+									';
+									$counter_row = 0;
+								}
+							}
+							echo '
+						</tr>';
+						}
+					?>
 					</table>
 				</div>
 				<div id="own-dgroup">
