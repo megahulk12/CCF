@@ -381,6 +381,7 @@
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
+			 $('.dropdown-button').dropdown('close');
 			swal({
 				  title: "Do you approve?",
 				  type: "info",
@@ -406,7 +407,8 @@
 						swal({
 								title: "Approved!",
 								text: "You have approved this request.",
-								type: "success"
+								type: "success",
+								allowOutsideClick: true
 							});
 					}
 					else {
@@ -422,7 +424,8 @@
 						swal({
 								title: "Disapproved!",
 								text: "You have disapproved this request.",
-								type: "error"
+								type: "error",
+								allowOutsideClick: true
 							});
 					}
 					/*
