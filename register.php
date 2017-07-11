@@ -1,3 +1,4 @@
+
 <?php
 	/*
 		REMINDERS:
@@ -56,7 +57,10 @@
 		$email = $_POST["EmailAd"];
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
-		$dgroupid = $_POST["dgroupID"];
+		if(isset($_GET['id'])) {
+			$count = $_GET['id'];
+		}
+		$dgroupid = $_POST[$count];
 		$receivedChrist = $_POST["receivedChrist"];
 		$attendCCF = $_POST["attendCCF"];
 		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
@@ -309,9 +313,7 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php
-		include('globalfunctions.php');
-	?>
+	<?php include('globalfunctions.php'); ?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -673,12 +675,15 @@
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
 			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			window.location.href = "register.php?id="+id.split("_")[1];
 		}
 	</script>
 
 	<header>
 	</header>
 	<body>
+		<div id="response"></div>
 		<div class="row">
 			<div class="row center" style="margin-top: 30px;">
 				<a href="home.php"><img src="resources/CCF Logos3.png" id="loginlogo" /></a>
@@ -976,14 +981,14 @@
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
 										while($row = mysqli_fetch_assoc($result)) {
-											echo '<tr id="row'.$count.'" onclick="cellActive('."'".'row'.$count.''."'".')">';
+											echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
 											$dgroupid = $row["dgroupID"];
 											$fullname = $row["fullname"];
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
 											$schedday = $row["schedDay"];
 											$schedule = $row["schedule"];
-											echo '<td style="display: none;"><input type="hidden" name="dgroupID" value="'.$dgroupid.'" />
+											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
 											<td>'.$gender.'</td>
 											<td>'.$dgrouptype.'</td>
