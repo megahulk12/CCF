@@ -21,20 +21,27 @@
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
+	<style>
 		::selection {
 			background-color: #16A5B8;
 			color: #fff;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 
 		div {
 			display: block;
 		}
 
+<<<<<<< HEAD
 =======
 		div {
 			display: block;
 		}
+>>>>>>> master
+=======
 >>>>>>> master
 		.container {
 			margin: 0 auto;
@@ -42,6 +49,7 @@
 			width: 80%;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		#logo {
 			margin-top: 10px;
@@ -51,6 +59,13 @@
 		#logo {
 			margin-top: 10px;
 		}
+>>>>>>> master
+=======
+
+		#logo {
+			margin-top: 10px;
+		}
+
 >>>>>>> master
 		/*
 		colors in materliaze:
@@ -63,8 +78,12 @@
 			background-color: transparent;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		nav {
 			color: #777;
@@ -83,8 +102,12 @@
 			font-weight: bold;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		nav ul li a {
 			font-family: proxima-nova;
@@ -92,14 +115,17 @@
 			font-size: 13px;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.dropdown-content-list {
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
 			 overflow-y: auto;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
@@ -109,8 +135,12 @@
 		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.dropdown-content-list li {
 		 	  clear: both;
@@ -123,8 +153,12 @@
 			  text-transform: none;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.dropdown-content-list li > a, .dropdown-content-list li > span {
 		  	font-size: 16px;
@@ -134,23 +168,36 @@
 		  	padding: 14px 16px;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
+		.notifcation-new {
+			background-color: #ebebeb;
+		}
+
 >>>>>>> master
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 400px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
-		 	 will-change: width, height;
 		 	 margin-top: 97px;
+		 	 height: 350px;
 		}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.dropdown-content-notification li {
 		 	  clear: both;
@@ -163,8 +210,12 @@
 			  text-transform: none;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.dropdown-content-notification li > a, .dropdown-content-notification li > span {
 		  	font-size: 16px;
@@ -174,8 +225,12 @@
 		  	padding: 14px 16px;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		ul.account {
 			width: 200px;
@@ -186,8 +241,12 @@
 			display: none;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		/* for alignment of notification icon and badge */
 		nav i.material-icon-notification {
@@ -197,17 +256,25 @@
 		  line-height: 56px;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.notifications {
 			padding-top: 15px;
 			height: 100%;
-			position: relative;
+			position: relative !important;
 		}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.notifications-header, .notifications-body {
 			font-family: proxima-nova;
@@ -217,8 +284,12 @@
 			margin: 20 0 0 20;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		span.badge.new {
 			font-weight: 300;
@@ -231,14 +302,18 @@
 			top: 15px;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 50%;
-			padding: 1px 3px;
+			border-radius: 100%;
+			padding: 1 4 1 4;
 			position: relative;
 			top: 19px;
 			left: 13px
@@ -254,8 +329,12 @@
 			animation-direction: alternate;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> master
+=======
+
 >>>>>>> master
 		@keyframes notification1 {
 			0% { transform: rotate(0deg) }
@@ -270,6 +349,7 @@
 		}
 		*/
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> master
@@ -279,6 +359,8 @@
 		}
 <<<<<<< HEAD
 
+=======
+>>>>>>> master
 =======
 >>>>>>> master
 	</style>
@@ -302,17 +384,51 @@
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
-	<!-- Dropdown Structure Notifications--> 
+	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
-		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="#!">Dodong Laboriki has approved your endorsement request.</a></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
+			<?php
+				// database connection variables
+
+				$servername = "localhost";
+				$username = "root";
+				$password = "root";
+				$dbname = "dbccf";
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+
+				// insert code set notificationStatus = 1 when user clicks notification area
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$result = mysqli_query($conn, $query);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						//$receivermemberID = $row['receivermemberID']; testing muna ito
+						$notificationDesc = $row['notificationDesc'];
+						$notificationStatus = $row['notificationStatus'];
+						$notificationType = $row['notificationType'];
+						$request = $row['request'];
+						if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
+							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 1) { // for result notifs of request approve
+							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+
+						}
+						echo '<li class="divider"></li>';
+					}
+				}
+			?>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -325,7 +441,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -333,96 +449,106 @@
 	</header>
 
 	<body>
-	<center><h1 class="header">Latest Events</h1></center>
-		<div class="row">
-		<h3 class="header">Walk Through</h2>
-		<div class="card horizontal card-panel hoverable">
-			<div class="card-image">
-				<img src="resources/tree.jpg">
+		<div id="response"></div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card">
+						<div class="card-image">
+							<img src="images/sample-1.jpg">
+							<span class="card-title">Card Title</span>
+						</div>
+					<div class="card-content">
+						<p>I am a very simple card. I am good at containing small bits of information.
+						I am convenient because I require little markup to use effectively.</p>
+					</div>
+					<div class="card-action">
+						<a href="#">This is a link</a>
+					</div>
+				</div>
 			</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<p>Set on a new Journey!</p>
-			</div>
-			<div class="card-action">
-				<a href="#">LEARN MORE</a>
-			</div>
-		</div>
-		</div>
-		</div>
-
-		<div class="row">
-		<h3 class="header">Take a Swim</h2>
-		<div class="card horizontal card-panel hoverable">
-			<div class="card-image">
-				<img src="resources/water.jpg">
-			</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<p>Want to take a swim?</p>
-			</div>
-			<div class="card-action">
-				<a href="#">LEARN MORE</a>
-			</div>
-		</div>
-		</div>
-		</div>
-
-		<div class="col s12 m7 row">
-		<h3 class="header">Have a Break</h2>
-		<div class="card horizontal card-panel hoverable">
-			<div class="card-image">
-				<img src="resources/coffee.jpg">
-			</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<p>Craving for Coffee?</p>
-			</div>
-			<div class="card-action">
-				<a href="#">LEARN MORE</a>
-			</div>
-		</div>
-		</div>
-		</div>
-
-		<div class="row">
-			<div class="row col s12 m12 l6"> <!--1st row containing 2 cards-->
-			<div class="col s12 m7 row">
-		<h3 class="header">Go Somewhere</h2>
-		<div class="card horizontal card-panel hoverable">
-			<div class="card-image">
-				<img src="resources/coffee.jpg">
-			</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<p>Craving for Coffee?</p>
-			</div>
-			<div class="card-action">
-				<a href="#">LEARN MORE</a>
-			</div>
-		</div>
-		</div>
-		</div>
-			</div><!--END ROW-->
-
-		<div class="row col s12 m12 l6">  <!--2nd row containing 2 cards-->
-			<div class="col s12 m7 row">
-		<h3 class="header">Find Meaning</h2>
-		<div class="card horizontal card-panel hoverable">
-			<div class="card-image">
-				<img src="resources/coffee.jpg">
-			</div>
-		<div class="card-stacked">
-			<div class="card-content">
-				<p>Craving for Coffee?</p>
-			</div>
-			<div class="card-action">
-				<a href="#">LEARN MORE</a>
-			</div>
-		</div>
-		</div>
-		</div><!--END ROW-->
 		</div>
 	</body>
 
+	 <!-- this section is for notification approval of requests -->
+	<script>
+		function approval() {
+			 $('.dropdown-button').dropdown('close');
+			swal({
+				  title: "Do you approve?",
+				  type: "info",
+				  showCancelButton: true,
+				  confirmButtonColor: "#66ff66",
+				  confirmButtonText: "Yes",
+				  cancelButtonText: "No",
+				  allowEscapeKey: false,
+				  closeOnConfirm: false,
+				  closeOnCancel: false
+				},
+				function(isConfirm){
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success",
+								allowOutsideClick: true
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error",
+								allowOutsideClick: true
+							});
+					}
+					/*
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { //window.location here ?apr=y }
+						), 1000);
+						*/
+				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
+		}
+	</script>
 </html>
