@@ -15,8 +15,6 @@
 	<link href="universal.css" rel="stylesheet">
 
 	<title>Christ's Commission Fellowship</title>
-
-	<style>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -31,6 +29,15 @@
 			margin: 0 auto;
 			max-width: 1280px;
 			width: 80%;
+		}
+
+		.container-events {
+			position: relative;
+			margin: 0 auto;
+			max-width: 1280px;
+			width: 80%;
+			display: -webkit-flex;
+			display: flex;
 		}
 
 		#logo {
@@ -59,6 +66,7 @@
 		li a:hover {
 			color: #16A5B8;
 		}
+
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
@@ -213,6 +221,88 @@
 			100% { transform: rotate(0deg) }
 		}
 		*/
+
+		/* ===============CARDS=============== */
+		/*headers*/
+		h1, h2, h3, h4, h5, h6 {
+			color: #292929;
+			font-family: proxima-nova;
+			text-transform: uppercase;
+		}
+
+		@font-face {
+			font-family: proxima-nova-header;
+			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
+			font-weight: bold;
+		}
+		/*=======END=======*/
+
+		.card {
+			position: relative;
+			margin: 0.5rem 0 1rem 0;	
+			background-color: #fff;
+			transition: box-shadow .25s;
+			border-radius: 2px;
+			width: 330px;
+		}
+
+		.card .card-title {
+			font-size: 24px;
+			font-weight: 300;
+			font-family: proxima-nova;
+			text-transform: uppercase;
+		}
+
+		.card .card-image img {
+			display: block;
+			border-radius: 2px 2px 0 0;
+			position: relative;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+			color: #16A5B8;
+			margin-right: 24px;
+			transition: color .3s ease;
+			text-transform: uppercase;
+		}
+
+		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating):hover {
+			color: #1bcde4;
+		}
+
+		.card .card-content p {
+			margin: 0;
+			color: #6a6a6a;
+			font-family: sans-serif;
+			height: inherit;
+			text-align: justify;
+		}
+
+		a.events {
+		    font-family: proxima-nova;
+		    color: #292929 !important;
+		}
+
+		a.events:hover {
+		    font-family: proxima-nova;
+		    color: #16A5B8 !important;
+		    cursor: pointer;
+		}
+
+		a.events:visited {
+			color: #1bcde4 !important;
+		}
+
+		table {
+			display: -webkit-flex;
+			display: flex;
+		}
+		/* ===============END=============== */
 	</style>
 
 	<script type="text/javascript">
@@ -300,19 +390,130 @@
 
 	<body>
 		<div id="response"></div>
+		<!-- event cards -->
+		<?php
+			//position-x interval: 370px
+			//position-y interval: 540px
+		?>
+		<h3 class="center">UPCOMING EVENTS</h3>
+		<div class="container-events">
 			<div class="row">
 				<div class="col s12 m7">
-					<div class="card">
+					<div class="card" style="position: absolute; top: 0px; left: 0px;">
 						<div class="card-image">
-							<img src="images/sample-1.jpg">
-							<span class="card-title">Card Title</span>
+							<img src="resources/Elevate Unite.jpg" class="stretch">
 						</div>
-					<div class="card-content">
-						<p>I am a very simple card. I am good at containing small bits of information.
-						I am convenient because I require little markup to use effectively.</p>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p class="truncatee">
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
 					</div>
-					<div class="card-action">
-						<a href="#">This is a link</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card" style="position: absolute; top: 0px; left: 370px;">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card" style="position: absolute; top: 0px; left: 740px;">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card" style="position: absolute; top: 750px; left: 0px;">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p class="truncatee">
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card" style="position: absolute; top: 750px; left: 370px;">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card" style="position: absolute; top: 750px; left: 740px;">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
