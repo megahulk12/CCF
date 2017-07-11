@@ -58,7 +58,7 @@
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
 		if(isset($_GET['id'])) {
-			$count = $_GET['id'];
+			$count = "dgroupID".$_GET['id'];
 		}
 		$dgroupid = $_POST[$count];
 		$receivedChrist = $_POST["receivedChrist"];
@@ -676,7 +676,7 @@
 			document.getElementById(id).style.color = "#fff";
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			window.location.href = "register.php?id="+id.split("_")[1];
+			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
 		}
 	</script>
 
