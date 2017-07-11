@@ -381,6 +381,7 @@
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
 				  allowEscapeKey: false,
+				  allowOutsideClick: false,
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},

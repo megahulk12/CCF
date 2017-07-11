@@ -426,12 +426,15 @@
 						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
 
 						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
+
+
 						$lresult = mysqli_query($conn, $lquery);
 						if(mysqli_num_rows($lresult) > 0) {
 							while($lrow = mysqli_fetch_assoc($lresult)) {
 								$leader = $lrow["leader"];
 							}
 						}
+
 						$result = mysqli_query($conn, $query);
 						if(mysqli_num_rows($result) > 0) {
 								echo '
@@ -464,9 +467,74 @@
 					?>
 					</table>
 				</div>
-				<div id="own-dgroup">
+			</div>
+
+			<div id="view-profile">
+				<div class="container">
+					<div class="col col-profile s12 card-panel z-depth-4">
+						<table>
+							<tr>
+								<td class="fixed">
+									<ul class="sidenav">
+										<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" href="#cpinfo" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
+										<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
+										<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
+										<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>>
+
+				<!-----------------code ni paolo------------------>
 				<?php
-					if($_SESSION['memberType'] >= 2 ) {
+
+					$servername = "localhost";
+					$username = "root";
+					$password = "root";
+					$dbname = "dbccf";
+					$conn = mysqli_connect($servername, $username, $password, $dbname);
+					if (!$conn) {
+						die("Connection failed: " . mysqli_connect_error());
+					}
+
+					// insert code set notificationStatus = 1 when user clicks notification area
+					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
+
+					$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+								$counter_row = 1;
+								echo '
+									<div id="own-dgroup">
+										<h3>Own Dgroup</h3>
+									<table id="own-dgroup" class="centered dgroup-table-spacing">
+								';
+							while($row = mysqli_fetch_assoc($result)) {
+								$fullname = $row["fullname"];
+								if($_SESSION['memberType'] >= 2 ){
+									echo '
+										<td>
+											<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+												'.$fullname.'<br><br>&nbsp;</a>
+										</td>
+										';
+									$counter_row++;
+									if($counter_row == 4) {
+									echo'
+											</tr>
+							<tr>
+									';
+									$counter_row = 0;
+								}
+								}
+								
+							}
+							echo '
+						</tr>';
+						}
+					/*if($_SESSION['memberType'] >= 2 ) {
 					echo '
 					<h3>Own Dgroup</h3>
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
@@ -489,10 +557,10 @@
 							</td>
 						</tr>
 					</table>';
-					}
+					}*/
 				?>
-				</div>
-			</div>
+				<!----------------------THE END------------------------>
+				
 	</body>
 
 	<script>
