@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 <?php include('session.php'); ?>
+=======
+<?php 
+	include('session.php'); 
+	include('globalfunctions.php'); 
+?>
+>>>>>>> master
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -18,21 +25,33 @@
 			background-color: #16A5B8;
 			color: #fff;
 		}
+<<<<<<< HEAD
 
 		div {
 			display: block;
 		}
 
+=======
+		div {
+			display: block;
+		}
+>>>>>>> master
 		.container {
 			margin: 0 auto;
 			max-width: 1280px;
 			width: 80%;
 		}
+<<<<<<< HEAD
 
 		#logo {
 			margin-top: 10px;
 		}
 
+=======
+		#logo {
+			margin-top: 10px;
+		}
+>>>>>>> master
 		/*
 		colors in materliaze:
 		#ee6e73
@@ -43,7 +62,10 @@
 		nav ul a:hover {
 			background-color: transparent;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		nav {
 			color: #777;
 			background-color: #fff;
@@ -60,13 +82,19 @@
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
 			font-weight: bold;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		nav ul li a {
 			font-family: proxima-nova;
 			color: #777;
 			font-size: 13px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-list {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -80,7 +108,10 @@
 		 	 margin-top: 97px;
 		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-list li {
 		 	  clear: both;
 			  color: rgba(0, 0, 0, 0.87);
@@ -91,7 +122,10 @@
 			  text-align: left;
 			  text-transform: none;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-list li > a, .dropdown-content-list li > span {
 		  	font-size: 16px;
 		  	color: #777 !important;
@@ -99,7 +133,10 @@
 		  	line-height: 22px
 		  	padding: 14px 16px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -111,7 +148,10 @@
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-notification li {
 		 	  clear: both;
 			  color: rgba(0, 0, 0, 0.87);
@@ -122,7 +162,10 @@
 			  text-align: left;
 			  text-transform: none;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.dropdown-content-notification li > a, .dropdown-content-notification li > span {
 		  	font-size: 16px;
 		  	color: #777 !important;
@@ -130,7 +173,10 @@
 		  	line-height: 22px
 		  	padding: 14px 16px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		ul.account {
 			width: 200px;
 			position: absolute;
@@ -139,7 +185,10 @@
 			opacity: 1;
 			display: none;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		/* for alignment of notification icon and badge */
 		nav i.material-icon-notification {
 		  display: block;
@@ -147,13 +196,19 @@
 		  height: 0px; /* use this attribute to change vertiical alignment */ 
 		  line-height: 56px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.notifications {
 			padding-top: 15px;
 			height: 100%;
 			position: relative;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.notifications-header, .notifications-body {
 			font-family: proxima-nova;
 			color: #777;
@@ -161,7 +216,10 @@
 			text-transform: uppercase;
 			margin: 20 0 0 20;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		span.badge.new {
 			font-weight: 300;
 			font-size: 0.8rem;
@@ -172,7 +230,10 @@
 			right: 20px;
 			top: 15px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
@@ -192,7 +253,10 @@
 			animation-timing-function: ease-in-out;
 			animation-direction: alternate;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		@keyframes notification1 {
 			0% { transform: rotate(0deg) }
 			5% { transform: rotate(25deg) }
@@ -205,12 +269,18 @@
 			100% { transform: rotate(0deg) }
 		}
 		*/
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		.card {
 			width:400px;
 			height: 200px;
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 	</style>
 
 	<script type="text/javascript">

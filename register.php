@@ -1,3 +1,4 @@
+
 <?php
 	/*
 		REMINDERS:
@@ -21,6 +22,8 @@
 		$spousename = $_POST["SpouseName"];
 		$spousemobilenumber = $_POST["SpouseMobileNumber"];
 		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+		if($spousebirthdate=="")
+			$spousebirthdate="";
 		$language = $_POST["Language"];
 		$venue1 = $_POST["Option1Venue"];
 		$venue2 = $_POST["Option2Venue"];
@@ -37,6 +40,8 @@
 		$lastname = $_POST["Lastname"];
 		$nickname = $_POST["Nickname"];
 		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
+		if($birthdate=="")
+			$birthdate="";
 		$gender = $_POST["Gender"];
 		if ($gender == "Male") {
 			$gender = 0;
@@ -52,7 +57,10 @@
 		$email = $_POST["EmailAd"];
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
-		$dgroupid = $_POST["dgroupID"];
+		if(isset($_GET['id'])) {
+			$count = "dgroupID".$_GET['id'];
+		}
+		$dgroupid = $_POST[$count];
 		$receivedChrist = $_POST["receivedChrist"];
 		$attendCCF = $_POST["attendCCF"];
 		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
@@ -76,7 +84,7 @@
 		$schoolIDField = "";
 		$spouseIDField = "";
 		$preferenceIDField = "";
-		if($companyname != ""){
+		//if($companyname != ""){
 			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
 			$checkCompanyID = true;
 			$companyIDField = ", companyID";
@@ -92,8 +100,8 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
-		if($schoolname != "") {
+		//}
+		//if($schoolname != "") {
 			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
 			$checkSchoolID = true;
 			$schoolIDField = ", schoolID";
@@ -109,8 +117,8 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
-		if($spousename != "") {
+		//}
+		//if($spousename != "") {
 			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
 			$checkSpouseID = true;
 			$spouseIDField = ", spouseID";
@@ -126,7 +134,7 @@
 				mysqli_error($conn);
 			}
 			*/
-		}
+		//}
 		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
 			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
 			$checkPreferenceID = true;
@@ -173,7 +181,7 @@
 		*/
 		mysqli_close($conn);
 		//echo "<meta http-equiv='refresh' content='0'>";
-		inclutde("config.php");
+		include("config.php");
 		session_start();
 		$myusername = mysqli_real_escape_string($db,$_POST['username']);
 		$_SESSION['user'] = $myusername;
@@ -305,9 +313,7 @@
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
-	<?php
-		include('globalfunctions.php');
-	?>
+	<?php include('globalfunctions.php'); ?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -605,7 +611,7 @@
 	<script>
 		$(document).ready(function(){
 			$('.datepicker').pickadate({
-				selectMonths: false, // Creates a dropdown to control month
+				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
 				max: true
 			});
@@ -669,12 +675,15 @@
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
 			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
 		}
 	</script>
 
 	<header>
 	</header>
 	<body>
+		<div id="response"></div>
 		<div class="row">
 			<div class="row center" style="margin-top: 30px;">
 				<a href="home.php"><img src="resources/CCF Logos3.png" id="loginlogo" /></a>
@@ -972,14 +981,14 @@
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
 										while($row = mysqli_fetch_assoc($result)) {
-											echo '<tr id="row'.$count.'" onclick="cellActive('."'".'row'.$count.''."'".')">';
+											echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
 											$dgroupid = $row["dgroupID"];
 											$fullname = $row["fullname"];
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
 											$schedday = $row["schedDay"];
 											$schedule = $row["schedule"];
-											echo '<td style="display: none;"><input type="hidden" name="dgroupID" value="'.$dgroupid.'" />
+											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
 											<td>'.$gender.'</td>
 											<td>'.$dgrouptype.'</td>

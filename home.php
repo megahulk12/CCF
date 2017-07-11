@@ -88,12 +88,9 @@
 			    <div class="nav-wrapper">
 			      	<a href="home.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      		<!-- FOR DGROUP MEMERS
-			        	<li><a href="profile.php">PROFILE</a></li>
-			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
 						<li><a href="events.php" onclick="">EVENTS</a></li>
-						<li><a href="ministry.php" onclick="">MINISTRIES</a></li>
-						<li><a href="login.php" onclick="">LOGIN</a></li>'
+						<li><a href="" onclick="">ABOUT US</a></li>
+						<li><a href="login.php" onclick="">LOGIN</a></li>
 			     	 </ul>
 			    </div>
 			</div>

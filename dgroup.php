@@ -2,80 +2,6 @@
 	include('session.php'); 
 	include('globalfunctions.php');
 ?>
-<?php
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
-	if(isset($_POST['request_leader'])) {
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
-		mysqli_query($conn, $sql_endorsement_request);
-
-		// notifications
-
-		// notificationStatus: 0 implies not read, 1 implies already read
-		// notificationType: 
-		// 0 = endorsement; 1 = event; 2 = ministry;
-		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
-		mysqli_query($conn, $sql_notifications);
-	}
-?>
-<?php
-	if(isset($_GET["apr"])) {
-		if($_GET["apr"] == "y" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass);
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype);
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." has approved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getRequestDgMemberID()).", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-		else if($_GET["apr"] == "n" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 3 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass); //sets endorsement request status as rejected/reconsideration
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype); // sets notification as already completed
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." disapproved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getRequestDgMemberID().", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -340,6 +266,15 @@
 			color: #1bcde4;
 		}
 
+		.prefix-leader {
+			color: #777;
+		}
+
+		.prefix-leader:hover {
+			transition: 0.3s ease-out;
+			color: #999;
+		}
+
 		.dgroup-icons {
 			font-size: 200px;
 		}
@@ -387,8 +322,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
-		  	<li class="divider"></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
 			<?php
 				// database connection variables
 
@@ -430,15 +365,6 @@
 					}
 				}
 			?>
-			<!-- <li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -451,7 +377,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -459,12 +385,13 @@
 	</header>
 
 	<body>
+		<div id="response"></div>
 		<div class="container">
 			<?php 
 			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
-			<form method="post" action="dgroup.php">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="submit" name="request_leader">I WANT TO BE A DGROUP LEADER</button>
+			<form method="post">
+				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
 				<input type="hidden" name="seen-request" />
 			</form>';
 			}
@@ -483,23 +410,58 @@
 					<h3>Dgroup</h3>
 					<table class="centered dgroup-table-spacing">
 						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
+					<?php
+						// database connection variables
+
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+
+						// insert code set notificationStatus = 1 when user clicks notification area
+						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
+
+						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
+						$lresult = mysqli_query($conn, $lquery);
+						if(mysqli_num_rows($lresult) > 0) {
+							while($lrow = mysqli_fetch_assoc($lresult)) {
+								$leader = $lrow["leader"];
+							}
+						}
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+								echo '
+						<td>
+							<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
+							'.$leader.'<br><br><label>LEADER</label></a>
+						</td>
+								';
+							$counter_row = 1;
+							while($row = mysqli_fetch_assoc($result)) {
+								$fullname = $row["fullname"];
+								echo '
 							<td>
 								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
+								'.$fullname.'<br><br>&nbsp;</a>
 							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
+								';
+								$counter_row++;
+								if($counter_row == 4) {
+									echo'
 						</tr>
+						<tr>
+									';
+									$counter_row = 0;
+								}
+							}
+							echo '
+						</tr>';
+						}
+					?>
 					</table>
 				</div>
 				<div id="own-dgroup">
@@ -576,10 +538,33 @@
 		}
 		*/
 	</script>
+	<script>
+		function requestLeader() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "request.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("request_leader");
+			swal({
+				title: "Success!",
+				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+				type: "success",
+				allowEscapeKey: true
+			},
+				function() { window.location.reload(); }
+			);
+		}
+	</script>
 
 	<?php
 		if(isset($_POST['seen-request'])) {
 			// script also prevents to confirm form resubmission para there are no duplicates in the data
+			/*
 			echo '
 			<script>
 			setTimeout( 
@@ -593,6 +578,7 @@
 					), 1000);
 			</script>';
 			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
+			*/
 			setRequestSeen();
 		}
 
@@ -632,40 +618,11 @@
 			mysqli_query($conn, $sql);
 		}
 	?>
-	<!-- this section is for notification approval of requests -->
-	<?php
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "disapproved!",
-							text: "You have disapproved this request.",
-							type: "error"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-	?>
+	
+	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
+			 $('.dropdown-button').dropdown('close');
 			swal({
 				  title: "Do you approve?",
 				  type: "info",
@@ -673,14 +630,45 @@
 				  confirmButtonColor: "#66ff66",
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
+				  allowEscapeKey: false,
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
 				function(isConfirm){
-					if(isConfirm)
-						window.location = window.location.href + "?apr=y";
-					else
-						window.location = window.location.href + "?apr=n";
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success",
+								allowOutsideClick: true
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error",
+								allowOutsideClick: true
+							});
+					}
 					/*
 				setTimeout( 
 					swal({
@@ -692,6 +680,25 @@
 						), 1000);
 						*/
 				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
 		}
 	</script>
 </html>

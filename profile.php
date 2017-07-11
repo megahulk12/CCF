@@ -2,161 +2,6 @@
 	include('session.php');
 	include('globalfunctions.php');
 ?>
-<?php
-	/*
-		REMINDERS:
-		1. set data-length maxlength to length of sql fields dynamically
-
-	*/
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-
-	// ====================UPDATING DATA====================
-	if(isset($_POST["submit_cpinfo"])) {
-		$lastname = $_POST["Lastname"];
-		$firstname = $_POST["Firstname"];
-		$middlename = $_POST["Middlename"];
-		$nickname = $_POST["Nickname"];
-		$birthdate = date("Y-m-d", strtotime($_POST["Birthdate"]));
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_cpinfo = "UPDATE member_tbl SET lastName = '$lastname', firstName = '$firstname', middleName = '$middlename', nickName = '$nickname', birthdate = '$birthdate' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_cpinfo);
-	}
-
-	if(isset($_POST["submit_coinfo"])) {
-		$gender = $_POST["Gender"];
-		if ($gender == "Male") {
-			$gender = 0;
-		}
-		else {
-			$gender = 1;
-		}
-		$civilstatus = $_POST["CivilStatus"];
-		$citizenship = $_POST["Citizenship"];
-		$mobilenumber = $_POST["MobileNumber"];
-		$email = $_POST["Email"];
-		$profession = $_POST["Profession"];
-		$homeaddress = $_POST["HomeAddress"];
-		$homephonenumber = $_POST["HomePhoneNumber"];
-		$companyname = $_POST["CompanyName"];
-		$companyaddress = $_POST["CompanyAddress"];
-		$companycontactnum = $_POST["CompanyContactNum"];
-		$schoolname = $_POST["SchoolName"];
-		$schooladdress = $_POST["SchoolAddress"];
-		$schoolcontactnum = $_POST["SchoolContactNum"];
-		$spousename = $_POST["SpouseName"];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_coinfo = "UPDATE member_tbl SET gender = '$gender', civilStatus = '$civilstatus', citizenship = '$citizenship', contactNum = '$mobilenumber', emailAd = '$email', occupation = '$profession', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber' WHERE memberID = ".$_SESSION['userid'];
-		$sql_company = "UPDATE companydetails_tbl SET companyName = '$companyname', companyContactNum = '$companycontactnum', companyAddress = '$companyaddress' WHERE companyID = ".$_SESSION['companyID'];
-		$sql_school = "UPDATE schooldetails_tbl SET schoolName = '$schoolname', schoolContactNum = '$schoolcontactnum', schoolAddress = '$schooladdress' WHERE schoolID = ".$_SESSION['schoolID'];
-		$sql_spouse = "UPDATE spousedetails_tbl SET spouseName = '$spousename', spouseContactNum = '$spousemobilenumber', spouseBirthdate = '$spousebirthdate' WHERE spouseID = ".$_SESSION['spouseID'];
-		mysqli_query($conn, $sql_coinfo);
-		mysqli_query($conn, $sql_company);
-		mysqli_query($conn, $sql_school);
-		mysqli_query($conn, $sql_spouse);
-	}
-
-	if(isset($_POST["submit_cprefer"])) {
-		$language = $_POST["Language"];
-		$venue1 = $_POST["Option1Venue"];
-		$venue2 = $_POST["Option2Venue"];
-		$timepicker1opt1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
-		$timepicker1opt2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
-		$timepicker2opt1 = date("H:i:s", strtotime($_POST["timepicker2opt1"]));
-		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
-		$day1 = $_POST["Option1Day"];
-		$day2 = $_POST["Option2Day"];
-		$receivedChrist = $_POST["receivedChrist"];
-		$attendCCF = $_POST["attendCCF"];
-		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_cprefer = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$timepicker1opt1', prefEndTime1 = '$timepicker1opt2', prefStartTime2 = '$timepicker2opt1', prefEndTime2 = '$timepicker2opt2', prefDay1 = '$day1', prefDay2 = '$day2' WHERE prefID = ".$_SESSION['prefID'];
-		$sql_dgroupmember = "UPDATE discipleshipgroupmembers_tbl SET receivedChrist = '$receivedChrist', attendCCF = '$attendCCF', regularlyAttendsAt = '$regularlyAttendsAt' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_cprefer);
-		mysqli_query($conn, $sql_dgroupmember);
-	}
-
-	if(isset($_POST["submit_cpass"])) {
-		$regpassword = $_POST["password"];
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_pass = "UPDATE member_tbl SET password = '$regpassword' WHERE memberID = ".$_SESSION['userid'];
-		mysqli_query($conn, $sql_pass);
-	}
-	// ====================END====================
-?>
-<?php
-	if(isset($_GET["apr"])) {
-		if($_GET["apr"] == "y" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 1 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass);
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype);
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." has approved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getRequestDgMemberID()).", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-		else if($_GET["apr"] == "n" && getNotificationSuccess() == 0) {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql_pass = "UPDATE endorsement_tbl INNER JOIN notifications_tbl ON endorsement_tbl.dgmemberID = notifications_tbl.requestdgmemberID SET endorsementStatus = 3 WHERE dgmemberID = ".getRequestDgMemberID();
-			mysqli_query($conn, $sql_pass); //sets endorsement request status as rejected/reconsideration
-
-			$sql_notificationtype = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE receivermemberID = ".$_SESSION['userid'];
-			mysqli_query($conn, $sql_notificationtype); // sets notification as already completed
-
-			$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." disapproved your request to be a Dgroup Leader";
-			$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType) VALUES(".$_SESSION['userid'].", ".getRequestDgMemberID().", ".getDgEndorsementID(getRequestDgMemberID()).", '$notificationDesc', 0, 0);";
-			mysqli_query($conn, $sql_notifications);
-		}
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -792,8 +637,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header">Notifications<span class="new badge">5</span></h6></li>
-		  	<li class="divider"></li>
+			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li class="divider"></li>
 			<?php
 				// database connection variables
 
@@ -835,15 +680,6 @@
 					}
 				}
 			?>
-			<!-- <li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="endorsement.php">Dodong Laboriki has approved your endorsement request. Click to see endorsement form.</a></li>
-			-->
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -856,7 +692,7 @@
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account" style="position: relative;">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications"><i class="material-icons material-icon-notification">notifications</i><sup class="notification-badge">5</sup></a></li>
+						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 					</ul>
 			    </div>
 			</div>
@@ -864,6 +700,7 @@
 	</header>
 
 	<body onload="defaultActive()">
+		<div id="response"></div>
 		<div class="row row-profile">
 			<div class="col col-profile s12 card-panel z-depth-4">
 				<table>
@@ -878,7 +715,7 @@
 						</td>
 						<td class="content">
 							<div class="container">
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="cpinfo" onsubmit="return submit_form('submit_cpinfo')">
 									<div id="cpinfo">
 										<div class="row">
 											<?php
@@ -930,12 +767,12 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
 											</div>
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="coinfo" onsubmit="return submit_form('submit_coinfo')">
 									<div id="coinfo" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1115,7 +952,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms">
+								<form method="post" class="forms" name="cprefer" onsubmit="return submit_form('submit_cprefer');">
 									<div id="cprefer" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1192,7 +1029,7 @@
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt1">End Time</label>
-														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefendtime1.'">
+														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
@@ -1216,7 +1053,7 @@
 												</div>
 													<div class="input-field col s6">
 														<label for="timepicker1opt2">Start Time</label>
-														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefstarttime2.'">
+														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
@@ -1283,7 +1120,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post">
+								<form method="post" name="cpass" onsubmit="return submit_form('submit_cpass');">
 									<div id="cpass" style="display: none;">
 										<div class="row">
 											<?php
@@ -1307,8 +1144,8 @@
 											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="password" data-length="16" maxlength="16" value="'.$password.'">
-												<label for="password" name="lblpassword">Password</label>
+												<input type="text" name="password" data-length="16" maxlength="16" value="'.$password.'">
+												<label for="text" name="lblpassword">Password</label>
 											</div>';
 											?>
 											<div class="row">
@@ -1324,7 +1161,12 @@
 			</div>
 		</div>
 	</body>
+
+	<footer>
+	</footer>
+
 	<script>
+	"use strict";
 		var currentpage = 1, no_of_pages = 2, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 		function setNavPage(navpage, num_of_pages) {
 			// re-initialize every after visit of side navigation page
@@ -1394,7 +1236,8 @@
 					document.getElementById(navpage+'_back').style.display = "inline";
 					document.getElementById(navpage+'_next').href = "#"+navpage+"page"+currentpage;
 
-					document.getElementById(navpage+'_next').onclick = submitOnClick(navpage);
+					// originally .onclick event
+					document.getElementById(navpage+'_next').onsubmit = submitOnClick(navpage);
 				}
 				else {
 					document.getElementById(navpage+'_page'+currentpage).style.display = "none";
@@ -1416,7 +1259,9 @@
 		}
 
 		function submitOnClick(navpage) {
+			// if not using ajax, use this
 			document.getElementById(navpage+'_next').setAttribute("type", "submit");
+			//submit_form("submit_"+navpage);
 			//document.myForm.submit();
 			/*
 			$["#next"].click(function() {
@@ -1451,61 +1296,112 @@
 				document.getElementById('cprefer').style.display = "none";
 				document.getElementById('cpass').style.display = "inline";
 			}
-		} 
+		}
+
+
+		function submit_form(submit_name) {
+			var xhttp, params;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "update_profile.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			if(submit_name=="submit_cpinfo")
+				params = getSubmitCpinfo();
+			else if(submit_name=="submit_coinfo")
+				params = getSubmitCoinfo();
+			else if(submit_name=="submit_cprefer")
+				params = getSubmitCprefer();
+			else if(submit_name=="submit_cpass")
+				params = getSubmitCpass();
+			xhttp.send(submit_name+"=g&"+params);
+			swal({
+				title: "Success!",
+				text: "Profile Updated!",
+				type: "success",
+				allowEscapeKey: true,
+				timer: 10000
+			});
+			return false;
+		}
+
+		function getSubmitCpinfo() {
+			var params="", element=document.cpinfo, length=$("#cpinfo input").length;
+			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
+				if(i==length-1)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCoinfo() {
+			var params="", element=document.coinfo, length=$("#coinfo input").length;
+			for(var i = 0; i < length+1; i++) { // replace commas in date inputs because year won't update in database, always current year
+			// length is plus 1 because the maximum is SpouseMobileNumber; ugh hardcoded, please fix
+			// selects are +1
+				if(i==length)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCprefer() {
+			var params="", element=document.cprefer, length=$("#cprefer input").length;
+			for(var i = 0; i < length+5; i++) { // replace commas in date inputs because year won't update in database, always current year
+			// selects are +1
+			// textareas are +1
+				if(i==length+4)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
+
+		function getSubmitCpass() {
+			var params="", element=document.cpass, length=$("#cpass input").length;
+			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
+				if(i==length)
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
+				else
+					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
+			}
+			return params;
+		}
 	</script>
-	<footer>
-	</footer>
-	
 	<?php
+		/*
 		if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_coinfo"])||isset($_POST["submit_cprefer"])||isset($_POST["submit_cpass"])) { // pop up for updates
 			echo '
 				<script>
 				// profile update success
-					swal({
+				setTimeout( 
+				swal({
 						title: "Success!",
 						text: "Profile Updated!",
 						type: "success",
 						allowEscapeKey: true,
 						timer: 10000
-					});
+					},
+					function() { window.location = "profile.php"; }
+					), 1000);
 				</script>
 			';
 		}
+		*/
 	?>
-	<!-- this section is for notification approval of requests -->
-	<?php
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'y' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-
-		if(isset($_GET['apr'])) {
-			if($_GET['apr'] == 'n' && getNotificationSuccess() == 0) {
-				echo '
-				<script> //reminder: reload
-					swal({
-							title: "disapproved!",
-							text: "You have disapproved this request.",
-							type: "error"
-						});
-				</script>
-				';
-				setNotificationSuccess();
-			}
-		}
-	?>
+	
+	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
+			 $('.dropdown-button').dropdown('close');
 			swal({
 				  title: "Do you approve?",
 				  type: "info",
@@ -1513,14 +1409,45 @@
 				  confirmButtonColor: "#66ff66",
 				  confirmButtonText: "Yes",
 				  cancelButtonText: "No",
+				  allowEscapeKey: false,
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
 				function(isConfirm){
-					if(isConfirm)
-						window.location = window.location.href + "?apr=y";
-					else
-						window.location = window.location.href + "?apr=n";
+					if(isConfirm) {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=y", true);
+						xhttp.send();
+						swal({
+								title: "Approved!",
+								text: "You have approved this request.",
+								type: "success",
+								allowOutsideClick: true
+							});
+					}
+					else {
+						var xhttp;
+						xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+								document.getElementById("response").innerHTML = this.responseText;
+							}
+						};
+						xhttp.open("GET", "request.php?apr=n", true);
+						xhttp.send();
+						swal({
+								title: "Disapproved!",
+								text: "You have disapproved this request.",
+								type: "error",
+								allowOutsideClick: true
+							});
+					}
 					/*
 				setTimeout( 
 					swal({
@@ -1532,6 +1459,25 @@
 						), 1000);
 						*/
 				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
 		}
 	</script>
 </html>
