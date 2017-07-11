@@ -470,7 +470,7 @@
 			</div>
 
 			<div id="view-profile">
-				<div class="container">
+				<div class="row row-profile">
 					<div class="col col-profile s12 card-panel z-depth-4">
 						<table>
 							<tr>
