@@ -404,6 +404,8 @@
 								text: "You have approved this request.",
 								type: "success",
 								allowOutsideClick: true
+							}, function() {
+								window.location.reload();
 							});
 					}
 					else {
@@ -421,6 +423,8 @@
 								text: "You have disapproved this request.",
 								type: "error",
 								allowOutsideClick: true
+							}, function() {
+								window.location.reload();
 							});
 					}
 					/*
