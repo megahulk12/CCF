@@ -3,14 +3,6 @@
 	      return 100/$rownumber;
 	}
 
-	function setMemberID($id) {
-		$_SESSION['dgmembID'] = $id;
-	}
-
-	function getMemberID() {
-		return $_SESSION['dgmembID'];
-	}
-
 	function getID($id, $table) {
 		// database connection variables
 
