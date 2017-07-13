@@ -14,6 +14,9 @@
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
 
+	<!-- layout plugin -->
+	<script src="isotope.pkgd.min.js"></script>
+
 	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {
@@ -36,8 +39,11 @@
 			margin: 0 auto;
 			max-width: 1280px;
 			width: 80%;
-			display: -webkit-flex;
 			display: flex;
+		}
+
+		body {
+			margin-top: 150px;
 		}
 
 		#logo {
@@ -56,11 +62,14 @@
 		}
 
 		nav {
+			position: fixed;
+			top: 0;
 			color: #777;
 			background-color: #fff;
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
+			z-index: 1;
 		}
 		
 		li a:hover {
@@ -85,11 +94,11 @@
 		 	 min-width: 250px;
 			 overflow-y: auto;
 		 	 opacity: 0;
-		 	 position: absolute; /*original: absolute*/
+		 	 position: absolute !important; /*original: absolute*/
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
-		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
+		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
 		}
 
 		.dropdown-content-list li {
@@ -239,6 +248,15 @@
 
 		.card {
 			position: relative;
+			margin: 0.5rem 0 1rem 0;
+			background-color: #f4f7f8;
+			transition: box-shadow .25s;
+			border-radius: 2px;
+			width: 330px;
+		}
+
+		.card:hover {
+			position: relative;
 			margin: 0.5rem 0 1rem 0;	
 			background-color: #fff;
 			transition: box-shadow .25s;
@@ -262,6 +280,7 @@
 			top: 0;
 			bottom: 0;
 			width: 100%;
+			cursor: pointer;
 		}
 
 		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
@@ -279,28 +298,37 @@
 			margin: 0;
 			color: #6a6a6a;
 			font-family: sans-serif;
+			font-size: 13px;
 			height: inherit;
 			text-align: justify;
+			line-height: 1.5rem;
 		}
 
 		a.events {
 		    font-family: proxima-nova;
+		    font-size: 21px;
 		    color: #292929 !important;
+			cursor: pointer;
+
 		}
 
 		a.events:hover {
-		    font-family: proxima-nova;
 		    color: #16A5B8 !important;
-		    cursor: pointer;
 		}
 
-		a.events:visited {
+		a.events:focus {
 			color: #1bcde4 !important;
 		}
 
-		table {
-			display: -webkit-flex;
-			display: flex;
+		.schedule {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 50px !important;
+			margin-bottom: 20px !important;
+			padding-top: 15px;
 		}
 		/* ===============END=============== */
 	</style>
@@ -311,6 +339,17 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		});
+
+		/*
+		window.addEventListener("scroll", function() {
+			if(window.scrollY > 150) {
+				$('nav').slideUp("fast");
+			}
+			else {
+				$('nav').slideDown("fast");
+			}
+		}, false);
+		*/
 	</script>
 
 	<header class="top-nav">
@@ -370,7 +409,7 @@
 				}
 			?>
 		</ul>
-		<nav style="margin-bottom: 50px;">
+		<nav style="margin-bottom: 50px;" id="navbar">
 			<div class="container">
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
@@ -396,123 +435,212 @@
 			//position-y interval: 540px
 		?>
 		<h3 class="center">UPCOMING EVENTS</h3>
-		<div class="container-events">
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 0px; left: 0px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="truncatee">
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+		<div class="grid">
+			<div class="container-events">
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<a href=""><img src="resources/Elevate Unite.jpg" class="stretch"></a>
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
 
-								The time to act is NOW!
+									The time to act is NOW!
 
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 0px; left: 370px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 0px; left: 740px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
 
-								The time to act is NOW!
+									The time to act is NOW!
 
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 750px; left: 0px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="truncatee">
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 750px; left: 370px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
 
-								The time to act is NOW!
+									The time to act is NOW!
 
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card" style="position: absolute; top: 750px; left: 740px;">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+									The time to act is NOW!
+
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
 						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
 
-								The time to act is NOW!
+									The time to act is NOW!
 
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+									The time to act is NOW!
+
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+									The time to act is NOW!
+
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+									The time to act is NOW!
+
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 m7">
+						<div class="card hoverable">
+							<div class="card-image">
+								<img src="resources/Elevate Unite.jpg" class="stretch">
+							</div>
+							<div class="card-content">
+								<a class="card-title events">ELEVATE UNITE</a>
+								<p class="schedule">
+									July 15 @ 1:00 pm - 5:30 pm
+								</p>
+								<p>
+									YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+									YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+									The time to act is NOW!
+
+									Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -601,5 +729,12 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+	</script>
+	<script>
+		$('.grid').isotope({
+			// options
+			itemSelector: '.row',
+			layoutMode: 'masonry'
+		});
 	</script>
 </html>

@@ -95,11 +95,18 @@
 		}
 
 		nav {
+			position: fixed;
+			top: 0;
 			color: #777;
 			background-color: #fff;
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
+			z-index: 2;
+		}
+
+		body {
+			margin-top: 150px;
 		}
 		
 		li a:hover {
