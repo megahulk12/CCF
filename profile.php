@@ -62,8 +62,8 @@
 		}
 
 		nav {
-			position: fixed;
-			top: 0;
+			/*position: fixed;
+			top: 0; this is responsible for fixed nav bars */
 			color: #777;
 			background-color: #fff;
 			width: 100%;
@@ -72,9 +72,10 @@
 			z-index: 2;
 		}
 
+		/* this is responsible for fixed nav bars 
 		body {
 			margin-top: 150px;
-		}
+		}*/
 		
 		li a:hover {
 			color: #16A5B8;
@@ -630,14 +631,16 @@
 			});
 		}
 
+		/*
 		window.addEventListener("scroll", function() {
 			if(window.scrollY > 50) {
 				$('nav').slideUp(100);
 			}
 			else {
-				$('nav').fadeIn(100);
+				$('nav').slideDown(100);
 			}
 		}, false);
+		*/
 	</script>
 
 	<header class="top-nav">
