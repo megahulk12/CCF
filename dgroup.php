@@ -291,6 +291,8 @@
 			color: #424242;
 			font-size: 13px;
 			text-transform: uppercase;
+			-webkit-user-select: none;
+			cursor: default;
 		}
 
 		.dgroup-table-spacing {
@@ -306,7 +308,128 @@
 		@keyframes view-profile {
 			
 		}
+		/*CUSTOM DATEPICKER*/
+		.picker__weekday-display {
+		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
+		 	padding: 10px;
+		 	font-weight: 200;
+		 	letter-spacing: .5;
+		 	font-size: 1rem;
+			margin-bottom: 15px;
+		}
+
+		.picker__date-display {
+			text-align: center;
+		  	background-color: #16A5B8;
+		 	color: #fff;
+		 	padding-bottom: 15px;
+		  	font-weight: 300;
+		}
+
+		.picker__day.picker__day--today {
+		 	color: #16A5B8;
+		}
+
+		.picker__day--selected,
+		.picker__day--selected:hover,
+		.picker--focused .picker__day--selected {
+		  	border-radius: 50%;
+		    -webkit-transform: scale(0.9);
+		          transform: scale(0.9);
+		 	 background-color: #16A5B8;
+		 	 color: #ffffff;
+		}
+
+		.picker__close, .picker__today {
+		  	font-size: 1.1rem;
+		  	padding: 0 1rem;
+		 	color: #16A5B8;
+		}
+
+		/*page progress bar*/
+		.progress {
+		 	 position: relative;
+		 	 height: 8px;
+		 	 display: block;
+		 	 width: 100%;
+		 	 max-width: 200px;
+		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
+		 	 border-radius: 2px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 overflow: hidden;
+		}
+
+		.progress .determinate {
+		  	position: absolute;
+		  	top: 0;
+		  	left: 0;
+		  	bottom: 0;
+		  	background-color: #16A5B8;
+		  	transition: width .3s linear;
+		}
+
+		/*radio buttons*/
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:before,
+		[type="radio"].with-gap:checked + label:after {
+		  	border: 2px solid #16A5B8;
+		}
+
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:after {
+		  	background-color: #16A5B8;
+		}
+
+		/*selects*/
+		.dropdown-content li > a, .dropdown-content li > span {
+		  	font-size: 16px;
+		  	color: #16A5B8;
+		  	display: block;
+		  	line-height: 22px;
+		  	padding: 14px 16px;
+		}
+
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
+
+		/*tables*/
+		table.cursor > tbody > tr:hover {
+			cursor: hand;
+		}
+
+		td {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal hightlight bar*/
+		}
+		/* ============================END=========================== */  
+
+		/*validation*/
+		.input-field div.error {
+			font-size: 0.8rem;
+			color: #16A5B8;
+		}
+
+		th {
+			color: #424242;
+		}
 	</style>
+
+	<script>
+			$(document).ready(function(){
+				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+				$('.modal').modal();
+			});
+ 
+			
+		</script>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -314,6 +437,10 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		}); 
+
+		function view(id) {
+			history.pushState(null, null, "dgroup.php?id="+id);
+		}
 	</script>
 
 	<header class="top-nav">
@@ -446,7 +573,7 @@
 						if(mysqli_num_rows($result) > 0) {
 								echo '
 						<td>
-							<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
+							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
 							'.$leader.'<br><br><label>LEADER</label></a>
 						</td>
 								';
@@ -455,7 +582,7 @@
 								$fullname = $row["fullname"];
 								echo '
 							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
 								'.$fullname.'<br><br>&nbsp;</a>
 							</td>
 								';
@@ -476,24 +603,6 @@
 				</div>
 			</div>
 
-			<div id="view-profile">
-				<div class="container">
-					<div class="col col-profile s12 card-panel z-depth-4">
-						<table>
-							<tr>
-								<td class="fixed">
-									<ul class="sidenav">
-										<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" href="#cpinfo" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
-										<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
-										<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
-										<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-									</ul>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>>
 
 				<!-----------------code ni paolo------------------>
 				<?php
@@ -508,22 +617,23 @@
 					}
 
 					// insert code set notificationStatus = 1 when user clicks notification area
-					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
+					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
 
 					$result = mysqli_query($conn, $query);
 						if(mysqli_num_rows($result) > 0) {
 								$counter_row = 1;
 								echo '
 									<div id="own-dgroup">
-										<h3>Own Dgroup</h3>
+										<h3>My Dgroup</h3>
 									<table id="own-dgroup" class="centered dgroup-table-spacing">
 								';
 							while($row = mysqli_fetch_assoc($result)) {
 								$fullname = $row["fullname"];
+								$memberID = $row["memberID"];
 								if($_SESSION['memberType'] >= 2 ){
 									echo '
 										<td>
-											<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+											<a class="dgroup-names" onclick="view('.$memberID.');" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
 												'.$fullname.'<br><br>&nbsp;</a>
 										</td>
 										';
@@ -531,12 +641,11 @@
 									if($counter_row == 4) {
 									echo'
 											</tr>
-							<tr>
+										<tr>
 									';
 									$counter_row = 0;
+									}
 								}
-								}
-								
 							}
 							echo '
 						</tr>';
@@ -566,6 +675,80 @@
 					</table>';
 					}*/
 				?>
+
+			<!--Modal Body-->
+			<div id="view-profile" class="modal modal-fixed-footer">
+		<!--<div class="row row-profile">-->
+			<div class="col col-profile s12 card-panel z-depth-4">
+				
+							<div class="container">
+								<form method="post" class="forms" name="cpinfo" onsubmit="return submit_form('submit_cpinfo')">
+									<div id="cpinfo">
+										<div class="row">
+											<?php
+												if(isset($_GET['id'])) {
+												// database connection variables
+
+												$servername = "localhost";
+												$username = "root";
+												$password = "root";
+												$dbname = "dbccf";
+												$conn = mysqli_connect($servername, $username, $password, $dbname);
+												if (!$conn) {
+													die("Connection failed: " . mysqli_connect_error());
+												}
+												$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_GET['id'];
+												echo '<script> alert('.$_GET['id'].'); </script>';
+												$result = mysqli_query($conn, $query);
+												if(mysqli_num_rows($result) > 0) {
+													while($row = mysqli_fetch_assoc($result)) {
+														$lastname = $row["lastName"];
+														$firstname = $row["firstName"];
+														$middlename = $row["middleName"];
+														$nickname = $row["nickName"];
+														$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+														if(is_null($row["birthdate"]))
+															$birthdate = "";
+														//$birthdate = $row["birthdate"];
+													}
+												}
+												echo '
+												<div class="input-field col s12">
+													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
+													<label for="Lastname">Lastname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
+													<label for="Firstname">Firstname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
+													<label for="Middlename">Middlename</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
+													<label for="Nickname">Nickname</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
+													<label for="Birthdate">Birthdate</label>
+												</div>
+												';
+												}
+												unset($_GET['id']);
+											?>
+											<div class="row">
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						
+			</div>
+			</div>
+		<!--</div>-->
+
 				<!----------------------THE END------------------------>
 				
 	</body>
