@@ -1337,6 +1337,7 @@
 							text: "Profile Updated!",
 							type: "success",
 							allowEscapeKey: true,
+							allowOutsideClick: true,
 							timer: 10000
 						});
 					}
