@@ -14,10 +14,6 @@
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
 
-	<!-- layout plugin -->
-	<script src="isotope.pkgd.min.js"></script>
-	<script src="imagesloaded.pkgd.js"></script>
-
 	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {
@@ -249,20 +245,20 @@
 
 		.card {
 			position: relative;
-			margin: 0.5rem 0 1rem 0;
+			margin: 0 !important;
 			background-color: #f4f7f8;
 			transition: box-shadow .25s;
 			border-radius: 2px;
-			width: 330px;
+			width: 650px;
+
 		}
 
-		.card:hover {
+		.card-schedule {
 			position: relative;
-			margin: 0.5rem 0 1rem 0;	
-			background-color: #fff;
+			background-color: #f4f7f8;
 			transition: box-shadow .25s;
 			border-radius: 2px;
-			width: 330px;
+			width: 300px;
 		}
 
 		.card .card-title {
@@ -270,6 +266,7 @@
 			font-weight: 300;
 			font-family: proxima-nova;
 			text-transform: uppercase;
+			color: #292929 !important;
 		}
 
 		.card .card-image img {
@@ -305,22 +302,6 @@
 			line-height: 1.5rem;
 		}
 
-		a.events {
-		    font-family: proxima-nova;
-		    font-size: 21px;
-		    color: #292929 !important;
-			cursor: pointer;
-
-		}
-
-		a.events:hover {
-		    color: #16A5B8 !important;
-		}
-
-		a.events:focus {
-			color: #1bcde4 !important;
-		}
-
 		.schedule {
 			background-color: #e4e4e4;
 			font-size: 14px !important;
@@ -351,12 +332,6 @@
 			}
 		}, false);
 		*/
-
-		setTimeout(function() {
-			window.addEventListener("scroll", function() {
-				behavior: 'smooth'
-			});
-		}, 500);
 	</script>
 
 	<header class="top-nav">
@@ -435,20 +410,42 @@
 	</header>
 	<body>
 		<div id="response"></div>
-	</body>
+		<div class="container-events">
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card">
+						<div class="card-image">
+							<img src="resources/Elevate Unite Cover.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title">ELEVATE UNITE</a>
+							<p class="schedule">
+								July 15 @ 1:00 pm - 5:30 pm
+							</p>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
 
-	<script>
-	jQuery(function() { // allows to load the image first before layout isotope executes
-		var $container = jQuery('.container-events');
-		$container.imagesLoaded(function() {
-			$container.isotope({
-				// options
-				itemSelector: '.row',
-				layoutMode: 'masonry'
-			});
-		});
-	});
-	</script>
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card card-schedule">
+						<div class="card-content">
+							<a class="card-title"><i class="material-icons prefix small" style="vertical-align: -6px;">schedule</i>  SCHEDULE</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {

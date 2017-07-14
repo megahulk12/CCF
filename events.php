@@ -36,11 +36,10 @@
 		}
 
 		.container-events {
-			position: relative;
 			margin: 0 auto;
-			max-width: 1280px;
-			width: 80%;
-			display: flex;
+			position: relative;
+			max-width: 1080px;
+			width: 100%;
 		}
 
 		body {
@@ -262,7 +261,6 @@
 			background-color: #fff;
 			transition: box-shadow .25s;
 			border-radius: 2px;
-			width: 330px;
 		}
 
 		.card .card-title {
@@ -299,7 +297,7 @@
 			margin: 0;
 			color: #6a6a6a;
 			font-family: sans-serif;
-			font-size: 13px;
+			font-size: 11px;
 			height: inherit;
 			text-align: justify;
 			line-height: 1.5rem;
@@ -658,7 +656,10 @@
 	$container.isotope({
 		// options
 		itemSelector: '.row',
-		layoutMode: 'masonry'
+		layoutMode: 'masonry',
+		masonry: {
+			columnWidth: 20
+		}
 	});
 
 	// re-initialize
@@ -668,7 +669,10 @@
 			$container.isotope({
 				// options
 				itemSelector: '.row',
-				layoutMode: 'masonry'
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
 			});
 		});
 	});
