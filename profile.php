@@ -1102,9 +1102,9 @@
 												$result = mysqli_query($conn, $query);
 												if(mysqli_num_rows($result) > 0) {
 													while($row = mysqli_fetch_assoc($result)) {
-														$receivedChrist = $row["receivedChrist"];
-														$attendCCF = $row["attendCCF"];
-														$regularlyAttendsAt = $row["regularlyAttendsAt"];
+														$receivedChrist = trim(preg_replace('/\s+/', '\n', $row["receivedChrist"]));
+														$attendCCF = trim(preg_replace('/\s+/', '\n', $row["attendCCF"]));
+														$regularlyAttendsAt = trim(preg_replace('/\s+/', '\n', $row["regularlyAttendsAt"]));
 													}
 												}
 											echo '
@@ -1282,7 +1282,7 @@
 			// if not using ajax, use this
 			document.getElementById(navpage+'_next').setAttribute("type", "submit");
 			submit_form('f'+navpage, 'submit_'+navpage);
-			convertToButton();
+			//convertToButton(navpage);
 			//submit_form("submit_"+navpage);
 			//document.myForm.submit();
 			/*

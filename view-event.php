@@ -14,6 +14,10 @@
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
 
+	<!-- layout plugin -->
+	<script src="isotope.pkgd.min.js"></script>
+	<script src="imagesloaded.pkgd.js"></script>
+
 	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {
@@ -32,12 +36,12 @@
 		}
 
 		.container-events {
-			position: relative;
 			margin: 0 auto;
-			max-width: 1280px;
-			width: 80%;
-			display: flex;
+			position: relative;
+			max-width: 1080px;
+			width: 100%;
 		}
+
 
 		body {
 			margin-top: 150px;
@@ -249,24 +253,28 @@
 			background-color: #f4f7f8;
 			transition: box-shadow .25s;
 			border-radius: 2px;
-			width: 650px;
-
+			width: 700px;
 		}
 
 		.card-schedule {
 			position: relative;
+			margin: 0 !important;
 			background-color: #f4f7f8;
 			transition: box-shadow .25s;
 			border-radius: 2px;
-			width: 300px;
+			width: 310px;
 		}
 
 		.card .card-title {
-			font-size: 24px;
+			font-size: 33px;
 			font-weight: 300;
 			font-family: proxima-nova;
 			text-transform: uppercase;
 			color: #292929 !important;
+		}
+
+		.card .card-title-schedule {
+			font-size: 20px;
 		}
 
 		.card .card-image img {
@@ -278,7 +286,6 @@
 			top: 0;
 			bottom: 0;
 			width: 100%;
-			cursor: pointer;
 		}
 
 		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
@@ -293,6 +300,16 @@
 		}
 
 		.card .card-content p {
+			margin: 20 0;
+			color: #6a6a6a;
+			font-family: sans-serif;
+			font-size: 13px;
+			height: inherit;
+			text-align: justify;
+			line-height: 1.5rem;
+		}
+
+		.card .card-content-schedule p {
 			margin: 0;
 			color: #6a6a6a;
 			font-family: sans-serif;
@@ -300,6 +317,10 @@
 			height: inherit;
 			text-align: justify;
 			line-height: 1.5rem;
+		}
+
+		dd {
+			color: #6a6a6a;
 		}
 
 		.schedule {
@@ -312,6 +333,33 @@
 			margin-bottom: 20px !important;
 			padding-top: 15px;
 		}
+
+		/*=====FORM BUTTONS=====*/
+		.btn, .btn-large {
+		  text-decoration: none;
+		  color: #fff;
+		  background-color: #16A5B8;
+		  text-align: center;
+		  letter-spacing: .5px;
+		  transition: .2s ease-out;
+		  cursor: pointer;
+		  font-family: proxima-nova;
+		  font-size: 13px;
+		  /*border-radius: 20px;*/
+		}
+
+		/*hover of button*/
+		.btn:hover, .btn-large:hover {
+			background-color: #1bcde4;
+			color: #fff;
+		}
+
+		/*focus of button*/
+		.btn:focus, .btn-large:focus,
+		.btn-floating:focus {
+		  	background-color: #1bcde4;
+		}
+
 		/* ===============END=============== */
 	</style>
 
@@ -419,33 +467,67 @@
 						</div>
 						<div class="card-content">
 							<a class="card-title">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
 							<p>
 								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+							</p>
+							<p>
 								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
+							</p>
+							<p>
 								The time to act is NOW!
-
+							</p>
+							<p>
 								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+							<p>
+								<button class="waves-effect waves-light btn col s3 right">JOIN THIS EVENT</button>
+								<br>
 							</p>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="col s12 m7">
 					<div class="card card-schedule">
-						<div class="card-content">
-							<a class="card-title"><i class="material-icons prefix small" style="vertical-align: -6px;">schedule</i>  SCHEDULE</a>
+						<div class="card-content card-content-schedule">
+							<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>July 1</dd> </span></a>
+							<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>1:00 pm - 5:30 pm</dd> </span></a>
+							<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">VENUE<dd>CCF DAVAO</dd> </span></a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</body>
+
+	<script>
+	// initialize
+	var $container = jQuery('.container-events');
+	$container.isotope({
+		// options
+		itemSelector: '.row',
+		layoutMode: 'masonry',
+		masonry: {
+			columnWidth: 20
+		}
+	});
+
+	// re-initialize
+	jQuery(function() { // allows to load the image first before layout isotope executes
+		var $container = jQuery('.container-events');
+		$container.imagesLoaded(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		});
+	});
+	</script>
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {

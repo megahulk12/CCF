@@ -603,78 +603,78 @@
 				</div>
 			</div>
 
+			<!-----------------code ni paolo------------------>
+					<?php
 
-				<!-----------------code ni paolo------------------>
-				<?php
-
-					$servername = "localhost";
-					$username = "root";
-					$password = "root";
-					$dbname = "dbccf";
-					$conn = mysqli_connect($servername, $username, $password, $dbname);
-					if (!$conn) {
-						die("Connection failed: " . mysqli_connect_error());
-					}
-
-					// insert code set notificationStatus = 1 when user clicks notification area
-					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
-
-					$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-								$counter_row = 1;
-								echo '
-									<div id="own-dgroup">
-										<h3>My Dgroup</h3>
-									<table id="own-dgroup" class="centered dgroup-table-spacing">
-								';
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								$memberID = $row["memberID"];
-								if($_SESSION['memberType'] >= 2 ){
-									echo '
-										<td>
-											<a class="dgroup-names" onclick="view('.$memberID.');" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-												'.$fullname.'<br><br>&nbsp;</a>
-										</td>
-										';
-									$counter_row++;
-									if($counter_row == 4) {
-									echo'
-											</tr>
-										<tr>
-									';
-									$counter_row = 0;
-									}
-								}
-							}
-							echo '
-						</tr>';
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
 						}
-					/*if($_SESSION['memberType'] >= 2 ) {
-					echo '
-					<h3>Own Dgroup</h3>
+
+						// insert code set notificationStatus = 1 when user clicks notification area
+						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
+
+						$result = mysqli_query($conn, $query);
+							if(mysqli_num_rows($result) > 0) {
+								$counter_row = 0;
+								echo '
+			<div id="own-dgroup">
+				<h3>My Dgroup</h3>
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
 						<tr>
+								';
+								while($row = mysqli_fetch_assoc($result)) {
+									$fullname = $row["fullname"];
+									$memberID = $row["memberID"];
+									if($_SESSION['memberType'] >= 2 ){
+										echo '
 							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
+								<a class="dgroup-names" onclick="view('.$memberID.');" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									'.$fullname.'<br><br>&nbsp;</a>
 							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
+											';
+										$counter_row++;
+										if($counter_row == 4) {
+										echo'
 						</tr>
-					</table>';
-					}*/
-				?>
+						<tr>
+										';
+										$counter_row = 0;
+										}
+									}
+								}
+								echo '
+						</tr>';
+							}
+						/*if($_SESSION['memberType'] >= 2 ) {
+						echo '
+						<h3>Own Dgroup</h3>
+						<table id="own-dgroup" class="centered dgroup-table-spacing">
+							<tr>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+							</tr>
+						</table>';
+						}*/
+					?>
 
 			<!--Modal Body-->
 			<div id="view-profile" class="modal modal-fixed-footer">
