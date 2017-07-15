@@ -1163,9 +1163,9 @@
 											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="text" name="password" data-length="16" maxlength="16" value="'.$password.'">
-												<label for="text" name="lblpassword">Password</label>
-											</div>';
+												<input type="password" name="password" id="password" data-length="16" maxlength="16">
+												<label for="password" name="lblpassword">Password</label>
+											</div>'; // originally having a value of own password
 											?>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
