@@ -466,47 +466,6 @@
 	</header>
 	<body>
 		<div id="response"></div>
-		<div class="container-events">
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card">
-						<div class="card-image">
-							<img src="resources/Elevate Unite Cover.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-							</p>
-							<p>
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-							</p>
-							<p>
-								The time to act is NOW!
-							</p>
-							<p>
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-							<p>
-								<button class="waves-effect waves-light btn col s3 right" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
-								<br>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card card-schedule">
-						<div class="card-content card-content-schedule">
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>July 1</dd> </span></a>
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>1:00 pm - 5:30 pm</dd> </span></a>
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>CCF DAVAO</dd> </span></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</body>
 
 	<script>
