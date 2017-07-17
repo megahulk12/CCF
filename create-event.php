@@ -1,6 +1,47 @@
-<?php 
-	include('session.php'); 
-	include('globalfunctions.php'); 
+<?php
+	include('session.php');
+	include('globalfunctions.php');
+?>
+<?php
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+	if(isset($_POST['submit'])) {
+		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
+		$baptismalplace = $_POST["BaptismalPlace"];
+		$dgrouptype = $_POST["DgroupType"];
+		if($dgrouptype=="Youth") $dgrouptype = 0;
+		else if($dgrouptype=="Singles") $dgrouptype = 1;
+		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
+		else if($dgrouptype=="Married") $dgrouptype = 3;
+		else if($dgrouptype=="Couples") $dgrouptype = 4;
+		$agebracket = $_POST["AgeBracket"];
+		$meetingday = $_POST["MeetingDay"];
+		$meetingplace = $_POST["MeetingPlace"];
+		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$dateendorsed = date("Y-m-d");
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', eschedDay = '$meetingday', eschedStartTime = '$time1', eschedEndTime = '$time2', eschedPlace = '$meetingplace', edgleader = ".$_SESSION['userid'].", edgroupType = $dgroupType, dateEndorsed = '$dateendorsed' WHERE endorsementID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
+		/*
+		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
+		*/
+		$sql_notifications = "";
+		mysqli_query($conn, $sql_endorsement);
+		/*
+		mysqli_query($conn, $sql_sched);
+		mysqli_query($conn, $sql_dgroup);
+		*/
+		mysqli_close($conn);
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -13,22 +54,18 @@
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
-
-	<!-- layout plugin -->
-	<script src="isotope.pkgd.min.js"></script>
-	<script src="imagesloaded.pkgd.js"></script>
-
-	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert-dev.js"></script>
-	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
+	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<title>Christ's Commission Fellowship</title>
+
 	<style>
 		::selection {
 			background-color: #16A5B8;
 			color: #fff;
 		}
-
+		
+		/* containers*/
 		div {
 			display: block;
 		}
@@ -38,21 +75,16 @@
 			max-width: 1280px;
 			width: 80%;
 		}
+		/*=======END=======*/
 
-		.container-events {
-			margin: 0 auto;
-			position: relative;
-			max-width: 1080px;
-			width: 100%;
-		}
-
-
-		body {
-			margin-top: 150px;
-		}
-
+		/*logo*/
 		#logo {
 			margin-top: 10px;
+		}
+
+		img#loginlogo {
+			height: 150px;
+			width: 300px;
 		}
 
 		/*
@@ -74,13 +106,16 @@
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
-			z-index: 1;
+			z-index: 2;
+		}
+
+		body {
+			margin-top: 150px;
 		}
 		
 		li a:hover {
 			color: #16A5B8;
 		}
-
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
@@ -93,17 +128,218 @@
 			font-size: 13px;
 		}
 
+		/*form*/
+		.create-event {
+			width:600px;
+		}
+		/*=======END=======*/
+
+		/*headers*/
+		h1, h2, h3, h4, h5, h6 {
+			color: #777;
+			font-family: proxima-nova;
+			text-transform: uppercase;
+		}
+		/*=======END=======*/
+
+		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
+		/* input custom colors*/
+		/*Text inputs*/
+		input:not([type]):focus:not([readonly]),
+		input[type=text]:focus:not([readonly]),
+		input[type=password]:focus:not([readonly]),
+		input[type=email]:focus:not([readonly]),
+		input[type=url]:focus:not([readonly]),
+		input[type=time]:focus:not([readonly]),
+		input[type=date]:focus:not([readonly]),
+		input[type=datetime]:focus:not([readonly]),
+		input[type=datetime-local]:focus:not([readonly]),
+		input[type=tel]:focus:not([readonly]),
+		input[type=number]:focus:not([readonly]),
+		input[type=search]:focus:not([readonly]),
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		input:not([type]):focus:not([readonly])+label,
+		input[type=text]:focus:not([readonly])+label,
+		input[type=password]:focus:not([readonly])+label,
+		input[type=email]:focus:not([readonly])+label,
+		input[type=url]:focus:not([readonly])+label,
+		input[type=time]:focus:not([readonly])+label,
+		input[type=date]:focus:not([readonly])+label,
+		input[type=datetime]:focus:not([readonly])+label,
+		input[type=datetime-local]:focus:not([readonly])+label,
+		input[type=tel]:focus:not([readonly])+label,
+		input[type=number]:focus:not([readonly])+label,
+		input[type=search]:focus:not([readonly])+label,
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+
+		.btn, .btn-large {
+		  text-decoration: none;
+		  color: #777;
+		  background-color: #ebebeb;
+		  text-align: center;
+		  letter-spacing: .5px;
+		  transition: .2s ease-out;
+		  cursor: pointer;
+		  font-family: proxima-nova;
+		  font-size: 13px;
+		  /*border-radius: 20px;*/
+		}
+
+		.fixbutton {
+		  	background-color: #16A5B8;
+		  	color: #fff;
+		}
+
+		.profile-next-or-submit-button {
+			margin-right: 9px;
+		}
+
+		/*background-color for icons if focus is inactive*/
+		.input-field .prefix {
+			position: absolute;
+			width: 3rem;
+			font-size: 2rem;
+		    transition: color .2s;
+		    color: #777;
+		}
+
+		/*background-color for icons if focus is active*/
+		.input-field .prefix.active {
+		  color: #16A5B8;
+		}
+
+		/*hover of button*/
+		.btn:hover, .btn-large:hover {
+			background-color: #1bcde4;
+			color: #fff;
+		}
+
+		/*focus of button*/
+		.btn:focus, .btn-large:focus,
+		.btn-floating:focus {
+		  	background-color: #1bcde4;
+		}
+
+
+		.card-panel {
+		 	 transition: box-shadow .25s;
+		 	 padding: 24px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 border-radius: 2px;
+		 	 background-color: #fff;
+		}
+		/* ============================END=========================== */  
+
+		/*CUSTOM DATEPICKER*/
+		.picker__weekday-display {
+		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
+		 	padding: 10px;
+		 	font-weight: 200;
+		 	letter-spacing: .5;
+		 	font-size: 1rem;
+			margin-bottom: 15px;
+		}
+
+		.picker__date-display {
+			text-align: center;
+		  	background-color: #16A5B8;
+		 	color: #fff;
+		 	padding-bottom: 15px;
+		  	font-weight: 300;
+		}
+
+		.picker__day.picker__day--today {
+		 	color: #16A5B8;
+		}
+
+		.picker__day--selected,
+		.picker__day--selected:hover,
+		.picker--focused .picker__day--selected {
+		  	border-radius: 50%;
+		    -webkit-transform: scale(0.9);
+		          transform: scale(0.9);
+		 	 background-color: #16A5B8;
+		 	 color: #ffffff;
+		}
+
+		.picker__close, .picker__today {
+		  	font-size: 1.1rem;
+		  	padding: 0 1rem;
+		 	color: #16A5B8;
+		}
+		/*==========END==========*/
+
+		/*page progress bar*/
+		.progress {
+		 	 position: relative;
+		 	 height: 8px;
+		 	 display: block;
+		 	 width: 100%;
+		 	 max-width: 200px;
+		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
+		 	 border-radius: 2px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 overflow: hidden;
+		}
+
+		.progress .determinate {
+		  	position: absolute;
+		  	top: 0;
+		  	left: 0;
+		  	bottom: 0;
+		  	background-color: #16A5B8;
+		  	transition: width .3s linear;
+		}
+		/*==========END==========*/
+
+		/*radio buttons*/
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:before,
+		[type="radio"].with-gap:checked + label:after {
+		  	border: 2px solid #16A5B8;
+		}
+
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:after {
+		  	background-color: #16A5B8;
+		}
+
+		/*selects*/
+		.dropdown-content li > a, .dropdown-content li > span {
+		  	font-size: 16px;
+		  	color: #16A5B8;
+		  	display: block;
+		  	line-height: 22px;
+		  	padding: 14px 16px;
+		}
+
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
+		/*==========END==========*/
+
 		.dropdown-content-list {
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
+			 max-height: 650px;
 			 overflow-y: auto;
 		 	 opacity: 0;
-		 	 position: absolute !important; /*original: absolute*/
+		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
-		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
+		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
 		}
 
 		.dropdown-content-list li {
@@ -125,10 +361,6 @@
 		  	padding: 14px 16px;
 		}
 
-		.notifcation-new {
-			background-color: #ebebeb;
-		}
-
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -138,6 +370,7 @@
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
+		 	 will-change: width, height;
 		 	 margin-top: 97px;
 		 	 height: 350px;
 		}
@@ -181,7 +414,7 @@
 		.notifications {
 			padding-top: 15px;
 			height: 100%;
-			position: relative !important;
+			position: relative;
 		}
 
 		.notifications-header, .notifications-body {
@@ -206,169 +439,28 @@
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 100%;
-			padding: 1 4 1 4;
+			border-radius: 50%;
+			padding: 1px 3px;
 			position: relative;
 			top: 19px;
 			left: 13px
 		}
-		/* for animation of notification
-		.notifications {
-			animation: notification ease-in-out 2s infinite;
-			/*
-			animation-name: notification;
-			animation-duration: 0.3s;
-			animation-iteration-count: infinite;
-			animation-timing-function: ease-in-out;
-			animation-direction: alternate;
-		}
 
-		@keyframes notification1 {
-			0% { transform: rotate(0deg) }
-			5% { transform: rotate(25deg) }
-			15% { transform: rotate(-17deg) }
-			25% { transform: rotate(13deg) }
-			35% { transform: rotate(-7deg) }
-			45% { transform: rotate(3deg) }
-			55% { transform: rotate(-1deg) }
-			60% { transform: rotate(0deg) }
-			100% { transform: rotate(0deg) }
-		}
-		*/
-
-		/* ===============CARDS=============== */
-		/*headers*/
-		h1, h2, h3, h4, h5, h6 {
-			color: #292929;
-			font-family: proxima-nova;
-			text-transform: uppercase;
-		}
-
-		@font-face {
-			font-family: proxima-nova-header;
-			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
-			font-weight: bold;
-		}
-		/*=======END=======*/
-
-		.card {
-			position: relative;
-			margin: 0 !important;
-			background-color: #f4f7f8;
-			transition: box-shadow .25s;
-			border-radius: 2px;
-			width: 700px;
-		}
-
-		.card-schedule {
-			position: relative;
-			margin: 0 !important;
-			background-color: #f4f7f8;
-			transition: box-shadow .25s;
-			border-radius: 2px;
-			width: 310px;
-		}
-
-		.card .card-title {
-			font-size: 33px;
-			font-weight: 300;
-			font-family: proxima-nova;
-			text-transform: uppercase;
-			color: #292929 !important;
-		}
-
-		.card .card-title-schedule {
-			font-size: 20px;
-		}
-
-		.card .card-image img {
-			display: block;
-			border-radius: 2px 2px 0 0;
-			position: relative;
-			left: 0;
-			right: 0;
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
 			top: 0;
-			bottom: 0;
-			width: 100%;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
+			background-color: #16A5B8;
+			z-index: 0;
 		}
 
-		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
-			color: #16A5B8;
-			margin-right: 24px;
-			transition: color .3s ease;
-			text-transform: uppercase;
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
+			background-color: #16A5B8;
+			border-color: #16A5B8;
 		}
-
-		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating):hover {
-			color: #1bcde4;
-		}
-
-		.card .card-content p {
-			margin: 20 0;
-			color: #6a6a6a;
-			font-family: sans-serif;
-			font-size: 13px;
-			height: inherit;
-			text-align: justify;
-			line-height: 1.5rem;
-		}
-
-		.card .card-content-schedule p {
-			margin: 0;
-			color: #6a6a6a;
-			font-family: sans-serif;
-			font-size: 13px;
-			height: inherit;
-			text-align: justify;
-			line-height: 1.5rem;
-		}
-
-		dd {
-			color: #6a6a6a;
-			font-size: 1rem;
-		}
-
-		.schedule {
-			background-color: #e4e4e4;
-			font-size: 14px !important;
-			font-weight: bolder;
-			color: #424242 !important;
-			text-align: center !important;
-			height: 50px !important;
-			margin-bottom: 20px !important;
-			padding-top: 15px;
-		}
-
-		/*=====FORM BUTTONS=====*/
-		.btn, .btn-large {
-		  text-decoration: none;
-		  color: #fff;
-		  background-color: #16A5B8;
-		  text-align: center;
-		  letter-spacing: .5px;
-		  transition: .2s ease-out;
-		  cursor: pointer;
-		  font-family: proxima-nova;
-		  font-size: 13px;
-		  /*border-radius: 20px;*/
-		}
-
-		/*hover of button*/
-		.btn:hover, .btn-large:hover {
-			background-color: #1bcde4;
-			color: #fff;
-		}
-
-		/*focus of button*/
-		.btn:focus, .btn-large:focus,
-		.btn-floating:focus {
-		  	background-color: #1bcde4;
-		}
-
-		.prefix {
-            -webkit-user-select: none;
-		}
-		/* ===============END=============== */
 	</style>
 
 	<script type="text/javascript">
@@ -376,18 +468,55 @@
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		});
+		}); 
+	</script>
+	<script>
+	$(document).ready(function(){
+			$('.datepicker').pickadate({
+				selectMonths: true, // Creates a dropdown to control month
+				selectYears: 50, // Creates a dropdown of 15 years to control year
+				formatSubmit: 'yyyy-mm-dd',
+				max: true
+			});
+			 
+			$(document).ready(function() {
+				$('select').material_select();
+			}); 
 
-		/*
-		window.addEventListener("scroll", function() {
-			if(window.scrollY > 150) {
-				$('nav').slideUp("fast");
-			}
-			else {
-				$('nav').slideDown("fast");
-			}
-		}, false);
-		*/
+			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
+			$('#receivedChrist').val();
+  			$('#receivedChrist').trigger('autoresize');
+
+			$('#attendCCF').val();
+  			$('#attendCCF').trigger('autoresize');
+
+			$('#regularlyAttendsAt').val();
+  			$('#regularlyAttendsAt').trigger('autoresize');
+
+  			//old version of timepicker
+  			/*
+  			$('#timepicker1opt1').pickatime({
+  				autoclose: false
+  			});
+
+  			$('#timepicker1opt2').pickatime({
+  				autoclose: false
+  			});
+			
+			*/
+  			//new version of timepicker
+			$('.timepicker').pickatime({
+				default: 'now', // Set default time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker  
+			});
+		});
 	</script>
 
 	<header class="top-nav">
@@ -447,7 +576,7 @@
 				}
 			?>
 		</ul>
-		<nav style="margin-bottom: 50px;" id="navbar">
+		<nav style="margin-bottom: 50px;">
 			<div class="container">
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
@@ -464,61 +593,86 @@
 			</div>
 		</nav>
 	</header>
+
 	<body>
-		<div id="response"></div>
+		<div class="row">
+			<div class="col s12 z-depth-4 card-panel">
+				<form method="post" class="create-event" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+					<div id="page1">
+						<h3 class="center">EVENT PROPOSAL</h3>
+						<div class="row">
+							<div class="input-field col s12">
+								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+								<label for="EventName">Event Name</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+								<label for="EventDesc">Event Description</label>
+							</div>
+							<h4 class="center">Date</h4>
+							<p>
+								<div class ="row" style="margin-left:10px;">
+									<input type="checkbox" class="filled-in" id="SingleDay" name="SingleDay" onclick="checkIfSingle();"/>
+									<label for="SingleDay">Single Day Event</label>
+								</div>
+							</p>
+							<div class="input-field col s6" id="Event_Date_Start">
+								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+								<label for="EventDateStart" id="lblEventDateStart">Start</label>
+							</div>
+							<div class="input-field col s6" id="Event_Date_End">
+								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+								<label for="EventDateEnd">End</label>
+							</div>
+							<h4 class="center">Time</h4>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+								<label for="EventTime1">Start</label>
+							</div>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+								<label for="EventTime2">End</label>
+							</div>
+							<h4 class="center">Location</h4>
+							<div class="input-field col s12">
+								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+								<label for="EventVenue">Event Venue</label>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<label for="Budget">Budget</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks" data-length="500" maxlength="500"></textarea>
+								<label for="Remarks">Remarks</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</body>
-
-	<script>
-	// initialize
-	var $container = jQuery('.container-events');
-	$container.isotope({
-		// options
-		itemSelector: '.row',
-		layoutMode: 'masonry',
-		masonry: {
-			columnWidth: 20
-		}
-	});
-
-	// re-initialize
-	jQuery(function() { // allows to load the image first before layout isotope executes
-		var $container = jQuery('.container-events');
-		$container.imagesLoaded(function() {
-			$container.isotope({
-				// options
-				itemSelector: '.row',
-				layoutMode: 'masonry',
-				masonry: {
-					columnWidth: 20
-				}
-			});
-		});
-	});
-	</script>
-
-	<!-- this section is for setting requests -->
-	<script>
-		function joinEvent() {
-			var url="join-event.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				success: function() {
-					swal({
-						title: "Success!",
-						text: "Request Submitted! Please wait for further notice.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					});
-				}
-			});
-		}
-	</script>
-
+	
 	 <!-- this section is for notification approval of requests -->
 	<script>
+		function checkIfSingle() {
+			if(document.getElementById('SingleDay').checked) {
+				document.getElementById('Event_Date_End').style.display = "none";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
+				document.getElementById('lblEventDateStart').innerHTML = "Event Date";	
+			}
+			else {
+				$('#Event_Date_End').fadeIn(200);
+				document.getElementById('lblEventDateStart').innerHTML = "Start";
+				document.getElementById('Event_Date_End').style.display = "inline";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
+				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
