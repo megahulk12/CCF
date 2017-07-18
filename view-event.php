@@ -74,7 +74,7 @@
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
-			z-index: 1;
+			z-index: 2;
 		}
 		
 		li a:hover {
@@ -350,6 +350,7 @@
 		  cursor: pointer;
 		  font-family: proxima-nova;
 		  font-size: 13px;
+		  z-index: 1;
 		  /*border-radius: 20px;*/
 		}
 

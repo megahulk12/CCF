@@ -111,6 +111,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -194,10 +195,8 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.profile-next-or-submit-button {
-			margin-right: 9px;
+		  	margin-right: 9px;
+		  	z-index: 1;
 		}
 
 		/*background-color for icons if focus is inactive*/
@@ -595,6 +594,7 @@
 	</header>
 
 	<body>
+		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
 				<form method="post" class="create-event" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
@@ -649,7 +649,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit">PROPOSE</button>
 					</div>
 				</form>
 			</div>
