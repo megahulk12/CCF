@@ -108,3 +108,45 @@
 		mysqli_query($conn, $sql_notifications);
 	}
 ?>
+
+<?php
+	// database connection variables
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "dbccf";
+	if(isset($_POST['submit'])) {
+		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
+		$baptismalplace = $_POST["BaptismalPlace"];
+		$dgrouptype = $_POST["DgroupType"];
+		if($dgrouptype=="Youth") $dgrouptype = 0;
+		else if($dgrouptype=="Singles") $dgrouptype = 1;
+		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
+		else if($dgrouptype=="Married") $dgrouptype = 3;
+		else if($dgrouptype=="Couples") $dgrouptype = 4;
+		$agebracket = $_POST["AgeBracket"];
+		$meetingday = $_POST["MeetingDay"];
+		$meetingplace = $_POST["MeetingPlace"];
+		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$dateendorsed = date("Y-m-d");
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', eschedDay = '$meetingday', eschedStartTime = '$time1', eschedEndTime = '$time2', eschedPlace = '$meetingplace', edgleader = ".$_SESSION['userid'].", edgroupType = $dgroupType, dateEndorsed = '$dateendorsed' WHERE endorsementID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
+		/*
+		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
+		*/
+		$sql_notifications = "";
+		mysqli_query($conn, $sql_endorsement);
+		/*
+		mysqli_query($conn, $sql_sched);
+		mysqli_query($conn, $sql_dgroup);
+		*/
+		mysqli_close($conn);
+	}
+?>

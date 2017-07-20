@@ -525,7 +525,7 @@
 			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
 			<form method="post">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
+				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
 				<input type="hidden" name="seen-request" />
 			</form>';
 			}
@@ -603,7 +603,7 @@
 				</div>
 			</div>
 
-			<!-----------------code ni paolo------------------>
+			<!---code ni paolo-->
 					<?php
 
 						$servername = "localhost";
@@ -766,18 +766,19 @@
 			}
 		}
 
-		/*
+		
 		function requestLeader() {
-			swal({
+			/*swal({
 				title: "Success!",
 				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
 				type: "success",
 				allowEscapeKey: true
 			},
 				function() {
-					//changeToPending();
+					changeToPending();
 				}
 			);
+			*/
 			
 		}
 
@@ -794,7 +795,6 @@
 			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
 			document.getElementById("request_leader").disabled = false;
 		}
-		*/
 	</script>
 	<script>
 		function requestLeader() {
@@ -878,6 +878,7 @@
 	?>
 	
 	 <!-- this section is for notification approval of requests -->
+	 
 	<script>
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
@@ -936,7 +937,6 @@
 						},
 						function() { //window.location here ?apr=y }
 						), 1000);
-						*/
 				});
 		}
 		

@@ -2,47 +2,6 @@
 	include('session.php');
 	include('globalfunctions.php');
 ?>
-<?php
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-	if(isset($_POST['submit'])) {
-		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
-		$baptismalplace = $_POST["BaptismalPlace"];
-		$dgrouptype = $_POST["DgroupType"];
-		if($dgrouptype=="Youth") $dgrouptype = 0;
-		else if($dgrouptype=="Singles") $dgrouptype = 1;
-		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
-		else if($dgrouptype=="Married") $dgrouptype = 3;
-		else if($dgrouptype=="Couples") $dgrouptype = 4;
-		$agebracket = $_POST["AgeBracket"];
-		$meetingday = $_POST["MeetingDay"];
-		$meetingplace = $_POST["MeetingPlace"];
-		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
-		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
-		$dateendorsed = date("Y-m-d");
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', eschedDay = '$meetingday', eschedStartTime = '$time1', eschedEndTime = '$time2', eschedPlace = '$meetingplace', edgleader = ".$_SESSION['userid'].", edgroupType = $dgroupType, dateEndorsed = '$dateendorsed' WHERE endorsementID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
-		/*
-		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
-		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
-		*/
-		$sql_notifications = "";
-		mysqli_query($conn, $sql_endorsement);
-		/*
-		mysqli_query($conn, $sql_sched);
-		mysqli_query($conn, $sql_dgroup);
-		*/
-		mysqli_close($conn);
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -57,6 +16,10 @@
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
@@ -580,9 +543,10 @@
 
 	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
+		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="endorsement" name="myForm"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">ENDORSEMENT FORM</h3>
 						<h4 class="center">BAPTISMAL</h4>
@@ -644,12 +608,34 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="submit" id="submit">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="button" name="submit" id="submit">SUBMIT</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
+	<script>
+		function requestLeader() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "request.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("request_leader");
+			swal({
+				title: "Success!",
+				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+				type: "success",
+				allowEscapeKey: true
+			},
+				function() { window.location.href = "index.php" }
+			);
+		}
+	</script>
 
 	<script>
 		function endorsementComplete() {
@@ -660,24 +646,8 @@
 				allowEscapeKey: true
 			});
 		}
-	</script>
-	<?php
-		if(isset($_POST['submit'])) {
-			echo '
-		<script>
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		</script>
-			';
-		}
-	?>
+			 <!-- this section is for notification approval of requests -->
 	
-	 <!-- this section is for notification approval of requests -->
-	<script>
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -758,4 +728,19 @@
 			xhttp.send("seen");
 		}
 	</script>
+
+	<?php /*
+		if(isset($_POST['submit'])) {
+			echo '
+		<script>
+			swal({
+				title: "Congratulations!",
+				text: "You are now a Dgroup leader!",
+				type: "success",
+				allowEscapeKey: true
+			});
+		</script>
+			';
+		} */
+	?>
 </html>
