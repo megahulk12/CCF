@@ -307,7 +307,7 @@
 		<div id="response"></div>
 	</body>
 	<?php 
-		if(isset($_POST['submit'])) {
+		/*if(isset($_POST['submit'])) {
 			echo '
 				<script>
 				// for congratulations of being a dgroup leader
@@ -320,7 +320,7 @@
 					});
 				</script>
 			';
-		}
+		}*/
 
 		if(getWelcome() == 0)  {
 			echo '
@@ -388,6 +388,7 @@
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
+				
 				function(isConfirm){
 					if(isConfirm) {
 						var xhttp;
