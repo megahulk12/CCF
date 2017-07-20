@@ -84,12 +84,15 @@
 ?>
 <?php
 	// database connection variables
+
+	echo 'qqqqq';
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
 
-	if(isset($_POST['request_leader'])) {
+	if(isset($_POST['request'])) {
+		echo 'asdasdasd';
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
@@ -113,11 +116,6 @@
 		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
 		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
 		$dateendorsed = date("Y-m-d");
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
 
 		$sql_endorsement = "INSERT INTO endorsement_tbl(dgmemberID, baptismalDate, baptismalPlace, ageBracket, eschedDay, eschedStartTime, eschedEndTime, eschedPlace, edgleader, edgroupType, dateEndorsed) VALUES(".$_SESSION['dgroupmemberID'].", '$baptismaldate', '$baptismalplace', '$agebracket', '$meetingday', '$time1', '$time2', '$meetingplace', ".$_SESSION['userid'].", $dgroupType, '$dateendorsed')";
 		/*

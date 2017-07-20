@@ -546,7 +546,7 @@
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" name="myForm" id="Eform"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">ENDORSEMENT FORM</h3>
 						<h4 class="center">BAPTISMAL</h4>
@@ -608,7 +608,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="submit" id="submit">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
 					</div>
 				</form>
 			</div>
@@ -618,11 +618,10 @@
 		function requestLeader() {
 			$('#Eform').submit(function(e) {
 				var url="request.php";
-				alert('asd');
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: 'request_leader=g&'+$('#Eform').serialize(), 
+					data: 'request=g&'+$('#Eform').serialize(), 
 					success: function(data) {
 						swal({
 							title: "Success!",
@@ -630,11 +629,10 @@
 							type: "success",
 							allowEscapeKey: true
 						},
-							function() { window.location.href = "index.php" }
+							function() { window.location.href = "index.php"; }
 						);
 					}
 				});
-				alert('asddd');
 				e.preventDefault();
 			});
 			
