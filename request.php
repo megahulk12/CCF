@@ -92,7 +92,6 @@
 	$dbname = "dbccf";
 
 	if(isset($_POST['request'])) {
-		echo 'asdasdasd';
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
@@ -117,12 +116,12 @@
 		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
 		$dateendorsed = date("Y-m-d");
 
-		$sql_endorsement = "INSERT INTO endorsement_tbl(dgmemberID, baptismalDate, baptismalPlace, ageBracket, eschedDay, eschedStartTime, eschedEndTime, eschedPlace, edgleader, edgroupType, dateEndorsed) VALUES(".$_SESSION['dgroupmemberID'].", '$baptismaldate', '$baptismalplace', '$agebracket', '$meetingday', '$time1', '$time2', '$meetingplace', ".$_SESSION['userid'].", $dgroupType, '$dateendorsed')";
+		$sql_endorsement = "INSERT INTO endorsement_tbl(dgmemberID, baptismalDate, baptismalPlace, ageBracket, eschedDay, eschedStartTime, eschedEndTime, eschedPlace, edgleader, edgroupType, dateEndorsed) VALUES(".$_SESSION['dgroupmemberID'].", '$baptismaldate', '$baptismalplace', '$agebracket', '$meetingday', '$time1', '$time2', '$meetingplace', ".$_SESSION['userid'].", $dgroupType, '$dateendorsed');";
+		mysqli_query($conn, $sql_endorsement);
 		/*
 		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
 		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
 		*/
-		mysqli_query($conn, $sql_endorsement);
 
 		// notifications
 

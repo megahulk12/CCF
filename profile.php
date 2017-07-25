@@ -732,6 +732,7 @@
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
 								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav" href="#register" onclick="setActive(this); navigationForms(5);" onfocus="disableFocus(this)">I want to be Dgroup Member</a></li>
 							</ul>
 						</td>
 						<td class="content">
