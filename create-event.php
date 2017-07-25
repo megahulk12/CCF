@@ -19,7 +19,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	
+
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
@@ -74,6 +74,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -92,7 +93,7 @@
 		}
 
 		/*form*/
-		.endorsement {
+		.create-event {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -157,10 +158,8 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.profile-next-or-submit-button {
-			margin-right: 9px;
+		  	margin-right: 9px;
+		  	z-index: 1;
 		}
 
 		/*background-color for icons if focus is inactive*/
@@ -408,6 +407,22 @@
 			top: 19px;
 			left: 13px
 		}
+
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
+			background-color: #16A5B8;
+			z-index: 0;
+		}
+
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
+			background-color: #16A5B8;
+			border-color: #16A5B8;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -455,12 +470,12 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
+				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
+				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 		});
@@ -543,115 +558,108 @@
 		</nav>
 	</header>
 
-	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="create-event" id="create-event"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
-						<h3 class="center">ENDORSEMENT FORM</h3>
-						<h4 class="center">BAPTISMAL</h4>
+						<h3 class="center">EVENT PROPOSAL</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
-								<label for="BaptismalDate" class>When were you baptized?</label>
+								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+								<label for="EventName">Event Name</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
-								<label for="BaptismalPlace">Where were you baptized?</label>
+								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+								<label for="EventDesc">Event Description</label>
 							</div>
-							<h4 class="center">DGROUP</h4>
-							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
-								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Youth">Youth</option>
-										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
-										<option value="Married">Married</option>
-										<option value="Couples">Couples</option>
-									</select>
-									<label>Type of Dgroup</label>
+							<h4 class="center">Date</h4>
+							<p>
+								<div class ="row" style="margin-left:10px;">
+									<input type="checkbox" class="filled-in" id="SingleDay" name="SingleDay" onclick="checkIfSingle();"/>
+									<label for="SingleDay">Single Day Event</label>
 								</div>
+							</p>
+							<div class="input-field col s6" id="Event_Date_Start">
+								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+								<label for="EventDateStart" id="lblEventDateStart">Start</label>
 							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="AgeBracket">Age Bracket</label>
+							<div class="input-field col s6" id="Event_Date_End">
+								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+								<label for="EventDateEnd">End</label>
 							</div>
-							<h4 class="center">MEETING</h4>
-							<div class="row" style="margin-bottom: 0px;">
-								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
-										<option value="Monday">Monday</option>
-										<option value="Tuesday">Tuesday</option>
-										<option value="Wednesday">Wednesday</option>
-										<option value="Thursday">Thursday</option>
-										<option value="Friday">Friday</option>
-										<option value="Saturday">Saturday</option>
-									</select>
-									<label>Day</label>
-								</div>
+							<h4 class="center">Time</h4>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+								<label for="EventTime1">Start</label>
 							</div>
 							<div class="input-field col s6">
-								<label for="timepicker1opt1">Start Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+								<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+								<label for="EventTime2">End</label>
 							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt2">End Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+							<h4 class="center">Location</h4>
+							<div class="input-field col s12">
+								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+								<label for="EventVenue">Event Venue</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
-								<label for="MeetingPlace">Place</label>
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<label for="Budget">Budget</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks" data-length="500" maxlength="500"></textarea>
+								<label for="Remarks">Remarks</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit" onclick="propose()">PROPOSE</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
+	
+	 <!-- this section is for notification approval of requests -->
 	<script>
-		function requestLeader() {
-			$('#Eform').submit(function(e) {
-				var url="request.php";
+		function propose() {
+			$('#create-event').submit(function(e) {
+				var url = "propose.php";
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: 'request=g&'+$('#Eform').serialize(), 
+					data: $('#create-event').serialize(),
 					success: function(data) {
 						swal({
 							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+							text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
 							type: "success",
-							allowEscapeKey: true
-						},
-							function() { window.location.href = "index.php"; }
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.href = "index.php"; }
 						);
 					}
 				});
 				e.preventDefault();
 			});
-			
 		}
-	</script>
+		function checkIfSingle() {
+			if(document.getElementById('SingleDay').checked) {
+				document.getElementById('Event_Date_End').style.display = "none";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
+				document.getElementById('lblEventDateStart').innerHTML = "Event Date";	
+			}
+			else {
+				$('#Event_Date_End').fadeIn(200);
+				document.getElementById('lblEventDateStart').innerHTML = "Start";
+				document.getElementById('Event_Date_End').style.display = "inline";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
+				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
 
-	<script>
-		function endorsementComplete() {
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		}
-			 <!-- this section is for notification approval of requests -->
-	
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -732,19 +740,4 @@
 			xhttp.send("seen");
 		}
 	</script>
-
-	<?php /*
-		if(isset($_POST['submit'])) {
-			echo '
-		<script>
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		</script>
-			';
-		} */
-	?>
 </html>

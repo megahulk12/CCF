@@ -1,42 +1,6 @@
 <?php
 	include("config.php");
 	session_start();
-	if($_SERVER["REQUEST_METHOD"] == "POST") {
-		$myusername = mysqli_real_escape_string($db,$_POST['username']);
-		$mypassword = mysqli_real_escape_string($db,$_POST['password']);
-		$sql = "SELECT * FROM member_tbl WHERE username = '$myusername' AND password = '$mypassword';";
-		$result = mysqli_query($db, $sql);
-		$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-		$count = mysqli_num_rows($result);
-		if($count == 1) {
-			$_SESSION['user'] = $myusername;
-			sleep(1);
-			header("Location: index.php");
-			exit();
-			/*
-			if($active == 1) {
-					
-				$_SESSION['user'] = $myusername;
-				//$_SESSION['id'] = $id;
-				
-				sleep(1);
-				header("Location: home.php");
-			}
-			else {
-				echo '
-				<script>
-					Materialize.toast("Your account is inactive.", 3000);
-				</script>';
-			}
-			*/
-		}
-		else {
-			echo '
-			<script>
-				Materialize.toast("Your Username or Password is invalid", 3000);
-			</script>';
-		}
-    }
 ?>
 <?xml version = ?1.0??>
 <!DOCTYPE html PUBLIC ?-//w3c//DTD XHTML 1.1//EN? “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -203,8 +167,6 @@
 		/*=======END=======*/
 		/*============================END===========================*/
 	</style>
-	<script>
-	</script>
 	<header>
 	</header>
 		<body>
@@ -227,7 +189,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s12" type="submit" name="login-submit">Login</button>
+						<button class="waves-effect waves-light btn col s12" type="submit" name="login-submit" id="login-submit">Login</button>
 					</div>
 					<div class="row">
 						<a href="guest.php" class="col s12 center">LOGIN AS GUEST</a>
@@ -241,20 +203,33 @@
 		<footer>
 		</footer>
 	</body>
+	<script>
+		$('form').submit(function(e) {
+			var url="request_login.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: $('form').serialize(),
+				success: function(data) {
+					if(data == "index.php") {
+						window.location.href = data;
+					}
+					else {
+						swal({
+							title: "Error!",
+							text: "Wrong username or password. Please try again!",
+							type: "error",
+							allowEscapeKey: true,
+							timer: 10000
+						});
+					}
+				}
+			});
+			e.preventDefault();
+		});
+	</script>
+	<?php
+		if(isset($_POST['login-submit'])) {
+		}
+	?>
 </html>
-<?php
-	if(isset($_POST['login-submit'])) {
-		echo '
-			<script>
-			// popup for wrong credentials
-				swal({
-					title: "Error!",
-					text: "Wrong username or password. Please try again!",
-					type: "error",
-					allowEscapeKey: true,
-					timer: 10000
-				});
-			</script>
-		';
-	}
-?>

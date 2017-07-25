@@ -17,8 +17,8 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-
 	<title>Christ's Commission Fellowship</title>
+
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -51,11 +51,14 @@
 		}
 
 		nav {
+			position: fixed;
+			top: 0;
 			color: #777;
 			background-color: #fff;
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
+			z-index: 2;
 		}
 		
 		li a:hover {
@@ -232,6 +235,8 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -304,7 +309,7 @@
 		<div id="response"></div>
 	</body>
 	<?php 
-		if(isset($_POST['submit'])) {
+		/*if(isset($_POST['submit'])) {
 			echo '
 				<script>
 				// for congratulations of being a dgroup leader
@@ -317,7 +322,7 @@
 					});
 				</script>
 			';
-		}
+		}*/
 
 		if(getWelcome() == 0)  {
 			echo '
@@ -385,6 +390,7 @@
 				  closeOnConfirm: false,
 				  closeOnCancel: false
 				},
+				
 				function(isConfirm){
 					if(isConfirm) {
 						var xhttp;
@@ -401,6 +407,8 @@
 								text: "You have approved this request.",
 								type: "success",
 								allowOutsideClick: true
+							}, function() {
+								window.location.reload();
 							});
 					}
 					else {
@@ -418,6 +426,8 @@
 								text: "You have disapproved this request.",
 								type: "error",
 								allowOutsideClick: true
+							}, function() {
+								window.location.reload();
 							});
 					}
 					/*

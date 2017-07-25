@@ -62,12 +62,20 @@
 		}
 
 		nav {
+			/*position: fixed;
+			top: 0; this is responsible for fixed nav bars */
 			color: #777;
 			background-color: #fff;
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
+			z-index: 2;
 		}
+
+		/* this is responsible for fixed nav bars 
+		body {
+			margin-top: 150px;
+		}*/
 		
 		li a:hover {
 			color: #16A5B8;
@@ -569,8 +577,8 @@
 			$('.timepicker').pickatime({
 				//default: 'now', // Set default time; do not set default time in viewing of time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
-				donetext: 'OK', // text for done-button
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
@@ -622,6 +630,17 @@
 				$('#regularlyAttendsAt').trigger('autoresize');
 			});
 		}
+
+		/*
+		window.addEventListener("scroll", function() {
+			if(window.scrollY > 50) {
+				$('nav').slideUp(100);
+			}
+			else {
+				$('nav').slideDown(100);
+			}
+		}, false);
+		*/
 	</script>
 
 	<header class="top-nav">
@@ -630,6 +649,8 @@
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
@@ -711,11 +732,12 @@
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
 								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav" href="#register" onclick="setActive(this); navigationForms(5);" onfocus="disableFocus(this)">I want to be Dgroup Member</a></li>
 							</ul>
 						</td>
 						<td class="content">
 							<div class="container">
-								<form method="post" class="forms" name="cpinfo" onsubmit="return submit_form('submit_cpinfo')">
+								<form method="post" class="forms" id="fcpinfo">
 									<div id="cpinfo">
 										<div class="row">
 											<?php
@@ -746,15 +768,15 @@
 												echo '
 												<div class="input-field col s12">
 													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
-													<label for="Lastname">Lastname</label>
+													<label for="Lastname">Last Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
-													<label for="Firstname">Firstname</label>
+													<label for="Firstname">First Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
-													<label for="Middlename">Middlename</label>
+													<label for="Middlename">Middle Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
@@ -767,12 +789,12 @@
 												';
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
 											</div>
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms" name="coinfo" onsubmit="return submit_form('submit_coinfo')">
+								<form method="post" class="forms" id="fcoinfo">
 									<div id="coinfo" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -952,7 +974,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms" name="cprefer" onsubmit="return submit_form('submit_cprefer');">
+								<form method="post" class="forms" id="fcprefer" onsubmit="submit_form(this.id)">
 									<div id="cprefer" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1083,9 +1105,9 @@
 												$result = mysqli_query($conn, $query);
 												if(mysqli_num_rows($result) > 0) {
 													while($row = mysqli_fetch_assoc($result)) {
-														$receivedChrist = $row["receivedChrist"];
-														$attendCCF = $row["attendCCF"];
-														$regularlyAttendsAt = $row["regularlyAttendsAt"];
+														$receivedChrist = trim(preg_replace('/\s+/', '\n', $row["receivedChrist"]));
+														$attendCCF = trim(preg_replace('/\s+/', '\n', $row["attendCCF"]));
+														$regularlyAttendsAt = trim(preg_replace('/\s+/', '\n', $row["regularlyAttendsAt"]));
 													}
 												}
 											echo '
@@ -1120,7 +1142,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" name="cpass" onsubmit="return submit_form('submit_cpass');">
+								<form method="post" id="fcpass">
 									<div id="cpass" style="display: none;">
 										<div class="row">
 											<?php
@@ -1144,12 +1166,12 @@
 											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="text" name="password" data-length="16" maxlength="16" value="'.$password.'">
-												<label for="text" name="lblpassword">Password</label>
-											</div>';
+												<input type="password" name="password" id="password" data-length="16" maxlength="16">
+												<label for="password" name="lblpassword">Password</label>
+											</div>'; // originally having a value of own password
 											?>
 											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass">SUBMIT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
 											</div>
 										</div>
 									</div>
@@ -1226,7 +1248,8 @@
 				// removes color of submit button attached to this button ~bug
 				document.getElementById(navpage+'_next').setAttribute("class", "waves-effect waves-light btn profile-next-or-submit-button col s2 right");
 				document.getElementById(navpage+'_next').innerHTML = "NEXT";
-			}
+				convertToButton(navpage);
+			}	
 			else {
 				if(currentpage == no_of_pages) {
 					document.getElementById(navpage+'_page'+currentpage).style.display = "none";
@@ -1261,6 +1284,8 @@
 		function submitOnClick(navpage) {
 			// if not using ajax, use this
 			document.getElementById(navpage+'_next').setAttribute("type", "submit");
+			submit_form('f'+navpage, 'submit_'+navpage);
+			//convertToButton(navpage);
 			//submit_form("submit_"+navpage);
 			//document.myForm.submit();
 			/*
@@ -1268,6 +1293,10 @@
 				$("button[name='submit_next']").prop("type", "submit"); //jquery-3
 			});
 			*/
+		}
+
+		function convertToButton(navpage) {
+			document.getElementById(navpage+'_next').setAttribute("type", "button");
 		}
 
 		var navcurrentpage = 1;
@@ -1298,8 +1327,27 @@
 			}
 		}
 
-
-		function submit_form(submit_name) {
+		function submit_form(submit_id, submit_name) {
+			$('#'+submit_id).submit(function(e) {
+				var url="update_profile.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
+					success: function(data) {
+						swal({
+							title: "Success!",
+							text: "Profile Updated!",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						});
+					}
+				});
+				e.preventDefault();
+			});
+			/*
 			var xhttp, params;
 			xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -1318,16 +1366,12 @@
 			else if(submit_name=="submit_cpass")
 				params = getSubmitCpass();
 			xhttp.send(submit_name+"=g&"+params);
-			swal({
-				title: "Success!",
-				text: "Profile Updated!",
-				type: "success",
-				allowEscapeKey: true,
-				timer: 10000
-			});
-			return false;
+			alert(params);
+			*/
+			//return false;
 		}
 
+		/*
 		function getSubmitCpinfo() {
 			var params="", element=document.cpinfo, length=$("#cpinfo input").length;
 			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
@@ -1353,11 +1397,11 @@
 		}
 
 		function getSubmitCprefer() {
-			var params="", element=document.cprefer, length=$("#cprefer input").length;
-			for(var i = 0; i < length+5; i++) { // replace commas in date inputs because year won't update in database, always current year
+			var params="", element=document.cprefer, length=$("#cprefer input").length + $("#cprefer select").length + $("#cprefer textarea").length;
+			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
 			// selects are +1
 			// textareas are +1
-				if(i==length+4)
+				if(i==length)
 					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
 				else
 					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
@@ -1375,6 +1419,7 @@
 			}
 			return params;
 		}
+		*/
 	</script>
 	<?php
 		/*

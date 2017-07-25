@@ -51,11 +51,18 @@
 		}
 
 		nav {
+			position: fixed;
+			top: 0;
 			color: #777;
 			background-color: #fff;
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
+			z-index: 2;
+		}
+
+		body {
+			margin-top: 150px;
 		}
 		
 		li a:hover {
@@ -128,7 +135,7 @@
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
-		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
+		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
 		}
 
 		.dropdown-content-list li {
@@ -284,6 +291,8 @@
 			color: #424242;
 			font-size: 13px;
 			text-transform: uppercase;
+			-webkit-user-select: none;
+			cursor: default;
 		}
 
 		.dgroup-table-spacing {
@@ -299,7 +308,128 @@
 		@keyframes view-profile {
 			
 		}
+		/*CUSTOM DATEPICKER*/
+		.picker__weekday-display {
+		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
+		 	padding: 10px;
+		 	font-weight: 200;
+		 	letter-spacing: .5;
+		 	font-size: 1rem;
+			margin-bottom: 15px;
+		}
+
+		.picker__date-display {
+			text-align: center;
+		  	background-color: #16A5B8;
+		 	color: #fff;
+		 	padding-bottom: 15px;
+		  	font-weight: 300;
+		}
+
+		.picker__day.picker__day--today {
+		 	color: #16A5B8;
+		}
+
+		.picker__day--selected,
+		.picker__day--selected:hover,
+		.picker--focused .picker__day--selected {
+		  	border-radius: 50%;
+		    -webkit-transform: scale(0.9);
+		          transform: scale(0.9);
+		 	 background-color: #16A5B8;
+		 	 color: #ffffff;
+		}
+
+		.picker__close, .picker__today {
+		  	font-size: 1.1rem;
+		  	padding: 0 1rem;
+		 	color: #16A5B8;
+		}
+
+		/*page progress bar*/
+		.progress {
+		 	 position: relative;
+		 	 height: 8px;
+		 	 display: block;
+		 	 width: 100%;
+		 	 max-width: 200px;
+		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
+		 	 border-radius: 2px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 overflow: hidden;
+		}
+
+		.progress .determinate {
+		  	position: absolute;
+		  	top: 0;
+		  	left: 0;
+		  	bottom: 0;
+		  	background-color: #16A5B8;
+		  	transition: width .3s linear;
+		}
+
+		/*radio buttons*/
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:before,
+		[type="radio"].with-gap:checked + label:after {
+		  	border: 2px solid #16A5B8;
+		}
+
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:after {
+		  	background-color: #16A5B8;
+		}
+
+		/*selects*/
+		.dropdown-content li > a, .dropdown-content li > span {
+		  	font-size: 16px;
+		  	color: #16A5B8;
+		  	display: block;
+		  	line-height: 22px;
+		  	padding: 14px 16px;
+		}
+
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
+
+		/*tables*/
+		table.cursor > tbody > tr:hover {
+			cursor: hand;
+		}
+
+		td {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal hightlight bar*/
+		}
+		/* ============================END=========================== */  
+
+		/*validation*/
+		.input-field div.error {
+			font-size: 0.8rem;
+			color: #16A5B8;
+		}
+
+		th {
+			color: #424242;
+		}
 	</style>
+
+	<script>
+			$(document).ready(function(){
+				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+				$('.modal').modal();
+			});
+ 
+			
+		</script>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -307,6 +437,10 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		}); 
+
+		function view(id) {
+			history.pushState(null, null, "dgroup.php?id="+id);
+		}
 	</script>
 
 	<header class="top-nav">
@@ -315,6 +449,8 @@
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
@@ -391,7 +527,7 @@
 			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
 			echo '
 			<form method="post">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
+				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
 				<input type="hidden" name="seen-request" />
 			</form>';
 			}
@@ -429,17 +565,23 @@
 
 
 						$lresult = mysqli_query($conn, $lquery);
-						if(mysqli_num_rows($lresult) > 0) {
+						if(!$row){
+							echo "<label>You Have No Dgroup </label>";
+						}
+						else if(mysqli_num_rows($lresult) > 0) {
 							while($lrow = mysqli_fetch_assoc($lresult)) {
 								$leader = $lrow["leader"];
 							}
 						}
 
 						$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
+						if(!$row){
+							echo "<label>You Have No Dgroup</label>";
+						}
+						else if(mysqli_num_rows($result) > 0) {
 								echo '
 						<td>
-							<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
+							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
 							'.$leader.'<br><br><label>LEADER</label></a>
 						</td>
 								';
@@ -448,7 +590,7 @@
 								$fullname = $row["fullname"];
 								echo '
 							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
 								'.$fullname.'<br><br>&nbsp;</a>
 							</td>
 								';
@@ -469,6 +611,7 @@
 				</div>
 			</div>
 
+<<<<<<< HEAD
 			<div id="view-profile">
 				<div class="row row-profile">
 					<div class="col col-profile s12 card-panel z-depth-4">
@@ -499,24 +642,42 @@
 					if (!$conn) {
 						die("Connection failed: " . mysqli_connect_error());
 					}
+=======
+			<!---code ni paolo-->
+					<?php
 
-					// insert code set notificationStatus = 1 when user clicks notification area
-					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+>>>>>>> eeec7a8751f5ae64eea2570c3e07a2e898ca8657
 
-					$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-								$counter_row = 1;
+						// insert code set notificationStatus = 1 when user clicks notification area
+						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
+
+						$result = mysqli_query($conn, $query);
+							if(mysqli_num_rows($result) > 0) {
+								$counter_row = 0;
 								echo '
+<<<<<<< HEAD
+			<div id="own-dgroup">
+				<h3>My Dgroup</h3>
+=======
 									<div id="own-dgroup">
-										<h3>Own Dgroup</h3>
+										<h3>My Dgroup</h3>
 									<table id="own-dgroup" class="centered dgroup-table-spacing">
 								';
 							while($row = mysqli_fetch_assoc($result)) {
 								$fullname = $row["fullname"];
+								$memberID = $row["memberID"];
 								if($_SESSION['memberType'] >= 2 ){
 									echo '
 										<td>
-											<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+											<a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
 												'.$fullname.'<br><br>&nbsp;</a>
 										</td>
 										';
@@ -524,12 +685,11 @@
 									if($counter_row == 4) {
 									echo'
 											</tr>
-							<tr>
+										<tr>
 									';
 									$counter_row = 0;
+									}
 								}
-								}
-								
 							}
 							echo '
 						</tr>';
@@ -537,28 +697,60 @@
 					/*if($_SESSION['memberType'] >= 2 ) {
 					echo '
 					<h3>Own Dgroup</h3>
+>>>>>>> Paolo-Edits
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
 						<tr>
+								';
+								while($row = mysqli_fetch_assoc($result)) {
+									$fullname = $row["fullname"];
+									$memberID = $row["memberID"];
+									if($_SESSION['memberType'] >= 2 ){
+										echo '
 							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
+								<a class="dgroup-names" onclick="view('.$memberID.');" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									'.$fullname.'<br><br>&nbsp;</a>
 							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
+											';
+										$counter_row++;
+										if($counter_row == 4) {
+										echo'
 						</tr>
-					</table>';
-					}*/
-				?>
+						<tr>
+										';
+										$counter_row = 0;
+										}
+									}
+								}
+								echo '
+						</tr>';
+							}
+						/*if($_SESSION['memberType'] >= 2 ) {
+						echo '
+						<h3>Own Dgroup</h3>
+						<table id="own-dgroup" class="centered dgroup-table-spacing">
+							<tr>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+								<td>
+									<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
+									Dodong Laboriki</a>
+								</td>
+							</tr>
+						</table>';
+						}*/
+					?>
+
+			
 				<!----------------------THE END------------------------>
 				
 	</body>
@@ -576,18 +768,19 @@
 			}
 		}
 
-		/*
+		
 		function requestLeader() {
-			swal({
+			/*swal({
 				title: "Success!",
 				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
 				type: "success",
 				allowEscapeKey: true
 			},
 				function() {
-					//changeToPending();
+					changeToPending();
 				}
 			);
+			*/
 			
 		}
 
@@ -604,7 +797,6 @@
 			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
 			document.getElementById("request_leader").disabled = false;
 		}
-		*/
 	</script>
 	<script>
 		function requestLeader() {
@@ -688,6 +880,7 @@
 	?>
 	
 	 <!-- this section is for notification approval of requests -->
+	 
 	<script>
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
@@ -746,7 +939,6 @@
 						},
 						function() { //window.location here ?apr=y }
 						), 1000);
-						*/
 				});
 		}
 		

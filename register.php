@@ -80,235 +80,245 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$companyIDField = "";
-		$schoolIDField = "";
-		$spouseIDField = "";
-		$preferenceIDField = "";
-		//if($companyname != ""){
-			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
-			$checkCompanyID = true;
-			$companyIDField = ", companyID";
-			mysqli_query($conn, $sql_company);
+		$usernamecheck = mysql_query("SELECT username FROM member_tbl WHERE username = '$_POST['username']'");
+		$userchecker = mysql_fetch_assoc($usernamecheck);
+
+		/*if($_POST['username'] == userchecker('username')){
+			echo 'alert("Username is Already Taken, Sorry")';
+		}
+		else{*/
+
+			$companyIDField = "";
+			$schoolIDField = "";
+			$spouseIDField = "";
+			$preferenceIDField = "";
+			//if($companyname != ""){
+				$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
+				$checkCompanyID = true;
+				$companyIDField = ", companyID";
+				mysqli_query($conn, $sql_company);
+				/*
+				if (mysqli_query($conn, $sql_company)) {
+					echo '
+					<script>
+						Materialize.toast("Company Details Inserted", 3000);
+					</script>';
+				}
+				else {
+					mysqli_error($conn);
+				}
+				*/
+			//}
+			//if($schoolname != "") {
+				$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
+				$checkSchoolID = true;
+				$schoolIDField = ", schoolID";
+				mysqli_query($conn, $sql_school);
+				/*
+				if (mysqli_query($conn, $sql_school)) {
+					echo '
+					<script>
+						Materialize.toast("School Details Inserted", 3000);
+					</script>';
+				}
+				else {
+					mysqli_error($conn);
+				}
+				*/
+			//}
+			//if($spousename != "") {
+				$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
+				$checkSpouseID = true;
+				$spouseIDField = ", spouseID";
+				mysqli_query($conn, $sql_spouse);
+				/*
+				if (mysqli_query($conn, $sql_spouse)) {
+					echo '
+					<script>
+						Materialize.toast("Spouse Details Inserted", 3000);
+					</script>';
+				}
+				else {
+					mysqli_error($conn);
+				}
+				*/
+			//}
+			if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
+				$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
+				$checkPreferenceID = true;
+				$preferenceIDField = ", prefID";
+				mysqli_query($conn, $sql_preference);
+				/*
+				if (mysqli_query($conn, $sql_preference)) {
+					echo '
+					<script>
+						Materialize.toast("Preference Details Inserted", 3000);
+					</script>';
+				}
+				else {
+					mysqli_error($conn);
+				}
+				*/
+			}
+			$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, prefID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", ".getSpouseID($checkSpouseID).", ".getPreferenceID($checkPreferenceID).", $memberType);";
+			$checkMemberID = true;
+			mysqli_query($conn, $sql_parent);
 			/*
-			if (mysqli_query($conn, $sql_company)) {
+			if (mysqli_query($conn, $sql_parent)) {
 				echo '
 				<script>
-					Materialize.toast("Company Details Inserted", 3000);
+					Materialize.toast("Member Details Inserted", 3000);
 				</script>';
 			}
 			else {
 				mysqli_error($conn);
 			}
 			*/
-		//}
-		//if($schoolname != "") {
-			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
-			$checkSchoolID = true;
-			$schoolIDField = ", schoolID";
-			mysqli_query($conn, $sql_school);
+			$sql_dgroupmember = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES(".getMemberID($checkMemberID).", $dgroupid, $dgorupmemberstatus, '$receivedChrist', '$attendCCF', '$regularlyAttendsAt', '$dateJoined');";
+			mysqli_query($conn, $sql_dgroupmember);
 			/*
-			if (mysqli_query($conn, $sql_school)) {
+			if (mysqli_query($conn, $sql_dgroupmember)) {
 				echo '
 				<script>
-					Materialize.toast("School Details Inserted", 3000);
+					Materialize.toast("Dgroup Member Details Inserted", 3000);
 				</script>';
 			}
 			else {
 				mysqli_error($conn);
 			}
 			*/
-		//}
-		//if($spousename != "") {
-			$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
-			$checkSpouseID = true;
-			$spouseIDField = ", spouseID";
-			mysqli_query($conn, $sql_spouse);
-			/*
-			if (mysqli_query($conn, $sql_spouse)) {
-				echo '
-				<script>
-					Materialize.toast("Spouse Details Inserted", 3000);
-				</script>';
+			mysqli_close($conn);
+			//echo "<meta http-equiv='refresh' content='0'>";
+			include("config.php");
+			session_start();
+			$myusername = mysqli_real_escape_string($db,$_POST['username']);
+			$_SESSION['user'] = $myusername;
+			sleep(1);
+			header("Location: index.php");
+			exit();
+		}
+
+		function getCompanyID($checkCompanyID) { // gets the recently added company id
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
 			}
-			else {
-				mysqli_error($conn);
+			$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$companyID = $row["companyID"];
+				}
 			}
-			*/
-		//}
-		if($language != "" && $venue1 != "" && $venue2 != "" && $timepicker1opt1 != "" && $timepicker1opt2 != "" && $timepicker2opt1 != "" && $timepicker2opt2 != "" && $day1 != "" && $day2 != "") {
-			$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
-			$checkPreferenceID = true;
-			$preferenceIDField = ", prefID";
-			mysqli_query($conn, $sql_preference);
-			/*
-			if (mysqli_query($conn, $sql_preference)) {
-				echo '
-				<script>
-					Materialize.toast("Preference Details Inserted", 3000);
-				</script>';
+			if($checkCompanyID)
+				return $companyID;
+			else
+				return "NULL";
+		}
+
+		function getSchoolID($checkSchoolID) { // gets the recently added school id
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
 			}
-			else {
-				mysqli_error($conn);
+			$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$schoolID = $row["schoolID"];
+				}
 			}
-			*/
+			if($checkSchoolID)
+				return $schoolID;
+			else
+				return "NULL";
 		}
-		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, prefID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", ".getSpouseID($checkSpouseID).", ".getPreferenceID($checkPreferenceID).", $memberType);";
-		$checkMemberID = true;
-		mysqli_query($conn, $sql_parent);
-		/*
-		if (mysqli_query($conn, $sql_parent)) {
-			echo '
-			<script>
-				Materialize.toast("Member Details Inserted", 3000);
-			</script>';
+
+		function getSpouseID($checkSpouseID) { // gets the recently added company id
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$spouseID = $row["spouseID"];
+				}
+			}
+			if($checkSpouseID)
+				return $spouseID;
+			else
+				return "NULL";
 		}
-		else {
-			mysqli_error($conn);
+
+		function getPreferenceID($checkPreferenceID) { // gets the recently added company id
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$query = "SELECT prefID FROM preferencedetails_tbl ORDER BY prefID DESC LIMIT 1";
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$preferenceID = $row["prefID"];
+				}
+			}
+			if($checkPreferenceID)
+				return $preferenceID;
+			else
+				return "NULL";
 		}
-		*/
-		$sql_dgroupmember = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES(".getMemberID($checkMemberID).", $dgroupid, $dgorupmemberstatus, '$receivedChrist', '$attendCCF', '$regularlyAttendsAt', '$dateJoined');";
-		mysqli_query($conn, $sql_dgroupmember);
-		/*
-		if (mysqli_query($conn, $sql_dgroupmember)) {
-			echo '
-			<script>
-				Materialize.toast("Dgroup Member Details Inserted", 3000);
-			</script>';
+
+		function getMemberID($checkMemberID) { // gets the recently added member id
+			// database connection variables
+
+			$servername = "localhost";
+			$username = "root";
+			$password = "root";
+			$dbname = "dbccf";
+			$conn = mysqli_connect($servername, $username, $password, $dbname);
+			if (!$conn) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
+			$result = mysqli_query($conn, $query);
+			if(mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {
+					$memberID = $row["memberID"];
+				}
+			}
+			if($checkMemberID)
+				return $memberID;
+			else
+				return "NULL";
 		}
-		else {
-			mysqli_error($conn);
-		}
-		*/
-		mysqli_close($conn);
-		//echo "<meta http-equiv='refresh' content='0'>";
-		include("config.php");
-		session_start();
-		$myusername = mysqli_real_escape_string($db,$_POST['username']);
-		$_SESSION['user'] = $myusername;
-		sleep(1);
-		header("Location: index.php");
-		exit();
 	}
-
-	function getCompanyID($checkCompanyID) { // gets the recently added company id
-		// database connection variables
-
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$companyID = $row["companyID"];
-			}
-		}
-		if($checkCompanyID)
-			return $companyID;
-		else
-			return "NULL";
-	}
-
-	function getSchoolID($checkSchoolID) { // gets the recently added school id
-		// database connection variables
-
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$schoolID = $row["schoolID"];
-			}
-		}
-		if($checkSchoolID)
-			return $schoolID;
-		else
-			return "NULL";
-	}
-
-	function getSpouseID($checkSpouseID) { // gets the recently added company id
-		// database connection variables
-
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$spouseID = $row["spouseID"];
-			}
-		}
-		if($checkSpouseID)
-			return $spouseID;
-		else
-			return "NULL";
-	}
-
-	function getPreferenceID($checkPreferenceID) { // gets the recently added company id
-		// database connection variables
-
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		$query = "SELECT prefID FROM preferencedetails_tbl ORDER BY prefID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$preferenceID = $row["prefID"];
-			}
-		}
-		if($checkPreferenceID)
-			return $preferenceID;
-		else
-			return "NULL";
-	}
-
-	function getMemberID($checkMemberID) { // gets the recently added member id
-		// database connection variables
-
-		$servername = "localhost";
-		$username = "root";
-		$password = "root";
-		$dbname = "dbccf";
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-		$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
-		$result = mysqli_query($conn, $query);
-		if(mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {
-				$memberID = $row["memberID"];
-			}
-		}
-		if($checkMemberID)
-			return $memberID;
-		else
-			return "NULL";
-	}
+	
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -695,15 +705,15 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
-								<label for="Lastname">Lastname</label>
+								<label for="Lastname">Last Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
-								<label for="Firstname">Firstname</label>
+								<label for="Firstname">First Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
-								<label for="Middlename">Middlename</label>
+								<label for="Middlename">Middle Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">

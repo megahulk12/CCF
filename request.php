@@ -84,19 +84,44 @@
 ?>
 <?php
 	// database connection variables
+
+	echo 'qqqqq';
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
 
-	if(isset($_POST['request_leader'])) {
+	if(isset($_POST['request'])) {
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
 		}
-
+		/*
 		$sql_endorsement_request = "INSERT INTO endorsement_tbl(dgmemberID) VALUES(".$_SESSION['dgroupmemberID'].");";
 		mysqli_query($conn, $sql_endorsement_request);
+		*/
+
+		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
+		$baptismalplace = $_POST["BaptismalPlace"];
+		$dgrouptype = $_POST["DgroupType"];
+		if($dgrouptype=="Youth") $dgrouptype = 0;
+		else if($dgrouptype=="Singles") $dgrouptype = 1;
+		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
+		else if($dgrouptype=="Married") $dgrouptype = 3;
+		else if($dgrouptype=="Couples") $dgrouptype = 4;
+		$agebracket = $_POST["AgeBracket"];
+		$meetingday = $_POST["MeetingDay"];
+		$meetingplace = $_POST["MeetingPlace"];
+		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$dateendorsed = date("Y-m-d");
+
+		$sql_endorsement = "INSERT INTO endorsement_tbl(dgmemberID, baptismalDate, baptismalPlace, ageBracket, eschedDay, eschedStartTime, eschedEndTime, eschedPlace, edgleader, edgroupType, dateEndorsed) VALUES(".$_SESSION['dgroupmemberID'].", '$baptismaldate', '$baptismalplace', '$agebracket', '$meetingday', '$time1', '$time2', '$meetingplace', ".$_SESSION['userid'].", $dgroupType, '$dateendorsed');";
+		mysqli_query($conn, $sql_endorsement);
+		/*
+		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
+		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
+		*/
 
 		// notifications
 
@@ -106,5 +131,8 @@
 		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, requestdgmemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".$_SESSION['dgroupmemberID'].", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
 		mysqli_query($conn, $sql_notifications);
+
+
+		mysqli_close($conn);
 	}
 ?>
