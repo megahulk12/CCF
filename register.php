@@ -80,13 +80,16 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$usernamecheck = mysql_query("SELECT username FROM member_tbl WHERE username = '$_POST['username']'");
+		/*
+		$usernamecheck = mysql_query("SELECT username FROM member_tbl WHERE username = $_POST['username']");
 		$userchecker = mysql_fetch_assoc($usernamecheck);
 
-		/*if($_POST['username'] == userchecker('username')){
+		if($_POST['username'] == userchecker('username')){
 			echo 'alert("Username is Already Taken, Sorry")';
 		}
-		else{*/
+		*/
+		
+		else{
 
 			$companyIDField = "";
 			$schoolIDField = "";
