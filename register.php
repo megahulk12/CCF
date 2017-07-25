@@ -695,15 +695,15 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
-								<label for="Lastname">Lastname</label>
+								<label for="Lastname">Last Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
-								<label for="Firstname">Firstname</label>
+								<label for="Firstname">First Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
-								<label for="Middlename">Middlename</label>
+								<label for="Middlename">Middle Name</label>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">

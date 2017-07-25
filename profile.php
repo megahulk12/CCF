@@ -650,6 +650,8 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -765,15 +767,15 @@
 												echo '
 												<div class="input-field col s12">
 													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
-													<label for="Lastname">Lastname</label>
+													<label for="Lastname">Last Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
-													<label for="Firstname">Firstname</label>
+													<label for="Firstname">First Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
-													<label for="Middlename">Middlename</label>
+													<label for="Middlename">Middle Name</label>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">

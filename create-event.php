@@ -2,47 +2,6 @@
 	include('session.php');
 	include('globalfunctions.php');
 ?>
-<?php
-	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
-	if(isset($_POST['submit'])) {
-		$baptismaldate = date("Y-m-d", strtotime($_POST["BaptismalDate"]));
-		$baptismalplace = $_POST["BaptismalPlace"];
-		$dgrouptype = $_POST["DgroupType"];
-		if($dgrouptype=="Youth") $dgrouptype = 0;
-		else if($dgrouptype=="Singles") $dgrouptype = 1;
-		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
-		else if($dgrouptype=="Married") $dgrouptype = 3;
-		else if($dgrouptype=="Couples") $dgrouptype = 4;
-		$agebracket = $_POST["AgeBracket"];
-		$meetingday = $_POST["MeetingDay"];
-		$meetingplace = $_POST["MeetingPlace"];
-		$time1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
-		$time2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
-		$dateendorsed = date("Y-m-d");
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_endorsement = "UPDATE endorsement_tbl SET baptismalDate = '$baptismaldate', baptismalPlace = '$baptismalplace', ageBracket = '$agebracket', eschedDay = '$meetingday', eschedStartTime = '$time1', eschedEndTime = '$time2', eschedPlace = '$meetingplace', edgleader = ".$_SESSION['userid'].", edgroupType = $dgroupType, dateEndorsed = '$dateendorsed' WHERE endorsementID = ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid']));
-		/*
-		$sql_sched = "INSERT INTO scheduledmeeting_tbl(schedDay, schedStartTime, schedEndTime, schedType, schedPlace) VALUES('$meetingday', '$time1', '$time2', 0, '$meetingplace');";
-		$sql_dgroup = "INSERT INTO discipleshipgroup_tbl(schedID, dgendorsementID, dgleader, dgroupType) VALUES(".getSchedID().", ".getDgEndorsementID(getDgroupMemberID($_SESSION['userid'])).", ".$_SESSION['userid'].", $dgroupType);";
-		*/
-		$sql_notifications = "";
-		mysqli_query($conn, $sql_endorsement);
-		/*
-		mysqli_query($conn, $sql_sched);
-		mysqli_query($conn, $sql_dgroup);
-		*/
-		mysqli_close($conn);
-	}
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
@@ -56,6 +15,10 @@
 	<link href="universal.css" rel="stylesheet">
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
+
+	<!-- for alerts -->
+	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
 
@@ -525,6 +488,8 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -597,7 +562,7 @@
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="create-event" name="myForm" action="index.php"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="create-event" id="create-event"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">EVENT PROPOSAL</h3>
 						<div class="row">
@@ -649,7 +614,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit">PROPOSE</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit" onclick="propose()">PROPOSE</button>
 					</div>
 				</form>
 			</div>
@@ -658,6 +623,28 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
+		function propose() {
+			$('#create-event').submit(function(e) {
+				var url = "propose.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: $('#create-event').serialize(),
+					success: function(data) {
+						swal({
+							title: "Success!",
+							text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.href = "index.php"; }
+						);
+					}
+				});
+				e.preventDefault();
+			});
+		}
 		function checkIfSingle() {
 			if(document.getElementById('SingleDay').checked) {
 				document.getElementById('Event_Date_End').style.display = "none";
