@@ -930,35 +930,8 @@
 								allowOutsideClick: true
 							});
 					}
-					/*
-				setTimeout( 
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						},
-						function() { //window.location here ?apr=y }
-						), 1000);
-				});
-		}
-		
-		function seen() { // this function gets rid of the badge every after click event 
-			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
-			document.getElementById('badge').innerHTML = "Notifications";
-			setSeenRequest(); // records in the database that user has seen or read the notifications
-		}
-		
-		function setSeenRequest() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "globalfunctions.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("seen");
-		}
+				})
+			}
+					
 	</script>
 </html>

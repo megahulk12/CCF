@@ -85,14 +85,12 @@
 <?php
 	// database connection variables
 
-	echo 'qqqqq';
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
 
 	if(isset($_POST['request'])) {
-		echo 'asdasdasd';
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
