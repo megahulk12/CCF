@@ -413,9 +413,22 @@
 		th {
 			color: #424242;
 		}
+
+		#back{
+			padding-left: 145px;
+		}
+
+		#title{
+			padding-left: 400; 
+		}
+
+		.header{
+			font-family: proxima-nova;
+			font-size: 20px;
+		}
 	</style>
 
-	<script>
+<!--	<script>
 			$(document).ready(function(){
 				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
 				$('.modal').modal();
@@ -423,7 +436,7 @@
  
 			
 		</script>
-
+-->
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
@@ -512,378 +525,204 @@
 	</header>
 
 	<body>
-		<div id="response"></div>
+		<div id = "back">
+			<div class="nav-wrapper">
+				<a href = "dgroup.php"><h5>←</h5></a>
+			</div>
+		</div>
+		<div id = "title">
+			<div class = "jumbotron text-center">
+				<h1>Personal Information</h1>
+			</div>
+		</div>
+		
+		<!--<div class="row row-profile">-->
 		<div class="container">
-			<?php 
-			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
-			echo '
-			<form method="post">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick="requestLeader()">I WANT TO BE A DGROUP LEADER</button>
-				<input type="hidden" name="seen-request" />
-			</form>';
-			}
-			?>
-			<div id="view-profilee" style="display: none;"> <!-- remove e -->
-				<table class="centered dgroup-table-spacing">
-					<tr>
-						<td>
-							<a id="member" class="dgroup-names" href="#small-group" onclick="viewProfile(0)"><i class="material-icons prefix dgroup-icons">person</i></a>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div id="small-group">
-				<div id="dgroup">
-					<h3>Dgroup</h3>
-					<table class="centered dgroup-table-spacing">
-						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
-					<?php
-						// database connection variables
-
-						$servername = "localhost";
-						$username = "root";
-						$password = "root";
-						$dbname = "dbccf";
-						$conn = mysqli_connect($servername, $username, $password, $dbname);
-						if (!$conn) {
-							die("Connection failed: " . mysqli_connect_error());
-						}
-
-						// insert code set notificationStatus = 1 when user clicks notification area
-						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
-
-						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
-
-
-						$lresult = mysqli_query($conn, $lquery);
-						if(!$row){
-							echo "<label>You Have No Dgroup </label>";
-						}
-						else if(mysqli_num_rows($lresult) > 0) {
-							while($lrow = mysqli_fetch_assoc($lresult)) {
-								$leader = $lrow["leader"];
-							}
-						}
-
-						$result = mysqli_query($conn, $query);
-						if(!$row){
-							echo "<label>You Have No Dgroup</label>";
-						}
-						else if(mysqli_num_rows($result) > 0) {
-								echo '
-						<td>
-							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
-							'.$leader.'<br><br><label>LEADER</label></a>
-						</td>
-								';
-							$counter_row = 1;
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								echo '
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								'.$fullname.'<br><br>&nbsp;</a>
-							</td>
-								';
-								$counter_row++;
-								if($counter_row == 4) {
-									echo'
-						</tr>
-						<tr>
-									';
-									$counter_row = 0;
+			
+				<div id="cpinfo">
+					<div class="row">
+							<?php
+								if(isset($_GET['id'])){
+								$memberID = $_GET['id'];
+								$servername = "localhost";
+								$username = "root";
+								$password = "root";
+								$dbname = "dbccf";
+								$conn = mysqli_connect($servername, $username, $password, $dbname);
+								if (!$conn) {
+									die("Connection failed: " . mysqli_connect_error());
 								}
-							}
-							echo '
-						</tr>';
-						}
-					?>
-					</table>
-				</div>
-			</div>
-
-
-				<!-----------------code ni paolo------------------>
-				<?php
-
-					$servername = "localhost";
-					$username = "root";
-					$password = "root";
-					$dbname = "dbccf";
-					$conn = mysqli_connect($servername, $username, $password, $dbname);
-					if (!$conn) {
-						die("Connection failed: " . mysqli_connect_error());
-					}
-
-					// insert code set notificationStatus = 1 when user clicks notification area
-					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
-
-					$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-								$counter_row = 1;
-								echo '
-									<div id="own-dgroup">
-										<h3>My Dgroup</h3>
-									<table id="own-dgroup" class="centered dgroup-table-spacing">
-								';
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								$memberID = $row["memberID"];
-								if($_SESSION['memberType'] >= 2 ){
-									echo '
-										<td>
-											<a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
-												'.$fullname.'<br><br>&nbsp;</a>
-										</td>
-										';
-									$counter_row++;
-									if($counter_row == 4) {
-									echo'
-											</tr>
-										<tr>
-									';
-									$counter_row = 0;
+								$query = "SELECT lastName, firstName, middleName, nickName, birthdate, (SELECT CASE WHEN gender = '0' THEN 'Male' ELSE 'Female' END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, dateJoined, schoolID, companyID, spouseID, prefID FROM member_tbl WHERE memberID = ".$memberID;
+								$result = mysqli_query($conn, $query);
+								if(mysqli_num_rows($result) > 0) {
+									while($row = mysqli_fetch_assoc($result)) {
+										$lastname = $row["lastName"];
+										$firstname = $row["firstName"];
+										$middlename = $row["middleName"];
+										$nickname = $row["nickName"];
+										$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+										if(is_null($row["birthdate"]))
+											$birthdate = "";
+										//$birthdate = $row["birthdate"];
+										$gender = $row["gender"];
+										$male = "";
+										$female = "";
+										//if($gender == "Male") $male = "checked";
+										//else $female = "checked";
+										$civilStatus = $row["civilStatus"];
+										$citizenship = $row["citizenship"];
+										$contactNum = $row["contactNum"];
+										$emailAd = $row["emailAd"];
+										$occupation = $row["occupation"];
+										$dateJoined = date("j F, Y", strtotime($row["dateJoined"]));
+										if(is_null($row["dateJoined"]))
+											$dateJoined = "";
+										//$birthdate = $row["birthdate"];
+										$schoolID = $row["schoolID"];
+										$companyID = $row["companyID"];
+										$spouseID = $row["spouseID"];
+										$prefID = $row["prefID"];
+										//<p>'.$lastname.'</p>
 									}
 								}
-							}
-							echo '
-						</tr>';
-						}
-					/*if($_SESSION['memberType'] >= 2 ) {
-					echo '
-					<h3>Own Dgroup</h3>
-					<table id="own-dgroup" class="centered dgroup-table-spacing">
-						<tr>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-							<td>
-								<a class="dgroup-names" href="#view-profile"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Dodong Laboriki</a>
-							</td>
-						</tr>
-					</table>';
-					}*/
-				?>
+								echo '
+									<div class = "container">
+										<div class = "row">
+											<h5 class = "header">Last Name: </h5><p>'.$lastname.'</p>
+											<h5 class = "header">First Name: </h5><p>'.$firstname.'</p>
+											<h5 class = "header">Middle Name: </h5><p>'.$middlename.'</p>
+											<h5 class = "header">Nick Name: </h5><p>'.$nickname.'</p>
+											<h5 class = "header">Birthdate: </h5><p>'.$birthdate.'</p>
+											<h5 class = "header">Gender: </h5><p>'.$gender.'</p>
+											<h5 class = "header">Civil Status: </h5><p>'.$civilStatus.'</p>
+											<h5 class = "header">Citizenship: </h5><p>'.$citizenship.'</p>
+											<h5 class = "header">Contact Number: </h5><p>'.$contactNum.'</p>
+											<h5 class = "header">Email Address: </h5><p>'.$emailAd.'</p>
+											<h5 class = "header">Occupation: </h5><p>'.$occupation.'</p>
+											<h5 class = "header">Date Joined: </h5><p>'.$dateJoined.'</p>
+									
+								';
+								
+								if($schoolID != ""){
+									$servername = "localhost";
+									$username = "root";
+									$password = "root";
+									$dbname = "dbccf";
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+									$query = "SELECT schoolName, schoolContactNum, schoolAddress FROM schooldetails_tbl WHERE schoolID = ".$schoolID;
+									$result = mysqli_query($conn, $query);
+									if(mysqli_num_rows($result) > 0) {
+										while($row = mysqli_fetch_assoc($result)) {
+											$schoolName = $row["schoolName"];
+											$schoolContactNum = $row["schoolContactNum"];
+											$schoolAddress = $row["schoolAddress"];
+										}	
+									}
+									echo '
+										<h5 class = "header">School Name: </h5><p>'.$schoolName.'</p>
+										<h5 class = "header">School Address: </h5><p>'.$schoolAddress.'</p>
+										<h5 class = "header">School Contact Number: </h5><p>'.$schoolAddress.'</p>
+									';
+								}
+								else if($companyID != ""){
+									$servername = "localhost";
+									$username = "root";
+									$password = "root";
+									$dbname = "dbccf";
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+									$query = "SELECT companyName, companyAddress, companyContactNum FROM companydetails_tbl WHERE companyID = ".$companyID;
+									$result = mysqli_query($conn, $query);
+									if(mysqli_num_rows($result) > 0) {
+										while($row = mysqli_fetch_assoc($result)) {
+											$companyName = $row["companyName"];
+											$companyAddress = $row["companyAddress"];
+											$companyContactNum = $row["companyContactNum"];
+										}	
+									}
+									echo '
+											<h5 class = "header">Company Name: </h5><p>'.$companyName.'</p>
+											<h5 class = "header">Company Address: </h5><p>'.$companyAddress.'</p>
+											<h5 class = "header">Company Contact Number: </h5><p>'.$companyContactNum.'</p>
+									';
+								}
+								if($civilStatus == "Married" || $civilStatus == "Seperated" || $civilStatus == "Widow/er"){
+									$servername = "localhost";
+									$username = "root";
+									$password = "root";
+									$dbname = "dbccf";
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+									$query = "SELECT spouseName, spouseContactNum, spouseBirthdate FROM spousedetails_tbl WHERE spouseID = ".$spouseID;
+									$result = mysqli_query($conn, $query);
+									if(mysqli_num_rows($result) > 0) {
+										while($row = mysqli_fetch_assoc($result)) {
+											$spouseName = $row["spouseName"];
+											$spouseContactNum = $row["spouseContactNum"];
+											$spouseBirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+											if(is_null($row["spouseBirthdate"]))
+												$spouseBirthdate = "";
+											//$birthdate = $row["birthdate"];
+										}	
+									}
+									echo '
+											<h5 class = "header">Spouse Name: </h5><p>'.$spouseName.'</p>
+											<h5 class = "header">Spouse Contact Number: </h5><p>'.$spouseContactNum.'</p>
+											<h5 class = "header">Spouse Birthdate: </h5><p>'.$spouseBirthdate.'</p>
+										
+									';
+								}
+								if($prefID != ""){
+									$servername = "localhost";
+									$username = "root";
+									$password = "root";
+									$dbname = "dbccf";
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+									$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefStartTime2, prefEndTime1, prefEndTime2, prefDay1, prefDay2 FROM preferencedetails_tbl WHERE prefID = ".$prefID;
+									$result = mysqli_query($conn, $query);
+									if(mysqli_num_rows($result) > 0) {
+										while($row = mysqli_fetch_assoc($result)) {
+											$prefLanguage = $row["prefLanguage"];
+											$prefVenue1 = $row["prefVenue1"];
+											$prefVenue2 = $row["prefVenue2"];
+											$prefStartTime1 = date("H:i", strtotime($row["prefStartTime1"]));
+											$prefEndTime1 = date("H:i", strtotime($row["prefEndTime1"]));
+											$prefStartTime2 = date("H:i", strtotime($row["prefStartTime2"]));
+											$prefEndTime2 = date("H:i", strtotime($row["prefEndTime2"]));
+											$prefDay1 = $row["prefDay1"];
+											$prefDay2 = $row["prefDay2"];
+										}	
+									}
+									echo '
+											<h5 class = "header">Prefered Language: </h5><p>'.$prefLanguage.'</p>
+											<h5 class = "header">Prefered Venue 1: </h5><p>'.$prefVenue1.'</p>
+											<h5 class = "header">Prefered Venue 2: </h5><p>'.$prefVenue2.'</p>
+											<h5 class = "header">Prefered Start Time 1: </h5><p>'.$prefStartTime1.'</p>
+											<h5 class = "header">Prefered End Time 1: </h5><p>'.$prefEndTime1.'</p>
+											<h5 class = "header">Prefered Start Time 2: </h5><p>'.$prefStartTime2.'</p>
+											<h5 class = "header">Prefered End Time 2: </h5><p>'.$prefEndTime2.'</p>
+											<h5 class = "header">Prefered Day 1: </h5><p>'.$prefDay1.'</p>
+											<h5 class = "header">Prefered Day 2: </h5><p>'.$prefDay2.'</p>
 
+
+										</div>
+									';
+								}
+							}
+							?>
+						
+					</div>
+				</div>
 			
-				<!----------------------THE END------------------------>
-				
+		</div>
 	</body>
-
-	<script>
-		function viewProfile(page) {
-			if(page==1) {
-				document.getElementById('small-group').style.display = "none";
-				document.getElementById('view-profile').style.display = "inline";
-				document.getElementById('member').setAttribute("class", "dgroup-names dgroup-view-profile");
-			}
-			else {
-				document.getElementById('small-group').style.display = "inline";
-				document.getElementById('view-profile').style.display = "none";
-			}
-		}
-
-		/*
-		function requestLeader() {
-			swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() {
-					//changeToPending();
-				}
-			);
-			
-		}
-
-		function changeToPending() {
-			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
-			document.getElementById("request_leader").style.color = "#777";
-			document.getElementById("request_leader").innerHTML = "PENDING";
-			document.getElementById("request_leader").disabled = true;
-		}
-
-		function changeBack() {
-			document.getElementById("request_leader").style.backgroundColor = "#16A5B8";
-			document.getElementById("request_leader").style.color = "#fff";
-			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
-			document.getElementById("request_leader").disabled = false;
-		}
-		*/
-	</script>
-	<script>
-		function requestLeader() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "request.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("request_leader");
-			swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() { window.location.reload(); }
-			);
-		}
-	</script>
-
-	<?php
-		if(isset($_POST['seen-request'])) {
-			// script also prevents to confirm form resubmission para there are no duplicates in the data
-			/*
-			echo '
-			<script>
-			setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-						type: "success",
-						allowEscapeKey: true
-					},
-					function() { window.location = "dgroup.php"; }
-					), 1000);
-			</script>';
-			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
-			*/
-			setRequestSeen();
-		}
-
-		function getRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			$result = mysqli_query($conn, $sql);
-			$request = "";
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$request = $row["request"];
-				}
-			}
-			return $request;
-		}
-
-		function setRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			mysqli_query($conn, $sql);
-		}
-	?>
-	
-	 <!-- this section is for notification approval of requests -->
-	<script>
-		function approval() {
-			 $('.dropdown-button').dropdown('close');
-			swal({
-				  title: "Do you approve?",
-				  type: "info",
-				  showCancelButton: true,
-				  confirmButtonColor: "#66ff66",
-				  confirmButtonText: "Yes",
-				  cancelButtonText: "No",
-				  allowEscapeKey: false,
-				  closeOnConfirm: false,
-				  closeOnCancel: false
-				},
-				function(isConfirm){
-					if(isConfirm) {
-						var xhttp;
-						xhttp = new XMLHttpRequest();
-							xhttp.onreadystatechange = function() {
-								if (this.readyState == 4 && this.status == 200) {
-								document.getElementById("response").innerHTML = this.responseText;
-							}
-						};
-						xhttp.open("GET", "request.php?apr=y", true);
-						xhttp.send();
-						swal({
-								title: "Approved!",
-								text: "You have approved this request.",
-								type: "success",
-								allowOutsideClick: true
-							});
-					}
-					else {
-						var xhttp;
-						xhttp = new XMLHttpRequest();
-							xhttp.onreadystatechange = function() {
-								if (this.readyState == 4 && this.status == 200) {
-								document.getElementById("response").innerHTML = this.responseText;
-							}
-						};
-						xhttp.open("GET", "request.php?apr=n", true);
-						xhttp.send();
-						swal({
-								title: "Disapproved!",
-								text: "You have disapproved this request.",
-								type: "error",
-								allowOutsideClick: true
-							});
-					}
-					/*
-				setTimeout( 
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						},
-						function() { //window.location here ?apr=y }
-						), 1000);
-						*/
-				});
-		}
-		
-		function seen() { // this function gets rid of the badge every after click event 
-			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
-			document.getElementById('badge').innerHTML = "Notifications";
-			setSeenRequest(); // records in the database that user has seen or read the notifications
-		}
-		
-		function setSeenRequest() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "globalfunctions.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("seen");
-		}
-	</script>
-</html>
