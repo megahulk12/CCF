@@ -565,20 +565,15 @@
 
 
 						$lresult = mysqli_query($conn, $lquery);
-						if(!$row){
-							echo "<label>You Have No Dgroup </label>";
-						}
-						else if(mysqli_num_rows($lresult) > 0) {
+						
+						if(mysqli_num_rows($lresult) > 0) {
 							while($lrow = mysqli_fetch_assoc($lresult)) {
 								$leader = $lrow["leader"];
 							}
 						}
 
 						$result = mysqli_query($conn, $query);
-						if(!$row){
-							echo "<label>You Have No Dgroup</label>";
-						}
-						else if(mysqli_num_rows($result) > 0) {
+						if(mysqli_num_rows($result) > 0) {
 								echo '
 						<td>
 							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
