@@ -473,6 +473,8 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -546,7 +548,7 @@
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" name="myForm"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">ENDORSEMENT FORM</h3>
 						<h4 class="center">BAPTISMAL</h4>
@@ -608,7 +610,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="button" name="submit" id="submit">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
 					</div>
 				</form>
 			</div>
@@ -616,24 +618,26 @@
 	</body>
 	<script>
 		function requestLeader() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "request.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("request_leader");
-			swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() { window.location.href = "index.php" }
-			);
+			$('#Eform').submit(function(e) {
+				var url="request.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: 'request=g&'+$('#Eform').serialize(), 
+					success: function(data) {
+						swal({
+							title: "Success!",
+							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+							type: "success",
+							allowEscapeKey: true
+						},
+							function() { window.location.href = "index.php"; }
+						);
+					}
+				});
+				e.preventDefault();
+			});
+			
 		}
 	</script>
 

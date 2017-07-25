@@ -17,8 +17,8 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-
 	<title>Christ's Commission Fellowship</title>
+
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -234,6 +234,8 @@
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
