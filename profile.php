@@ -1210,13 +1210,14 @@
 												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
 												<label for="new-password">New Password</label>
 												<small class="error" id="newpass">This field is required.</small>
-												<small class="error" id="checkpass">Passwords do not match.</small>
+												<small class="error" id="checkoldnew">Cannot use old password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
 												<label for="confirm-password">Confirm New Password</label>
 												<small class="error" id="confirmpass">This field is required.</small>
+												<small class="error" id="checkpass">Passwords do not match.</small>
 											</div>
 											'; // originally having a value of own password
 											?>
@@ -1837,6 +1838,8 @@
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
+			var checkoldnew = true;
+			var checknewpass = true;
 
 			//password form
 			if(confirmpass=="") {
@@ -1854,14 +1857,26 @@
 				$("input#old-password").focus();
 			}
 
-			if(newpass!=oldpass) {
-				$("small#newpass").hide();
+			if(confirmpass!=newpass) {
+				$("small#confirmpass").hide();
 				$("small#checkpass").show();
-				$("input#new-password").focus();
+				$("input#confirm-password").focus();
+				checknewpass = false;
 			}
 
-			if(oldpass!=""&&newpass!=""&&confirmpass!=="")
+			if(oldpass==newpass) {
+				$("small#newpass").hide();
+				$("small#checkoldnew").show();
+				$("input#new-password").focus();
+				checkoldnew = false;
+
+			}
+
+			if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
 				validated = true;
+				checknewpass = true;
+				checkoldnew = true;
+			}
 		});
 	</script>
 </html>
