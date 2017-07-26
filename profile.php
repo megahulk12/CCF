@@ -1204,6 +1204,7 @@
 												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
 												<label for="old-password">Old Password</label>
 												<small class="error" id="oldpass">This field is required.</small>
+												<small class="error" id="notpass">This is not your password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
@@ -1851,6 +1852,20 @@
 				$("small#newpass").show();
 				$("input#new-password").focus();
 			}
+
+			var url="check.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: $('#fcpass').serialize(),
+				success: function(data) {
+					if(data == 0) {
+						$("small#oldpass").hide();
+						$("small#notpass").show();
+						$("input#old-password").focus();
+					}
+				}
+			});
 
 			if(oldpass=="") {
 				$("small#oldpass").show();
