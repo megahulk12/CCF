@@ -767,7 +767,7 @@
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
 								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav" href="#register" onclick="setActive(this); navigationForms(5);" onfocus="disableFocus(this)">I want to be Dgroup Member</a></li>
+								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav" href="#register" onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
 							</ul>
 						</td>
 						<td class="content">
@@ -1283,7 +1283,7 @@
 												</div>
 											</div>
 
-											<div id="register_page2">
+											<div id="register_page2" style="display: none;">
 												<h3 class="center">Preferences</h3>
 												<div class="input-field col s12">
 													<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
@@ -1348,7 +1348,7 @@
 												</div>
 											</div>
 
-											<div id="register_page3">
+											<div id="register_page3" style="display: none;">
 												<div class="input-field col s12">
 													<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 													<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
@@ -1362,7 +1362,7 @@
 													<label for="regularlyAttendsAt">Where do you regularly attend?</label>
 												</div>
 											</div>
-											<div id="register_page4">
+											<div id="register_page4" style="display: none;">
 												<h3 class="center">Choose a Dgroup Leader</h3>
 												<table class="cursor centered" id="table" style="margin-bottom: 20px;">
 													<thead>
@@ -1853,7 +1853,7 @@
 				$("input#new-password").focus();
 			}
 
-			checkoldpass = checkOldPass();
+			checkOldPass();
 			alert(checkoldpass);
 
 			if(oldpass=="") {
@@ -1876,17 +1876,18 @@
 
 			}
 
+			alert(checkoldpass);
 			if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew&&checkoldpass) {
 				validated = true;
 				checknewpass = true;
 				checkoldnew = true;
-				checkoldpass = true;
+				checkoldpass = true;	
+				alert(checkoldpass);
 			}
 		});
 
 		function checkOldPass() {
 			var url="check.php";
-			var check = true;
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -1896,11 +1897,14 @@
 						$("small#oldpass").hide();
 						$("small#notpass").show();
 						$("input#old-password").focus();
-						check = false;
+						setOldPassFalse();
 					}
 				}
 			});
-			return check;
+		}
+
+		function setOldPassFalse() {
+			checkoldpass = false;
 		}
 	</script>
 </html>
