@@ -1834,13 +1834,13 @@
 		}
 
 		$('.error').hide();
+		var checkoldpass = true;
 		$("#submit_cpass").click(function() {
 			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
-			var checkoldnew = true;
-			var checknewpass = true;
+			var checkoldnew = true, checknewpass = true;
 
 			//password form
 			if(confirmpass=="") {
@@ -1853,19 +1853,8 @@
 				$("input#new-password").focus();
 			}
 
-			var url="check.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: $('#fcpass').serialize(),
-				success: function(data) {
-					if(data == 0) {
-						$("small#oldpass").hide();
-						$("small#notpass").show();
-						$("input#old-password").focus();
-					}
-				}
-			});
+			checkoldpass = checkOldPass();
+			alert(checkoldpass);
 
 			if(oldpass=="") {
 				$("small#oldpass").show();
@@ -1887,11 +1876,31 @@
 
 			}
 
-			if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
+			if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew&&checkoldpass) {
 				validated = true;
 				checknewpass = true;
 				checkoldnew = true;
+				checkoldpass = true;
 			}
 		});
+
+		function checkOldPass() {
+			var url="check.php";
+			var check = true;
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: $('#fcpass').serialize(),
+				success: function(data) {
+					if(data == 0) {
+						$("small#oldpass").hide();
+						$("small#notpass").show();
+						$("input#old-password").focus();
+						check = false;
+					}
+				}
+			});
+			return check;
+		}
 	</script>
 </html>
