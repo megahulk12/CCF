@@ -62,8 +62,8 @@
 		}
 
 		nav {
-			/*position: fixed;
-			top: 0; this is responsible for fixed nav bars */
+			position: fixed;
+			top: 0; /* this is responsible for fixed nav bars */
 			color: #777;
 			background-color: #fff;
 			width: 100%;
@@ -72,10 +72,10 @@
 			z-index: 2;
 		}
 
-		/* this is responsible for fixed nav bars 
+		/* this is responsible for fixed nav bars */
 		body {
 			margin-top: 150px;
-		}*/
+		}
 		
 		li a:hover {
 			color: #16A5B8;
@@ -547,6 +547,18 @@
 		  	border-radius: 0px; /* complete horizontal hightlight bar*/
 		}
 		/* ============================END=========================== */  
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -765,7 +777,7 @@
 							<ul class="sidenav">
 								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" href="#cpinfo" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
-								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
+								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
 								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
 								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav" href="#register" onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
 							</ul>
@@ -1477,7 +1489,22 @@
 		</div>
 	</body>
 
-	<footer>
+	<main>
+	</main>	
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
 	</footer>
 
 	<script>

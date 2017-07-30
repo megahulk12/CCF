@@ -420,6 +420,18 @@
 		th {
 			color: #424242;
 		}
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script>
@@ -625,7 +637,7 @@
 			<div id="own-dgroup">
 				<h3>My Dgroup</h3>
 				<table id="own-dgroup" class="centered dgroup-table-spacing">
-							';
+					<tr>';
 							$counter_row = 0;
 						while($row = mysqli_fetch_assoc($result)) {
 							$fullname = $row["fullname"];
@@ -708,8 +720,32 @@
 
 			
 				<!----------------------THE END------------------------>
-				
 	</body>
+	</tr>
+	</table>
+	</div>
+	</div>
+	</div>
+	</body>
+
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 
 	<script>
 		function viewProfile(page) {
