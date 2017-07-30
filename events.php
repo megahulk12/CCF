@@ -376,7 +376,7 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li
 		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
@@ -666,6 +666,7 @@
 
 	<main>
 	</main>	
+
 	<footer class="page-footer">
 		<div class="container">
 			<div class="row">
@@ -692,6 +693,19 @@
 		masonry: {
 			columnWidth: 20
 		}
+	});
+	$(window).resize(function() {
+		var $container = jQuery('.container-events');
+		setTimeout(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		}, 500);
 	});
 
 	// re-initialize
