@@ -1834,32 +1834,38 @@
 		}
 
 		$('.error').hide();
-		var checkoldpass = true;
 		$("#submit_cpass").click(function() {
 			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
-			var checkoldnew = true, checknewpass = true;
+			var checkoldnew = true, checknewpass = true, checkoldpass = true;
 
 			//password form
+
+			// ===== CHECKS IF INPUTS ARE BLANK =====
 			if(confirmpass=="") {
 				$("small#confirmpass").show();
 				$("input#confirm-password").focus();
 			}
 
+			if(oldpass==newpass) {
+				$("small#checkoldnew").show();
+				$("input#new-password").focus();
+				checkoldnew = false;
+			}
+
 			if(newpass=="") {
+				$("small#checkoldnew").hide();
 				$("small#newpass").show();
 				$("input#new-password").focus();
 			}
-
-			checkOldPass();
-			alert(checkoldpass);
 
 			if(oldpass=="") {
 				$("small#oldpass").show();
 				$("input#old-password").focus();
 			}
+			// ===== END =====
 
 			if(confirmpass!=newpass) {
 				$("small#confirmpass").hide();
@@ -1868,43 +1874,44 @@
 				checknewpass = false;
 			}
 
-			if(oldpass==newpass) {
-				$("small#newpass").hide();
-				$("small#checkoldnew").show();
-				$("input#new-password").focus();
-				checkoldnew = false;
-
-			}
-
-			alert(checkoldpass);
-			if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew&&checkoldpass) {
-				validated = true;
-				checknewpass = true;
-				checkoldnew = true;
-				checkoldpass = true;	
-				alert(checkoldpass);
-			}
-		});
-
-		function checkOldPass() {
 			var url="check.php";
 			$.ajax({
 				type: "POST",
 				url: url,
+				async: false, // remove if there is bad user experience
 				data: $('#fcpass').serialize(),
 				success: function(data) {
 					if(data == 0) {
-						$("small#oldpass").hide();
-						$("small#notpass").show();
+						if(oldpass=="")
+							$("small#oldpass").show();
+						else
+							$("small#notpass").show();
 						$("input#old-password").focus();
-						setOldPassFalse();
+					}
+					else {
+						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
+							validated = true;
+						}
 					}
 				}
 			});
+		});
+
+		/*
+
+		function checkOldPass() {
 		}
 
-		function setOldPassFalse() {
-			checkoldpass = false;
+		function setCheckOldPass() {
+			checkOldPass().done(function(data) {
+				checkoldpass = false;
+			});
 		}
+
+		function confirmValidated() {
+			if(checkoldpass)
+				validated = true;
+		}
+		*/
 	</script>
 </html>
