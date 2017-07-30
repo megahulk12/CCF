@@ -694,7 +694,8 @@
 			columnWidth: 20
 		}
 	});
-	$(window).resize(function() {
+
+	$(window).resize(function() { // in every event of zoom in/out, isotope re-initializes
 		var $container = jQuery('.container-events');
 		setTimeout(function() {
 			$container.isotope({

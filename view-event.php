@@ -554,6 +554,20 @@
 		}
 	});
 
+	$(window).resize(function() { // in every event of zoom in/out, isotope re-initializes
+		var $container = jQuery('.container-events');
+		setTimeout(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		}, 500);
+	});
+
 	// re-initialize
 	jQuery(function() { // allows to load the image first before layout isotope executes
 		var $container = jQuery('.container-events');
