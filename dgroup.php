@@ -555,7 +555,7 @@
 			</div>
 			<div id="small-group">
 				<div id="dgroup">
-					<h3>Dgroup</h3>
+					<h3>Discipleship Group</h3>
 					<table class="centered dgroup-table-spacing">
 						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
 					<?php
@@ -635,7 +635,7 @@
 						if(mysqli_num_rows($result) > 0) {
 							echo '
 			<div id="own-dgroup">
-				<h3>My Dgroup</h3>
+				<h3>My Discipleship Group</h3>
 				<table id="own-dgroup" class="centered dgroup-table-spacing">
 					<tr>';
 							$counter_row = 0;
