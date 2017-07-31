@@ -244,8 +244,12 @@
 		*/
 
 		.parallax-container {
-			height: 90%;
+			height: 100%;
 			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
+		}
+
+		.parallax-container img {
+			width: 100%;
 		}
 		/* ===== FOOTER ===== */
 		.page-footer {
