@@ -59,11 +59,31 @@
 			height: 97px;
 			line-height: 97px;
 			z-index: 2;
+			transition: background-color 0.3s, box-shadow 0.3s; /* for transition purposes */
+		}
+
+		 /*Note: for rectangle background in navbar same sa original site*/
+		.nav-container-transition {
+			padding: 0 40;
+			background-color: rgba(233, 233, 233, 0.4);
+			transition: all 0.3s;
+		}
+
+		.transition {
+			background-color: transparent !important;
+			box-shadow: none;
+			transition: all 0.3s;
+		}
+
+		header a.transition {
+			color: #fff;
+			transition: all 0.5s;
 		}
 		
 		li a:hover {
 			color: #16A5B8;
 		}
+
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
@@ -218,14 +238,67 @@
 			100% { transform: rotate(0deg) }
 		}
 		*/
+
+		.parallax-container {
+			height: 100%;
+			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
+		}
+		/* ===== FOOTER ===== */
+		.page-footer {
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.parallax').parallax();
+		});
+        
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		});
+
+		// navbar initial state
+		$(document).ready(function() {
+			$('nav').addClass('transition');
+			$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+			$('header a').addClass('transition');
+			$('header ul').addClass('transition');
+			$('a.dropdown-button').hide(300);
+			$('ul.dropdown-content').hide(300);
+			$('.dropdown-button').dropdown('close');
+			$('nav a img').attr('src', "resources/CCF Logos8.png");
+		});
+
+		// navbar scroll state
+		window.addEventListener("scroll", function() {
+			if(window.scrollY > 100) {
+				$('nav').removeClass('transition');
+				$('nav div.container').removeClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+				$('header a').removeClass('transition');
+				$('header ul').removeClass('transition');
+				$('a.dropdown-button').show(300);
+				$('nav a img').attr('src', "resources/CCF Logos6.png");
+			}
+			else {
+				$('nav').addClass('transition');
+				$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+				$('header a').addClass('transition');
+				$('header ul').addClass('transition');
+				$('a.dropdown-button').hide(300);
+				$('ul.dropdown-content').hide(300);
+				$('.dropdown-button').dropdown('close');
+				$('nav a img').attr('src', "resources/CCF Logos8.png");
+			}
+		}, false);
 	</script>
 
 	<header class="top-nav">
@@ -292,9 +365,6 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      		<!-- FOR DGROUP MEMERS
-			        	<li><a href="profile.php">PROFILE</a></li>
-			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
@@ -307,7 +377,37 @@
 
 	<body>
 		<div id="response"></div>
+		<div class="parallax-container">
+			<div class="parallax">
+				<img src="resources/GoServe2017_Background-04-1.jpg">
+			</div>
+		</div>
+		<div class="section white">
+			<div class="row container">
+				<h2 class="header">Parallax</h2>
+				<p class="grey-text text-darken-3 lighten-3">Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.</p>
+			</div>
+		</div>
 	</body>
+
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 	<?php 
 		/*if(isset($_POST['submit'])) {
 			echo '

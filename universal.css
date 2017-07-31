@@ -62,6 +62,11 @@ body
 	font-weight: bold;
 }
 
+@font-face {
+	font-family: futura;
+	src: url('ccf-fonts/futura/FUTURA-T-OT-BOOK.TTF');
+}
+
 a {
     font-family: proxima-nova;
     color: #16A5B8;

@@ -97,7 +97,7 @@
 	}
 
 	if(isset($_POST["submit_cpass"])) {
-		$regpassword = $_POST["password"];
+		$regpassword = $_POST["confirm-password"];
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {

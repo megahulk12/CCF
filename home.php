@@ -75,6 +75,17 @@
 			animation-name: fade-out;
 			animation-duration: 3s;
 		}
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 	<script>
 		function fadeout() {
@@ -101,4 +112,22 @@
 
 	</body>
 
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 </html>
