@@ -27,6 +27,7 @@
 
 		div {
 			display: block;
+			font-family: ;
 		}
 
 		.container {
@@ -88,11 +89,13 @@
 			color: #16A5B8;
 		}
 
+		/* ===== FONTS =====*/
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
 			font-weight: bold;
 		}
+		/* ===== END ===== */
 
 		nav ul li a {
 			font-family: proxima-nova;
@@ -243,6 +246,10 @@
 		}
 		*/
 
+		.cover {
+			font-weight: 800;
+		}
+
 		.parallax-container {
 			height: 100%;
 			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
@@ -388,6 +395,7 @@
 		<div class="parallax-container">
 			<div class="parallax">
 				<img src="resources/GoServe2017_Background-04-1.jpg">
+
 			</div>
 		</div>
 		<div class="section white">

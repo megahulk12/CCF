@@ -1872,7 +1872,6 @@
 			var nickname = $("#Nickname").val();
 			var birthdate = $("#Birthdate").val();
 
-			if(lastname=="")
 		});
 
 		// change password form validation
