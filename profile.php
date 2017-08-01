@@ -550,7 +550,7 @@
 
 		/* ===== FOOTER ===== */
 		.page-footer {
-			margin-top: 100px;
+			margin-top: 20px;
 			background-color: #16A5B8;
 		}
 
@@ -1490,7 +1490,8 @@
 	</body>
 
 	<main>
-	</main>	
+	</main>
+	
 	<footer class="page-footer">
 		<div class="container">
 			<div class="row">
@@ -1860,7 +1861,21 @@
 			xhttp.send("seen");
 		}
 
-		$('.error').hide();
+		$('.error').hide(); // by default, hide all error classes
+
+		// personal info form validation
+		$("#submit_cpinfo").click(function() {
+			$('.error').hide();
+			var lastname = $("#Lastname").val();
+			var firstname = $("#Firstname").val();
+			var middlename = $("#Middlename").val();
+			var nickname = $("#Nickname").val();
+			var birthdate = $("#Birthdate").val();
+
+			if(lastname=="")
+		});
+
+		// change password form validation
 		$("#submit_cpass").click(function() {
 			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
 			var oldpass = $("#old-password").val();
