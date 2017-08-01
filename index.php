@@ -62,15 +62,15 @@
 			transition: background-color 0.3s, box-shadow 0.3s; /* for transition purposes */
 		}
 
-		 /*Note: for rectangle background in navbar same sa original site*/
+		 /*Note: for rectangle background in navbar same sa original site
 		.nav-container-transition {
 			padding: 0 40;
 			background-color: rgba(233, 233, 233, 0.4);
 			transition: all 0.3s;
-		}
+		}*/
 
 		.transition {
-			background-color: transparent !important;
+			background-color: transparent;
 			box-shadow: none;
 			transition: all 0.3s;
 		}
@@ -78,6 +78,10 @@
 		header a.transition {
 			color: #fff;
 			transition: all 0.5s;
+		}
+
+		header a.transition:hover {
+			color: rgba(233, 233, 233, 0.7);
 		}
 		
 		li a:hover {
@@ -243,6 +247,10 @@
 			height: 100%;
 			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
 		}
+
+		.parallax-container img {
+			width: 100%;
+		}
 		/* ===== FOOTER ===== */
 		.page-footer {
 			background-color: #16A5B8;
@@ -269,11 +277,11 @@
 		// navbar initial state
 		$(document).ready(function() {
 			$('nav').addClass('transition');
-			$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+			//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 			$('header a').addClass('transition');
 			$('header ul').addClass('transition');
-			$('a.dropdown-button').hide(300);
-			$('ul.dropdown-content').hide(300);
+			$('a.dropdown-button').hide();
+			$('ul.dropdown-content').hide();
 			$('.dropdown-button').dropdown('close');
 			$('nav a img').attr('src', "resources/CCF Logos8.png");
 		});
@@ -282,7 +290,7 @@
 		window.addEventListener("scroll", function() {
 			if(window.scrollY > 100) {
 				$('nav').removeClass('transition');
-				$('nav div.container').removeClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+				//$('nav div.container').removeClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 				$('header a').removeClass('transition');
 				$('header ul').removeClass('transition');
 				$('a.dropdown-button').show(300);
@@ -290,11 +298,11 @@
 			}
 			else {
 				$('nav').addClass('transition');
-				$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
+				//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 				$('header a').addClass('transition');
 				$('header ul').addClass('transition');
-				$('a.dropdown-button').hide(300);
-				$('ul.dropdown-content').hide(300);
+				$('a.dropdown-button').hide();
+				$('ul.dropdown-content').hide();
 				$('.dropdown-button').dropdown('close');
 				$('nav a img').attr('src', "resources/CCF Logos8.png");
 			}
@@ -360,15 +368,15 @@
 				}
 			?>
 		</ul>
-		<nav style="margin-bottom: 50px;">
-			<div class="container">
+		<nav style="margin-bottom: 50px;" class="transition">
+			<div class="container nav-container-transition">
 			    <div class="nav-wrapper">
-			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
+			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos8" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<li><a href="events.php">EVENTS</a></li>
-						<li><a href="ministry.php">MINISTRIES</a></li>
-						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
+						<li><a href="events.php" class="transition">EVENTS</a></li>
+						<li><a href="ministry.php" class="transition">MINISTRIES</a></li>
+						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button transition" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
+						<li><a class="dropdown-button notifications transition" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
 			    </div>
 			</div>
