@@ -695,12 +695,16 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-		  	<li class="divider"></li>
+
+		  	<?php
+		  		if($_SESSION["memberType"] > 0) echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  	<li class="divider"></li>
+			  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  		<li class="divider"></li>';
+		  	?>
+		  	
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -777,9 +781,18 @@
 							<ul class="sidenav">
 								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
-								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
-								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
+
+								<!---Code ni Mark ito-->
+								<?php
+								if($_SESSION["memberType"] > 0) echo <<< HTML
+									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
+									<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+HTML;
+
+								if($_SESSION["memberType"] == 0) echo <<< HTML
+									<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
+HTML;
+								?>
 							</ul>
 						</td>
 						<td class="content">
