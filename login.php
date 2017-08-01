@@ -205,6 +205,7 @@
 	</body>
 	<script>
 		$('form').submit(function(e) {
+			$('button').prop("disabled", true);
 			var url="request_login.php";
 			$.ajax({
 				type: "POST",
@@ -222,6 +223,7 @@
 							allowEscapeKey: true,
 							timer: 10000
 						});
+						$('button').prop("disabled", false);
 					}
 				}
 			});
