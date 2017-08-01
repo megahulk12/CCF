@@ -420,6 +420,18 @@
 		th {
 			color: #424242;
 		}
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script>
@@ -543,7 +555,7 @@
 			</div>
 			<div id="small-group">
 				<div id="dgroup">
-					<h3>Dgroup</h3>
+					<h3>Discipleship Group</h3>
 					<table class="centered dgroup-table-spacing">
 						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
 					<?php
@@ -565,6 +577,7 @@
 
 
 						$lresult = mysqli_query($conn, $lquery);
+						
 						if(mysqli_num_rows($lresult) > 0) {
 							while($lrow = mysqli_fetch_assoc($lresult)) {
 								$leader = $lrow["leader"];
@@ -604,28 +617,55 @@
 					</table>
 				</div>
 			</div>
+				<!-----------------code ni paolo------------------>
+				<?php
 
-			<!---code ni paolo-->
-					<?php
+					$servername = "localhost";
+					$username = "root";
+					$password = "root";
+					$dbname = "dbccf";
+					$conn = mysqli_connect($servername, $username, $password, $dbname);
+					if (!$conn) {
+						die("Connection failed: " . mysqli_connect_error());
+					}
+					// insert code set notificationStatus = 1 when user clicks notification area
+					$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
 
-						$servername = "localhost";
-						$username = "root";
-						$password = "root";
-						$dbname = "dbccf";
-						$conn = mysqli_connect($servername, $username, $password, $dbname);
-						if (!$conn) {
-							die("Connection failed: " . mysqli_connect_error());
-						}
-
-						// insert code set notificationStatus = 1 when user clicks notification area
-						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
-
-						$result = mysqli_query($conn, $query);
-							if(mysqli_num_rows($result) > 0) {
-								$counter_row = 0;
-								echo '
+					$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+							echo '
 			<div id="own-dgroup">
-				<h3>My Dgroup</h3>
+				<h3>My Discipleship Group</h3>
+				<table id="own-dgroup" class="centered dgroup-table-spacing">
+					<tr>';
+							$counter_row = 0;
+						while($row = mysqli_fetch_assoc($result)) {
+							$fullname = $row["fullname"];
+							$memberID = $row["memberID"];
+							if($_SESSION['memberType'] >= 2 ){
+								echo '
+									<td>
+										<a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
+											'.$fullname.'<br><br>&nbsp;</a>
+									</td>
+									';
+								$counter_row++;
+								if($counter_row == 4) {
+								echo'
+										</tr>
+									<tr>
+								';
+								$counter_row = 0;
+								}
+							}
+						}
+						echo '
+					</tr>';
+					}
+					/*if($_SESSION['memberType'] >= 2 ) {
+					echo '
+					<h3>Own Dgroup</h3>
+>>>>>>> Paolo-Edits
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
 						<tr>
 								';
@@ -678,82 +718,34 @@
 						}*/
 					?>
 
-			<!--Modal Body-->
-			<div id="view-profile" class="modal modal-fixed-footer">
-		<!--<div class="row row-profile">-->
-			<div class="col col-profile s12 card-panel z-depth-4">
-				
-							<div class="container">
-								<form method="post" class="forms" name="cpinfo" onsubmit="return submit_form('submit_cpinfo')">
-									<div id="cpinfo">
-										<div class="row">
-											<?php
-												if(isset($_GET['id'])) {
-												// database connection variables
-
-												$servername = "localhost";
-												$username = "root";
-												$password = "root";
-												$dbname = "dbccf";
-												$conn = mysqli_connect($servername, $username, $password, $dbname);
-												if (!$conn) {
-													die("Connection failed: " . mysqli_connect_error());
-												}
-												$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_GET['id'];
-												echo '<script> alert('.$_GET['id'].'); </script>';
-												$result = mysqli_query($conn, $query);
-												if(mysqli_num_rows($result) > 0) {
-													while($row = mysqli_fetch_assoc($result)) {
-														$lastname = $row["lastName"];
-														$firstname = $row["firstName"];
-														$middlename = $row["middleName"];
-														$nickname = $row["nickName"];
-														$birthdate = date("j F, Y", strtotime($row["birthdate"]));
-														if(is_null($row["birthdate"]))
-															$birthdate = "";
-														//$birthdate = $row["birthdate"];
-													}
-												}
-												echo '
-												<div class="input-field col s12">
-													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
-													<label for="Lastname">Lastname</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
-													<label for="Firstname">Firstname</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
-													<label for="Middlename">Middlename</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
-													<label for="Nickname">Nickname</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
-													<label for="Birthdate">Birthdate</label>
-												</div>
-												';
-												}
-												unset($_GET['id']);
-											?>
-											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo">SUBMIT</button>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-						
-			</div>
-			</div>
-		<!--</div>-->
-
+			
 				<!----------------------THE END------------------------>
-				
 	</body>
+	</tr>
+	</table>
+	</div>
+	</div>
+	</div>
+	</body>
+
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 
 	<script>
 		function viewProfile(page) {
@@ -930,8 +922,42 @@
 								allowOutsideClick: true
 							});
 					}
+<<<<<<< HEAD
 				})
 			}
 					
+=======
+					/*
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { //window.location here ?apr=y }
+						), 1000);
+						*/
+				});
+		}
+		
+		function seen() { // this function gets rid of the badge every after click event 
+			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
+			document.getElementById('badge').innerHTML = "Notifications";
+			setSeenRequest(); // records in the database that user has seen or read the notifications
+		}
+		
+		function setSeenRequest() {
+			var xhttp;
+			xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("response").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("POST", "globalfunctions.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send("seen");
+		}
+>>>>>>> Jasper-Edits
 	</script>
 </html>

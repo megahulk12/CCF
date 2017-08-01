@@ -62,8 +62,8 @@
 		}
 
 		nav {
-			/*position: fixed;
-			top: 0; this is responsible for fixed nav bars */
+			position: fixed;
+			top: 0; /* this is responsible for fixed nav bars */
 			color: #777;
 			background-color: #fff;
 			width: 100%;
@@ -72,10 +72,10 @@
 			z-index: 2;
 		}
 
-		/* this is responsible for fixed nav bars 
+		/* this is responsible for fixed nav bars */
 		body {
 			margin-top: 150px;
-		}*/
+		}
 		
 		li a:hover {
 			color: #16A5B8;
@@ -192,6 +192,11 @@
 			box-sizing: border-box;
 			padding: 0; /*padding of the contents of card-panel*/
 			min-height: 1px;
+		}
+
+		.error {
+			color: #ff3333;
+			margin-left: 43;
 		}
 		/*=======END=======*/
 
@@ -528,7 +533,32 @@
 		.extend {
 			max-height: 350px !important;
 		}
+
+		/*tables*/
+		table.cursor > tbody > tr:hover {
+			cursor: hand;
+		}
+
+		td.choose {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal hightlight bar*/
+		}
 		/* ============================END=========================== */  
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 20px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -606,7 +636,8 @@
 		}
 
 		function removeActives() {
-			for(var i = 1; i <= 4; i++) {
+			var no_of_side_nav_links = $(".sidenav a").length;
+			for(var i = 1; i <= no_of_side_nav_links; i++) {
 				document.getElementById("sidenav"+i).setAttribute("class", "waves-effect waves-light btn btn-side-nav");
 			}
 		}
@@ -641,6 +672,22 @@
 			}
 		}, false);
 		*/
+
+		function cellActive(id) { // this function allows you to highlight the table rows you select
+			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
+			var num_of_rows = document.getElementsByTagName("TR").length;
+			var rownumber = id.charAt(3);
+			for(var i = 0; i < num_of_rows; i++) {
+				//document.getElementsByTagName("TR")[i].appendChild(style);
+				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
+				document.getElementsByTagName("TR")[i].style.color = "black"
+			}
+			document.getElementById(id).style.backgroundColor = "#16A5B8";
+			document.getElementById(id).style.color = "#fff";
+			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			history.pushState(null, null, "profile.php?id="+id.split("_")[1]);
+		}
 	</script>
 
 	<header class="top-nav">
@@ -728,10 +775,11 @@
 					<tr>
 						<td class="fixed">
 							<ul class="sidenav">
-								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" href="#cpinfo" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
-								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" href="#coinfo" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
-								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav" href="#cprefer" onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a</li>
-								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav" href="#cpass" onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
+								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
+								<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
+								<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+								<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
 							</ul>
 						</td>
 						<td class="content">
@@ -1165,12 +1213,270 @@
 											echo '
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="password" id="password" data-length="16" maxlength="16">
-												<label for="password" name="lblpassword">Password</label>
-											</div>'; // originally having a value of own password
+												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
+												<label for="old-password">Old Password</label>
+												<small class="error" id="oldpass">This field is required.</small>
+												<small class="error" id="notpass">This is not your password.</small>
+											</div>
+											<div class="input-field col s12">
+												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
+												<label for="new-password">New Password</label>
+												<small class="error" id="newpass">This field is required.</small>
+												<small class="error" id="checkoldnew">Cannot use old password.</small>
+											</div>
+											<div class="input-field col s12">
+												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
+												<label for="confirm-password">Confirm New Password</label>
+												<small class="error" id="confirmpass">This field is required.</small>
+												<small class="error" id="checkpass">Passwords do not match.</small>
+											</div>
+											'; // originally having a value of own password
 											?>
 											<div class="row">
 												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
+											</div>
+										</div>
+									</div>
+								</form>
+								<form method="post" id="fregister">
+									<div id="register" style="display: none;">
+										<div class="row">
+											<div id="register_page1">
+												<h3 class="center">Other Information</h3>
+												<div class="input-field col s12">
+													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+													<label for="Citizenship">Citizenship</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
+													<label for="EmailAd" data-error="Invalid email address">Email Address</label>
+												</div>
+												<h4 class="center">Home</h4>
+												<div class="input-field col s12">
+													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+													<label for="HomeAddress" style=" font-size:14px;">Address</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+													<label for="HomePhoneNumber">Home Phone Number</label>
+												</div>
+												<h4 class="center">Company</h4>
+												<div class="input-field col s12">
+													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+													<label for="CompanyContactNum">Company Contact Number</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+													<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
+												</div>
+												<h4 class="center">School</h4>
+												<div class="input-field col s12">
+													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+													<label for="SchoolContactNum">School Contact Number</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+													<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
+												</div>
+												<h4 class="center">Spouse</h4>
+												<div class="input-field col s12">
+													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+													<label for="SpouseName">Spouse Name</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+												</div>
+												<div class="input-field col s12">
+													<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+													<label for="SpouseBirthdate">Birthdate</label>
+												</div>
+											</div>
+
+											<div id="register_page2" style="display: none;">
+												<h3 class="center">Preferences</h3>
+												<div class="input-field col s12">
+													<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
+													<label for="Language">Language</label>
+												</div>
+												<h4 class="center">Schedule</h4>
+												<h5 class="center">Option 1</h5>
+												<div class="row" style="margin: 0;">
+													<div class="input-field col s12">
+														<select id="Option1Day" name="Option1Day">
+															<option value="" disabled selected>Choose your option...</option>
+															<option value="Sunday">Sunday</option>
+															<option value="Monday">Monday</option>
+															<option value="Tuesday">Tuesday</option>
+															<option value="Wednesday">Wednesday</option>
+															<option value="Thursday">Thursday</option>
+															<option value="Friday">Friday</option>
+															<option value="Saturday">Saturday</option>
+														</select>
+														<label>Day</label>
+													</div>
+												</div>
+													<div class="input-field col s6">
+														<label for="timepicker1opt1">Start Time</label>
+														<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+													</div>
+													<div class="input-field col s6 right">
+														<label for="timepicker2opt1">End Time</label>
+														<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+													</div>
+												<div class="input-field col s12">
+													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+												</div>
+												<h5 class="center">Option 2</h5>
+												<div class="row" style="margin: 0;">
+													<div class="input-field col s12">
+														<select id="Option2Day" name="Option2Day">
+															<option value="" disabled selected>Choose your option...</option>
+															<option value="Sunday">Sunday</option>
+															<option value="Monday">Monday</option>
+															<option value="Tuesday">Tuesday</option>
+															<option value="Wednesday">Wednesday</option>
+															<option value="Thursday">Thursday</option>
+															<option value="Friday">Friday</option>
+															<option value="Saturday">Saturday</option>
+														</select>
+														<label>Day</label>
+													</div>
+												</div>
+													<div class="input-field col s6">
+														<label for="timepicker1opt2">Start Time</label>
+														<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+													</div>
+													<div class="input-field col s6">
+														<label for="timepicker2opt2">End Time</label>
+														<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+													</div>
+												<div class="input-field col s12">
+													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+													<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+												</div>
+											</div>
+
+											<div id="register_page3" style="display: none;">
+												<div class="input-field col s12">
+													<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+													<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
+												</div>
+												<div class="input-field col s12">
+													<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
+													<label for="attendCCF">How long you have been attending CCF?</label>
+												</div>
+												<div class="input-field col s12">
+													<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+													<label for="regularlyAttendsAt">Where do you regularly attend?</label>
+												</div>
+											</div>
+											<div id="register_page4" style="display: none;">
+												<h3 class="center">Choose a Dgroup Leader</h3>
+												<table class="cursor centered" id="table" style="margin-bottom: 20px;">
+													<thead>
+														<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
+														<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
+														<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
+														<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
+														<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+														<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
+													</thead>
+													<?php
+														// database connection variables
+
+														$servername = "localhost";
+														$username = "root";
+														$password = "root";
+														$dbname = "dbccf";
+
+														$conn = mysqli_connect($servername, $username, $password, $dbname);
+														if (!$conn) {
+															die("Connection failed: " . mysqli_connect_error());
+														}
+
+														/*
+														function countDgroups() {
+															$conn = mysqli_connect($servername, $username, $password, $dbname);
+															if (!$conn) {
+																die("Connection failed: " . mysqli_connect_error());
+															}
+
+															$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
+															$result = mysqli_query($conn, $sql);
+															if(mysqli_num_rows($result) > 0){
+																while($row = mysqli_fetch_assoc($result)){
+																	$count = $row["numOfDgroup"];
+																}
+															}
+														}*/
+
+														$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
+																		CASE
+																			WHEN gender = '0' THEN 'Male'
+																			ELSE 'Female'
+																		END) AS gender,
+																		(SELECT CASE
+																			WHEN dgroupType = '0' THEN 'Youth'
+																			WHEN dgroupType = '1' THEN 'Singles'
+																			WHEN dgroupType = '2' THEN 'Single Parents'
+																			WHEN dgroupType = '3' THEN 'Married'
+																			WHEN dgroupType = '4' THEN 'Couples'
+																		END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+														$result = mysqli_query($conn, $sql_dgroups);
+														if(mysqli_num_rows($result) > 0) {
+															$count = 1;
+															while($row = mysqli_fetch_assoc($result)) {
+																echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
+																$dgroupid = $row["dgroupID"];
+																$fullname = $row["fullname"];
+																$gender = $row["gender"];
+																$dgrouptype = $row["dgroupType"];
+																$schedday = $row["schedDay"];
+																$schedule = $row["schedule"];
+																echo '<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
+																<td class="choose">'.$fullname.'</td>
+																<td class="choose">'.$gender.'</td>
+																<td class="choose">'.$dgrouptype.'</td>
+																<td class="choose">'.$schedday.'</td>
+																<td class="choose">'.$schedule.'</td>';
+																echo '</tr>';
+																$count++;
+															}
+														}
+														echo ' ';
+													?>
+													<!--
+													<tr id="row1" onclick="cellActive('row1')">
+														<td>Sample 1</td>
+														<td>Sample 1</td>
+														<td>Sample 1</td>
+														<td>Sample 1</td>
+													</tr>
+													<tr id="row2" onclick="cellActive('row2')">
+														<td>Sample 2</td>
+														<td>Sample 2</td>
+														<td>Sample 2</td>
+														<td>Sample 2</td>
+													</tr>
+													<tr id="row3" onclick="cellActive('row3')">
+														<td>Sample 3</td>
+														<td>Sample 3</td>
+														<td>Sample 3</td>
+														<td>Sample 3</td>
+													</tr>
+													-->
+												</table>
+											</div>
+											<div class="row">
+												<div class="progress col s6 left" style=" margin-left: 3.3%;">
+													<div class="determinate" style="" id="register_progressbar"></div>
+												</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
+												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
 											</div>
 										</div>
 									</div>
@@ -1183,20 +1489,36 @@
 		</div>
 	</body>
 
-	<footer>
+	<main>
+	</main>
+	
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
 	</footer>
 
 	<script>
 	"use strict";
-		var currentpage = 1, no_of_pages = 2, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		var currentpage = 1, no_of_pages = 0, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 		function setNavPage(navpage, num_of_pages) {
+			// sets number of pages
+			no_of_pages = num_of_pages;
+
 			// re-initialize every after visit of side navigation page
 			currentpage = 1;
 			percentage=(currentpage/no_of_pages)*100;
 			currentprogress=percentage;
-
-			// sets number of pages
-			no_of_pages = num_of_pages;
 
 			// initialization of profress bar controls
 			document.getElementById(navpage+'_page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
@@ -1305,45 +1627,60 @@
 				document.getElementById('coinfo').style.display = "none";
 				document.getElementById('cprefer').style.display = "none";
 				document.getElementById('cpass').style.display = "none";
+				document.getElementById('register').style.display = "none";
 			}
 			else if (page == 2) {
 				document.getElementById('cpinfo').style.display = "none";
 				document.getElementById('coinfo').style.display = "inline";
 				document.getElementById('cprefer').style.display = "none";
 				document.getElementById('cpass').style.display = "none";
+				document.getElementById('register').style.display = "none";
 			}
 			else if (page == 3) {
 				document.getElementById('cpinfo').style.display = "none";
 				document.getElementById('coinfo').style.display = "none";
 				document.getElementById('cprefer').style.display = "inline";
 				document.getElementById('cpass').style.display = "none";
+				document.getElementById('register').style.display = "none";
 			}
 			else if (page == 4) {
 				document.getElementById('cpinfo').style.display = "none";
 				document.getElementById('coinfo').style.display = "none";
 				document.getElementById('cprefer').style.display = "none";
 				document.getElementById('cpass').style.display = "inline";
+				document.getElementById('register').style.display = "none";
+			}
+			else if (page == 5) {
+				document.getElementById('cpinfo').style.display = "none";
+				document.getElementById('coinfo').style.display = "none";
+				document.getElementById('cprefer').style.display = "none";
+				document.getElementById('cpass').style.display = "none";
+				document.getElementById('register').style.display = "inline";
 			}
 		}
 
+		var validated = false;
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
-				var url="update_profile.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
-					success: function(data) {
-						swal({
-							title: "Success!",
-							text: "Profile Updated!",
-							type: "success",
-							allowEscapeKey: true,
-							allowOutsideClick: true,
-							timer: 10000
-						});
-					}
-				});
+				if(validated) {
+					var url="update_profile.php";
+					$.ajax({
+						type: "POST",
+						url: url,
+						data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
+						success: function(data) {
+							swal({
+								title: "Success!",
+								text: "Profile Updated!",
+								type: "success",
+								allowEscapeKey: true,
+								allowOutsideClick: true,
+								timer: 10000
+							});
+						}
+					});
+					validated = false; // re-initialize validated variable
+				}
 				e.preventDefault();
 			});
 			/*
@@ -1523,5 +1860,100 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		$('.error').hide(); // by default, hide all error classes
+
+		// personal info form validation
+		$("#submit_cpinfo").click(function() {
+			$('.error').hide();
+			var lastname = $("#Lastname").val();
+			var firstname = $("#Firstname").val();
+			var middlename = $("#Middlename").val();
+			var nickname = $("#Nickname").val();
+			var birthdate = $("#Birthdate").val();
+
+			if(lastname=="")
+		});
+
+		// change password form validation
+		$("#submit_cpass").click(function() {
+			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			var oldpass = $("#old-password").val();
+			var newpass = $("#new-password").val();
+			var confirmpass = $("#confirm-password").val();
+			var checkoldnew = true, checknewpass = true, checkoldpass = true;
+
+			//password form
+
+			// ===== CHECKS IF INPUTS ARE BLANK =====
+			if(confirmpass=="") {
+				$("small#confirmpass").show();
+				$("input#confirm-password").focus();
+			}
+
+			if(oldpass==newpass) {
+				$("small#checkoldnew").show();
+				$("input#new-password").focus();
+				checkoldnew = false;
+			}
+
+			if(newpass=="") {
+				$("small#checkoldnew").hide();
+				$("small#newpass").show();
+				$("input#new-password").focus();
+			}
+
+			if(oldpass=="") {
+				$("small#oldpass").show();
+				$("input#old-password").focus();
+			}
+			// ===== END =====
+
+			if(confirmpass!=newpass) {
+				$("small#confirmpass").hide();
+				$("small#checkpass").show();
+				$("input#confirm-password").focus();
+				checknewpass = false;
+			}
+
+			var url="check.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				async: false, // remove if there is bad user experience
+				data: $('#fcpass').serialize(),
+				success: function(data) {
+					if(data == 0) {
+						if(oldpass=="")
+							$("small#oldpass").show();
+						else
+							$("small#notpass").show();
+						$("input#old-password").focus();
+					}
+					else {
+						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
+							validated = true;
+						}
+					}
+				}
+			});
+		});
+
+		/*
+
+		function checkOldPass() {
+		}
+
+		function setCheckOldPass() {
+			checkOldPass().done(function(data) {
+				checkoldpass = false;
+			});
+		}
+
+		function confirmValidated() {
+			if(checkoldpass)
+				validated = true;
+		}
+		*/
 	</script>
 </html>

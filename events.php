@@ -330,6 +330,18 @@
 			padding-top: 15px;
 		}
 		/* ===============END=============== */
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -364,7 +376,7 @@
 		  	<li class="divider"></li>
 		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li
 		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 		  	<li class="divider"></li>
 		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  	<li class="divider"></li>
@@ -652,6 +664,25 @@
 		</div>
 	</body>
 
+	<main>
+	</main>	
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+
 	<script>
 	// initialize
 	var $container = jQuery('.container-events');
@@ -662,6 +693,20 @@
 		masonry: {
 			columnWidth: 20
 		}
+	});
+
+	$(window).resize(function() { // in every event of zoom in/out, isotope re-initializes
+		var $container = jQuery('.container-events');
+		setTimeout(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		}, 500);
 	});
 
 	// re-initialize
