@@ -92,8 +92,14 @@
 		/* ===== FONTS =====*/
 		@font-face {
 			font-family: proxima-nova;
-			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
+			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.OTF);
 			font-weight: bold;
+		}
+
+		@font-face {
+			font-family: proxima-nova-extrabold;
+			src: url(ccf-fonts/proxima/PROXIMANOVA-EXTRABOLD.OTF);
+			font-weight: 800;
 		}
 		/* ===== END ===== */
 
@@ -246,8 +252,19 @@
 		}
 		*/
 
-		.cover {
+		.cover, .cover span {
+			margin-top: 120px;
+			font-family: proxima-nova-extrabold;
+			font-size: 5rem;
 			font-weight: 800;
+			line-height: 5rem;
+			color: #fff;
+		}
+
+		.cover-content, .cover-content span {
+			font-family: sans-serif;
+			font-size: 17px;
+			color: #fff;
 		}
 
 		.parallax-container {
@@ -393,9 +410,19 @@
 	<body>
 		<div id="response"></div>
 		<div class="parallax-container">
+			<p class="cover center"> <!-- always enclose span tag -->
+				<span>Y O U <br></span>
+				<span>HAVE <br></span>
+				<span>Y O U <br></span>
+				<span>C A N <br></span>
+				<br>
+				<span>#GoServe</span>
+			</p>
+			<p class="cover-content center">
+				<span>Make the most out of every opportunity that the Lord gives you to volunteer where you can and while you can.</span>
+			</p>
 			<div class="parallax">
 				<img src="resources/GoServe2017_Background-04-1.jpg">
-
 			</div>
 		</div>
 		<div class="section white">
@@ -577,5 +604,14 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		// cover transition
+		$(document).ready(function() {
+			var cover = $(".parallax-container span");
+			cover.hide();
+			cover.each(function(i) {
+				$(this).delay(i*600).fadeIn(500);
+			});
+		});
 	</script>
 </html>
