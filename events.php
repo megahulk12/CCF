@@ -70,6 +70,10 @@
 			height: 97px;
 			line-height: 97px;
 			z-index: 1;
+			/*
+			box-shadow: none;
+			border-bottom: 0.5px solid rgba(0,0,0,0.2);
+			*/
 		}
 		
 		li a:hover {

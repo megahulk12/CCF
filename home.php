@@ -124,7 +124,7 @@
 
 		.parallax-container {
 			height: 100%;
-			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
+			/*background-color: rgba(216, 216, 216, 0.48); /* fading opacity filter effect*/
 		}
 
 		.parallax-container img {
