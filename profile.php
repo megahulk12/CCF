@@ -820,27 +820,27 @@
 												<div class="input-field col s12">
 													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
 													<label for="Lastname">Last Name</label>
-													<small class="error" id="lastname-required">This field is required.</small>
+													<small class="error" id="lastname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
 													<label for="Firstname">First Name</label>
-													<small class="error" id="firstname-required">This field is required.</small>
+													<small class="error" id="firstname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
 													<label for="Middlename">Middle Name</label>
-													<small class="error" id="middlename-required">This field is required.</small>
+													<small class="error" id="middlename-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
-													<small class="error" id="nickname-required">This field is required.</small>
+													<small class="error" id="nickname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
 													<label for="Birthdate">Birthdate</label>
-													<small class="error" id="birthdate-required">This field is required.</small>
+													<small class="error" id="birthdate-required"></small>
 												</div>
 												';
 											?>
@@ -1881,6 +1881,10 @@
 		============================================================
 		*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('div#cpinfo small').text('This field is required.');
+		});
 
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
@@ -1923,7 +1927,7 @@
 
 		$("#submit_coinfo").click(function() {
 			$('.error').hide();
-
+			
 		});
 
 		// change password form validation
@@ -1990,22 +1994,5 @@
 				}
 			});
 		});
-
-		/*
-
-		function checkOldPass() {
-		}
-
-		function setCheckOldPass() {
-			checkOldPass().done(function(data) {
-				checkoldpass = false;
-			});
-		}
-
-		function confirmValidated() {
-			if(checkoldpass)
-				validated = true;
-		}
-		*/
 	</script>
 </html>
