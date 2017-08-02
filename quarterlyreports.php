@@ -40,6 +40,10 @@
 			margin-top: 10px;
 		}
 
+		body {
+			margin-top: 150px;
+		}
+
 		/*
 		colors in materliaze:
 		#ee6e73
@@ -60,40 +64,6 @@
 			height: 97px;
 			line-height: 97px;
 			z-index: 2;
-			transition: background-color 0.3s, box-shadow 0.3s; /* for transition purposes */
-		}
-
-		 /*Note: for rectangle background in navbar same sa original site
-		.nav-container-transition {
-			padding: 0 40;
-			background-color: rgba(233, 233, 233, 0.4);
-			transition: all 0.3s;
-		}*/
-
-		.transition {
-			background-color: transparent;
-			box-shadow: none;
-			transition: background-color 0.3s;
-		}
-
-		header a.transition, .dropdown-content li > a.transition, .dropdown-content li > h6.transition {
-			color: #fff;
-			transition: color 0.3s;
-		}
-
-		header a.transition:hover {
-			color: rgba(233, 233, 233, 0.7);
-			transition: color 0.3s;
-		}
-
-		.dropdown-content li.transition:hover {
-			background-color: rgba(233, 233, 233, 0.15);
-			transition: background-color 0.3s;
-		}
-
-		header > ul.transition, header ul li ul.transition {
-			background-color: rgba(255, 255, 255, 0.1);
-			transition: background-color 0.3s;
 		}
 
 		li a:hover {
@@ -265,18 +235,15 @@
 		*/
 
 		.cover, .cover span {
-			position: relative;
-			top: 50;
+			margin-top: 120px;
 			font-family: proxima-nova-extrabold;
 			font-size: 5rem;
 			font-weight: 800;
-			line-height: 4rem;
+			line-height: 5rem;
 			color: #fff;
 		}
 
 		.cover-content, .cover-content span {
-			position: relative;
-			top: 50;
 			font-family: sans-serif;
 			font-size: 1.4rem;
 			color: #fff;
@@ -288,7 +255,7 @@
 		}
 
 		.parallax-container img {
-			width: 100%; /* responsible for fitting the image in parallax */
+			width: 100%;
 		}
 		/* ===== FOOTER ===== */
 		.page-footer {
@@ -310,71 +277,87 @@
 			display: inline;
 		}
 		/* ===== END ===== */
+
+		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
+		/* input custom colors*/
+		/*Text inputs*/
+		input:not([type]):focus:not([readonly]),
+		input[type=text]:focus:not([readonly]),
+		input[type=password]:focus:not([readonly]),
+		input[type=email]:focus:not([readonly]),
+		input[type=url]:focus:not([readonly]),
+		input[type=time]:focus:not([readonly]),
+		input[type=date]:focus:not([readonly]),
+		input[type=datetime]:focus:not([readonly]),
+		input[type=datetime-local]:focus:not([readonly]),
+		input[type=tel]:focus:not([readonly]),
+		input[type=number]:focus:not([readonly]),
+		input[type=search]:focus:not([readonly]),
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		input:not([type]):focus:not([readonly])+label,
+		input[type=text]:focus:not([readonly])+label,
+		input[type=password]:focus:not([readonly])+label,
+		input[type=email]:focus:not([readonly])+label,
+		input[type=url]:focus:not([readonly])+label,
+		input[type=time]:focus:not([readonly])+label,
+		input[type=date]:focus:not([readonly])+label,
+		input[type=datetime]:focus:not([readonly])+label,
+		input[type=datetime-local]:focus:not([readonly])+label,
+		input[type=tel]:focus:not([readonly])+label,
+		input[type=number]:focus:not([readonly])+label,
+		input[type=search]:focus:not([readonly])+label,
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+
+		/*===============BUTTONS===============*/
+
+		/*=====FORM BUTTONS=====*/
+		.btn, .btn-large {
+		  text-decoration: none;
+		  color: #777;
+		  background-color: #ebebeb;
+		  text-align: center;
+		  letter-spacing: .5px;
+		  transition: .2s ease-out;
+		  cursor: pointer;
+		  font-family: proxima-nova;
+		  font-size: 13px;
+		  /*border-radius: 20px;*/
+		}
+
+		.fixbutton {
+		  	background-color: #16A5B8;
+		  	color: #fff;
+		  	margin-right: 10px;
+		}
+
+		/*hover of button*/
+		.btn:hover, .btn-large:hover {
+			background-color: #1bcde4;
+			color: #fff;
+		}
+
+		/*focus of button*/
+		.btn:focus, .btn-large:focus,
+		.btn-floating:focus {
+		  	background-color: #1bcde4;
+		}
+		/* ============================END=========================== */ 
 	</style>
 
 	<script type="text/javascript">
-		$(document).ready(function(){
-			$('.parallax').parallax();
-		});
-        
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		});
-
-		// navbar initial state
-		$(document).ready(function() {
-			$('nav').addClass('transition');
-			//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
-			$('header a').addClass('transition');
-			$('header ul').addClass('transition');
-			$('header ul li ul').addClass('transition');
-			/* code for hiding dropdown links 
-			$('a.dropdown-button').hide();
-			$('ul.dropdown-content').hide();
-			$('.dropdown-button').dropdown('close');
-			*/
-			$('header > a').addClass('transition');
-			$('.dropdown-content li').addClass('transition');
-			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
-			$('nav a img').attr('src', "resources/CCF Logos8.png");
-		});
-
-		// navbar scroll state
-		window.addEventListener("scroll", function() {
-			if(window.scrollY > 10) {
-				$('nav').removeClass('transition');
-				//$('nav div.container').removeClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
-				$('header a').removeClass('transition');
-				$('header ul').removeClass('transition');
-				$('header ul li ul').removeClass('transition');
-				/* code for showing dropdown links
-				$('a.dropdown-button').show(300);
-				*/
-				$('header > a').removeClass('transition');
-				$('.dropdown-content li').removeClass('transition');
-				$('.dropdown-content li > a, .dropdown-content li > h6').removeClass('transition');
-				$('nav a img').attr('src', "resources/CCF Logos6.png");
-			}
-			else {
-				$('nav').addClass('transition');
-				//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
-				$('header a').addClass('transition');
-				$('header ul').addClass('transition');
-				$('header ul li ul').addClass('transition');
-				/* code for hiding dropdown links 
-				$('a.dropdown-button').hide();
-				$('ul.dropdown-content').hide();
-				$('.dropdown-button').dropdown('close');
-				*/
-				$('header > a').addClass('transition');
-				$('.dropdown-content li').addClass('transition');
-				$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
-				$('nav a img').attr('src', "resources/CCF Logos8.png");
-			}
-		}, false);
 	</script>
+
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
@@ -439,7 +422,7 @@
 		<nav style="margin-bottom: 50px;" class="transition">
 			<div class="container nav-container-transition">
 			    <div class="nav-wrapper">
-			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos8" id="logo"/></a>
+			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 						<li><a href="events.php" class="transition">EVENTS</a></li>
 						<li><a href="ministry.php" class="transition">MINISTRIES</a></li>
@@ -453,27 +436,42 @@
 
 	<body>
 		<div id="response"></div>
-		<div class="parallax-container">
-			<p class="cover center"> <!-- always enclose span tag -->
-				<span>Y O U <br></span>
-				<span>HAVE <br></span>
-				<span>Y O U <br></span>
-				<span>C A N <br></span>
-				<br>
-				<span>#GoServe</span>
-				<p class="cover-content center">
-					<span>Make the most out of every opportunity that the Lord gives you to volunteer where you can and while you can.</span>
-				</p>
-			</p>
-			<div class="parallax">
-				<img src="resources/GoServe2017_Background-04-1.jpg">
+		<div class="container">
+			<div class="row">
+				<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit">Generate A Report</button>
 			</div>
-		</div>
-		<div class="section white">
-			<div class="row container">
-				<h2 class="header">Parallax</h2>
-				<p class="grey-text text-darken-3 lighten-3">Parallax is an effect where the background content or image in this case, is moved at a different speed than the foreground content while scrolling.</p>
-			</div>
+			<table class="centered">
+				<thead>
+					<tr>
+						<th>Dgroup Leader</th>
+						<th>Type of Dgroup</th>
+						<th>Schedule</th>
+						<th>List of Members</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+					</tr>
+					<tr>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+					</tr>
+					<tr>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+						<td>Sample</td>
+					</tr>
+				</tbody>
+				<tfoot>
+				</tfoot>
+			</table>
 		</div>
 	</body>
 
@@ -495,74 +493,6 @@
 			</div>
 		</div>
 	</footer>
-	<?php 
-		/*if(isset($_POST['submit'])) {
-			echo '
-				<script>
-				// for congratulations of being a dgroup leader
-					swal({
-						title: "Congratulations!",
-						text: "You are now a Dgroup leader! :)",
-						type: "success",
-						allowEscapeKey: true,
-						timer: 10000
-					});
-				</script>
-			';
-		}*/
-
-		if(getWelcome() == 0)  {
-			echo '
-			<script>
-			$(document).ready(function() {
-				// to inform that you have been registered
-				swal({
-					title: "Welcome to CCF!",
-					text: "Thank you for filling up the registration form!\nFeel free to explore this website and God bless! :)",
-					timer: 10000,
-					confirmButtonText: "OK"
-				});
-			});
-			</script>
-			';
-			setWelcome();
-		}
-
-		function getWelcome() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql = "SELECT welcome FROM member_tbl WHERE memberID = ".$_SESSION["userid"];
-			$result = mysqli_query($conn, $sql);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$welcome = $row["welcome"];
-				}
-			}
-			return $welcome;
-		}
-
-		function setWelcome() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$sql = "UPDATE member_tbl SET welcome = 1 WHERE memberID = ".$_SESSION["userid"];
-			mysqli_query($conn, $sql);
-		}
-	?>
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
@@ -650,22 +580,5 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
-
-		// cover transition
-		$(document).ready(function() {
-			var cover = $(".parallax-container span");
-			var ticker = 0;
-			cover.hide();
-			cover.each(function(i) { //3
-				if(i%2==0) {
-					ticker += 1000;
-					$(this).delay(ticker).fadeIn(500); //1800
-				}
-				else {
-					ticker += 400;
-					$(this).delay(ticker).fadeIn(500); //1800
-				}
-			});
-		});
 	</script>
 </html>
