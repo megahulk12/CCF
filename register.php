@@ -88,7 +88,6 @@
 			echo 'alert("Username is Already Taken, Sorry")';
 		}
 		*/
-		
 		else{
 
 			$companyIDField = "";
@@ -200,128 +199,127 @@
 			header("Location: index.php");
 			exit();
 		}
-
-		function getCompanyID($checkCompanyID) { // gets the recently added company id
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$companyID = $row["companyID"];
-				}
-			}
-			if($checkCompanyID)
-				return $companyID;
-			else
-				return "NULL";
-		}
-
-		function getSchoolID($checkSchoolID) { // gets the recently added school id
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$schoolID = $row["schoolID"];
-				}
-			}
-			if($checkSchoolID)
-				return $schoolID;
-			else
-				return "NULL";
-		}
-
-		function getSpouseID($checkSpouseID) { // gets the recently added company id
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$spouseID = $row["spouseID"];
-				}
-			}
-			if($checkSpouseID)
-				return $spouseID;
-			else
-				return "NULL";
-		}
-
-		function getPreferenceID($checkPreferenceID) { // gets the recently added company id
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT prefID FROM preferencedetails_tbl ORDER BY prefID DESC LIMIT 1";
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$preferenceID = $row["prefID"];
-				}
-			}
-			if($checkPreferenceID)
-				return $preferenceID;
-			else
-				return "NULL";
-		}
-
-		function getMemberID($checkMemberID) { // gets the recently added member id
-			// database connection variables
-
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
-			$result = mysqli_query($conn, $query);
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$memberID = $row["memberID"];
-				}
-			}
-			if($checkMemberID)
-				return $memberID;
-			else
-				return "NULL";
-		}
 	}
-	
+
+	function getCompanyID($checkCompanyID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT companyID FROM companydetails_tbl ORDER BY companyID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$companyID = $row["companyID"];
+			}
+		}
+		if($checkCompanyID)
+			return $companyID;
+		else
+			return "NULL";
+	}
+
+	function getSchoolID($checkSchoolID) { // gets the recently added school id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT schoolID FROM schooldetails_tbl ORDER BY schoolID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schoolID = $row["schoolID"];
+			}
+		}
+		if($checkSchoolID)
+			return $schoolID;
+		else
+			return "NULL";
+	}
+
+	function getSpouseID($checkSpouseID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$spouseID = $row["spouseID"];
+			}
+		}
+		if($checkSpouseID)
+			return $spouseID;
+		else
+			return "NULL";
+	}
+
+	function getPreferenceID($checkPreferenceID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT prefID FROM preferencedetails_tbl ORDER BY prefID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$preferenceID = $row["prefID"];
+			}
+		}
+		if($checkPreferenceID)
+			return $preferenceID;
+		else
+			return "NULL";
+	}
+
+	function getMemberID($checkMemberID) { // gets the recently added member id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT memberID FROM member_tbl ORDER BY memberID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$memberID = $row["memberID"];
+			}
+		}
+		if($checkMemberID)
+			return $memberID;
+		else
+			return "NULL";
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
