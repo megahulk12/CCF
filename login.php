@@ -171,6 +171,7 @@
 			border-color: rgba(27,31,35,0.15);
 			height: 50px;
 			border-radius: 5px;
+			margin-bottom: 20px;
 		}
 
 		.close-error {
