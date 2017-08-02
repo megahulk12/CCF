@@ -194,9 +194,13 @@
 			min-height: 1px;
 		}
 
-		.error {
+		.error-with-icon {
 			color: #ff3333;
 			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
 		}
 		/*=======END=======*/
 
@@ -816,22 +820,27 @@
 												<div class="input-field col s12">
 													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
 													<label for="Lastname">Last Name</label>
+													<small class="error" id="lastname-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
 													<label for="Firstname">First Name</label>
+													<small class="error" id="firstname-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
 													<label for="Middlename">Middle Name</label>
+													<small class="error" id="middlename-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
+													<small class="error" id="nickname-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
 													<label for="Birthdate">Birthdate</label>
+													<small class="error" id="birthdate-required">This field is required.</small>
 												</div>
 												';
 											?>
@@ -1215,22 +1224,22 @@
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
 												<label for="old-password">Old Password</label>
-												<small class="error" id="oldpass">This field is required.</small>
-												<small class="error" id="notpass">This is not your password.</small>
+												<small class="error-with-icon" id="oldpass">This field is required.</small>
+												<small class="error-with-icon" id="notpass">This is not your password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
 												<label for="new-password">New Password</label>
-												<small class="error" id="newpass">This field is required.</small>
-												<small class="error" id="checkoldnew">Cannot use old password.</small>
+												<small class="error-with-icon" id="newpass">This field is required.</small>
+												<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
 												<label for="confirm-password">Confirm New Password</label>
-												<small class="error" id="confirmpass">This field is required.</small>
-												<small class="error" id="checkpass">Passwords do not match.</small>
+												<small class="error-with-icon" id="confirmpass">This field is required.</small>
+												<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
 											</div>
 											'; // originally having a value of own password
 											?>
@@ -1659,7 +1668,7 @@
 			}
 		}
 
-		var validated = false;
+		var validated = false, cpass = false;
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
@@ -1677,6 +1686,9 @@
 								allowOutsideClick: true,
 								timer: 10000
 							});
+							if(cpass) {
+								$('div#cpass input').val("");
+							}
 						}
 					});
 					validated = false; // re-initialize validated variable
@@ -1861,7 +1873,14 @@
 			xhttp.send("seen");
 		}
 
-		$('.error').hide(); // by default, hide all error classes
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
@@ -1872,11 +1891,43 @@
 			var nickname = $("#Nickname").val();
 			var birthdate = $("#Birthdate").val();
 
+			if(birthdate==""){
+				$('small#birthdate-required').show();
+				$('#Birthdate').focus();
+			}
+
+			if(nickname==""){
+				$('small#nickname-required').show();
+				$('#Nickname').focus();
+			}
+			
+			if(middlename==""){
+				$('small#middlename-required').show();
+				$('#Middlename').focus();
+			}
+			
+			if(firstname==""){
+				$('small#firstname-required').show();
+				$('#Firstname').focus();
+			}
+			
+			if(lastname==""){
+				$('small#lastname-required').show();
+				$('#Lastname').focus();
+			}
+
+			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&firstname!="")
+				validated = true;
+		});
+
+		$("#submit_coinfo").click(function() {
+			$('.error').hide();
+
 		});
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
-			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			$('.error-with-icon').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
@@ -1932,6 +1983,7 @@
 					else {
 						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
 							validated = true;
+							cpass = true;
 						}
 					}
 				}
