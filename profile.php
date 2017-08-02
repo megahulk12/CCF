@@ -1916,8 +1916,9 @@
 				$('#Lastname').focus();
 			}
 
-			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&firstname!="")
+			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&lastname!="") {
 				validated = true;
+			}
 		});
 
 		$("#submit_coinfo").click(function() {
