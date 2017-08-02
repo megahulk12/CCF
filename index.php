@@ -265,7 +265,8 @@
 		*/
 
 		.cover, .cover span {
-			margin-top: 120px;
+			position: relative;
+			top: 50;
 			font-family: proxima-nova-extrabold;
 			font-size: 5rem;
 			font-weight: 800;
@@ -274,6 +275,8 @@
 		}
 
 		.cover-content, .cover-content span {
+			position: relative;
+			top: 50;
 			font-family: sans-serif;
 			font-size: 1.4rem;
 			color: #fff;
@@ -285,7 +288,7 @@
 		}
 
 		.parallax-container img {
-			width: 100%;
+			width: 100%; /* responsible for fitting the image in parallax */
 		}
 		/* ===== FOOTER ===== */
 		.page-footer {
@@ -372,7 +375,6 @@
 			}
 		}, false);
 	</script>
-
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
@@ -512,13 +514,15 @@
 		if(getWelcome() == 0)  {
 			echo '
 			<script>
-			// to inform that you have been registered
+			$(document).ready(function() {
+				// to inform that you have been registered
 				swal({
 					title: "Welcome to CCF!",
 					text: "Thank you for filling up the registration form!\nFeel free to explore this website and God bless! :)",
 					timer: 10000,
 					confirmButtonText: "OK"
 				});
+			});
 			</script>
 			';
 			setWelcome();
