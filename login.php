@@ -164,6 +164,36 @@
 			width:300px;
 			margin-top: 25%;
 		}
+
+		.error {
+			background-color: #ffdce0;
+			color: #86181d;
+			border-color: rgba(27,31,35,0.15);
+			height: 50px;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+
+		.close-error {
+			background: none;
+			float: right;
+			padding: 16px;
+			text-align: center;
+			border: 0;
+			opacity: 0.6;
+			color: inherit;
+			cursor: pointer;
+		}
+
+		.small {
+			font-size: 1.4rem !important;
+			font-weight: bold;
+		}
+
+		.close-error:hover {
+			text-decoration: none;
+			color: #410b0e;
+		}
 		/*=======END=======*/
 		/*============================END===========================*/
 	</style>
@@ -177,9 +207,13 @@
 						<a href="home.php" tabindex="-1"><img src="resources/CCF Logos3.png" id="loginlogo"/></a>
 					</div>
 					<div class="row">
+						<div class="error col s12">
+							<a class="close-error" id="close-error"><i class="material-icons prefix small">close</i></a>
+							<p class="center">Wrong username or password.</p>
+						</div>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">account_circle</i><!-- person_outline -->
-							<input type="text" id="username" name="username">
+							<input type="text" id="username" name="username" autocomplete="off">
 							<label for="username">Username</label>
 						</div>
 						<div class="input-field col s12">
@@ -204,7 +238,14 @@
 		</footer>
 	</body>
 	<script>
-		$('form').submit(function(e) {
+		$('.error').hide();
+		$('#close-error').click(function() {
+			$('.error').fadeOut(200);
+		});
+
+		$('#login-submit').click(function(e) {
+			$('#login-submit').text('Logging In...');
+			$('button').prop("disabled", true);
 			var url="request_login.php";
 			$.ajax({
 				type: "POST",
@@ -215,13 +256,9 @@
 						window.location.href = data;
 					}
 					else {
-						swal({
-							title: "Error!",
-							text: "Wrong username or password. Please try again!",
-							type: "error",
-							allowEscapeKey: true,
-							timer: 10000
-						});
+						$('.error').show();
+						$('#login-submit').text('Login');
+						$('button').prop("disabled", false);
 					}
 				}
 			});

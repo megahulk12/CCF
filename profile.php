@@ -194,9 +194,13 @@
 			min-height: 1px;
 		}
 
-		.error {
+		.error-with-icon {
 			color: #ff3333;
 			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
 		}
 		/*=======END=======*/
 
@@ -829,22 +833,27 @@ HTML;
 												<div class="input-field col s12">
 													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
 													<label for="Lastname">Last Name</label>
+													<small class="error" id="lastname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
 													<label for="Firstname">First Name</label>
+													<small class="error" id="firstname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
 													<label for="Middlename">Middle Name</label>
+													<small class="error" id="middlename-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
 													<label for="Nickname">Nickname</label>
+													<small class="error" id="nickname-required"></small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
 													<label for="Birthdate">Birthdate</label>
+													<small class="error" id="birthdate-required"></small>
 												</div>
 												';
 											?>
@@ -906,7 +915,7 @@ HTML;
 													<label for="Gender_Female">Female</label>
 												</p>
 												<div class="input-field col s12">
-													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
+													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
 													<label for="Citizenship">Citizenship</label>
 												</div>
 												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
@@ -924,15 +933,15 @@ HTML;
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
+													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" required>
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'">
+													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
 													<label for="Profession">Profession/Occupation</label>
 												</div>';
 												?>
@@ -976,7 +985,7 @@ HTML;
 											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
+													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
 													<label for="HomeAddress">Address</label>
 												</div>
 												<div class="input-field col s12">
@@ -985,7 +994,7 @@ HTML;
 												</div>
 												<h4 class="center">Company</h4>
 												<div class="input-field col s12">
-													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
+													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
 													<label for="CompanyName">Company Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -998,7 +1007,7 @@ HTML;
 												</div>
 												<h4 class="center">School</h4>
 												<div class="input-field col s12">
-													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
+													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
 													<label for="SchoolName">School Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -1011,7 +1020,7 @@ HTML;
 												</div>
 												<h4 class="center">Spouse</h4>
 												<div class="input-field col s12">
-													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
+													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
 													<label for="SpouseName">Spouse Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -1228,22 +1237,22 @@ HTML;
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
 												<label for="old-password">Old Password</label>
-												<small class="error" id="oldpass">This field is required.</small>
-												<small class="error" id="notpass">This is not your password.</small>
+												<small class="error-with-icon" id="oldpass">This field is required.</small>
+												<small class="error-with-icon" id="notpass">This is not your password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
 												<label for="new-password">New Password</label>
-												<small class="error" id="newpass">This field is required.</small>
-												<small class="error" id="checkoldnew">Cannot use old password.</small>
+												<small class="error-with-icon" id="newpass">This field is required.</small>
+												<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
 												<label for="confirm-password">Confirm New Password</label>
-												<small class="error" id="confirmpass">This field is required.</small>
-												<small class="error" id="checkpass">Passwords do not match.</small>
+												<small class="error-with-icon" id="confirmpass">This field is required.</small>
+												<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
 											</div>
 											'; // originally having a value of own password
 											?>
@@ -1672,7 +1681,7 @@ HTML;
 			}
 		}
 
-		var validated = false;
+		var validated = false, cpass = false;
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
@@ -1690,6 +1699,9 @@ HTML;
 								allowOutsideClick: true,
 								timer: 10000
 							});
+							if(cpass) {
+								$('div#cpass input').val("");
+							}
 						}
 					});
 					validated = false; // re-initialize validated variable
@@ -1874,7 +1886,18 @@ HTML;
 			xhttp.send("seen");
 		}
 
-		$('.error').hide(); // by default, hide all error classes
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('div#cpinfo small').text('This field is required.');
+		});
 
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
@@ -1885,12 +1908,51 @@ HTML;
 			var nickname = $("#Nickname").val();
 			var birthdate = $("#Birthdate").val();
 
-			if(lastname=="")
+			if(birthdate==""){
+				$('small#birthdate-required').show();
+				$('#Birthdate').focus();
+			}
+
+			if(nickname==""){
+				$('small#nickname-required').show();
+				$('#Nickname').focus();
+			}
+			
+			if(middlename==""){
+				$('small#middlename-required').show();
+				$('#Middlename').focus();
+			}
+			
+			if(firstname==""){
+				$('small#firstname-required').show();
+				$('#Firstname').focus();
+			}
+			
+			if(lastname==""){
+				$('small#lastname-required').show();
+				$('#Lastname').focus();
+			}
+
+			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&lastname!="") {
+				validated = true;
+			}
+		});
+
+		$("#coinfo_next").click(function() {
+			$('.error').hide();
+			$('form#fcoinfo').find('input').each(function() {
+				if($(this).prop('required')) {
+					$(this).parent(".input-field").append('<small class="error" id="'+this.id+'">This field is required.</small>');
+					if(this.val() == "") {
+						$('small#'+this.id).show();
+					}
+				}
+			});
 		});
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
-			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			$('.error-with-icon').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
@@ -1946,27 +2008,11 @@ HTML;
 					else {
 						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
 							validated = true;
+							cpass = true;
 						}
 					}
 				}
 			});
 		});
-
-		/*
-
-		function checkOldPass() {
-		}
-
-		function setCheckOldPass() {
-			checkOldPass().done(function(data) {
-				checkoldpass = false;
-			});
-		}
-
-		function confirmValidated() {
-			if(checkoldpass)
-				validated = true;
-		}
-		*/
 	</script>
 </html>
