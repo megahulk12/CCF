@@ -908,6 +908,7 @@
 												<div class="input-field col s12">
 													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
 													<label for="Citizenship">Citizenship</label>
+													<small class="error" id="Citizenship-required">This field is required.</small>
 												</div>
 												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
 													<div class="input-field col s12">
@@ -926,14 +927,17 @@
 												<div class="input-field col s12">
 													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
+													<small class="error" id="MobileNumber-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
+													<small class="error" id="Email-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'">
 													<label for="Profession">Profession/Occupation</label>
+													<small class="error" id="Profession-required">This field is required.</small>
 												</div>';
 												?>
 											</div>
@@ -978,6 +982,7 @@
 												<div class="input-field col s12">
 													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
 													<label for="HomeAddress">Address</label>
+													<small class="error" id="HomeAddress-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
@@ -987,6 +992,7 @@
 												<div class="input-field col s12">
 													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
 													<label for="CompanyName">Company Name</label>
+													<small class="error" id="CompanyName-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
@@ -1000,6 +1006,7 @@
 												<div class="input-field col s12">
 													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
 													<label for="SchoolName">School Name</label>
+													<small class="error" id="SchoolName-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
@@ -1013,6 +1020,7 @@
 												<div class="input-field col s12">
 													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
 													<label for="SpouseName">Spouse Name</label>
+													<small class="error" id="SpouseName-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
@@ -1028,7 +1036,7 @@
 												<div class="progress col s6 left" style=" margin-left: 3.3%;">
 													<div class="determinate" style="" id="coinfo_progressbar"></div>
 												</div>&nbsp; &nbsp;<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next" onclick="pagination(1, 'coinfo')">NEXT</button>
+												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
 												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
 											</div>
 										</div>
@@ -1553,9 +1561,11 @@
 			document.getElementById(navpage+'_next').blur();
 			document.getElementById(navpage+'_back').blur();
 		}
+
 		function labelpage(navpage) {
 			document.getElementById(navpage+'_page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
 		}
+
 		function pagination(direction, navpage) {
 			if(direction == 0) {
 				if(currentpage == 2) {
@@ -1691,6 +1701,9 @@
 								allowOutsideClick: true,
 								timer: 10000
 							});
+							if(cpass) { // if true, every success of data val from cpass form, it clears the form
+								$('div#cpass input').val("");
+							}
 						}
 					});
 					validated = false; // re-initialize validated variable
@@ -1886,8 +1899,63 @@
 			var nickname = $("#Nickname").val();
 			var birthdate = $("#Birthdate").val();
 
-			if(lastname=="")
+			if(birthdate==""){
+				$('small#birthdate-required').show();
+				$('#Birthdate').focus();
+			}
+
+			if(nickname==""){
+				$('small#nickname-required').show();
+				$('#Nickname').focus();
+			}
+			
+			if(middlename==""){
+				$('small#middlename-required').show();
+				$('#Middlename').focus();
+			}
+			
+			if(firstname==""){
+				$('small#firstname-required').show();
+				$('#Firstname').focus();
+			}
+			
+			if(lastname==""){
+				$('small#lastname-required').show();
+				$('#Lastname').focus();
+			}
+
+			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&lastname!="") {
+				validated = true;
+			}
 		});
+
+		$("#coinfo_next").click(function() {
+			$('.error').hide();
+			var check_iteration = true;
+
+			$($('form#fcoinfo').find('input').reverse()).each(function() { // [FRONT-END] iterate to show error classes to required fields
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						alert(0);
+						$('small#'+$(this).id+'-required').show();
+						$('small#'+$(this).id+'-required').focus();
+					}
+				}
+			});
+
+			$($('form#fcoinfo').find('input').reverse()).each(function() { // [BACK-END] iterate to check blank fields before going to next pages
+					if($(this).prop('required')) {
+						if($(this).val() == "") {
+							check_iteration = false;
+						}
+					}
+				});
+
+			if(check_iteration) {
+				pagination(1, $(this).id.split("_")[0]);
+			}
+
+			});
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
