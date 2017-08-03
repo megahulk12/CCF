@@ -27,6 +27,7 @@
 
 		div {
 			display: block;
+			font-family: ;
 		}
 
 		.container {
@@ -72,27 +73,47 @@
 		.transition {
 			background-color: transparent;
 			box-shadow: none;
-			transition: all 0.3s;
+			transition: background-color 0.3s;
 		}
 
-		header a.transition {
+		header a.transition, .dropdown-content li > a.transition, .dropdown-content li > h6.transition {
 			color: #fff;
-			transition: all 0.5s;
+			transition: color 0.3s;
 		}
 
 		header a.transition:hover {
 			color: rgba(233, 233, 233, 0.7);
+			transition: color 0.3s;
 		}
-		
+
+		.dropdown-content li.transition:hover {
+			background-color: rgba(233, 233, 233, 0.15);
+			transition: background-color 0.3s;
+		}
+
+		header > ul.transition, header ul li ul.transition {
+			background-color: rgba(255, 255, 255, 0.1);
+			transition: background-color 0.3s;
+		}
+
 		li a:hover {
 			color: #16A5B8;
+			transition: color 0.3s;
+		}
+
+		/* ===== FONTS =====*/
+		@font-face {
+			font-family: proxima-nova;
+			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.OTF);
+			font-weight: bold;
 		}
 
 		@font-face {
-			font-family: proxima-nova;
-			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
-			font-weight: bold;
+			font-family: proxima-nova-extrabold;
+			src: url(ccf-fonts/proxima/PROXIMANOVA-EXTRABOLD.OTF);
+			font-weight: 800;
 		}
+		/* ===== END ===== */
 
 		nav ul li a {
 			font-family: proxima-nova;
@@ -126,7 +147,7 @@
 
 		.dropdown-content-list li > a, .dropdown-content-list li > span {
 		  	font-size: 16px;
-		  	color: #777 !important;
+		  	color: #777;
 		  	display: block;
 		  	line-height: 22px
 		  	padding: 14px 16px;
@@ -162,7 +183,7 @@
 
 		.dropdown-content-notification li > a, .dropdown-content-notification li > span {
 		  	font-size: 16px;
-		  	color: #777 !important;
+		  	color: #777;
 		  	display: block;
 		  	line-height: 22px
 		  	padding: 14px 16px;
@@ -243,13 +264,31 @@
 		}
 		*/
 
+		.cover, .cover span {
+			position: relative;
+			top: 25;
+			font-family: proxima-nova-extrabold;
+			font-size: 5rem;
+			font-weight: 800;
+			line-height: 4rem;
+			color: #fff;
+		}
+
+		.cover-content, .cover-content span {
+			position: relative;
+			top: 25;
+			font-family: sans-serif;
+			font-size: 1.4rem;
+			color: #fff;
+		}
+
 		.parallax-container {
 			height: 100%;
 			/*background-color: rgba(216, 216, 216, 0.48); fading opacity filter effect */
 		}
 
 		.parallax-container img {
-			width: 100%;
+			width: 100%; /* responsible for fitting the image in parallax */
 		}
 		/* ===== FOOTER ===== */
 		.page-footer {
@@ -259,6 +298,16 @@
 		p.footer-cpyrght {
 			font-family: sans-serif;
 			color: #fff;
+		}
+		/* ===== END ===== */
+
+		/* ===== appearance class ===== */
+		.hide {
+			display: none;
+		}
+
+		.show {
+			display: inline;
 		}
 		/* ===== END ===== */
 	</style>
@@ -280,20 +329,32 @@
 			//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 			$('header a').addClass('transition');
 			$('header ul').addClass('transition');
+			$('header ul li ul').addClass('transition');
+			/* code for hiding dropdown links 
 			$('a.dropdown-button').hide();
 			$('ul.dropdown-content').hide();
 			$('.dropdown-button').dropdown('close');
+			*/
+			$('header > a').addClass('transition');
+			$('.dropdown-content li').addClass('transition');
+			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
 			$('nav a img').attr('src', "resources/CCF Logos8.png");
 		});
 
 		// navbar scroll state
 		window.addEventListener("scroll", function() {
-			if(window.scrollY > 100) {
+			if(window.scrollY > 10) {
 				$('nav').removeClass('transition');
 				//$('nav div.container').removeClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 				$('header a').removeClass('transition');
 				$('header ul').removeClass('transition');
+				$('header ul li ul').removeClass('transition');
+				/* code for showing dropdown links
 				$('a.dropdown-button').show(300);
+				*/
+				$('header > a').removeClass('transition');
+				$('.dropdown-content li').removeClass('transition');
+				$('.dropdown-content li > a, .dropdown-content li > h6').removeClass('transition');
 				$('nav a img').attr('src', "resources/CCF Logos6.png");
 			}
 			else {
@@ -301,20 +362,24 @@
 				//$('nav div.container').addClass('nav-container-transition'); // Note: for rectangle background in navbar same sa original site
 				$('header a').addClass('transition');
 				$('header ul').addClass('transition');
+				$('header ul li ul').addClass('transition');
+				/* code for hiding dropdown links 
 				$('a.dropdown-button').hide();
 				$('ul.dropdown-content').hide();
 				$('.dropdown-button').dropdown('close');
+				*/
+				$('header > a').addClass('transition');
+				$('.dropdown-content li').addClass('transition');
+				$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
 				$('nav a img').attr('src', "resources/CCF Logos8.png");
 			}
 		}, false);
 	</script>
-
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
-
 		  	<?php
 		  		if($_SESSION["memberType"] > 0) echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 		  		<li class="divider"></li>
@@ -323,7 +388,14 @@
 			  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 		  		<li class="divider"></li>';
 		  	?>
-		  	
+		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -390,6 +462,17 @@
 	<body>
 		<div id="response"></div>
 		<div class="parallax-container">
+			<p class="cover center"> <!-- always enclose span tag -->
+				<span>Y O U <br></span>
+				<span>HAVE <br></span>
+				<span>Y O U <br></span>
+				<span>C A N <br></span>
+				<br>
+				<span>#GoServe</span>
+				<p class="cover-content center">
+					<span>Make the most out of every opportunity that the Lord gives you to volunteer where you can and while you can.</span>
+				</p>
+			</p>
 			<div class="parallax">
 				<img src="resources/GoServe2017_Background-04-1.jpg">
 			</div>
@@ -439,13 +522,15 @@
 		if(getWelcome() == 0)  {
 			echo '
 			<script>
-			// to inform that you have been registered
+			$(document).ready(function() {
+				// to inform that you have been registered
 				swal({
 					title: "Welcome to CCF!",
 					text: "Thank you for filling up the registration form!\nFeel free to explore this website and God bless! :)",
 					timer: 10000,
 					confirmButtonText: "OK"
 				});
+			});
 			</script>
 			';
 			setWelcome();
@@ -573,5 +658,22 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		// cover transition
+		$(document).ready(function() {
+			var cover = $(".parallax-container span");
+			var ticker = 0;
+			cover.hide();
+			cover.each(function(i) { //3
+				if(i%2==0) {
+					ticker += 1000;
+					$(this).delay(ticker).fadeIn(500); //1800
+				}
+				else {
+					ticker += 400;
+					$(this).delay(ticker).fadeIn(500); //1800
+				}
+			});
+		});
 	</script>
 </html>
