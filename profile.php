@@ -673,6 +673,7 @@
 		}, false);
 		*/
 
+		var chooseleader = false;
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -687,6 +688,17 @@
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "profile.php?id="+id.split("_")[1]);
+			setID(id);
+		}
+
+		var dgid;
+		function setID(id) {
+			dgid = id;
+			chooseleader = true;
+		}
+
+		function getID() {
+			return dgid;
 		}
 	</script>
 
@@ -782,7 +794,7 @@
 								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 
-								<!---Code ni Mark ito-->
+								<!---Code ni Mark ito. Hide links for Member Type-->
 								<?php
 								if($_SESSION["memberType"] > 0) echo '
 									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
@@ -1617,6 +1629,7 @@
 
 		function submitOnClick(navpage) {
 			// if not using ajax, use this
+			alert(0);
 			document.getElementById(navpage+'_next').setAttribute("type", "submit");
 			submit_form('f'+navpage, 'submit_'+navpage);
 			//convertToButton(navpage);
@@ -1673,15 +1686,18 @@
 			}
 		}
 
-		var validated = false;
+		var validated = true;
 		function submit_form(submit_id, submit_name) {
+			var id = "id=";
+			if(chooseleader)
+				id += getID() + "&";
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
 					var url="update_profile.php";
 					$.ajax({
 						type: "POST",
 						url: url,
-						data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
+						data: submit_name+'=g&'+id+$('#'+submit_id).serialize(), 
 						success: function(data) {
 							swal({
 								title: "Success!",

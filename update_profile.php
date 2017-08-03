@@ -107,5 +107,55 @@
 		$sql_pass = "UPDATE member_tbl SET password = '$regpassword' WHERE memberID = ".$_SESSION['userid'];
 		mysqli_query($conn, $sql_pass);
 	}
+
+	if(isset($_POST["submit_register"])) {
+		$citizenship = $_POST["Citizenship"];
+		$email = $_POST["Email"];
+
+		$homeaddress = $_POST["HomeAddress"];
+		$homephonenumber = $_POST["HomePhoneNumber"];
+
+		$companyaddress = $_POST["CompanyAddress"];
+		$companycontactnum = $_POST["CompanyContactNum"];
+
+		$schooladdress = $_POST["SchoolAddress"];
+		$schoolcontactnum = $_POST["SchoolContactNum"];
+
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+
+		$language = $_POST["Language"];
+
+		$opt1day = $_POST["Option1Day"];
+		$start1 = $_POST["timepicker1opt1"];
+		$end1 = $_POST["timepicker2opt1"];
+		$venue1 = $_POST["Option1Venue"];
+
+		$opt2day = $_POST["Option2Day"];
+		$start2 = $_POST["timepicker1opt2"];
+		$end2 = $_POST["timepicker2opt2"];
+		$venue2 = $_POST["Option2Venue"];
+
+		$recchrist = $opt1day = $_POST["receivedChrist"];
+		$attccf = $_POST["attendCCF"];
+		$regattat = $_POST["regularlyAttendsAt"];
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_coinfo = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber' WHERE memberID = ".$_SESSION['userid'];
+		$sql_company = "INSERT INTO companydetails_tbl(companyContactNum, companyAddress) VALUES('$companycontactnum', '$companyaddress');";
+		$sql_school = "INSERT INTO schooldetails_tbl(schoolContactNum, schoolAddress) VALUES('$schoolcontactnum', '$schooladdress');";
+		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate_ VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
+		$sql_prefs = "INSERT INTO preferencedetails_tbl(prefLanguage, prefDay1, prefDay2, prefVenue1, prefVenue2, prefStartTime1 , prefEndTime1, prefStartTime2, prefEndTime2) VALUES('$language', '$op1day', '$op2day', '$venue1', '$venue2', '$start1', '$end1', '$start2' '$end2');";
+		mysqli_query($conn, $sql_coinfo);
+		mysqli_query($conn, $sql_company);
+		mysqli_query($conn, $sql_school);
+		mysqli_query($conn, $sql_spouse);	
+		mysqli_query($conn, $sql_prefs);
+	}
 	// ====================END====================
 ?>
