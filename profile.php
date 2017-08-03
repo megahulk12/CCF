@@ -902,7 +902,7 @@
 													<label for="Gender_Female">Female</label>
 												</p>
 												<div class="input-field col s12">
-													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
+													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
 													<label for="Citizenship">Citizenship</label>
 												</div>
 												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
@@ -920,15 +920,15 @@
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
+													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" required>
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'">
+													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
 													<label for="Profession">Profession/Occupation</label>
 												</div>';
 												?>
@@ -972,7 +972,7 @@
 											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
+													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
 													<label for="HomeAddress">Address</label>
 												</div>
 												<div class="input-field col s12">
@@ -981,7 +981,7 @@
 												</div>
 												<h4 class="center">Company</h4>
 												<div class="input-field col s12">
-													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
+													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
 													<label for="CompanyName">Company Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -994,7 +994,7 @@
 												</div>
 												<h4 class="center">School</h4>
 												<div class="input-field col s12">
-													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
+													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
 													<label for="SchoolName">School Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -1007,7 +1007,7 @@
 												</div>
 												<h4 class="center">Spouse</h4>
 												<div class="input-field col s12">
-													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
+													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
 													<label for="SpouseName">Spouse Name</label>
 												</div>
 												<div class="input-field col s12">
@@ -1925,9 +1925,16 @@
 			}
 		});
 
-		$("#submit_coinfo").click(function() {
+		$("#coinfo_next").click(function() {
 			$('.error').hide();
-			
+			$('form#fcoinfo').find('input').each(function() {
+				if($(this).prop('required')) {
+					$(this).parent(".input-field").append('<small class="error" id="'+this.id+'">This field is required.</small>');
+					if(this.val() == "") {
+						$('small#'+this.id).show();
+					}
+				}
+			});
 		});
 
 		// change password form validation
