@@ -271,6 +271,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
 
 		/*=====SIDE NAV BUTTONS=====*/
@@ -316,7 +317,7 @@
 		}
 
 		.profile-next-or-submit-button {
-			margin-right: 20px;
+			margin-right: 7px;
 		}
 
 		/*===============END===============*/
@@ -857,9 +858,9 @@
 												</div>
 												';
 											?>
-											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
-											</div>
+										</div>
+										<div class="row">
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
 										</div>
 									</div>
 								</form>
@@ -934,7 +935,7 @@
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" required>
+													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
 													<small class="error" id="MobileNumber-required">This field is required.</small>
 												</div>
@@ -942,6 +943,7 @@
 													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
 													<small class="error" id="Email-required">This field is required.</small>
+													<small class="error" id="Invalid-Email">Invalid Email Address</small>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
@@ -997,57 +999,57 @@
 													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
 													<label for="HomePhoneNumber">Home Phone Number</label>
 												</div>
-												<h4 class="center">Company</h4>
-												<div class="input-field col s12">
+												<h4 class="center company">Company</h4>
+												<div class="input-field col s12 company">
 													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
 													<label for="CompanyName">Company Name</label>
 													<small class="error" id="CompanyName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 company">
 													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
 													<label for="CompanyContactNum">Company Contact Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 company">
 													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 													<label for="CompanyAddress">Company Address</label>
 												</div>
-												<h4 class="center">School</h4>
-												<div class="input-field col s12">
+												<h4 class="center school">School</h4>
+												<div class="input-field col s12 school">
 													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
 													<label for="SchoolName">School Name</label>
 													<small class="error" id="SchoolName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 school">
 													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
 													<label for="SchoolContactNum">School Contact Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 school">
 													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
 													<label for="SchoolAddress">School Address</label>
 												</div>
-												<h4 class="center">Spouse</h4>
-												<div class="input-field col s12">
+												<h4 class="center spouse">Spouse</h4>
+												<div class="input-field col s12 spouse">
 													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
 													<label for="SpouseName">Spouse Name</label>
 													<small class="error" id="SpouseName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 spouse">
 													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
 													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 spouse">
 													<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
 													<label for="SpouseBirthdate">Birthdate</label>
 												</div>';
 											?>
 											</div>
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="coinfo_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="coinfo_progressbar"></div>
+											</div>&nbsp; &nbsp;<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
@@ -1207,15 +1209,14 @@
 												</div>';
 											?>
 											</div>
-
-											<!-- progressbar & buttons -->
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="cprefer_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next" onclick="pagination(1, 'cprefer')">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<!-- progressbar & buttons -->
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="cprefer_progressbar"></div>
+											</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next" onclick="pagination(1, 'cprefer')">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
@@ -1264,9 +1265,9 @@
 											</div>
 											'; // originally having a value of own password
 											?>
-											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
-											</div>
+										</div>
+										<div class="row">
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
 										</div>
 									</div>
 								</form>
@@ -1501,13 +1502,13 @@
 													-->
 												</table>
 											</div>
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="register_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="register_progressbar"></div>
+											</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
@@ -1541,7 +1542,9 @@
 	<script>
 	"use strict";
 		var currentpage = 1, no_of_pages = 0, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		var page;
 		function setNavPage(navpage, num_of_pages) {
+			page = navpage;
 			// sets number of pages
 			no_of_pages = num_of_pages;
 
@@ -1648,6 +1651,11 @@
 			*/
 		}
 
+		function getCurrentPage() {
+			var cp = page+"_page"+currentpage;
+			return cp;
+		}
+
 		function convertToButton(navpage) {
 			document.getElementById(navpage+'_next').setAttribute("type", "button");
 		}
@@ -1696,6 +1704,8 @@
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
+					$('.profile-next-or-submit-button').text('Submitting...');
+					$('.profile-next-or-submit-button').prop("disabled", true);
 					var url="update_profile.php";
 					$.ajax({
 						type: "POST",
@@ -1713,10 +1723,13 @@
 							if(cpass) { // if true, every success of data val from cpass form, it clears the form
 								$('div#cpass input').val("");
 							}
+							$('.profile-next-or-submit-button').text('Submit');
+							$('.profile-next-or-submit-button').prop("disabled", false);
 						}
 					});
-					validated = false; // re-initialize validated variable
 				}
+				validated = false; // re-initialize validated variable
+				confirmvalidated = false; // re=initialize
 				e.preventDefault();
 			});
 			/*
@@ -1913,6 +1926,7 @@
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
 			$('.error').hide();
+			$(this).blur();
 			var lastname = $("#Lastname").val();
 			var firstname = $("#Firstname").val();
 			var middlename = $("#Middlename").val();
@@ -1922,64 +1936,166 @@
 			if(birthdate==""){
 				$('small#birthdate-required').show();
 				$('#Birthdate').focus();
+				scrollTo($("#Birthdate"));
 			}
 
 			if(nickname==""){
 				$('small#nickname-required').show();
 				$('#Nickname').focus();
+				scrollTo($("#Nickname"));
 			}
 			
 			if(middlename==""){
 				$('small#middlename-required').show();
 				$('#Middlename').focus();
+				scrollTo($("#Middlename"));
 			}
 			
 			if(firstname==""){
 				$('small#firstname-required').show();
 				$('#Firstname').focus();
+				scrollTo($("#Firstname"));
 			}
 			
 			if(lastname==""){
 				$('small#lastname-required').show();
 				$('#Lastname').focus();
+				scrollTo($("#Lastname"));
 			}
 
 			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&lastname!="") {
+				confirmvalidated = true;
 				validated = true;
 			}
 		});
 
 		$("#coinfo_next").click(function() {
+			// default states
+			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
 			$('.error').hide();
+			company.show();
+			school.show();
+			spouse.show();
+			$(this).blur(); // no focus in button once clicked
 			var check_iteration = true;
+			
+			/* ===== SPOUSE VALIDATION ===== */
+			var civilstatusid = "#CivilStatus"
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+				spouse.hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
 
-			$($('form#fcoinfo').find('input').reverse()).each(function() { // [FRONT-END] iterate to show error classes to required fields
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+			var professionid = "#Profession";
+			if($(professionid).val().toLowerCase() == "student") {
+				company.hide();
+				$(".company input").prop("required", false);
+			}
+			else {
+				school.hide();
+				$(".school input").prop("required", false);
+			}
+
+			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
-						alert(0);
-						$('small#'+$(this).id+'-required').show();
-						$('small#'+$(this).id+'-required').focus();
+						$('small#'+this.id+'-required').show();
+						$('#'+this.id).focus();
+						check_iteration = false;
+					}
+					else if(this.id == "Email") {
+						if(!isValidEmailAddress($(this).val())) {
+							$('#Invalid-Email').show();
+							$('#'+this.id).focus();
+							check_iteration = false;
+						}
 					}
 				}
 			});
 
-			$($('form#fcoinfo').find('input').reverse()).each(function() { // [BACK-END] iterate to check blank fields before going to next pages
-					if($(this).prop('required')) {
-						if($(this).val() == "") {
+			$('form#fcoinfo #'+getCurrentPage()).find('input').each(function() {
+				if($(this).is(":focus")) {
+					scrollTo($(this));
+					return false;
+				}
+			});
+
+			if(check_iteration) {
+				if(checkLastPage()) {
+					validated = true;
+				}
+				confirmvalidated = true;
+				pagination(1, this.id.split("_")[0]);
+			}
+
+		});
+
+		$("#cprefer_next").click(function() {
+			// default states
+			$('.error').hide();
+			$('.spouse').show();
+			$(this).blur(); // no focus in button once clicked
+			var check_iteration = true, spouse = false;
+			
+			/* ===== SPOUSE VALIDATION ===== */
+			var civilstatusid = "#CivilStatus"
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+				$(".spouse").hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
+
+			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						$('small#'+this.id+'-required').focus();
+						check_iteration = false;
+					}
+					if(this.id == "Email") {
+						if(!isValidEmailAddress($(this).val())) {
+							$('#Invalid-Email').show();
+							$('#Invalid-Email').focus();
 							check_iteration = false;
 						}
 					}
-				});
+				}
+			});
 
 			if(check_iteration) {
-				pagination(1, $(this).id.split("_")[0]);
+				if(checkLastPage()) {
+					validated = true;
+				}
+				pagination(1, this.id.split("_")[0]);
 			}
 
-			});
+		});
+
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
+
+		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
+			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+			return pattern.test(emailAddress);
+		};
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
 			$('.error-with-icon').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			$(this).blur();
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
@@ -2041,5 +2157,38 @@
 				}
 			});
 		});
+
+		/*
+		 *     INFORMATION ABOUT WILDCARDS
+		 		^=<string> --> elements starting with <string>
+		 		$=<string> --> elements ending with <string>
+
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated
+		$("[id^=submit], [id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				$("body").animate({
+					scrollTop: 0
+				}, 300, "swing");
+				confirmvalidated = false;
+			}
+		});
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+		}
+
+		/* ===== END ===== */
 	</script>
 </html>
