@@ -788,14 +788,14 @@
 
 								<!---Code ni Mark ito-->
 								<?php
-								if($_SESSION["memberType"] > 0) echo <<< HTML
-									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('cprefer', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
+								if($_SESSION["memberType"] > 0) echo '
+									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
 									<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-HTML;
-
-								if($_SESSION["memberType"] == 0) echo <<< HTML
-									<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('register', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>
-HTML;
+									<li classs="li-sidenav" style="display: none"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+								else if($_SESSION["memberType"] == 0) echo '
+									<li classs="li-sidenav" style="display: none"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
+									<li classs="li-sidenav" style="display: none"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+									<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								?>
 							</ul>
 						</td>
@@ -1645,6 +1645,7 @@ HTML;
 		var navcurrentpage = 1;
 		function navigationForms(page) {
 			if(page == 1) {
+				//$('.content form > div').hide();
 				document.getElementById('cpinfo').style.display = "inline";
 				document.getElementById('coinfo').style.display = "none";
 				document.getElementById('cprefer').style.display = "none";
