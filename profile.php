@@ -1053,7 +1053,7 @@
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms" id="fcprefer" onsubmit="submit_form(this.id)">
+								<form method="post" class="forms" id="fcprefer">
 									<div id="cprefer" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1104,8 +1104,9 @@
 											}
 											echo '
 												<div class="input-field col s12">
-													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'">
+													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'" placeholder="ex. English, Bisaya, Tagalog" required>
 													<label for="Language">Language</label>
+													<small class="error" id="Language-required">This field is required.</small>
 												</div>
 												<h4 class="center">Schedule</h4>
 												<h5 class="center">Option 1</h5>
@@ -1127,11 +1128,15 @@
 													<div class="input-field col s6">
 														<label for="timepicker1opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
+														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>	
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt1">End Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
+														<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
 													</div>
+												<div class="col s12">
+												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
 													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
@@ -1155,10 +1160,12 @@
 													<div class="input-field col s6">
 														<label for="timepicker1opt2">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
+														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>	
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
+														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>	
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
@@ -1215,7 +1222,7 @@
 											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
 												<div class="determinate" style="" id="cprefer_progressbar"></div>
 											</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next" onclick="pagination(1, 'cprefer')">NEXT</button>
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next">NEXT</button>
 											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
@@ -1923,6 +1930,16 @@
 			$('div#cpinfo small').text('This field is required.');
 		});
 
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			        elem.focus();
+			    };
+			})(), true);
+		}
+
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
 			$('.error').hide();
@@ -1970,12 +1987,15 @@
 		});
 
 		$("#coinfo_next").click(function() {
-			// default states
+			// default and initialization states
 			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
 			$('.error').hide();
 			company.show();
 			school.show();
 			spouse.show();
+			$("#CompanyName").prop("required", true);
+			$("#SchoolName").prop("required", true);
+			$("#SpouseName").prop("required", true);
 			$(this).blur(); // no focus in button once clicked
 			var check_iteration = true;
 			
@@ -2006,12 +2026,14 @@
 					if($(this).val() == "") {
 						$('small#'+this.id+'-required').show();
 						$('#'+this.id).focus();
+						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
 					else if(this.id == "Email") {
 						if(!isValidEmailAddress($(this).val())) {
 							$('#Invalid-Email').show();
 							$('#'+this.id).focus();
+							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
 					}
@@ -2038,20 +2060,10 @@
 		$("#cprefer_next").click(function() {
 			// default states
 			$('.error').hide();
-			$('.spouse').show();
 			$(this).blur(); // no focus in button once clicked
-			var check_iteration = true, spouse = false;
-			
-			/* ===== SPOUSE VALIDATION ===== */
-			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
-				$(".spouse").hide();
-				$(".spouse input").prop("required", false);
-				//$("h4").find(":contains('Spouse')").hide();
-				//$("[id^=Spouse], [for^=Spouse]").hide();
-			}
+			var check_iteration = true;
 
-			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
+			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
 			// [FRONT-END] iterate to show error classes to required fields
 			// [BACK-END] iterate to check blank fields and other factors before going to next pages
 				if($(this).prop('required')) {
@@ -2060,15 +2072,21 @@
 						$('small#'+this.id+'-required').focus();
 						check_iteration = false;
 					}
-					if(this.id == "Email") {
-						if(!isValidEmailAddress($(this).val())) {
-							$('#Invalid-Email').show();
-							$('#Invalid-Email').focus();
-							check_iteration = false;
-						}
-					}
 				}
 			});
+
+			alert($("#timepicker1opt2").val());
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				check_iteration = false;
+			}
+
+			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				check_iteration = false;
+			}
 
 			if(check_iteration) {
 				if(checkLastPage()) {
