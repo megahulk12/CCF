@@ -895,10 +895,10 @@
 													$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
 													$civilstatus = $row["civilStatus"];
 													if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
-													else if($civilstatus == "Single Parent") $selectedcivilstatus[2] = "selected";
-													else if($civilstatus == "Separated") $selectedcivilstatus[3] = "selected";
-													else if($civilstatus == "Married") $selectedcivilstatus[4] = "selected";
-													else if($civilstatus == "Annulled") $selectedcivilstatus[5] = "selected";
+													else if($civilstatus == "Married") $selectedcivilstatus[2] = "selected";
+													else if($civilstatus == "Single Parent") $selectedcivilstatus[3] = "selected";
+													else if($civilstatus == "Annulled") $selectedcivilstatus[4] = "selected";
+													else if($civilstatus == "Separated") $selectedcivilstatus[5] = "selected";
 													else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
 													else $selectedcivilstatus[0] = "selected";
 													$citizenship = $row["citizenship"];
@@ -925,8 +925,8 @@
 														<select id="CivilStatus" name="CivilStatus">
 															<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
 															<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
-															<option value="Single Parent" '.$selectedcivilstatus[2].'>Single Parent</option>
-															<option value="Married" '.$selectedcivilstatus[3].'>Married</option>
+															<option value="Single Parent" '.$selectedcivilstatus[2].'>Married</option>
+															<option value="Married" '.$selectedcivilstatus[3].'>Single Parent</option>
 															<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
 															<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
 															<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
