@@ -266,7 +266,7 @@
 
 		.cover, .cover span {
 			position: relative;
-			top: 50;
+			top: 25;
 			font-family: proxima-nova-extrabold;
 			font-size: 5rem;
 			font-weight: 800;
@@ -276,7 +276,7 @@
 
 		.cover-content, .cover-content span {
 			position: relative;
-			top: 50;
+			top: 25;
 			font-family: sans-serif;
 			font-size: 1.4rem;
 			color: #fff;
@@ -380,14 +380,16 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-		  	<li class="divider"></li>
+		  	<?php
+		  		if($_SESSION["memberType"] > 0) echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  	<li class="divider"></li>
+			  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  		<li class="divider"></li>
+			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  	<li class="divider"></li>';
+		  	?>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->

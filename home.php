@@ -108,7 +108,8 @@
 		}
 
 		.cover, .cover span {
-			margin-top: 120px;
+			position: relative;
+			top: 25;
 			font-family: proxima-nova-extrabold;
 			font-size: 5rem;
 			font-weight: 800;
@@ -117,6 +118,8 @@
 		}
 
 		.cover-content, .cover-content span {
+			position: relative;
+			top: 25;
 			font-family: sans-serif;
 			font-size: 1.4rem;
 			color: #fff;

@@ -471,12 +471,16 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-		  	<li class="divider"></li>
+
+		  	<?php
+		  		if($_SESSION["memberType"] > 0) echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  	<li class="divider"></li>
+			  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+		  		<li class="divider"></li>';
+		  	?>
+		  	
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -625,6 +629,7 @@
 					url: url,
 					data: 'request=g&'+$('#Eform').serialize(), 
 					success: function(data) {
+						alert(data);
 						swal({
 							title: "Success!",
 							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",

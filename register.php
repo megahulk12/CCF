@@ -485,6 +485,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
 
 
