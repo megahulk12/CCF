@@ -1141,12 +1141,14 @@
 													<div class="input-field col s6">
 														<label for="timepicker1opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
-														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>	
+														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+														<small class="error greater1">Invalid Range Time</small>
 													</div>
 													<div class="input-field col s6">
-														<label for="timepicker2opt1">End Time</label>
+														<label for="timepicker1opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
 														<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
+														<small class="error greater1">Invalid Range Time</small>
 													</div>
 												<div class="col s12">
 												</div>
@@ -1171,14 +1173,16 @@
 													</div>
 												</div>
 													<div class="input-field col s6">
-														<label for="timepicker1opt2">Start Time</label>
+														<label for="timepicker2opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
-														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>	
+														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
+														<small class="error greater2">Invalid Range Time</small>
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
-														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>	
+														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
+														<small class="error greater2">Invalid Range Time</small>
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
@@ -1752,6 +1756,8 @@
 								allowEscapeKey: true,
 								allowOutsideClick: true,
 								timer: 10000
+							}, function() {
+								animateBodyScrollTop();
 							});
 							if(cpass) { // if true, every success of data val from cpass form, it clears the form
 								$('div#cpass input').val("");
@@ -1767,6 +1773,8 @@
 								allowEscapeKey: true,
 								allowOutsideClick: true,
 								timer: 10000
+							}, function() {
+								animateBodyScrollTop();
 							});
 							$('.profile-next-or-submit-button').text('Submit');
 							$('.profile-next-or-submit-button').prop("disabled", false);
@@ -1999,7 +2007,6 @@
 			
 			if(check_iteration) {
 				validated = true;
-				confirmvalidated = true;
 			}
 		});
 
@@ -2064,10 +2071,11 @@
 				scrollTo(focused_element); // scrolls to focused element
 
 			if(check_iteration) {
+				confirmvalidated = true;
 				if(checkLastPage()) {
 					validated = true;
+					confirmvalidated = false;
 				}
-				confirmvalidated = true;
 				pagination(1, this.id.split("_")[0]);
 			}
 
@@ -2093,7 +2101,8 @@
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
 						$('small#'+this.id+'-required').show();
-						$('small#'+this.id+'-required').focus();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
 				}
@@ -2102,20 +2111,52 @@
 			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
 				$("#timepicker1opt1-equal").show();
 				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
 				check_iteration = false;
 			}
 
 			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
 				$("#timepicker2opt1-equal").show();
 				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
 				check_iteration = false;
 			}
 
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").attr("data-submit"), end_time = $("#timepicker2opt2").attr("data-submit");
+			d = new Date();
+			start_time = new Date(d.getDate() + " " + start_time);
+			end_time = new Date(d.getDate() + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker1opt1").attr("data-submit"), end_time = $("#timepicker1opt2").attr("data-submit");
+			d = new Date();
+			start_time = new Date(d.getDate() + " " + start_time);
+			end_time = new Date(d.getDate() + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+
 			if(check_iteration) {
+				confirmvalidated = true;
 				if(checkLastPage()) {
 					validated = true;
+					confirmvalidated = false;
 				}
-				confirmvalidated = true;
 				pagination(1, this.id.split("_")[0]);
 			}
 
@@ -2197,7 +2238,6 @@
 					else {
 						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
 							validated = true;
-							confirmvalidated = true;
 							cpass = true;
 						}
 					}
@@ -2219,14 +2259,23 @@
 
 		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
 		var confirmvalidated = false; // confirms if every form is verified and validated
-		$("[id^=submit], [id$=next], [id$=back]").click(function() {
+
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
+
+		$("[id$=next], [id$=back]").click(function() {
 			if(confirmvalidated) {
-				$("body").animate({
-					scrollTop: 0
-				}, 300, "swing");
+				animateBodyScrollTop();
 				confirmvalidated = false;
 			}
 		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
 
 		function getCurrentPosition(elem) {
 		// gets the current top position of an element relative to the document
