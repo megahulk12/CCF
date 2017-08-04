@@ -435,6 +435,15 @@
 		  	vertical-align: middle;
 		  	border-radius: 0px; /* complete horizontal hightlight bar*/
 		}
+
+		.error-with-icon {
+			color: #ff3333;
+			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
+		}
 		/* ============================END=========================== */  
 	</style>
 
@@ -481,22 +490,27 @@
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Last Name</label>
+								<small class="error" id="lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">First Name</label>
+								<small class="error" id="firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middle Name</label>
+								<small class="error" id="middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
+								<small class="error" id="nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
 								<label for="Birthdate">Birthdate</label>
+								<small class="error" id="birthdate-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -524,15 +538,18 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
+									<small class="error" id="civilstatus-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
 								<label for="MobileNumber">Mobile Number</label>
+								<small class="error" id="mobilenumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
 								<label for="Profession">Profession/Occupation</label>
+								<small class="error" id="profession-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -543,26 +560,53 @@
 							<div class="input-field col s12">
 								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
 								<label for="CompanyName">Company Name</label>
+								<small class="error" id="companyname-required">This field is required.</small>
 							</div>
 							<h4 class="center">School</h4>
 							<div class="input-field col s12">
 								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
 								<label for="SchoolName">School Name</label>
+								<small class="error" id="schoolname-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
 					<div id="page4" style="display: none;">
 						<h3 class="center">Account</h3>
 						<div class="row">
+							<?php
+								// database connection variable
+
+								$servername = "localhost";
+								$username = "root";
+								$password = "root";
+								$dbname = "dbccf";
+								$conn = mysqli_connect($servername, $username, $password, $dbname);
+								if (!$conn) {
+									die("Connection failed: " . mysqli_connect_error());
+								}
+								$query = "SELECT username FROM member_tbl ";
+								$result = mysqli_query($conn, $query);
+								if(mysqli_num_rows($result) > 0) {
+									while($row = mysqli_fetch_assoc($result)) {
+										$username = $row["username"];
+									}
+								}
+								//checking if username exist
+							echo '
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" name="username" data-length="16" maxlength="16">
+								<input type="text" name="username" id="username" data-length="16" maxlength="16">
 								<label for="username">Username</label>
-							</div>
+								<small class="error-with-icon" id="noInput">This field is required.</small>
+								<small class="error-with-icon" id="notusername">This username is already taken.</small>
+							</div>not
+							'; // originally having a value of own password
+							?>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" name="password" data-length="16" maxlength="16">
 								<label for="password">Password</label>
+								<small class="error" id="password-required">This field is required.</small>
 							</div>
 						</div>
 					</div>

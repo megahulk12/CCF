@@ -705,14 +705,7 @@
 									}
 									echo '
 											<h5 class = "header">Prefered Language: </h5><p>'.$prefLanguage.'</p>
-											<h5 class = "header">Prefered Venue 1: </h5><p>'.$prefVenue1.'</p>
-											<h5 class = "header">Prefered Venue 2: </h5><p>'.$prefVenue2.'</p>
-											<h5 class = "header">Prefered Start Time 1: </h5><p>'.$prefStartTime1.'</p>
-											<h5 class = "header">Prefered End Time 1: </h5><p>'.$prefEndTime1.'</p>
-											<h5 class = "header">Prefered Start Time 2: </h5><p>'.$prefStartTime2.'</p>
-											<h5 class = "header">Prefered End Time 2: </h5><p>'.$prefEndTime2.'</p>
-											<h5 class = "header">Prefered Day 1: </h5><p>'.$prefDay1.'</p>
-											<h5 class = "header">Prefered Day 2: </h5><p>'.$prefDay2.'</p>
+											
 
 
 										</div>
