@@ -2057,6 +2057,14 @@
 
 		});
 
+		// change event handler removes leading
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
 		$("#cprefer_next").click(function() {
 			// default states
 			$('.error').hide();
@@ -2075,7 +2083,6 @@
 				}
 			});
 
-			alert($("#timepicker1opt2").val());
 			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
 				$("#timepicker1opt1-equal").show();
 				$("#timepicker1opt2-equal").show();
@@ -2103,6 +2110,10 @@
 			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
 			if($('#'+lastpage).length > 0) return false;
 			else return true;
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
 		}
 
 		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
