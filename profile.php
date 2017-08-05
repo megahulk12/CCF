@@ -1142,13 +1142,13 @@
 														<label for="timepicker1opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
 														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
-														<small class="error greater1">Invalid Range Time</small>
+														<small class="error greater1">Start Time should be before than End Time.</small>
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker1opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
 														<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
-														<small class="error greater1">Invalid Range Time</small>
+														<small class="error greater1">Start Time should be before than End Time.</small>
 													</div>
 												<div class="col s12">
 												</div>
@@ -1176,13 +1176,13 @@
 														<label for="timepicker2opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
 														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
-														<small class="error greater2">Invalid Range Time</small>
+														<small class="error greater2">Start Time should be before than End Time.</small>
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
 														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
-														<small class="error greater2">Invalid Range Time</small>
+														<small class="error greater2">Start Time should be before than End Time.</small>
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
@@ -2108,6 +2108,36 @@
 				}
 			});
 
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getDate();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// convert time values to timestamp
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
 			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
 				$("#timepicker1opt1-equal").show();
 				$("#timepicker1opt2-equal").show();
@@ -2122,32 +2152,6 @@
 				check_iteration = false;
 			}
 
-			// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").attr("data-submit"), end_time = $("#timepicker2opt2").attr("data-submit");
-			d = new Date();
-			start_time = new Date(d.getDate() + " " + start_time);
-			end_time = new Date(d.getDate() + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			// convert time values to timestamp
-			var start_time = $("#timepicker1opt1").attr("data-submit"), end_time = $("#timepicker1opt2").attr("data-submit");
-			d = new Date();
-			start_time = new Date(d.getDate() + " " + start_time);
-			end_time = new Date(d.getDate() + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater1").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
 			if(!check_iteration)
 				scrollTo(focused_element);
 
@@ -2159,7 +2163,6 @@
 				}
 				pagination(1, this.id.split("_")[0]);
 			}
-
 		});
 
 		function checkLastPage() {
@@ -2172,6 +2175,14 @@
 
 		function removeLeadingZero(time_value) {
 			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
 		}
 
 		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
