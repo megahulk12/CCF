@@ -943,35 +943,23 @@
 															<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
 														</select>
 														<label>Civil Status</label>
-														<small class="error" id="civilStatus-required">This field is required.</small>
 													</div>
 												</div>
 												<div class="input-field col s12">
 													<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
-<<<<<<< HEAD
-													<small class="error" id="mobilenumber-required">This field is required.</small>
-=======
 													<small class="error" id="MobileNumber-required">This field is required.</small>
->>>>>>> 1e2527b6f447cacbab36e41955eb65b6e3a00219
 												</div>
 												<div class="input-field col s12">
 													<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
 													<small class="error" id="Email-required">This field is required.</small>
-<<<<<<< HEAD
-=======
 													<small class="error" id="Invalid-Email">Invalid Email Address</small>
->>>>>>> 1e2527b6f447cacbab36e41955eb65b6e3a00219
 												</div>
 												<div class="input-field col s12">
 													<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
 													<label for="Profession">Profession/Occupation</label>
-<<<<<<< HEAD
-													<small class="error" id="profession-required">This field is required.</small>
-=======
 													<small class="error" id="Profession-required">This field is required.</small>
->>>>>>> 1e2527b6f447cacbab36e41955eb65b6e3a00219
 												</div>';
 												?>
 											</div>
