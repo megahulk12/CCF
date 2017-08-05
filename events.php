@@ -721,14 +721,16 @@
 	jQuery(function() { // allows to load the image first before layout isotope executes
 		var $container = jQuery('.container-events');
 		$container.imagesLoaded(function() {
-			$container.isotope({
-				// options
-				itemSelector: '.row',
-				layoutMode: 'masonry',
-				masonry: {
-					columnWidth: 20
-				}
-			});
+			setTimeout(function() {
+				$container.isotope({
+					// options
+					itemSelector: '.row',
+					layoutMode: 'masonry',
+					masonry: {
+						columnWidth: 20
+					}
+				});
+			}, 500);
 		});
 	});
 	</script>

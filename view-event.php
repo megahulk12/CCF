@@ -588,7 +588,7 @@
 	<script>
 		function joinEvent() {
 			var url="join-event.php";
-			$.ajax({
+				$.ajax({
 				type: "POST",
 				url: url,
 				success: function() {
