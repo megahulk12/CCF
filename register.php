@@ -716,27 +716,27 @@
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Last Name</label>
-								<small class="error" id="lastname-required">This field is required.</small>
+								<small class="error" id="Lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">First Name</label>
-								<small class="error" id="firstname-required">This field is required.</small>
+								<small class="error" id="Firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middle Name</label>
-								<small class="error" id="middlename-required">This field is required.</small>
+								<small class="error" id="Middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
-								<small class="error" id="nickname-required">This field is required.</small>
+								<small class="error" id="Nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="">
 								<label for="Birthdate" class>Birthdate</label>
-								<small class="error" id="birthdate-required">This field is required.</small>
+								<small class="error" id="Birthdate-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -755,7 +755,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
 								<label for="Citizenship">Citizenship</label>
-								<small class="error" id="citizenship-required">This field is required.</small>
+								<small class="error" id="Citizenship-required">This field is required.</small>
 							</div>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
@@ -769,23 +769,24 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
-									<small class="error" id="citizenship-required">This field is required.</small>
+									<small class="error" id="CivilStatus-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
 								<label for="MobileNumber">Mobile Number</label>
-								<small class="error" id="mobilenumber-required">This field is required.</small>
+								<small class="error" id="MobileNumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
 								<label for="EmailAd" data-error="Invalid email address">Email Address</label>
-								<small class="error" id="email-required">This field is required.</small>
+								<small class="error" id="EmailAd-required">This field is required.</small>
+								<small class="error" id="Invalid-Email">Invalid Email Address</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
 								<label for="Profession" name="profession">Profession/Occupation</label>
-								<small class="error" id="profession-required">This field is required.</small>
+								<small class="error" id="Profession-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -796,6 +797,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
 								<label for="HomeAddress" style=" font-size:14px;">Address</label>
+								<small class="error" id="HomeAddress-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
@@ -805,6 +807,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
 								<label for="CompanyName">Company Name</label>
+								<small class="error" id="CompanyName-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
@@ -818,6 +821,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
 								<label for="SchoolName">School Name</label>
+								<small class="error" id="SchoolName-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
@@ -831,6 +835,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
 								<label for="SpouseName">Spouse Name</label>
+								<small class="error" id="SpouseName-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
@@ -865,25 +870,25 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="prefday1-required">This field is required.</small>
+									<small class="error" id="Option1Day-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s6">
 									<label for="timepicker1opt1">Start Time</label>
 									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-									<small class="error" id="prefstarttime1-required">This field is required.</small>
+									<small class="error" id="timepicker1opt1-required">This field is required.</small>
 								</div>
 								<div class="input-field col s6 right">
 									<label for="timepicker2opt1">End Time</label>
 									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
-									<small class="error" id="prefendtime2-required">This field is required.</small>
+									<small class="error" id="timepicker2opt1-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
 								<label for="Option1Venue" style=" font-size:14px;">Venue</label>
-								<small class="error" id="prefvenue1-required">This field is required.</small>
+								<small class="error" id="Option1Venue-required">This field is required.</small>
 							</div>
 							<h5 class="center">Option 2</h5>
 							<div class="row" style="margin-bottom: 0px;">
@@ -899,23 +904,23 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="prefday2-required">This field is required.</small>
+									<small class="error" id="Option2Day-required">This field is required.</small>
 								</div>
 							</div>
 								<div class="input-field col s6">
 									<label for="timepicker1opt2">Start Time</label>
 									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-									<small class="error" id="prefstarttime2-required">This field is required.</small>
+									<small class="error" id="timepicker1opt2-required">This field is required.</small>
 								</div>
 								<div class="input-field col s6">
 									<label for="timepicker2opt2">End Time</label>
 									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
-									<small class="error" id="prefendtime2-required">This field is required.</small>
+									<small class="error" id="timepicker2opt2-required">This field is required.</small>
 								</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
 								<label for="Option2Venue" style=" font-size:14px;">Venue</label>
-								<small class="error" id="prefvenue2-required">This field is required.</small>
+								<small class="error" id="Option2Venue-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -956,7 +961,7 @@
 								if (!$conn) {
 									die("Connection failed: " . mysqli_connect_error());
 								}
-								$query = "SELECT username FROM member_tbl ";
+								$query = "SELECT username, password FROM member_tbl ";
 								$result = mysqli_query($conn, $query);
 								if(mysqli_num_rows($result) > 0) {
 									while($row = mysqli_fetch_assoc($result)) {
@@ -971,19 +976,22 @@
 								<label for="username">Username</label>
 								<small class="error-with-icon" id="noInput">This field is required.</small>
 								<small class="error-with-icon" id="notusername">This username is already taken.</small>
-							</div>not
-							'; // originally having a value of own password
-							?>
+							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" name="password" id="password" data-length="16" maxlength="16">
 								<label for="password">Password</label>
+								<small class="error-with-icon" id="newpass">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" name="cpassword" id="cpassword" data-length="16" maxlength="16">
 								<label for="cpassword">Confirm Password</label>
+								<small class="error-with-icon" id="confirmpass">This field is required.</small>
+								<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
 							</div>
+							'; // originally having a value of own password
+							?>
 						</div>
 					</div>
 					<div id="page7" style="display: none;">
@@ -1102,84 +1110,100 @@
 	<!-- scripts -->
 
 	<script>
-	//algo for displaying forms per page
-	var currentpage = 1, no_of_pages=7, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		//algo for displaying forms per page
+		var currentpage = 1, no_of_pages=7, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 
-	// initialization of profress bar controls
-	document.getElementById('page').innerHTML = document.getElementById('page').innerHTML + "Page "+currentpage+" of "+no_of_pages;
-	document.getElementById('progressbar').style.width = currentprogress+"%";
-	function labelpage() {
-		document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-	}
-	function pagination(direction) {
-		if(direction == 0) {
-			if(currentpage == 2) {
-				document.getElementById('back').style.display = "none";
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage--;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress-=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').href = "#page"+currentpage;
-				document.getElementById('back').blur();
-			}
-			else {
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage--;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress-=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').href = "#page"+currentpage;
-				document.getElementById('back').blur();
-			}
-			// removes color of submit button attached to this button ~bug
-			document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right");
-			document.getElementById('next').innerHTML = "NEXT";
+		// initialization of profress bar controls
+		document.getElementById('page').innerHTML = document.getElementById('page').innerHTML + "Page "+currentpage+" of "+no_of_pages;
+		document.getElementById('progressbar').style.width = currentprogress+"%";
+		function labelpage() {
+			document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
 		}
-		else {
-			if(currentpage == no_of_pages) {
-				document.getElementById('page'+currentpage).style.display = "none";
-				document.getElementById('page'+currentpage).style.display = "inline";
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').style.display = "inline";
-				document.getElementById('next').href = "#page"+currentpage;
-
-				//document.getElementById('next').type = "submit";
-				document.getElementById('next').onclick = submitOnClick();
-				//document.getElementById('next').onclick = document.getElementById('next').value = "Submit";
-				//document.getElementById('next').onclick = document.getElementById('next').setAttribute("type", "submit");
+		function pagination(direction) {
+			if(direction == 0) {
+				if(currentpage == 2) {
+					document.getElementById('back').style.display = "none";
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage--;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress-=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').href = "#page"+currentpage;
+					document.getElementById('back').blur();
+				}
+				else {
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage--;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress-=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').href = "#page"+currentpage;
+					document.getElementById('back').blur();
+				}
+				// removes color of submit button attached to this button ~bug
+				document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right");
+				document.getElementById('next').innerHTML = "NEXT";
 			}
 			else {
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage++;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress+=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').style.display = "inline";
-				document.getElementById('next').href = "#page"+currentpage;
-				document.getElementById('next').blur();
-				if(currentpage == no_of_pages) { /*at last page, button changes from next to submit*/
-					// fixbutton puts the color of submit button
-					document.getElementById('next').innerHTML = "SUBMIT";
-					document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right fixbutton");
+				if(currentpage == no_of_pages) {
+					document.getElementById('page'+currentpage).style.display = "none";
+					document.getElementById('page'+currentpage).style.display = "inline";
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').style.display = "inline";
+					document.getElementById('next').href = "#page"+currentpage;
+
+					//document.getElementById('next').type = "submit";
+					document.getElementById('next').onclick = submitOnClick();
+					//document.getElementById('next').onclick = document.getElementById('next').value = "Submit";
+					//document.getElementById('next').onclick = document.getElementById('next').setAttribute("type", "submit");
+				}
+				else {
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage++;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress+=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').style.display = "inline";
+					document.getElementById('next').href = "#page"+currentpage;
+					document.getElementById('next').blur();
+					if(currentpage == no_of_pages) { /*at last page, button changes from next to submit*/
+						// fixbutton puts the color of submit button
+						document.getElementById('next').innerHTML = "SUBMIT";
+						document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right fixbutton");
+					}
 				}
 			}
 		}
-	}
 
-	function submitOnClick() {
-		document.getElementById('next').setAttribute("type", "submit");
-		//document.myForm.submit();
-		/*
-		$["#next"].click(function() {
-			$("button[name='submit_next']").prop("type", "submit"); //jquery-3
-		});
-		*/
-	}
+		function submitOnClick() {
+			document.getElementById('next').setAttribute("type", "submit");
+			//document.myForm.submit();
+			/*
+			$["#next"].click(function() {
+				$("button[name='submit_next']").prop("type", "submit"); //jquery-3
+			});
+			*/
+		}
+
+		/*code ni paolo*/
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		
+
+		/*end code ni paolo*/
 	</script>
 	<script type="text/javascript">
 	/*
