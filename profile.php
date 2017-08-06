@@ -2264,12 +2264,13 @@
 		});
 
 		/*
-		 *     INFORMATION ABOUT WILDCARDS
-		 		^=<string> --> elements starting with <string>
-		 		$=<string> --> elements ending with <string>
-
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
 		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
-		var confirmvalidated = false; // confirms if every form is verified and validated
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
 
 		$("[id$=back]").click(function() {
 			confirmvalidated = true;

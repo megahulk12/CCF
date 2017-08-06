@@ -260,6 +260,10 @@
 						$('#login-submit').text('Login');
 						$('button').prop("disabled", false);
 					}
+				},
+				error: function(data) {
+					$('#login-submit').text('Login');
+					$('button').prop("disabled", false);
 				}
 			});
 			e.preventDefault();
