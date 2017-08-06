@@ -618,6 +618,14 @@
 		th {
 			color: #424242;
 		}
+		.error-with-icon {
+			color: #ff3333;
+			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
+		}
 	</style>
 
 	<script>
@@ -918,21 +926,18 @@
 								<div class="input-field col s12">
 									<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 									<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
-									<small class="error" id="receivedchrist-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
 									<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
 									<label for="attendCCF">How long you have been attending CCF?</label>
-									<small class="error" id="attendccf-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
 									<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
 									<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-									<small class="error" id="regularlyattendsat-required">This field is required.</small>
 								</div>
 							</div>
 						</div>
