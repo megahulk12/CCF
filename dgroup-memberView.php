@@ -511,9 +511,6 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      		<!-- FOR DGROUP MEMERS
-			        	<li><a href="profile.php">PROFILE</a></li>
-			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministry.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
@@ -525,12 +522,12 @@
 	</header>
 
 	<body>
-		<div id = "back">
+		<div id="back">
 			<div class="nav-wrapper">
 				<a href = "dgroup.php"><h5>←</h5></a>
 			</div>
 		</div>
-		<div id = "title">
+		<div id="title">
 			<div class = "jumbotron text-center">
 				<h1>Personal Information</h1>
 			</div>
@@ -538,184 +535,183 @@
 		
 		<!--<div class="row row-profile">-->
 		<div class="container">
-			
-				<div id="cpinfo">
-					<div class="row">
-							<?php
-								if(isset($_GET['id'])){
-								$memberID = $_GET['id'];
-								$servername = "localhost";
-								$username = "root";
-								$password = "root";
-								$dbname = "dbccf";
-								$conn = mysqli_connect($servername, $username, $password, $dbname);
-								if (!$conn) {
-									die("Connection failed: " . mysqli_connect_error());
-								}
-								$query = "SELECT lastName, firstName, middleName, nickName, birthdate, (SELECT CASE WHEN gender = '0' THEN 'Male' ELSE 'Female' END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, dateJoined, schoolID, companyID, spouseID, prefID FROM member_tbl WHERE memberID = ".$memberID;
-								$result = mysqli_query($conn, $query);
-								if(mysqli_num_rows($result) > 0) {
-									while($row = mysqli_fetch_assoc($result)) {
-										$lastname = $row["lastName"];
-										$firstname = $row["firstName"];
-										$middlename = $row["middleName"];
-										$nickname = $row["nickName"];
-										$birthdate = date("j F, Y", strtotime($row["birthdate"]));
-										if(is_null($row["birthdate"]))
-											$birthdate = "";
-										//$birthdate = $row["birthdate"];
-										$gender = $row["gender"];
-										$male = "";
-										$female = "";
-										//if($gender == "Male") $male = "checked";
-										//else $female = "checked";
-										$civilStatus = $row["civilStatus"];
-										$citizenship = $row["citizenship"];
-										$contactNum = $row["contactNum"];
-										$emailAd = $row["emailAd"];
-										$occupation = $row["occupation"];
-										$dateJoined = date("j F, Y", strtotime($row["dateJoined"]));
-										if(is_null($row["dateJoined"]))
-											$dateJoined = "";
-										//$birthdate = $row["birthdate"];
-										$schoolID = $row["schoolID"];
-										$companyID = $row["companyID"];
-										$spouseID = $row["spouseID"];
-										$prefID = $row["prefID"];
-										//<p>'.$lastname.'</p>
-									}
-								}
-								echo '
-									<div class = "container">
-										<div class = "row">
-											<h5 class = "header">Last Name: </h5><p>'.$lastname.'</p>
-											<h5 class = "header">First Name: </h5><p>'.$firstname.'</p>
-											<h5 class = "header">Middle Name: </h5><p>'.$middlename.'</p>
-											<h5 class = "header">Nick Name: </h5><p>'.$nickname.'</p>
-											<h5 class = "header">Birthdate: </h5><p>'.$birthdate.'</p>
-											<h5 class = "header">Gender: </h5><p>'.$gender.'</p>
-											<h5 class = "header">Civil Status: </h5><p>'.$civilStatus.'</p>
-											<h5 class = "header">Citizenship: </h5><p>'.$citizenship.'</p>
-											<h5 class = "header">Contact Number: </h5><p>'.$contactNum.'</p>
-											<h5 class = "header">Email Address: </h5><p>'.$emailAd.'</p>
-											<h5 class = "header">Occupation: </h5><p>'.$occupation.'</p>
-											<h5 class = "header">Date Joined: </h5><p>'.$dateJoined.'</p>
-									
-								';
-								
-								if($schoolID != ""){
-									$servername = "localhost";
-									$username = "root";
-									$password = "root";
-									$dbname = "dbccf";
-									$conn = mysqli_connect($servername, $username, $password, $dbname);
-									if (!$conn) {
-										die("Connection failed: " . mysqli_connect_error());
-									}
-									$query = "SELECT schoolName, schoolContactNum, schoolAddress FROM schooldetails_tbl WHERE schoolID = ".$schoolID;
-									$result = mysqli_query($conn, $query);
-									if(mysqli_num_rows($result) > 0) {
-										while($row = mysqli_fetch_assoc($result)) {
-											$schoolName = $row["schoolName"];
-											$schoolContactNum = $row["schoolContactNum"];
-											$schoolAddress = $row["schoolAddress"];
-										}	
-									}
-									echo '
-										<h5 class = "header">School Name: </h5><p>'.$schoolName.'</p>
-										<h5 class = "header">School Address: </h5><p>'.$schoolAddress.'</p>
-										<h5 class = "header">School Contact Number: </h5><p>'.$schoolAddress.'</p>
-									';
-								}
-								else if($companyID != ""){
-									$servername = "localhost";
-									$username = "root";
-									$password = "root";
-									$dbname = "dbccf";
-									$conn = mysqli_connect($servername, $username, $password, $dbname);
-									if (!$conn) {
-										die("Connection failed: " . mysqli_connect_error());
-									}
-									$query = "SELECT companyName, companyAddress, companyContactNum FROM companydetails_tbl WHERE companyID = ".$companyID;
-									$result = mysqli_query($conn, $query);
-									if(mysqli_num_rows($result) > 0) {
-										while($row = mysqli_fetch_assoc($result)) {
-											$companyName = $row["companyName"];
-											$companyAddress = $row["companyAddress"];
-											$companyContactNum = $row["companyContactNum"];
-										}	
-									}
-									echo '
-											<h5 class = "header">Company Name: </h5><p>'.$companyName.'</p>
-											<h5 class = "header">Company Address: </h5><p>'.$companyAddress.'</p>
-											<h5 class = "header">Company Contact Number: </h5><p>'.$companyContactNum.'</p>
-									';
-								}
-								if($civilStatus == "Married" || $civilStatus == "Seperated" || $civilStatus == "Widow/er"){
-									$servername = "localhost";
-									$username = "root";
-									$password = "root";
-									$dbname = "dbccf";
-									$conn = mysqli_connect($servername, $username, $password, $dbname);
-									if (!$conn) {
-										die("Connection failed: " . mysqli_connect_error());
-									}
-									$query = "SELECT spouseName, spouseContactNum, spouseBirthdate FROM spousedetails_tbl WHERE spouseID = ".$spouseID;
-									$result = mysqli_query($conn, $query);
-									if(mysqli_num_rows($result) > 0) {
-										while($row = mysqli_fetch_assoc($result)) {
-											$spouseName = $row["spouseName"];
-											$spouseContactNum = $row["spouseContactNum"];
-											$spouseBirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
-											if(is_null($row["spouseBirthdate"]))
-												$spouseBirthdate = "";
-											//$birthdate = $row["birthdate"];
-										}	
-									}
-									echo '
-											<h5 class = "header">Spouse Name: </h5><p>'.$spouseName.'</p>
-											<h5 class = "header">Spouse Contact Number: </h5><p>'.$spouseContactNum.'</p>
-											<h5 class = "header">Spouse Birthdate: </h5><p>'.$spouseBirthdate.'</p>
-										
-									';
-								}
-								if($prefID != ""){
-									$servername = "localhost";
-									$username = "root";
-									$password = "root";
-									$dbname = "dbccf";
-									$conn = mysqli_connect($servername, $username, $password, $dbname);
-									if (!$conn) {
-										die("Connection failed: " . mysqli_connect_error());
-									}
-									$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefStartTime2, prefEndTime1, prefEndTime2, prefDay1, prefDay2 FROM preferencedetails_tbl WHERE prefID = ".$prefID;
-									$result = mysqli_query($conn, $query);
-									if(mysqli_num_rows($result) > 0) {
-										while($row = mysqli_fetch_assoc($result)) {
-											$prefLanguage = $row["prefLanguage"];
-											$prefVenue1 = $row["prefVenue1"];
-											$prefVenue2 = $row["prefVenue2"];
-											$prefStartTime1 = date("H:i", strtotime($row["prefStartTime1"]));
-											$prefEndTime1 = date("H:i", strtotime($row["prefEndTime1"]));
-											$prefStartTime2 = date("H:i", strtotime($row["prefStartTime2"]));
-											$prefEndTime2 = date("H:i", strtotime($row["prefEndTime2"]));
-											$prefDay1 = $row["prefDay1"];
-											$prefDay2 = $row["prefDay2"];
-										}	
-									}
-									echo '
-											<h5 class = "header">Prefered Language: </h5><p>'.$prefLanguage.'</p>
-											
-
-
-										</div>
-									';
-								}
-							}
-							?>
+			<div id="cpinfo">
+				<div class="row">
+				<?php
+					if(isset($_GET['id'])){
+					$memberID = $_GET['id'];
+					$servername = "localhost";
+					$username = "root";
+					$password = "root";
+					$dbname = "dbccf";
+					$conn = mysqli_connect($servername, $username, $password, $dbname);
+					if (!$conn) {
+						die("Connection failed: " . mysqli_connect_error());
+					}
+					$query = "SELECT lastName, firstName, middleName, nickName, birthdate, (SELECT CASE WHEN gender = '0' THEN 'Male' ELSE 'Female' END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, dateJoined, schoolID, companyID, spouseID, prefID FROM member_tbl WHERE memberID = ".$memberID;
+					$result = mysqli_query($conn, $query);
+					if(mysqli_num_rows($result) > 0) {
+						while($row = mysqli_fetch_assoc($result)) {
+							$lastname = $row["lastName"];
+							$firstname = $row["firstName"];
+							$middlename = $row["middleName"];
+							$nickname = $row["nickName"];
+							$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+							if(is_null($row["birthdate"]))
+								$birthdate = "";
+							//$birthdate = $row["birthdate"];
+							$gender = $row["gender"];
+							$male = "";
+							$female = "";
+							//if($gender == "Male") $male = "checked";
+							//else $female = "checked";
+							$civilStatus = $row["civilStatus"];
+							$citizenship = $row["citizenship"];
+							$contactNum = $row["contactNum"];
+							$emailAd = $row["emailAd"];
+							$occupation = $row["occupation"];
+							$dateJoined = date("j F, Y", strtotime($row["dateJoined"]));
+							if(is_null($row["dateJoined"]))
+								$dateJoined = "";
+							//$birthdate = $row["birthdate"];
+							$schoolID = $row["schoolID"];
+							$companyID = $row["companyID"];
+							$spouseID = $row["spouseID"];
+							$prefID = $row["prefID"];
+							//<p>'.$lastname.'</p>
+						}
+					}
+					echo '
+						<div class = "container">
+							<div class = "row">
+								<h5 class = "header">Last Name: </h5><p>'.$lastname.'</p>
+								<h5 class = "header">First Name: </h5><p>'.$firstname.'</p>
+								<h5 class = "header">Middle Name: </h5><p>'.$middlename.'</p>
+								<h5 class = "header">Nick Name: </h5><p>'.$nickname.'</p>
+								<h5 class = "header">Birthdate: </h5><p>'.$birthdate.'</p>
+								<h5 class = "header">Gender: </h5><p>'.$gender.'</p>
+								<h5 class = "header">Civil Status: </h5><p>'.$civilStatus.'</p>
+								<h5 class = "header">Citizenship: </h5><p>'.$citizenship.'</p>
+								<h5 class = "header">Contact Number: </h5><p>'.$contactNum.'</p>
+								<h5 class = "header">Email Address: </h5><p>'.$emailAd.'</p>
+								<h5 class = "header">Occupation: </h5><p>'.$occupation.'</p>
+								<h5 class = "header">Date Joined: </h5><p>'.$dateJoined.'</p>
 						
-					</div>
-				</div>
+					';
+					
+					if($schoolID != ""){
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$query = "SELECT schoolName, schoolContactNum, schoolAddress FROM schooldetails_tbl WHERE schoolID = ".$schoolID;
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$schoolName = $row["schoolName"];
+								$schoolContactNum = $row["schoolContactNum"];
+								$schoolAddress = $row["schoolAddress"];
+							}	
+						}
+						echo '
+							<h5 class = "header">School Name: </h5><p>'.$schoolName.'</p>
+							<h5 class = "header">School Address: </h5><p>'.$schoolAddress.'</p>
+							<h5 class = "header">School Contact Number: </h5><p>'.$schoolAddress.'</p>
+						';
+					}
+					else if($companyID != ""){
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$query = "SELECT companyName, companyAddress, companyContactNum FROM companydetails_tbl WHERE companyID = ".$companyID;
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$companyName = $row["companyName"];
+								$companyAddress = $row["companyAddress"];
+								$companyContactNum = $row["companyContactNum"];
+							}	
+						}
+						echo '
+								<h5 class = "header">Company Name: </h5><p>'.$companyName.'</p>
+								<h5 class = "header">Company Address: </h5><p>'.$companyAddress.'</p>
+								<h5 class = "header">Company Contact Number: </h5><p>'.$companyContactNum.'</p>
+						';
+					}
+					if($civilStatus == "Married" || $civilStatus == "Seperated" || $civilStatus == "Widow/er"){
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$query = "SELECT spouseName, spouseContactNum, spouseBirthdate FROM spousedetails_tbl WHERE spouseID = ".$spouseID;
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$spouseName = $row["spouseName"];
+								$spouseContactNum = $row["spouseContactNum"];
+								$spouseBirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+								if(is_null($row["spouseBirthdate"]))
+									$spouseBirthdate = "";
+								//$birthdate = $row["birthdate"];
+							}	
+						}
+						echo '
+								<h5 class = "header">Spouse Name: </h5><p>'.$spouseName.'</p>
+								<h5 class = "header">Spouse Contact Number: </h5><p>'.$spouseContactNum.'</p>
+								<h5 class = "header">Spouse Birthdate: </h5><p>'.$spouseBirthdate.'</p>
+							
+						';
+					}
+					if($prefID != ""){
+						$servername = "localhost";
+						$username = "root";
+						$password = "root";
+						$dbname = "dbccf";
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefStartTime2, prefEndTime1, prefEndTime2, prefDay1, prefDay2 FROM preferencedetails_tbl WHERE prefID = ".$prefID;
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$prefLanguage = $row["prefLanguage"];
+								$prefVenue1 = $row["prefVenue1"];
+								$prefVenue2 = $row["prefVenue2"];
+								$prefStartTime1 = date("H:i", strtotime($row["prefStartTime1"]));
+								$prefEndTime1 = date("H:i", strtotime($row["prefEndTime1"]));
+								$prefStartTime2 = date("H:i", strtotime($row["prefStartTime2"]));
+								$prefEndTime2 = date("H:i", strtotime($row["prefEndTime2"]));
+								$prefDay1 = $row["prefDay1"];
+								$prefDay2 = $row["prefDay2"];
+							}	
+						}
+						echo '
+								<h5 class = "header">Prefered Language: </h5><p>'.$prefLanguage.'</p>
+								
+
+
+							</div>
+						';
+					}
+				}
+				?>
 			
+				</div>
+			</div>
 		</div>
 	</body>
+</html>
