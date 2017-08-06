@@ -669,7 +669,6 @@
 					/*if($_SESSION['memberType'] >= 2 ) {
 					echo '
 					<h3>Own Dgroup</h3>
->>>>>>> Paolo-Edits
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
 						<tr>
 								';
@@ -926,22 +925,8 @@
 								allowOutsideClick: true
 							});
 					}
-<<<<<<< HEAD
-				})
-			}
-					
-=======
-					/*
-				setTimeout( 
-					swal({
-							title: "Approved!",
-							text: "You have approved this request.",
-							type: "success"
-						},
-						function() { //window.location here ?apr=y }
-						), 1000);
-						*/
-				});
+				}
+			);
 		}
 		
 		function seen() { // this function gets rid of the badge every after click event 
@@ -962,6 +947,5 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
->>>>>>> Jasper-Edits
 	</script>
 </html>

@@ -1038,7 +1038,7 @@
 														WHEN dgroupType = '2' THEN 'Single Parents'
 														WHEN dgroupType = '3' THEN 'Married'
 														WHEN dgroupType = '4' THEN 'Couples'
-													END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+													END) AS dgroupType, schedDay, CONCAT((SELECT CONVERT(TIME, schedStartTime, 100)) AS start_time, ' - ', (SELECT CONVERT(TIME, schedEndTime, 100)) AS end_time) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 									$result = mysqli_query($conn, $sql_dgroups);
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;

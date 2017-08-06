@@ -524,6 +524,7 @@
 					timer: 10000,
 					confirmButtonText: "OK"
 				});
+				$("body").removeClass("stop-scrolling");
 			});
 			</script>
 			';
