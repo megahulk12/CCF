@@ -272,6 +272,8 @@
 			font-weight: 800;
 			line-height: 4rem;
 			color: #fff;
+			-webkit-user-select: none;
+			cursor: default;
 		}
 
 		.cover-content, .cover-content span {
@@ -280,6 +282,8 @@
 			font-family: sans-serif;
 			font-size: 1.4rem;
 			color: #fff;
+			-webkit-user-select: none;
+			cursor: default;
 		}
 
 		.parallax-container {
