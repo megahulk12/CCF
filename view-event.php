@@ -593,6 +593,9 @@
 			});
 		});
 	});
+
+	if($('div').hasClass('card'))
+		$('div .card').addClass('z-depth-0');
 	</script>
 
 	<!-- this section is for setting requests -->

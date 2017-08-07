@@ -1001,9 +1001,9 @@
 								<thead>
 									<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
 									<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+									<th style="width: <?php echo widthRow(8); ?>%">Gender</th>
+									<th style="width: <?php echo widthRow(8); ?>%">Type of Dgroup</th>
+									<th style="width: <?php echo widthRow(6); ?>%">Day</th>
 									<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
 								</thead>
 								<?php
@@ -1046,7 +1046,8 @@
 														WHEN dgroupType = '2' THEN 'Single Parents'
 														WHEN dgroupType = '3' THEN 'Married'
 														WHEN dgroupType = '4' THEN 'Couples'
-													END) AS dgroupType, schedDay, CONCAT((SELECT CONVERT(TIME, schedStartTime, 100)) AS start_time, ' - ', (SELECT CONVERT(TIME, schedEndTime, 100)) AS end_time) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+														WHEN dgroupType = '5' THEN 'All'
+													END) AS dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 									$result = mysqli_query($conn, $sql_dgroups);
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
@@ -1057,7 +1058,9 @@
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
 											$schedday = $row["schedDay"];
-											$schedule = $row["schedule"];
+											$start_time = date("g:i A", strtotime($row["start_time"]));
+											$end_time = date("g:i A", strtotime($row["end_time"]));
+											$schedule = "$start_time - $end_time";
 											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
 											<td>'.$gender.'</td>
