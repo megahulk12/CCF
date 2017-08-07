@@ -1283,8 +1283,8 @@
 													<label for="Citizenship">Citizenship</label>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
-													<label for="EmailAd" data-error="Invalid email address">Email Address</label>
+													<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+													<label for="Email" data-error="Invalid email address">Email Address</label>
 												</div>
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
@@ -1945,6 +1945,7 @@
 			}
 		});
 
+		/*
 		$("#coinfo_next").click(function() {
 			$('.error').hide();
 			var check_iteration = true;
@@ -1972,6 +1973,7 @@
 			}
 
 			});
+			*/
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
