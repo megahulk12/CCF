@@ -6,13 +6,16 @@
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
-	<link href="materialize/css/materialize.css" rel="stylesheet">
-	<script src="jquery-3.2.1.min.js"></script>
+	<link href="universal.css" rel="stylesheet">
+	<link rel="stylesheet" href="materialize/css/materialize.css" media="screen,projection">
+	<script src="jquery-3.2.1.js"></script>
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
-	<link href="universal.css" rel="stylesheet">
+	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
+	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
@@ -33,6 +36,14 @@
 			margin: 0 auto;
 			max-width: 1280px;
 			width: 80%;
+		}
+
+		.card-panel {
+		 	 transition: box-shadow .25s;
+		 	 padding: 24px !important;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 border-radius: 2px;
+		 	 background-color: #fff;
 		}
 
 		#logo {
@@ -144,8 +155,6 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		  	margin-right: 10px;
-		  	margin-top: 15px;
 		}
 
 		/*hover of button*/
@@ -158,8 +167,10 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
-		/* ============================END=========================== */ 
+
+		/*===============END===============*/
 
 		.dropdown-content-list {
 		 	 background-color: #fff;	
@@ -435,8 +446,19 @@
 		}
 
 		/*tables*/
-		table.cursor > tbody > tr:hover {
+		table > tbody > tr:hover {
 			cursor: hand;
+			background-color: #f2f2f2 !important;
+		}
+
+		table > tbody > tr.active {
+			background-color: #16A5B8;
+			color: #fff;
+		}
+
+		table > tbody > tr.active:hover {
+			background-color: #16A5B8 !important;
+			color: #fff !important;
 		}
 
 		td {
@@ -473,16 +495,72 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		#preloader {
+			position: relative;
+		}
+
+		#view {
+			position: relative;
+			top: 100;
+			cursor: pointer;
+		}
+
+		#Eform {
+			margin: 0 auto;
+			height: 700px;
+		}
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+			init();
+		});
+
+		function init() {
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 
 			// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
 			$('.modal').modal();
+
+			$('.datepicker').pickadate({
+				selectMonths: true, // Creates a dropdown to control month
+				selectYears: 100, // Creates a dropdown of 15 years to control year
+				max: true
+			});
+			
+			$('select').material_select();
+				
+			$('.timepicker').pickatime({
+				//default: 'now', // Set default time; do not set default time in viewing of time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker  
+			});
+		}
+
+		$(document).ready(function() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#Eform').width()/2);
+			$('#preloader').css("top", $('#Eform').height()/2);
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -490,15 +568,31 @@
 			var num_of_rows = document.getElementsByTagName("TR").length;
 			var rownumber = id.charAt(3);
 			for(var i = 0; i < num_of_rows; i++) {
-				//document.getElementsByTagName("TR")[i].appendChild(style);
-				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
-				document.getElementsByTagName("TR")[i].style.color = "black"
+				document.getElementsByTagName("TR")[i].setAttribute("class", "");
 			}
-			document.getElementById(id).style.backgroundColor = "#16A5B8";
-			document.getElementById(id).style.color = "#fff";
+			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "endorsements.php?id="+id.split("_")[1]);
+
+
+			// ajax + preloader
+
+			var url = "request_endorsements.php";
+			$('button').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$("#page1").css("opacity", 0.2);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+id,
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$('#page1').html(data);
+					$("#page1").css("opacity", 1);
+					$('button').prop("disabled", false);
+				}
+			});
 		}
 	</script>
 
@@ -588,43 +682,113 @@
 		<div class="container">
 			<h2 class="center">Endorsements</h2>
 			<div class="row">
-				<div class="col s3"></div>
-				<div class="col s6">
-					<table class="centered">
-						<thead>
-							<tr>
-								<th>Name(s)</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr id="row_1" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_2" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_3" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-						</tbody>
-						<tfoot></tfoot>
-					</table>
-					<div class="col s4"></div>
-					<button class="waves-effect waves-light btn col s4 fixbutton" type="submit" data-target="Endorsement">View</button>
-					<div class="col s4"></div>
+				<div class="col s12 z-depth-4 card-panel">
+					<div class="col s5">
+						<div class="col s12">
+							<h3 class="center">Request Lists</h3>
+							<table class="centered">
+								<thead>
+									<tr>
+										<th>Name(s)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="row_1" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+									<tr id="row_2" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+									<tr id="row_3" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+								</tbody>
+								<tfoot></tfoot>
+							</table>
+						</div>
+					</div>
+					<div class="col s7" id="form">
+						<div class="container">
+							<form method="post" id="Eform">
+								<h3 class="center">Sample's Form</h3>
+								<div class="row">
+									<div id="preloader">
+										<div class="preloader-wrapper small active">
+											<div class="spinner-layer spinner-blue-only spinner-color-theme">
+												<div class="circle-clipper left">
+													<div class="circle"></div>
+												</div><div class="gap-patch">
+													<div class="circle"></div>
+												</div><div class="circle-clipper right">
+													<div class="circle"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="page1">
+										<h4 class="center">BAPTISMAL</h4>
+										<div class="row">
+											<div class="input-field col s12">
+												<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" disabled>
+												<label for="BaptismalDate" class>When were you baptized?</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" disabled>
+												<label for="BaptismalPlace">Where were you baptized?</label>
+											</div>
+											<h4 class="center">DGROUP</h4>
+												<div class="input-field col s12">
+													<select id="DgroupType" name="DgroupType" disabled>
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Youth">Youth</option>
+														<option value="Singles">Singles</option>
+														<option value="Single_Parents">Single Parents</option>
+														<option value="Married">Married</option>
+														<option value="Couples">Couples</option>
+													</select>
+													<label>Type of Dgroup</label>
+												</div>
+											<div class="input-field col s12">
+												<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' disabled>
+												<label for="AgeBracket">Age Bracket</label>
+											</div>
+											<h4 class="center">MEETING</h4>
+												<div class="input-field col s12">
+													<select id="MeetingDay" name="MeetingDay" disabled>
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunnday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											<div class="input-field col s6">
+												<label for="timepicker1opt1">Start Time</label>
+												<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" disabled>
+											</div>
+											<div class="input-field col s6">
+												<label for="timepicker1opt2">End Time</label>
+												<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" disabled>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" disabled>
+												<label for="MeetingPlace">Place</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button class="waves-effect waves-light btn col s3 fixbutton right" type="submit" id="approve" name="approve">Approve</button>
+									<button class="modal-action modal-close waves-effect waves-light btn col s3 right" type="button" id="notify" name="notify" data-target="!" style="margin-right: 10px;">Notify</button>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
-				<div class="col s3"></div>
-			</div>
-		</div>
-
-		<div id="Endorsement" class="modal">
-			<div class="modal-content">
-				<h4>Endorsement</h4>
-				<p>A bunch of text</p>
-			</div>
-			<div class="modal-footer">
-				<button class="waves-effect waves-light btn col s4 fixbutton" type="submit" id="approve" name="approve" style="margin-left: 10px;">Approve</button>
-				<button class="modal-action modal-close waves-effect waves-green btn" type="button" id="notify" name="notify" data-target="!">Notify</button>
 			</div>
 		</div>
 	</body>
@@ -779,5 +943,11 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		// preloader section
+		$('button').prop("disabled", true);
+		$('button').click(function() {
+			$('button').blur();
+		});
 	</script>
 </html>
