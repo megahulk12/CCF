@@ -485,6 +485,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
 
 
@@ -707,22 +708,27 @@
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Last Name</label>
+								<small class="error" id="lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">First Name</label>
+								<small class="error" id="firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middle Name</label>
+								<small class="error" id="middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
+								<small class="error" id="nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="">
 								<label for="Birthdate" class>Birthdate</label>
+								<small class="error" id="birthdate-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -741,6 +747,7 @@
 							<div class="input-field col s12">
 								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
 								<label for="Citizenship">Citizenship</label>
+								<small class="error" id="citizenship-required">This field is required.</small>
 							</div>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
@@ -754,19 +761,23 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
+									<small class="error" id="citizenship-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
 								<label for="MobileNumber">Mobile Number</label>
+								<small class="error" id="mobilenumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
 								<label for="EmailAd" data-error="Invalid email address">Email Address</label>
+								<small class="error" id="email-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
 								<label for="Profession" name="profession">Profession/Occupation</label>
+								<small class="error" id="profession-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -846,21 +857,25 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
+									<small class="error" id="prefday1-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s6">
 									<label for="timepicker1opt1">Start Time</label>
 									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+									<small class="error" id="prefstarttime1-required">This field is required.</small>
 								</div>
 								<div class="input-field col s6 right">
 									<label for="timepicker2opt1">End Time</label>
 									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+									<small class="error" id="prefendtime2-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
 								<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+								<small class="error" id="prefvenue1-required">This field is required.</small>
 							</div>
 							<h5 class="center">Option 2</h5>
 							<div class="row" style="margin-bottom: 0px;">
@@ -876,19 +891,23 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
+									<small class="error" id="prefday2-required">This field is required.</small>
 								</div>
 							</div>
 								<div class="input-field col s6">
 									<label for="timepicker1opt2">Start Time</label>
 									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+									<small class="error" id="prefstarttime2-required">This field is required.</small>
 								</div>
 								<div class="input-field col s6">
 									<label for="timepicker2opt2">End Time</label>
 									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+									<small class="error" id="prefendtime2-required">This field is required.</small>
 								</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
 								<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+								<small class="error" id="prefvenue2-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -899,18 +918,21 @@
 								<div class="input-field col s12">
 									<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 									<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
+									<small class="error" id="receivedchrist-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
 									<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
 									<label for="attendCCF">How long you have been attending CCF?</label>
+									<small class="error" id="attendccf-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s12">
 									<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
 									<label for="regularlyAttendsAt">Where do you regularly attend?</label>
+									<small class="error" id="regularlyattendsat-required">This field is required.</small>
 								</div>
 							</div>
 						</div>
@@ -918,11 +940,35 @@
 					<div id="page6" style="display: none;">
 						<h3 class="center">Account</h3>
 						<div class="row">
+							<?php
+								// database connection variable
+
+								$servername = "localhost";
+								$username = "root";
+								$password = "root";
+								$dbname = "dbccf";
+								$conn = mysqli_connect($servername, $username, $password, $dbname);
+								if (!$conn) {
+									die("Connection failed: " . mysqli_connect_error());
+								}
+								$query = "SELECT username FROM member_tbl ";
+								$result = mysqli_query($conn, $query);
+								if(mysqli_num_rows($result) > 0) {
+									while($row = mysqli_fetch_assoc($result)) {
+										$username = $row["username"];
+									}
+								}
+								//checking if username exist
+							echo '
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
 								<input type="text" name="username" id="username" data-length="16" maxlength="16">
 								<label for="username">Username</label>
-							</div>
+								<small class="error-with-icon" id="noInput">This field is required.</small>
+								<small class="error-with-icon" id="notusername">This username is already taken.</small>
+							</div>not
+							'; // originally having a value of own password
+							?>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" name="password" id="password" data-length="16" maxlength="16">
@@ -942,9 +988,9 @@
 								<thead>
 									<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
 									<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
-									<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+									<th style="width: <?php echo widthRow(8); ?>%">Gender</th>
+									<th style="width: <?php echo widthRow(8); ?>%">Type of Dgroup</th>
+									<th style="width: <?php echo widthRow(6); ?>%">Day</th>
 									<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
 								</thead>
 								<?php
@@ -987,7 +1033,8 @@
 														WHEN dgroupType = '2' THEN 'Single Parents'
 														WHEN dgroupType = '3' THEN 'Married'
 														WHEN dgroupType = '4' THEN 'Couples'
-													END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+														WHEN dgroupType = '5' THEN 'All'
+													END) AS dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 									$result = mysqli_query($conn, $sql_dgroups);
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
@@ -998,7 +1045,9 @@
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
 											$schedday = $row["schedDay"];
-											$schedule = $row["schedule"];
+											$start_time = date("g:i A", strtotime($row["start_time"]));
+											$end_time = date("g:i A", strtotime($row["end_time"]));
+											$schedule = "$start_time - $end_time";
 											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
 											<td>'.$gender.'</td>

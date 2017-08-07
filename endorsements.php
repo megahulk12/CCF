@@ -6,13 +6,16 @@
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
-	<link href="materialize/css/materialize.css" rel="stylesheet">
-	<script src="jquery-3.2.1.min.js"></script>
+	<link href="universal.css" rel="stylesheet">
+	<link rel="stylesheet" href="materialize/css/materialize.css" media="screen,projection">
+	<script src="jquery-3.2.1.js"></script>
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
-	<link href="universal.css" rel="stylesheet">
+	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
+	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
@@ -33,6 +36,14 @@
 			margin: 0 auto;
 			max-width: 1280px;
 			width: 80%;
+		}
+
+		.card-panel {
+		 	 transition: box-shadow .25s;
+		 	 padding: 24px !important;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 border-radius: 2px;
+		 	 background-color: #fff;
 		}
 
 		#logo {
@@ -88,6 +99,45 @@
 		}
 		/*=======END=======*/
 
+		
+		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
+		/* input custom colors*/
+		/*Text inputs*/
+		input:not([type]):focus:not([readonly]),
+		input[type=text]:focus:not([readonly]),
+		input[type=password]:focus:not([readonly]),
+		input[type=email]:focus:not([readonly]),
+		input[type=url]:focus:not([readonly]),
+		input[type=time]:focus:not([readonly]),
+		input[type=date]:focus:not([readonly]),
+		input[type=datetime]:focus:not([readonly]),
+		input[type=datetime-local]:focus:not([readonly]),
+		input[type=tel]:focus:not([readonly]),
+		input[type=number]:focus:not([readonly]),
+		input[type=search]:focus:not([readonly]),
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		input:not([type]):focus:not([readonly])+label,
+		input[type=text]:focus:not([readonly])+label,
+		input[type=password]:focus:not([readonly])+label,
+		input[type=email]:focus:not([readonly])+label,
+		input[type=url]:focus:not([readonly])+label,
+		input[type=time]:focus:not([readonly])+label,
+		input[type=date]:focus:not([readonly])+label,
+		input[type=datetime]:focus:not([readonly])+label,
+		input[type=datetime-local]:focus:not([readonly])+label,
+		input[type=tel]:focus:not([readonly])+label,
+		input[type=number]:focus:not([readonly])+label,
+		input[type=search]:focus:not([readonly])+label,
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+
+		/*===============BUTTONS===============*/
+
 		/*=====FORM BUTTONS=====*/
 		.btn, .btn-large {
 		  text-decoration: none;
@@ -102,14 +152,9 @@
 		  /*border-radius: 20px;*/
 		}
 
-		.dgroup-leader-button {
+		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.wait-request {
-		  	background-color: #ebebeb;
-		  	color: #777;
 		}
 
 		/*hover of button*/
@@ -122,7 +167,10 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
+
+		/*===============END===============*/
 
 		.dropdown-content-list {
 		 	 background-color: #fff;	
@@ -398,8 +446,19 @@
 		}
 
 		/*tables*/
-		table.cursor > tbody > tr:hover {
+		table > tbody > tr:hover {
 			cursor: hand;
+			background-color: #f2f2f2 !important;
+		}
+
+		table > tbody > tr.active {
+			background-color: #16A5B8;
+			color: #fff;
+		}
+
+		table > tbody > tr.active:hover {
+			background-color: #16A5B8 !important;
+			color: #fff !important;
 		}
 
 		td {
@@ -407,7 +466,7 @@
 		  	display: table-cell;
 		  	text-align: left;
 		  	vertical-align: middle;
-		  	border-radius: 0px; /* complete horizontal hightlight bar*/
+		  	border-radius: 0px; /* complete horizontal highlight bar*/
 		}
 		/* ============================END=========================== */  
 
@@ -421,6 +480,10 @@
 			color: #424242;
 		}
 
+		tbody tr:hover {
+			cursor: pointer;
+		}
+
 		/* ===== FOOTER ===== */
 		.page-footer {
 			margin-top: 100px;
@@ -432,26 +495,108 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
-	</style>
 
-	<script>
-			$(document).ready(function(){
-				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-				$('.modal').modal();
-			});
- 
-			
-		</script>
+		#preloader {
+			position: relative;
+		}
+
+		#view {
+			position: relative;
+			top: 100;
+			cursor: pointer;
+		}
+
+		#Eform {
+			margin: 0 auto;
+			height: 700px;
+		}
+
+		.fadeIn {
+			opacity: 1;
+			transition: opacity 0.5s;
+		}
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+		/* ===== END ===== */
+	</style>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+			init();
+		});
+
+		function init() {
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		}); 
 
-		function view(id) {
-			history.pushState(null, null, "dgroup.php?id="+id);
+			// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+			$('.modal').modal();
+
+			$('.datepicker').pickadate({
+				selectMonths: true, // Creates a dropdown to control month
+				selectYears: 100, // Creates a dropdown of 15 years to control year
+				max: true
+			});
+			
+			$('select').material_select();
+				
+			$('.timepicker').pickatime({
+				//default: 'now', // Set default time; do not set default time in viewing of time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker  
+			});
+		}
+
+		$(document).ready(function() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#Eform').width()/2);
+			$('#preloader').css("top", $('#Eform').height()/2);
+		});
+
+		function cellActive(id) { // this function allows you to highlight the table rows you select
+			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
+			var num_of_rows = document.getElementsByTagName("TR").length;
+			var rownumber = id.charAt(3);
+			for(var i = 0; i < num_of_rows; i++) {
+				document.getElementsByTagName("TR")[i].setAttribute("class", "");
+			}
+			document.getElementById(id).setAttribute("class", "active");
+			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			history.pushState(null, null, "endorsements.php?id="+id.split("_")[1]);
+
+
+			// ajax + preloader
+
+			var url = "request_endorsements.php";
+			$('button').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$("#page1").css("opacity", 0.2);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+id,
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$("#page1").css("opacity", 1);
+					$('button').prop("disabled", false);
+				}
+			});
 		}
 	</script>
 
@@ -539,129 +684,116 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<?php 
-			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
-			echo '
-			<form method="post">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
-				<input type="hidden" name="seen-request" />
-			</form>';
-			}
-			?>
-			<div id="small-group">
-				<div id="dgroup">
-					<h3>Discipleship Group</h3>
-					<?php
-						// database connection variables
-
-						$servername = "localhost";
-						$username = "root";
-						$password = "root";
-						$dbname = "dbccf";
-						$conn = mysqli_connect($servername, $username, $password, $dbname);
-						if (!$conn) {
-							die("Connection failed: " . mysqli_connect_error());
-						}
-
-						// insert code set notificationStatus = 1 when user clicks notification area
-						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
-
-						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
-
-						echo '
-					<table class="centered dgroup-table-spacing">
-						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
-						';
-
-						$lresult = mysqli_query($conn, $lquery);
-						
-						if(mysqli_num_rows($lresult) > 0) {
-							while($lrow = mysqli_fetch_assoc($lresult)) {
-								$leader = $lrow["leader"];
-							}
-						}
-
-						$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-								echo '
-						<td>
-							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
-							'.$leader.'<br><br><label>LEADER</label></a>
-						</td>
-								';
-							$counter_row = 1;
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								echo '
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								'.$fullname.'<br><br>&nbsp;</a>
-							</td>
-								';
-								$counter_row++;
-								if($counter_row == 4) {
-									echo'
-						</tr>
-						<tr>
-									';
-									$counter_row = 0;
-								}
-							}
-							echo '
-						</tr>';
-						}
-					?>
-					</table>
+			<h2 class="center">Endorsements</h2>
+			<div class="row">
+				<div class="col s12 z-depth-4 card-panel">
+					<div class="col s5">
+						<div class="col s12">
+							<h3 class="center">Request Lists</h3>
+							<table class="centered">
+								<thead>
+									<tr>
+										<th>Name(s)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="row_1" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+									<tr id="row_2" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+									<tr id="row_3" onclick="cellActive(this.id)">
+										<td> Sample </td>
+									</tr>
+								</tbody>
+								<tfoot></tfoot>
+							</table>
+						</div>
+					</div>
+					<div class="col s7" id="form">
+						<div class="container">
+							<form method="post" id="Eform">
+								<h3 class="center">Sample's Form</h3>
+								<div class="row">
+									<div id="preloader">
+										<div class="preloader-wrapper small active">
+											<div class="spinner-layer spinner-blue-only spinner-color-theme">
+												<div class="circle-clipper left">
+													<div class="circle"></div>
+												</div><div class="gap-patch">
+													<div class="circle"></div>
+												</div><div class="circle-clipper right">
+													<div class="circle"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="page1" class="">
+										<h4 class="center">BAPTISMAL</h4>
+										<div class="row">
+											<div class="input-field col s12">
+												<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" disabled>
+												<label for="BaptismalDate" class>When were you baptized?</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" disabled>
+												<label for="BaptismalPlace">Where were you baptized?</label>
+											</div>
+											<h4 class="center">DGROUP</h4>
+												<div class="input-field col s12">
+													<select id="DgroupType" name="DgroupType" disabled>
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Youth">Youth</option>
+														<option value="Singles">Singles</option>
+														<option value="Single_Parents">Single Parents</option>
+														<option value="Married">Married</option>
+														<option value="Couples">Couples</option>
+													</select>
+													<label>Type of Dgroup</label>
+												</div>
+											<div class="input-field col s12">
+												<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' disabled>
+												<label for="AgeBracket">Age Bracket</label>
+											</div>
+											<h4 class="center">MEETING</h4>
+												<div class="input-field col s12">
+													<select id="MeetingDay" name="MeetingDay" disabled>
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunnday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											<div class="input-field col s6">
+												<label for="timepicker1opt1">Start Time</label>
+												<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" disabled>
+											</div>
+											<div class="input-field col s6">
+												<label for="timepicker1opt2">End Time</label>
+												<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" disabled>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" disabled>
+												<label for="MeetingPlace">Place</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button class="waves-effect waves-light btn col s3 fixbutton right" type="submit" id="approve" name="approve">Approve</button>
+									<button class="modal-action modal-close waves-effect waves-light btn col s3 right" type="button" id="notify" name="notify" data-target="!" style="margin-right: 10px;">Notify</button>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
-			<!-----------------code ni paolo------------------>
-			<?php
-
-				$servername = "localhost";
-				$username = "root";
-				$password = "root";
-				$dbname = "dbccf";
-				$conn = mysqli_connect($servername, $username, $password, $dbname);
-				if (!$conn) {
-					die("Connection failed: " . mysqli_connect_error());
-				}
-				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
-
-				$result = mysqli_query($conn, $query);
-				if(mysqli_num_rows($result) > 0) {
-					echo '
-			<div id="own-dgroup">
-				<h3>My Discipleship Group</h3>
-				<table id="own-dgroup" class="centered dgroup-table-spacing">
-					<tr>';
-					$counter_row = 0;
-					while($row = mysqli_fetch_assoc($result)) {
-						$fullname = $row["fullname"];
-						$memberID = $row["memberID"];
-						if($_SESSION['memberType'] >= 2 ){
-							echo '
-								<td>
-									<a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
-										'.$fullname.'<br><br>&nbsp;</a>
-								</td>
-								';
-							$counter_row++;
-							if($counter_row == 4) {
-							echo'
-					</tr>
-					<tr>
-							';
-							$counter_row = 0;
-							}
-						}
-					}
-					echo '
-					</tr>
-				</table>
-			</div>';
-				}
-			?>
 		</div>
 	</body>
 
@@ -683,72 +815,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<script>
-		function viewProfile(page) {
-			if(page==1) {
-				document.getElementById('small-group').style.display = "none";
-				document.getElementById('view-profile').style.display = "inline";
-				document.getElementById('member').setAttribute("class", "dgroup-names dgroup-view-profile");
-			}
-			else {
-				document.getElementById('small-group').style.display = "inline";
-				document.getElementById('view-profile').style.display = "none";
-			}
-		}
-
-		
-		function requestLeader() {
-			/*swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() {
-					changeToPending();
-				}
-			);
-			*/
-			
-		}
-
-		function changeToPending() {
-			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
-			document.getElementById("request_leader").style.color = "#777";
-			document.getElementById("request_leader").innerHTML = "PENDING";
-			document.getElementById("request_leader").disabled = true;
-		}
-
-		function changeBack() {
-			document.getElementById("request_leader").style.backgroundColor = "#16A5B8";
-			document.getElementById("request_leader").style.color = "#fff";
-			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
-			document.getElementById("request_leader").disabled = false;
-		}
-	</script>
-	<script>
-		function requestLeader() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "request.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("request_leader");
-			swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() { window.location.reload(); }
-			);
-		}
-	</script>
 
 	<?php
 		if(isset($_POST['seen-request'])) {
@@ -881,5 +947,24 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		// preloader section
+		$('button').prop("disabled", true);
+		$('button').click(function() {
+			$('button').blur();
+		});
+
+		// APPROVE SECTION
+		$('#approve').click(function() {
+			var url = "request_endorsements.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "approve",
+				success: function(data) {
+					
+				}
+			});
+		});
 	</script>
 </html>

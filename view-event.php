@@ -382,6 +382,17 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.2);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -503,7 +514,7 @@
 								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
 							</p>
 							<p>
-								<button class="waves-effect waves-light btn col s3 right" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
+								<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
 								<br>
 							</p>
 						</div>
@@ -582,13 +593,31 @@
 			});
 		});
 	});
+
+	if($('div').hasClass('card'))
+		$('div .card').addClass('z-depth-0');
 	</script>
 
 	<!-- this section is for setting requests -->
 	<script>
 		function joinEvent() {
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.join-event').html(preloader);
+			$('.join-event').prop("disabled", true);
 			var url="join-event.php";
-			$.ajax({
+				$.ajax({
 				type: "POST",
 				url: url,
 				success: function() {
@@ -600,6 +629,15 @@
 						allowOutsideClick: true,
 						timer: 10000
 					});
+					$('body').removeClass('stop-scrolling');
+					$('.join-event').html('JOIN THIS EVENT');
+					$('.join-event').prop("disabled", false);
+				},
+				error: function() {
+					swal("Error!", "Please try again later!", "error");
+					$('body').removeClass('stop-scrolling');
+					$('.join-event').html('JOIN THIS EVENT');
+					$('.join-event').prop("disabled", false);
 				}
 			});
 		}

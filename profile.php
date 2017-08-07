@@ -194,9 +194,13 @@
 			min-height: 1px;
 		}
 
-		.error {
+		.error-with-icon {
 			color: #ff3333;
 			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
 		}
 		/*=======END=======*/
 
@@ -267,6 +271,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+		  	color: #fff;
 		}
 
 		/*=====SIDE NAV BUTTONS=====*/
@@ -312,7 +317,7 @@
 		}
 
 		.profile-next-or-submit-button {
-			margin-right: 20px;
+			margin-right: 7px;
 		}
 
 		/*===============END===============*/
@@ -559,6 +564,17 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.2);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -615,7 +631,6 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
-			
 		});
 
 		// Initialize collapse button
@@ -673,7 +688,6 @@
 		}, false);
 		*/
 
-		var chooseleader = false;
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -688,17 +702,6 @@
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "profile.php?id="+id.split("_")[1]);
-			setID(id);
-		}
-
-		var dgid;
-		function setID(id) {
-			dgid = id;
-			chooseleader = true;
-		}
-
-		function getID() {
-			return dgid;
 		}
 	</script>
 
@@ -794,7 +797,7 @@
 								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
 								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 
-								<!---Code ni Mark ito. Hide links for Member Type-->
+								<!---Code ni Mark ito-->
 								<?php
 								if($_SESSION["memberType"] > 0) echo '
 									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
@@ -839,30 +842,35 @@
 												}
 												echo '
 												<div class="input-field col s12">
-													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'">
+													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'" required>
 													<label for="Lastname">Last Name</label>
+													<small class="error" id="lastname-required"></small>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'">
+													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'" required>
 													<label for="Firstname">First Name</label>
+													<small class="error" id="firstname-required"></small>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'">
+													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'" required>
 													<label for="Middlename">Middle Name</label>
+													<small class="error" id="middlename-required"></small>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'">
+													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'" required>
 													<label for="Nickname">Nickname</label>
+													<small class="error" id="nickname-required"></small>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'"> <!-- originally date type, OC ito haha -->
+													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'" required> <!-- originally date type, OC ito haha -->
 													<label for="Birthdate">Birthdate</label>
+													<small class="error" id="birthdate-required"></small>
 												</div>
 												';
 											?>
-											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
-											</div>
+										</div>
+										<div class="row">
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
 										</div>
 									</div>
 								</form>
@@ -897,10 +905,10 @@
 													$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
 													$civilstatus = $row["civilStatus"];
 													if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
-													else if($civilstatus == "Single Parent") $selectedcivilstatus[2] = "selected";
-													else if($civilstatus == "Separated") $selectedcivilstatus[3] = "selected";
-													else if($civilstatus == "Married") $selectedcivilstatus[4] = "selected";
-													else if($civilstatus == "Annulled") $selectedcivilstatus[5] = "selected";
+													else if($civilstatus == "Married") $selectedcivilstatus[2] = "selected";
+													else if($civilstatus == "Single Parent") $selectedcivilstatus[3] = "selected";
+													else if($civilstatus == "Annulled") $selectedcivilstatus[4] = "selected";
+													else if($civilstatus == "Separated") $selectedcivilstatus[5] = "selected";
 													else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
 													else $selectedcivilstatus[0] = "selected";
 													$citizenship = $row["citizenship"];
@@ -918,7 +926,7 @@
 													<label for="Gender_Female">Female</label>
 												</p>
 												<div class="input-field col s12">
-													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'">
+													<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
 													<label for="Citizenship">Citizenship</label>
 													<small class="error" id="Citizenship-required">This field is required.</small>
 												</div>
@@ -927,8 +935,8 @@
 														<select id="CivilStatus" name="CivilStatus">
 															<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
 															<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
-															<option value="Single Parent" '.$selectedcivilstatus[2].'>Single Parent</option>
-															<option value="Married" '.$selectedcivilstatus[3].'>Married</option>
+															<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
+															<option value="Single Parent" '.$selectedcivilstatus[3].'>Single Parent</option>
 															<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
 															<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
 															<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
@@ -937,17 +945,18 @@
 													</div>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'">
+													<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
 													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
 													<small class="error" id="MobileNumber-required">This field is required.</small>
 												</div>
 												<div class="input-field col s12">
-													<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+													<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 													<label for="Email" data-error="Invalid email address">Email Address</label>
 													<small class="error" id="Email-required">This field is required.</small>
+													<small class="error" id="Invalid-Email">Invalid Email Address</small>
 												</div>
 												<div class="input-field col s12">
-													<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'">
+													<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
 													<label for="Profession">Profession/Occupation</label>
 													<small class="error" id="Profession-required">This field is required.</small>
 												</div>';
@@ -992,7 +1001,7 @@
 											echo'
 												<h4 class="center">Home</h4>
 												<div class="input-field col s12">
-													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
+													<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
 													<label for="HomeAddress">Address</label>
 													<small class="error" id="HomeAddress-required">This field is required.</small>
 												</div>
@@ -1000,61 +1009,63 @@
 													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
 													<label for="HomePhoneNumber">Home Phone Number</label>
 												</div>
-												<h4 class="center">Company</h4>
-												<div class="input-field col s12">
-													<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'">
+												<h4 class="center company">Company</h4>
+												<div class="input-field col s12 company">
+													<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
 													<label for="CompanyName">Company Name</label>
 													<small class="error" id="CompanyName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 company">
 													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
 													<label for="CompanyContactNum">Company Contact Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 company">
 													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 													<label for="CompanyAddress">Company Address</label>
 												</div>
-												<h4 class="center">School</h4>
-												<div class="input-field col s12">
-													<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'">
+												<h4 class="center school">School</h4>
+												<div class="input-field col s12 school">
+													<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
 													<label for="SchoolName">School Name</label>
 													<small class="error" id="SchoolName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 school">
 													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
 													<label for="SchoolContactNum">School Contact Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 school">
 													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
 													<label for="SchoolAddress">School Address</label>
 												</div>
-												<h4 class="center">Spouse</h4>
-												<div class="input-field col s12">
-													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
+												<h4 class="center spouse">Spouse</h4>
+												<div class="input-field col s12 spouse">
+													<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
 													<label for="SpouseName">Spouse Name</label>
 													<small class="error" id="SpouseName-required">This field is required.</small>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 spouse">
 													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
 													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 												</div>
-												<div class="input-field col s12">
+												<div class="input-field col s12 spouse">
 													<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
 													<label for="SpouseBirthdate">Birthdate</label>
 												</div>';
 											?>
 											</div>
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="coinfo_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="coinfo_progressbar">
+												</div>
+											</div>&nbsp; &nbsp;
+											<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
-								<form method="post" class="forms" id="fcprefer" onsubmit="submit_form(this.id)">
+								<form method="post" class="forms" id="fcprefer">
 									<div id="cprefer" style="display: none;">
 										<div class="row">
 											<!-- page 1 -->
@@ -1105,8 +1116,9 @@
 											}
 											echo '
 												<div class="input-field col s12">
-													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'">
+													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'" placeholder="ex. English, Bisaya, Tagalog" required>
 													<label for="Language">Language</label>
+													<small class="error" id="Language-required">This field is required.</small>
 												</div>
 												<h4 class="center">Schedule</h4>
 												<h5 class="center">Option 1</h5>
@@ -1128,11 +1140,17 @@
 													<div class="input-field col s6">
 														<label for="timepicker1opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
+														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+														<small class="error greater1">Start Time should be before than End Time.</small>
 													</div>
 													<div class="input-field col s6">
-														<label for="timepicker2opt1">End Time</label>
+														<label for="timepicker1opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
+														<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
+														<small class="error greater1">Start Time should be before than End Time.</small>
 													</div>
+												<div class="col s12">
+												</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
 													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
@@ -1154,12 +1172,16 @@
 													</div>
 												</div>
 													<div class="input-field col s6">
-														<label for="timepicker1opt2">Start Time</label>
+														<label for="timepicker2opt1">Start Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
+														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
+														<small class="error greater2">Start Time should be before than End Time.</small>
 													</div>
 													<div class="input-field col s6">
 														<label for="timepicker2opt2">End Time</label>
 														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
+														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
+														<small class="error greater2">Start Time should be before than End Time.</small>
 													</div>
 												<div class="input-field col s12">
 													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
@@ -1210,15 +1232,14 @@
 												</div>';
 											?>
 											</div>
-
-											<!-- progressbar & buttons -->
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="cprefer_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next" onclick="pagination(1, 'cprefer')">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<!-- progressbar & buttons -->
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="cprefer_progressbar"></div>
+											</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
@@ -1248,28 +1269,28 @@
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
 												<label for="old-password">Old Password</label>
-												<small class="error" id="oldpass">This field is required.</small>
-												<small class="error" id="notpass">This is not your password.</small>
+												<small class="error-with-icon" id="oldpass">This field is required.</small>
+												<small class="error-with-icon" id="notpass">This is not your password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
 												<label for="new-password">New Password</label>
-												<small class="error" id="newpass">This field is required.</small>
-												<small class="error" id="checkoldnew">Cannot use old password.</small>
+												<small class="error-with-icon" id="newpass">This field is required.</small>
+												<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
 											</div>
 											<div class="input-field col s12">
 												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
 												<label for="confirm-password">Confirm New Password</label>
-												<small class="error" id="confirmpass">This field is required.</small>
-												<small class="error" id="checkpass">Passwords do not match.</small>
+												<small class="error-with-icon" id="confirmpass">This field is required.</small>
+												<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
 											</div>
 											'; // originally having a value of own password
 											?>
-											<div class="row">
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
-											</div>
+										</div>
+										<div class="row">
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
 										</div>
 									</div>
 								</form>
@@ -1504,13 +1525,13 @@
 													-->
 												</table>
 											</div>
-											<div class="row">
-												<div class="progress col s6 left" style=" margin-left: 3.3%;">
-													<div class="determinate" style="" id="register_progressbar"></div>
-												</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
-												<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
-												<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
-											</div>
+										</div>
+										<div class="row">
+											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+												<div class="determinate" style="" id="register_progressbar"></div>
+											</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
+											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
 										</div>
 									</div>
 								</form>
@@ -1544,7 +1565,9 @@
 	<script>
 	"use strict";
 		var currentpage = 1, no_of_pages = 0, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		var page;
 		function setNavPage(navpage, num_of_pages) {
+			page = navpage;
 			// sets number of pages
 			no_of_pages = num_of_pages;
 
@@ -1639,7 +1662,6 @@
 
 		function submitOnClick(navpage) {
 			// if not using ajax, use this
-			alert(0);
 			document.getElementById(navpage+'_next').setAttribute("type", "submit");
 			submit_form('f'+navpage, 'submit_'+navpage);
 			//convertToButton(navpage);
@@ -1650,6 +1672,11 @@
 				$("button[name='submit_next']").prop("type", "submit"); //jquery-3
 			});
 			*/
+		}
+
+		function getCurrentPage() {
+			var cp = page+"_page"+currentpage;
+			return cp;
 		}
 
 		function convertToButton(navpage) {
@@ -1696,18 +1723,30 @@
 			}
 		}
 
-		var validated = true;
+		var validated = false, cpass = false;
 		function submit_form(submit_id, submit_name) {
-			var id = "id=";
-			if(chooseleader)
-				id += getID() + "&";
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
+					var preloader = '\
+						<div class="preloader-wrapper small active"> \
+							<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+								<div class="circle-clipper left"> \
+									<div class="circle"></div> \
+								</div><div class="gap-patch"> \
+									<div class="circle"></div> \
+								</div><div class="circle-clipper right"> \
+									<div class="circle"></div> \
+								</div> \
+							</div> \
+						</div> \
+					  ';
+					$('.profile-next-or-submit-button').html(preloader);
+					$('.profile-next-or-submit-button').prop("disabled", true);
 					var url="update_profile.php";
 					$.ajax({
 						type: "POST",
 						url: url,
-						data: submit_name+'=g&'+id+$('#'+submit_id).serialize(), 
+						data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
 						success: function(data) {
 							swal({
 								title: "Success!",
@@ -1716,14 +1755,33 @@
 								allowEscapeKey: true,
 								allowOutsideClick: true,
 								timer: 10000
+							}, function() {
+								animateBodyScrollTop();
 							});
 							if(cpass) { // if true, every success of data val from cpass form, it clears the form
 								$('div#cpass input').val("");
 							}
+							$('.profile-next-or-submit-button').text('Submit');
+							$('.profile-next-or-submit-button').prop("disabled", false);
+						},
+						error: function(data) {
+							swal({
+								title: "Error!",
+								text: "Cannot reach server. Please try again.",
+								type: "error",
+								allowEscapeKey: true,
+								allowOutsideClick: true,
+								timer: 10000
+							}, function() {
+								animateBodyScrollTop();
+							});
+							$('.profile-next-or-submit-button').text('Submit');
+							$('.profile-next-or-submit-button').prop("disabled", false);
 						}
 					});
-					validated = false; // re-initialize validated variable
 				}
+				validated = false; // re-initialize validated variable
+				confirmvalidated = false; // re=initialize
 				e.preventDefault();
 			});
 			/*
@@ -1904,80 +1962,247 @@
 			xhttp.send("seen");
 		}
 
-		$('.error').hide(); // by default, hide all error classes
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('div#cpinfo small').text('This field is required.');
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
 
 		// personal info form validation
 		$("#submit_cpinfo").click(function() {
 			$('.error').hide();
-			var lastname = $("#Lastname").val();
-			var firstname = $("#Firstname").val();
-			var middlename = $("#Middlename").val();
-			var nickname = $("#Nickname").val();
-			var birthdate = $("#Birthdate").val();
+			$(this).blur();
+			var check_iteration = true, focused_element;
 
-			if(birthdate==""){
-				$('small#birthdate-required').show();
-				$('#Birthdate').focus();
-			}
-
-			if(nickname==""){
-				$('small#nickname-required').show();
-				$('#Nickname').focus();
-			}
-			
-			if(middlename==""){
-				$('small#middlename-required').show();
-				$('#Middlename').focus();
-			}
-			
-			if(firstname==""){
-				$('small#firstname-required').show();
-				$('#Firstname').focus();
-			}
-			
-			if(lastname==""){
-				$('small#lastname-required').show();
-				$('#Lastname').focus();
-			}
-
-			if(birthdate!=""&&nickname!=""&&middlename!=""&&firstname!=""&&lastname!="") {
-				validated = true;
-			}
-		});
-
-		/*
-		$("#coinfo_next").click(function() {
-			$('.error').hide();
-			var check_iteration = true;
-
-			$($('form#fcoinfo').find('input').reverse()).each(function() { // [FRONT-END] iterate to show error classes to required fields
+			$($("form#fcpinfo").find('input').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
-						alert(0);
-						$('small#'+$(this).id+'-required').show();
-						$('small#'+$(this).id+'-required').focus();
+						$("small#"+this.id+"-required").show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
 					}
 				}
 			});
 
-			$($('form#fcoinfo').find('input').reverse()).each(function() { // [BACK-END] iterate to check blank fields before going to next pages
-					if($(this).prop('required')) {
-						if($(this).val() == "") {
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		$("#coinfo_next").click(function() {
+			var focused_element;
+			// default and initialization states
+			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+			$('.error').hide();
+			company.show();
+			school.show();
+			spouse.show();
+			$("#CompanyName").prop("required", true);
+			$("#SchoolName").prop("required", true);
+			$("#SpouseName").prop("required", true);
+			$(this).blur(); // no focus in button once clicked
+			var check_iteration = true;
+			
+			/* ===== SPOUSE VALIDATION ===== */
+			var civilstatusid = "#CivilStatus"
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+				spouse.hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
+
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+			var professionid = "#Profession";
+			if($(professionid).val().toLowerCase() == "student") {
+				company.hide();
+				$(".company input").prop("required", false);
+			}
+			else {
+				school.hide();
+				$(".school input").prop("required", false);
+			}
+
+			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						//$('#'+this.id).focus();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					else if(this.id == "Email") {
+						if(!isValidEmailAddress($(this).val())) {
+							$('#Invalid-Email').show();
+							//$('#'+this.id).focus();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
 					}
-				});
+				}
+			});
+
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
 
 			if(check_iteration) {
-				pagination(1, $(this).id.split("_")[0]);
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					validated = true;
+					confirmvalidated = false;
+				}
+				pagination(1, this.id.split("_")[0]);
 			}
 
+		});
+
+		// change event handler removes leading
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
+<<<<<<< HEAD
+		/*
+		$("#coinfo_next").click(function() {
+=======
+		$("#cprefer_next").click(function() {
+			// default states
+>>>>>>> 85627922acf9d52d06f038765eb58eeb99f17f90
+			$('.error').hide();
+			$(this).blur(); // no focus in button once clicked
+			var check_iteration = true;
+
+			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getDate();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// convert time values to timestamp
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					validated = true;
+					confirmvalidated = false;
+				}
+				pagination(1, this.id.split("_")[0]);
+			}
+		});
+
+<<<<<<< HEAD
 			});
 			*/
+=======
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
+			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+			return pattern.test(emailAddress);
+		};
+>>>>>>> 85627922acf9d52d06f038765eb58eeb99f17f90
 
 		// change password form validation
 		$("#submit_cpass").click(function() {
-			$('.error').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			$('.error-with-icon').hide(); // this jquery function validates the form; order of validation should be reversed, from bottom to top so that .focus() can emhasize the top most input
+			$(this).blur();
 			var oldpass = $("#old-password").val();
 			var newpass = $("#new-password").val();
 			var confirmpass = $("#confirm-password").val();
@@ -2033,27 +2258,62 @@
 					else {
 						if(oldpass!=""&&newpass!=""&&confirmpass!==""&&checknewpass&&checkoldnew) {
 							validated = true;
+							cpass = true;
 						}
 					}
+				}
+			});
+
+			$("form#fcpass").find('input').each(function() { // scrolls to the current focused element
+				if($(this).is(':focus')) {
+					scrollTo($(this));
+					return false;
 				}
 			});
 		});
 
 		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
 
-		function checkOldPass() {
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
+
+		$("[id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				animateBodyScrollTop();
+				confirmvalidated = false;
+			}
+		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
 		}
 
-		function setCheckOldPass() {
-			checkOldPass().done(function(data) {
-				checkoldpass = false;
-			});
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
 		}
 
-		function confirmValidated() {
-			if(checkoldpass)
-				validated = true;
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
 		}
-		*/
+
+		/* ===== END ===== */
 	</script>
 </html>

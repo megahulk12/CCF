@@ -207,7 +207,7 @@
 						<a href="home.php" tabindex="-1"><img src="resources/CCF Logos3.png" id="loginlogo"/></a>
 					</div>
 					<div class="row">
-						<div class="error col s12">
+						<div class="error col s12" style="display: none;">
 							<a class="close-error" id="close-error"><i class="material-icons prefix small">close</i></a>
 							<p class="center">Wrong username or password.</p>
 						</div>
@@ -260,6 +260,10 @@
 						$('#login-submit').text('Login');
 						$('button').prop("disabled", false);
 					}
+				},
+				error: function(data) {
+					$('#login-submit').text('Login');
+					$('button').prop("disabled", false);
 				}
 			});
 			e.preventDefault();

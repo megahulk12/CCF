@@ -434,25 +434,12 @@
 		/* ===== END ===== */
 	</style>
 
-	<script>
-			$(document).ready(function(){
-				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-				$('.modal').modal();
-			});
- 
-			
-		</script>
-
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		}); 
-
-		function view(id) {
-			history.pushState(null, null, "dgroup.php?id="+id);
-		}
+		});
 	</script>
 
 	<header class="top-nav">
@@ -538,131 +525,6 @@
 
 	<body>
 		<div id="response"></div>
-		<div class="container">
-			<?php 
-			if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
-			echo '
-			<form method="post">
-				<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
-				<input type="hidden" name="seen-request" />
-			</form>';
-			}
-			?>
-			<div id="small-group">
-				<div id="dgroup">
-					<h3>Discipleship Group</h3>
-					<?php
-						// database connection variables
-
-						$servername = "localhost";
-						$username = "root";
-						$password = "root";
-						$dbname = "dbccf";
-						$conn = mysqli_connect($servername, $username, $password, $dbname);
-						if (!$conn) {
-							die("Connection failed: " . mysqli_connect_error());
-						}
-
-						// insert code set notificationStatus = 1 when user clicks notification area
-						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
-
-						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
-
-						echo '
-					<table class="centered dgroup-table-spacing">
-						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
-						';
-
-						$lresult = mysqli_query($conn, $lquery);
-						
-						if(mysqli_num_rows($lresult) > 0) {
-							while($lrow = mysqli_fetch_assoc($lresult)) {
-								$leader = $lrow["leader"];
-							}
-						}
-
-						$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-								echo '
-						<td>
-							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
-							'.$leader.'<br><br><label>LEADER</label></a>
-						</td>
-								';
-							$counter_row = 1;
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								echo '
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								'.$fullname.'<br><br>&nbsp;</a>
-							</td>
-								';
-								$counter_row++;
-								if($counter_row == 4) {
-									echo'
-						</tr>
-						<tr>
-									';
-									$counter_row = 0;
-								}
-							}
-							echo '
-						</tr>';
-						}
-					?>
-					</table>
-				</div>
-			</div>
-			<!-----------------code ni paolo------------------>
-			<?php
-
-				$servername = "localhost";
-				$username = "root";
-				$password = "root";
-				$dbname = "dbccf";
-				$conn = mysqli_connect($servername, $username, $password, $dbname);
-				if (!$conn) {
-					die("Connection failed: " . mysqli_connect_error());
-				}
-				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
-
-				$result = mysqli_query($conn, $query);
-				if(mysqli_num_rows($result) > 0) {
-					echo '
-			<div id="own-dgroup">
-				<h3>My Discipleship Group</h3>
-				<table id="own-dgroup" class="centered dgroup-table-spacing">
-					<tr>';
-					$counter_row = 0;
-					while($row = mysqli_fetch_assoc($result)) {
-						$fullname = $row["fullname"];
-						$memberID = $row["memberID"];
-						if($_SESSION['memberType'] >= 2 ){
-							echo '
-								<td>
-									<a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
-										'.$fullname.'<br><br>&nbsp;</a>
-								</td>
-								';
-							$counter_row++;
-							if($counter_row == 4) {
-							echo'
-					</tr>
-					<tr>
-							';
-							$counter_row = 0;
-							}
-						}
-					}
-					echo '
-					</tr>
-				</table>
-			</div>';
-				}
-			?>
-		</div>
 	</body>
 
 	<main>
@@ -683,72 +545,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<script>
-		function viewProfile(page) {
-			if(page==1) {
-				document.getElementById('small-group').style.display = "none";
-				document.getElementById('view-profile').style.display = "inline";
-				document.getElementById('member').setAttribute("class", "dgroup-names dgroup-view-profile");
-			}
-			else {
-				document.getElementById('small-group').style.display = "inline";
-				document.getElementById('view-profile').style.display = "none";
-			}
-		}
-
-		
-		function requestLeader() {
-			/*swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() {
-					changeToPending();
-				}
-			);
-			*/
-			
-		}
-
-		function changeToPending() {
-			document.getElementById("request_leader").style.backgroundColor = "#ebebeb";
-			document.getElementById("request_leader").style.color = "#777";
-			document.getElementById("request_leader").innerHTML = "PENDING";
-			document.getElementById("request_leader").disabled = true;
-		}
-
-		function changeBack() {
-			document.getElementById("request_leader").style.backgroundColor = "#16A5B8";
-			document.getElementById("request_leader").style.color = "#fff";
-			document.getElementById("request_leader").innerHTML = "I WANT TO BE A DGROUP LEADER";
-			document.getElementById("request_leader").disabled = false;
-		}
-	</script>
-	<script>
-		function requestLeader() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "request.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("request_leader");
-			swal({
-				title: "Success!",
-				text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-				type: "success",
-				allowEscapeKey: true
-			},
-				function() { window.location.reload(); }
-			);
-		}
-	</script>
 
 	<?php
 		if(isset($_POST['seen-request'])) {
