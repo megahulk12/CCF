@@ -511,6 +511,11 @@
 			height: 700px;
 		}
 
+		.fadeIn {
+			opacity: 1;
+			transition: opacity 0.5s;
+		}
+
 		/* ===== PRELOADER ===== */
 		.preloader-wrapper.small {
 			width: 24px;
@@ -588,7 +593,6 @@
 				data: "id="+id,
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
-					$('#page1').html(data);
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 				}
@@ -725,7 +729,7 @@
 											</div>
 										</div>
 									</div>
-									<div id="page1">
+									<div id="page1" class="">
 										<h4 class="center">BAPTISMAL</h4>
 										<div class="row">
 											<div class="input-field col s12">
@@ -948,6 +952,19 @@
 		$('button').prop("disabled", true);
 		$('button').click(function() {
 			$('button').blur();
+		});
+
+		// APPROVE SECTION
+		$('#approve').click(function() {
+			var url = "request_endorsements.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "approve",
+				success: function(data) {
+					
+				}
+			});
 		});
 	</script>
 </html>
