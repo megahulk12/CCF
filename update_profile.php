@@ -147,16 +147,16 @@
 		}
 
 		$sql_coinfo = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber', memberType = 1 WHERE memberID = ".$_SESSION['userid'];
-		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES ('.$_SESSION['userid'].', 4, 1, '$recchrist', '$attccf', '$regattat', '2017-08-08')"
+		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES (".$_SESSION['userid'].", 4, 1, '$recchrist', '$attccf', '$regattat', '2017-08-08');";
 		$sql_company = "INSERT INTO companydetails_tbl(companyContactNum, companyAddress) VALUES('$companycontactnum', '$companyaddress');";
 		$sql_school = "INSERT INTO schooldetails_tbl(schoolContactNum, schoolAddress) VALUES('$schoolcontactnum', '$schooladdress');";
 		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate_ VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
 		$sql_prefs = "INSERT INTO preferencedetails_tbl(prefLanguage, prefDay1, prefDay2, prefVenue1, prefVenue2, prefStartTime1 , prefEndTime1, prefStartTime2, prefEndTime2) VALUES('$language', '$op1day', '$op2day', '$venue1', '$venue2', '$start1', '$end1', '$start2' '$end2');";
 		mysqli_query($conn, $sql_coinfo);
+		mysqli_query($conn, $sql_dgmem);
 		mysqli_query($conn, $sql_company);
 		mysqli_query($conn, $sql_school);
 		mysqli_query($conn, $sql_spouse);	
 		mysqli_query($conn, $sql_prefs);
 	}
-	//INSERT INTO `discipleshipgroupmembers_tbl` (`dgroupmemberID`, `memberID`, `dgroupID`, `dgroupmemberStatus`, `receivedChrist`, `attendCCF`, `regularlyAttendsAt`, `remarks`, `dateJoinedAsDgroupMember`) VALUES (NULL, '19', '4', '1', 'n', 'n', 'n', NULL, '2017-08-08');
 ?>

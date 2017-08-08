@@ -1858,27 +1858,6 @@
 		}
 		*/
 	</script>
-	<?php
-		/*
-		if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_coinfo"])||isset($_POST["submit_cprefer"])||isset($_POST["submit_cpass"])) { // pop up for updates
-			echo '
-				<script>
-				// profile update success
-				setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Profile Updated!",
-						type: "success",
-						allowEscapeKey: true,
-						timer: 10000
-					},
-					function() { window.location = "profile.php"; }
-					), 1000);
-				</script>
-			';
-		}
-		*/
-	?>
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
@@ -2088,12 +2067,6 @@
 			}
 		});
 
-<<<<<<< HEAD
-		/*
-		$("#coinfo_next").click(function() {
-
-=======
->>>>>>> c3f103089f6d5bcb883026073060a826f4d8ae91
 		$("#cprefer_next").click(function() {
 			// default states
 			$('.error').hide();
@@ -2267,6 +2240,11 @@
 					return false;
 				}
 			});
+		});
+
+		$('#fregister').submit(function(e) {
+			// put ajax here
+			window.location.href = "dgroup.php";
 		});
 
 		/*
