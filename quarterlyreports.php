@@ -348,6 +348,17 @@
 		  	background-color: #1bcde4;
 		}
 		/* ============================END=========================== */ 
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -438,7 +449,9 @@
 		<div id="response"></div>
 		<div class="container">
 			<div class="row">
-				<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit">Generate A Report</button>
+				<form method="post" id="generate-report">
+					<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" id="report" name="report">Generate A Report</button>
+				</form>
 			</div>
 			<table class="centered">
 				<thead>
@@ -580,5 +593,38 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		$('#generate-report').submit(function(e) {
+			var url = "request_quarterlyreports.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('#report').html(preloader);
+			$('#report').prop("disabled", true);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "report=g",
+				success: function() {
+					$('#report').html("Generate A Report");
+					$('#report').prop("disabled", false);
+				},
+				error: function() {
+					$('#report').html("Generate A Report");
+					$('#report').prop("disabled", false);
+				}
+			});
+			e.preventDefault();
+		});
 	</script>
 </html>
