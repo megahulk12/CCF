@@ -29,7 +29,6 @@
 
 		$sql_cpinfo = "UPDATE member_tbl SET lastName = '$lastname', firstName = '$firstname', middleName = '$middlename', nickName = '$nickname', birthdate = '$birthdate' WHERE memberID = ".$_SESSION['userid'];
 		mysqli_query($conn, $sql_cpinfo);
-		mysqli_close($conn);
 	}
 
 	if(isset($_POST["submit_coinfo"])) {
@@ -70,7 +69,6 @@
 		mysqli_query($conn, $sql_company);
 		mysqli_query($conn, $sql_school);
 		mysqli_query($conn, $sql_spouse);
-		mysqli_close($conn);
 	}
 
 	if(isset($_POST["submit_cprefer"])) {
@@ -96,7 +94,6 @@
 		$sql_dgroupmember = "UPDATE discipleshipgroupmembers_tbl SET receivedChrist = '$receivedChrist', attendCCF = '$attendCCF', regularlyAttendsAt = '$regularlyAttendsAt' WHERE memberID = ".$_SESSION['userid'];
 		mysqli_query($conn, $sql_cprefer);
 		mysqli_query($conn, $sql_dgroupmember);
-		mysqli_close($conn);
 	}
 
 	if(isset($_POST["submit_cpass"])) {
@@ -109,7 +106,6 @@
 
 		$sql_pass = "UPDATE member_tbl SET password = '$regpassword' WHERE memberID = ".$_SESSION['userid'];
 		mysqli_query($conn, $sql_pass);
-		mysqli_close($conn);
 	}
 
 	if(isset($_POST["submit_register"])) {
@@ -150,17 +146,17 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_coinfol = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber', memberType = 1 WHERE memberID = ".$_SESSION['userid'];
+		$sql_coinfo = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber', memberType = 1 WHERE memberID = ".$_SESSION['userid'];
+		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES ('.$_SESSION['userid'].', 4, 1, '$recchrist', '$attccf', '$regattat', '2017-08-08')"
 		$sql_company = "INSERT INTO companydetails_tbl(companyContactNum, companyAddress) VALUES('$companycontactnum', '$companyaddress');";
 		$sql_school = "INSERT INTO schooldetails_tbl(schoolContactNum, schoolAddress) VALUES('$schoolcontactnum', '$schooladdress');";
 		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate_ VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
 		$sql_prefs = "INSERT INTO preferencedetails_tbl(prefLanguage, prefDay1, prefDay2, prefVenue1, prefVenue2, prefStartTime1 , prefEndTime1, prefStartTime2, prefEndTime2) VALUES('$language', '$op1day', '$op2day', '$venue1', '$venue2', '$start1', '$end1', '$start2' '$end2');";
-		mysqli_query($conn, $sql_coinfol);
+		mysqli_query($conn, $sql_coinfo);
 		mysqli_query($conn, $sql_company);
 		mysqli_query($conn, $sql_school);
 		mysqli_query($conn, $sql_spouse);	
 		mysqli_query($conn, $sql_prefs);
-		mysqli_close($conn);
 	}
-	// ====================END====================
+	//INSERT INTO `discipleshipgroupmembers_tbl` (`dgroupmemberID`, `memberID`, `dgroupID`, `dgroupmemberStatus`, `receivedChrist`, `attendCCF`, `regularlyAttendsAt`, `remarks`, `dateJoinedAsDgroupMember`) VALUES (NULL, '19', '4', '1', 'n', 'n', 'n', NULL, '2017-08-08');
 ?>

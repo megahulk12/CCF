@@ -1723,7 +1723,7 @@
 			}
 		}
 
-		var validated = false, cpass = false;
+		var validated = true, cpass = false;
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
@@ -2088,7 +2088,6 @@
 			}
 		});
 
-<<<<<<< HEAD
 		/*
 		$("#coinfo_next").click(function() {
 
