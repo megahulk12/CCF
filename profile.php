@@ -2088,9 +2088,12 @@
 			}
 		});
 
+<<<<<<< HEAD
 		/*
 		$("#coinfo_next").click(function() {
 
+=======
+>>>>>>> c3f103089f6d5bcb883026073060a826f4d8ae91
 		$("#cprefer_next").click(function() {
 			// default states
 			$('.error').hide();
@@ -2166,11 +2169,7 @@
 				pagination(1, this.id.split("_")[0]);
 			}
 		});
-
-
-			});
-			*/
-
+		
 		function checkLastPage() {
 			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
 			pagenumber++; // page that is after the previous
