@@ -450,7 +450,7 @@
 		<div class="container">
 			<div class="row">
 				<form method="post" id="generate-report">
-					<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" id="report" name="report">Generate A Report</button>
+					<a class="waves-effect waves-light btn col s2 right fixbutton" id="report" href="request_quarterlyreports.php">Generate A Report</a>
 				</form>
 			</div>
 			<table class="centered">
@@ -594,6 +594,7 @@
 			xhttp.send("seen");
 		}
 
+		/*
 		$('#generate-report').submit(function(e) {
 			var url = "request_quarterlyreports.php";
 			var preloader = '\
@@ -615,7 +616,8 @@
 				type: "POST",
 				url: url,
 				data: "report=g",
-				success: function() {
+				success: function(data) {
+					alert(0);
 					$('#report').html("Generate A Report");
 					$('#report').prop("disabled", false);
 				},
@@ -626,5 +628,6 @@
 			});
 			e.preventDefault();
 		});
+		*/
 	</script>
 </html>
