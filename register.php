@@ -714,27 +714,27 @@
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
+								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" required>
 								<label for="Lastname">Last Name</label>
 								<small class="error" id="Lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
+								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" required>
 								<label for="Firstname">First Name</label>
 								<small class="error" id="Firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
+								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" required>
 								<label for="Middlename">Middle Name</label>
 								<small class="error" id="Middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
+								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" required>
 								<label for="Nickname">Nickname</label>
 								<small class="error" id="Nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="">
+								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="" required>
 								<label for="Birthdate" class>Birthdate</label>
 								<small class="error" id="Birthdate-required">This field is required.</small>
 							</div>
@@ -743,48 +743,49 @@
 					<div id="page2" style="display: none;">
 						<h3 class="center">Other Information</h3>
 						<div class="row">
-							<p style="margin-top: 40px;">
-								<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-								<spans>
-									<input type="radio" id="Gender_Male" name="Gender" value="Male" />
+							<p>
+								<div class="col s12" style="padding: 0 !important;">
+									<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
+									<input type="radio" id="Gender_Male" name="Gender" value="Male" required />
 									<label for="Gender_Male">Male</label>
-									<input type="radio" id="Gender_Female" name="Gender" value="Female" />
-									<label for="Gender_Female">Female</label>
-								</span>
+									<input type="radio" id="Gender_Female" name="Gender" value="Female" required />
+									<label for="Gender_Female">Female</label><br>
+									<small class="error" id="Gender-required" style="margin-left: 11; position: relative; top: 10px;">Please select one.</small>
+								</div>
 							</p>
 							<div class="input-field col s12">
-								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" required>
 								<label for="Citizenship">Citizenship</label>
 								<small class="error" id="Citizenship-required">This field is required.</small>
 							</div>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
-									<select id="CivilStatus" name="CivilStatus">
+									<select id="CivilStatus" name="CivilStatus" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Single">Single</option>
-										<option value="Single Parent">Single Parent</option>
 										<option value="Married">Married</option>
+										<option value="Single Parent">Single Parent</option>
 										<option value="Annulled">Annulled</option>
 										<option value="Separated">Separated</option>
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
-									<small class="error" id="CivilStatus-required">This field is required.</small>
+									<small class="error" id="CivilStatus-required">Please choose one.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
+								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18" placeholder="ex. 0912 345 6789" required>
 								<label for="MobileNumber">Mobile Number</label>
 								<small class="error" id="MobileNumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30"> <!-- increase size of email address -->
+								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30" required> <!-- increase size of email address -->
 								<label for="EmailAd" data-error="Invalid email address">Email Address</label>
 								<small class="error" id="EmailAd-required">This field is required.</small>
 								<small class="error" id="Invalid-Email">Invalid Email Address</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
+								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" required>
 								<label for="Profession" name="profession">Profession/Occupation</label>
 								<small class="error" id="Profession-required">This field is required.</small>
 							</div>
@@ -795,53 +796,53 @@
 						<h4 class="center">Home</h4>
 						<div class="row" style="margin-top: 0px;">
 							<div class="input-field col s12">
-								<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+								<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" required>
 								<label for="HomeAddress" style=" font-size:14px;">Address</label>
 								<small class="error" id="HomeAddress-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+								<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
 								<label for="HomePhoneNumber">Home Phone Number</label>
 							</div>
-							<h4 class="center">Company</h4>
-							<div class="input-field col s12">
-								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+							<h4 class="center company">Company</h4>
+							<div class="input-field col s12 company">
+								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" required>
 								<label for="CompanyName">Company Name</label>
 								<small class="error" id="CompanyName-required">This field is required.</small>
 							</div>
-							<div class="input-field col s12">
-								<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+							<div class="input-field col s12 company">
+								<input type="text" name="CompanyContactNum" id="CompanyContactNum" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
 								<label for="CompanyContactNum">Company Contact Number</label>
 							</div>
-							<div class="input-field col s12">
+							<div class="input-field col s12 company">
 								<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
 								<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
 							</div>
-							<h4 class="center">School</h4>
-							<div class="input-field col s12">
-								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+							<h4 class="center school">School</h4>
+							<div class="input-field col s12 school">
+								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" required>
 								<label for="SchoolName">School Name</label>
 								<small class="error" id="SchoolName-required">This field is required.</small>
 							</div>
-							<div class="input-field col s12">
+							<div class="input-field col s12 school">
 								<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
 								<label for="SchoolContactNum">School Contact Number</label>
 							</div>
-							<div class="input-field col s12">
+							<div class="input-field col s12 school">
 								<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
 								<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
 							</div>
-							<h4 class="center">Spouse</h4>
-							<div class="input-field col s12">
-								<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+							<h4 class="center spouse">Spouse</h4>
+							<div class="input-field col s12 spouse">
+								<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" required>
 								<label for="SpouseName">Spouse Name</label>
 								<small class="error" id="SpouseName-required">This field is required.</small>
 							</div>
-							<div class="input-field col s12">
+							<div class="input-field col s12 spouse">
 								<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
 								<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 							</div>
-							<div class="input-field col s12">
+							<div class="input-field col s12 spouse">
 								<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
 								<label for="SpouseBirthdate">Birthdate</label>
 							</div>
@@ -852,14 +853,15 @@
 						<h3 class="center">Preferences</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
+								<input type="text" name="Language" id="Language" data-length="50" maxlength="50" required>
 								<label for="Language">Language</label>
+								<small class="error" id="Language-required">This field is required.</small>
 							</div>
 							<h4 class="center">Schedule</h4>
 							<h5 class="center">Option 1</h5>
 							<div class="row" style="margin-bottom: 0px;">
 								<div class="input-field col s12">
-									<select id="Option1Day" name="Option1Day">
+									<select id="Option1Day" name="Option1Day" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
@@ -870,30 +872,34 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="Option1Day-required">This field is required.</small>
+									<small class="error" id="Option1Day-required">Please choose one.</small>
 								</div>
 							</div>
 							<div class="row">
 								<div class="input-field col s6">
 									<label for="timepicker1opt1">Start Time</label>
-									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
 									<small class="error" id="timepicker1opt1-required">This field is required.</small>
+									<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+									<small class="error greater1">Start Time should be before than End Time.</small>
 								</div>
 								<div class="input-field col s6 right">
 									<label for="timepicker2opt1">End Time</label>
-									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" required>
 									<small class="error" id="timepicker2opt1-required">This field is required.</small>
+									<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
+									<small class="error greater2">Start Time should be before than End Time.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+								<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" required>
 								<label for="Option1Venue" style=" font-size:14px;">Venue</label>
 								<small class="error" id="Option1Venue-required">This field is required.</small>
 							</div>
 							<h5 class="center">Option 2</h5>
 							<div class="row" style="margin-bottom: 0px;">
 								<div class="input-field col s12">
-									<select id="Option2Day" name="Option2Day">
+									<select id="Option2Day" name="Option2Day" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
@@ -904,21 +910,25 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="Option2Day-required">This field is required.</small>
+									<small class="error" id="Option2Day-required">Plese choos one.</small>
 								</div>
 							</div>
 								<div class="input-field col s6">
 									<label for="timepicker1opt2">Start Time</label>
-									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
 									<small class="error" id="timepicker1opt2-required">This field is required.</small>
+									<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
+									<small class="error greater1">Start Time should be before than End Time.</small>
 								</div>
 								<div class="input-field col s6">
 									<label for="timepicker2opt2">End Time</label>
-									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" required>
 									<small class="error" id="timepicker2opt2-required">This field is required.</small>
+									<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
+									<small class="error greater2">Start Time should be before than End Time.</small>
 								</div>
 							<div class="input-field col s12">
-								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" required>
 								<label for="Option2Venue" style=" font-size:14px;">Venue</label>
 								<small class="error" id="Option2Venue-required">This field is required.</small>
 							</div>
@@ -1098,7 +1108,7 @@
 							<div class="determinate" style="" id="progressbar"></div>
 						</div>&nbsp; &nbsp; <label id="page" onload="labelpage()"></label> <!-- Change when page number adjusts -->
 						<span id="submitbuttons">
-							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_next" id="next" onclick="pagination(1)">NEXT</button>
+							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_next" id="next">NEXT</button>
 							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="back" onclick="pagination(0)" style="margin-right: 10px; display: none;">BACK</button>
 						</span>
 					</div>
@@ -1201,8 +1211,238 @@
 			})(), true);
 		}
 
-		
+		$("#next").click(function(){
+			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+			var focused_element;
+			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+			company.show();
+			school.show();
+			spouse.show();
+			$("#CompanyName").prop("required", true);
+			$("#SchoolName").prop("required", true);
+			$("#SpouseName").prop("required", true);
+			$(this).blur();
+			check_iteration = true;
 
+			/* ===== SPOUSE VALIDATION ===== */
+			var civilstatusid = "#CivilStatus"
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+				spouse.hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
+
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */ //nandito na din kung unemployed ka
+			var professionid = "#Profession";
+			if($(professionid).val().toLowerCase() == "student") {
+				company.hide();
+				$(".company input").prop("required", false);
+			}
+			else if($(professionid).val().toLowerCase() == "unemployed"){
+				company.hide();
+				$(".company input").prop("required", false);
+				school.hide();
+				$(".school input").prop("required", false);
+			}
+			else {
+				school.hide();
+				$(".school input").prop("required", false);
+			}
+
+			$($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function(){
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					else if(this.id == "EmailAd") {
+						if(!isValidEmailAddress($(this).val())) {
+							$('#Invalid-Email').show();
+							//$('#'+this.id).focus();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if(this.id.split("_")[0] == "Gender"){
+						if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
+							$('#Gender-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					$('form#registration #'+getCurrentPage()).find('select').each(function() {
+						if($(this).prop('required')) {
+							if(this.id == "CivilStatus") {
+								if($(this).val() == null) {
+									$('small#'+this.id+'-required').show();
+									focused_element = $(this);
+									disableDefaultRequired($(this));
+									check_iteration = false;
+								}
+							}
+						}
+					});
+					$('form#registration #'+getCurrentPage()).find('select').each(function() {
+						if($(this).prop('required')) {
+							if(this.id == "Option1Day") {
+								if($(this).val() == null) {
+									$('small#'+this.id+'-required').show();
+									focused_element = $(this);
+									disableDefaultRequired($(this));
+									check_iteration = false;
+								}
+							}
+						}
+					});
+					$('form#registration #'+getCurrentPage()).find('select').each(function() {
+						if($(this).prop('required')) {
+							if(this.id == "Option2Day") {
+								if($(this).val() == null) {
+									$('small#'+this.id+'-required').show();
+									focused_element = $(this);
+									disableDefaultRequired($(this));
+									check_iteration = false;
+								}
+							}
+						}
+					});
+				}
+			});
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getDate();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// // convert time values to timestamp
+			// start_time = $("#timepicker1opt1").val();
+			// end_time = $("#timepicker1opt2").val();
+			// start_time = spaceAMPM(start_time);
+			// end_time = spaceAMPM(end_time);
+			// start_time = new Date(d + " " + start_time);
+			// end_time = new Date(d + " " + end_time);
+			// start_time = start_time.getTime();
+			// end_time = end_time.getTime();
+			// if(start_time > end_time) {
+			// 	$(".greater1").show();
+			// 	focused_element = $("#timepicker1opt1");
+			// 	check_iteration = false;
+			// }
+
+			// if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+			// 	$("#timepicker1opt1-equal").show();
+			// 	$("#timepicker1opt2-equal").show();
+			// 	focused_element = $("#timepicker1opt1");
+			// 	check_iteration = false;
+			// }
+
+			// if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+			// 	$("#timepicker2opt1-equal").show();
+			// 	$("#timepicker2opt2-equal").show();
+			// 	focused_element = $("#timepicker2opt1");
+			// 	check_iteration = false;
+			// }
+
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					confirmvalidated = false;
+				}
+				pagination(1, this.id.split("_")[0]);
+			}
+		});
+
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
+			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+			return pattern.test(emailAddress);
+		};
+
+		function getCurrentPage() {
+			var cp = "page"+currentpage;
+			return cp;
+		}
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
+
+		$("[id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				animateBodyScrollTop();
+				confirmvalidated = false;
+			}
+		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 		/*end code ni paolo*/
 	</script>
 	<script type="text/javascript">
