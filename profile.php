@@ -631,7 +631,6 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
-			
 		});
 
 		// Initialize collapse button

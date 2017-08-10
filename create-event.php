@@ -437,8 +437,7 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
-				max: true
+				formatSubmit: 'yyyy-mm-dd'
 			});
 			 
 			$(document).ready(function() {
@@ -581,6 +580,12 @@
 									<label for="SingleDay">Single Day Event</label>
 								</div>
 							</p>
+							<p>
+								<div class ="row" style="margin-left:10px;">
+									<input type="checkbox" class="filled-in" id="Weekly" name="Weekly" onclick="checkIfWeekly();"/>
+									<label for="Weekly">Weekly Event</label>
+								</div>
+							</p>
 							<div class="input-field col s6" id="Event_Date_Start">
 								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
 								<label for="EventDateStart" id="lblEventDateStart">Start</label>
@@ -589,6 +594,19 @@
 								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
 								<label for="EventDateEnd">End</label>
 							</div>
+								<div class="input-field col s12" id="WeeklyEvent">
+									<select id="WeeklyDay" name="WeeklyDay">
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Sunday">Sunday</option>
+										<option value="Monday">Monday</option>
+										<option value="Tuesday">Tuesday</option>
+										<option value="Wednesday">Wednesday</option>
+										<option value="Thursday">Thursday</option>
+										<option value="Friday">Friday</option>
+										<option value="Saturday">Saturday</option>
+									</select>
+									<label>Day</label>
+								</div>
 							<h4 class="center">Time</h4>
 							<div class="input-field col s6">
 								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
@@ -645,11 +663,13 @@
 				e.preventDefault();
 			});
 		}
+
 		function checkIfSingle() {
 			if(document.getElementById('SingleDay').checked) {
 				document.getElementById('Event_Date_End').style.display = "none";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
-				document.getElementById('lblEventDateStart').innerHTML = "Event Date";	
+				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
+				document.getElementById('Weekly').checked = false;
 			}
 			else {
 				$('#Event_Date_End').fadeIn(200);
@@ -657,6 +677,20 @@
 				document.getElementById('Event_Date_End').style.display = "inline";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
 				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		$(document).ready(function() {
+			$('#WeeklyEvent').hide();
+		});
+		function checkIfWeekly() {
+			if(document.getElementById('Weekly').checked) {
+				$('#WeeklyEvent').show();
+				document.getElementById('SingleDay').checked = false;
+			}
+			else {
+				$('#WeeklyEvent').hide();
+
 			}
 		}
 
