@@ -55,6 +55,37 @@
 		}
 	}
 
+	// Add some data; generate columns
+	$columns = array("Age Bracket", "Dgroup Type", "Day", "Time", "Email", "Birthdate");
+	$column_excel = array("A", "B", "C", "D", "E", "F");
+	for($i = 0; $i < count($columns); $i++) {
+	$excel->setActiveSheetIndex(0)
+            ->setCellValue($column_excel[$i].'1', $columns[$i]);
+	}
+
+	$sql_dgroup_schedule = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, dgroupType, schedStartTime AS start_time, schedEndTime AS end_time, schedPlace FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID LEFT OUTER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+	$result = mysqli_query($conn, $sql_dgroup_schedule);
+
+	if(mysqli_num_rows($result) > 0) {
+		$y = 1;
+		while($row = mysqli_fetch_assoc($result)) {
+			$fullname = $row["fullname"];
+			$civilstatus = $row["civilStatus"];
+			$occupation = $row["occupation"];
+			$contactnum = $row["contactNum"];
+			$emailad  = $row["emailAd"];
+			$birthdate = $row["birthdate"];
+			$data = array($fullname, $civilstatus, $occupation, $contactnum, $emailad, $birthdate);
+			for($i = 0; $i < count($data); $i++) {
+				$excel->getActiveSheet()
+			          ->setCellValue($column_excel[$i].($y+1), $data[$i]);
+			}
+			$y++;
+		}
+	}
+
+
+
 	mysqli_close($conn);
 
 	// Rename worksheet
