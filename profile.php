@@ -2115,6 +2115,7 @@
 			if(start_time > end_time) {
 				$(".greater1").show();
 				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
 			}
 
 			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
