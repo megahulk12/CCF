@@ -447,7 +447,7 @@
 			width: 250px; /*width for the side nav docked at left side of card panel*/
 			/*margin-bottom: 157%;*/
 			margin: 0;
-			padding: 0;		
+			padding: 0;
 		}
 
 		li.li-sidenav {
@@ -461,7 +461,7 @@
 
 		td.fixed {
 			height: 100%;
-			padding-top: 4.5%;
+			padding-bottom: 4.5%;
 		}
 
 		.forms {
@@ -794,19 +794,19 @@
 					<tr>
 						<td class="fixed">
 							<ul class="sidenav">
-								<li classs="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
-								<li classs="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
+								<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
+								<li class="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 
 								<!---Code ni Mark ito-->
 								<?php
 								if($_SESSION["memberType"] > 0) echo '
-									<li classs="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
-									<li classs="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-									<li classs="li-sidenav" style="display: none"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+									<li class="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
+									<li class="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+									<li class="li-sidenav" style="display: none"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								else if($_SESSION["memberType"] == 0) echo '
 									<li classs="li-sidenav" style="display: none"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
-									<li classs="li-sidenav" style="display: none"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-									<li classs="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+									<li class="li-sidenav" style="display: none"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+									<li class="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								?>
 							</ul>
 						</td>
