@@ -773,7 +773,7 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      		<!-- FOR DGROUP MEMERS
+			      		<!-- FOR DGROUP MEMBERS
 			        	<li><a href="profile.php">PROFILE</a></li>
 			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
 						<li><a href="events.php">EVENTS</a></li>
