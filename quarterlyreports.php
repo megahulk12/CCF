@@ -467,11 +467,17 @@
 		<div id="response"></div>
 		<div class="container">
 			<div class="row">
-				<form method="post" id="generate-report">
-					<a class="waves-effect waves-light btn col s2 right fixbutton" id="report" href="request_quarterlyreports.php">Generate A Report</a>
-				</form>
+				<div class="col s4">
+				</div>
+				<div class="col s4">
+					<form method="post" id="generate-report">
+						<a class="waves-effect waves-light btn col s12 right fixbutton" id="report" href="request_quarterlyreports.php">Generate Quarterly Reports</a>
+					</form>
+				</div>
+				<div class="col s4">
+				</div>
 			</div>
-			<table class="centered">
+			<!-- <table class="centered">
 				<thead>
 					<tr>
 						<th>Dgroup Leader</th>
@@ -502,7 +508,7 @@
 				</tbody>
 				<tfoot>
 				</tfoot>
-			</table>
+			</table> -->
 		</div>
 	</body>
 

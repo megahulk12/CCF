@@ -38,7 +38,7 @@
 	$result = mysqli_query($conn, $sql_dleader_information);
 
 	if(mysqli_num_rows($result) > 0) {
-		$y = 1;
+		$y = 2;
 		while($row = mysqli_fetch_assoc($result)) {
 			$fullname = $row["fullname"];
 			$civilstatus = $row["civilStatus"];
@@ -49,47 +49,93 @@
 			$data = array($fullname, $civilstatus, $occupation, $contactnum, $emailad, $birthdate);
 			for($i = 0; $i < count($data); $i++) {
 				$excel->getActiveSheet()
-			          ->setCellValue($column_excel[$i].($y+1), $data[$i]);
+			          ->setCellValue($column_excel[$i].($y), $data[$i]);
 			}
 			$y++;
 		}
 	}
 
+	// Rename worksheet
+	$excel->getActiveSheet()->setTitle("Dgroup Leader Information");
+
+	// Clone 1st worksheet
+	$dgleaderschedules = $excel->createSheet(1);
+
 	// Add some data; generate columns
-	$columns = array("Age Bracket", "Dgroup Type", "Day", "Time", "Email", "Birthdate");
+	$columns = array("Dgroup Leader", "Age Bracket", "Dgroup Type", "Day", "Time", "Place");
 	$column_excel = array("A", "B", "C", "D", "E", "F");
 	for($i = 0; $i < count($columns); $i++) {
-	$excel->setActiveSheetIndex(0)
+	$dgleaderschedules
             ->setCellValue($column_excel[$i].'1', $columns[$i]);
 	}
 
-	$sql_dgroup_schedule = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, dgroupType, schedStartTime AS start_time, schedEndTime AS end_time, schedPlace FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID LEFT OUTER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+	$sql_dgroup_schedule = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, ageBracket, gender, dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time, schedPlace FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID LEFT OUTER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 	$result = mysqli_query($conn, $sql_dgroup_schedule);
 
 	if(mysqli_num_rows($result) > 0) {
-		$y = 1;
+		$y = 2;
 		while($row = mysqli_fetch_assoc($result)) {
+			// added in database eageBracket in endosement_tbl, and ageBracket in discipleshipgroup_tbl
 			$fullname = $row["fullname"];
-			$civilstatus = $row["civilStatus"];
-			$occupation = $row["occupation"];
-			$contactnum = $row["contactNum"];
-			$emailad  = $row["emailAd"];
-			$birthdate = $row["birthdate"];
-			$data = array($fullname, $civilstatus, $occupation, $contactnum, $emailad, $birthdate);
+			$gender = $row["gender"];
+			if($gender == 0) $gender = "Men";
+			else $gender = "Women";
+			$agebracket = $row["ageBracket"];
+			$dgrouptype = $row["dgroupType"];
+			if($dgrouptype==0) $dgrouptype = "Youth ($gender)";
+			else if($dgrouptype==1) $dgrouptype = "Singles ($gender)";
+			else if($dgrouptype==2) $dgrouptype = "Single Parents ($gender)";
+			else if($dgrouptype==3) $dgrouptype = "Married ($gender)";
+			else if($dgrouptype==4) $dgrouptype = "Couples ($gender)";
+			$day = $row["schedDay"];
+			$start_time = date("g:i A", strtotime($row["start_time"]));
+			$end_time = date("g:i A", strtotime($row["end_time"]));
+			$time = "$start_time - $end_time";
+			$place = $row["schedPlace"];
+			$data = array($fullname, $agebracket, $dgrouptype, $day, $time, $place);
 			for($i = 0; $i < count($data); $i++) {
-				$excel->getActiveSheet()
-			          ->setCellValue($column_excel[$i].($y+1), $data[$i]);
+				$dgleaderschedules
+			          ->setCellValue($column_excel[$i].($y), $data[$i]);
 			}
 			$y++;
 		}
 	}
 
+	// Rename worksheet
+	$dgleaderschedules->setTitle("Dgroup Leader Schedules");
 
+	// Clone 1st worksheet
+	$d12Leaders = $excel->createSheet(2);
+
+	// Add some data; generate columns
+	$columns = array("D12 Leader", "Dgroup Leader");
+	$column_excel = array("A", "B");
+	for($i = 0; $i < count($columns); $i++) {
+	$d12Leaders
+            ->setCellValue($column_excel[$i].'1', $columns[$i]);
+	}	
+
+	$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2)";
+	$result = mysqli_query($conn, $sql_d12Leaders);
+
+	if(mysqli_num_rows($result) > 0) {
+		$y = 2;
+		while($row = mysqli_fetch_assoc($result)) {
+			$d12leadername = $row["dg12LeaderName"];
+			$dgleadername = $row["dgLeaderName"];
+			$data = array($d12leadername, $dgleadername);
+			for($i = 0; $i < count($data); $i++) {
+				$d12Leaders
+			          ->setCellValue($column_excel[$i].($y), $data[$i]);
+			}
+			$y++;
+		}
+	}
 
 	mysqli_close($conn);
 
 	// Rename worksheet
-	$excel->getActiveSheet()->setTitle("Dgroup Leader's Information");
+	$d12Leaders->setTitle("D12 Leaders");
 
 	// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 	$excel->setActiveSheetIndex(0);
