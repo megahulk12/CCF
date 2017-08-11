@@ -45,7 +45,7 @@
 			$occupation = $row["occupation"];
 			$contactnum = $row["contactNum"];
 			$emailad  = $row["emailAd"];
-			$birthdate = $row["birthdate"];
+			$birthdate = date("F j, Y", strtotime($row["birthdate"]));
 			$data = array($fullname, $civilstatus, $occupation, $contactnum, $emailad, $birthdate);
 			for($i = 0; $i < count($data); $i++) {
 				$excel->getActiveSheet()
@@ -132,10 +132,54 @@
 		}
 	}
 
-	mysqli_close($conn);
-
 	// Rename worksheet
 	$d12Leaders->setTitle("D12 Leaders");
+
+	// Clone 1st worksheet
+	$membersinfo = $excel->createSheet(3);
+
+	// Add some data; generate columns
+	$columns = array("Dgroup Leader", "Last Name", "First Name", "Middle Initial", "Gender", "Civil Status", "Birthdate", "Mobile Number", "Landline", "Email Address", "Member Type");
+	$column_excel = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K");
+	for($i = 0; $i < count($columns); $i++) {
+	$membersinfo
+            ->setCellValue($column_excel[$i].'1', $columns[$i]);
+	}	
+
+	$sql_membersinfo = "SELECT dgleader AS dgLeader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dgLeader) AS dgLeaderName, discipleshipgroupmembers_tbl.memberID AS dgMember, lastName, firstName, middleName, gender, civilStatus, birthdate, contactNum, homePhoneNumber, emailAd, memberType FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID;";
+	$result = mysqli_query($conn, $sql_membersinfo);
+
+	if(mysqli_num_rows($result) > 0) {
+		$y = 2;
+		while($row = mysqli_fetch_assoc($result)) {
+			$dgleadername = $row["dgLeaderName"];
+			$lastname = $row["lastName"];
+			$firstname = $row["firstName"];
+			$middlename = substr($row["middleName"], 0, 1);
+			$gender = $row["gender"];
+			if($gender == 0) $gender = "Male";
+			else $gender = "Female";
+			$civilstatus = $row["civilStatus"];
+			$birthdate = date("F j, Y", strtotime($row["birthdate"]));
+			$contactnum = $row["contactNum"];
+			$homephonenumber = $row["homePhoneNumber"];
+			$emailad = $row["emailAd"];
+			$membertype = $row["memberType"];
+			if($membertype == 1) $membertype = "Dgroup Member";
+			else if($membertype > 1) $membertype = "Dgroup Leader";
+			$data = array($dgleadername, $lastname, $firstname, $middlename, $gender, $civilstatus, $birthdate, $contactnum, $homephonenumber, $emailad, $membertype);
+			for($i = 0; $i < count($data); $i++) {
+				$membersinfo
+			          ->setCellValue($column_excel[$i].($y), $data[$i]);
+			}
+			$y++;
+		}
+	}
+
+	// Rename worksheet
+	$membersinfo->setTitle("Member's Information");
+
+	mysqli_close($conn);
 
 	// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 	$excel->setActiveSheetIndex(0);
