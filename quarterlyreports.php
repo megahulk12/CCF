@@ -373,15 +373,33 @@
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-		  	<li class="divider"></li>
+		  	<?php
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
+		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		';
+				  	if($_SESSION["memberType"] >= 2 )
+				  		echo '
+			  		<li class="divider"></li>
+				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
+				  	<li class="divider"></li>
+				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  		';
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		';
+				  	if($_SESSION["memberType"] == 4)
+				  		echo '
+				  		';
+		  		}
+			  	if($_SESSION["memberType"] == 5)
+			  		echo '
+		  		<li class="divider"></li>
+			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		';
+		  	?>
+	  		<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -449,11 +467,17 @@
 		<div id="response"></div>
 		<div class="container">
 			<div class="row">
-				<form method="post" id="generate-report">
-					<a class="waves-effect waves-light btn col s2 right fixbutton" id="report" href="request_quarterlyreports.php">Generate A Report</a>
-				</form>
+				<div class="col s4">
+				</div>
+				<div class="col s4">
+					<form method="post" id="generate-report">
+						<a class="waves-effect waves-light btn col s12 right fixbutton" id="report" href="request_quarterlyreports.php">Generate Quarterly Reports</a>
+					</form>
+				</div>
+				<div class="col s4">
+				</div>
 			</div>
-			<table class="centered">
+			<!-- <table class="centered">
 				<thead>
 					<tr>
 						<th>Dgroup Leader</th>
@@ -484,7 +508,7 @@
 				</tbody>
 				<tfoot>
 				</tfoot>
-			</table>
+			</table> -->
 		</div>
 	</body>
 
