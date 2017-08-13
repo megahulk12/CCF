@@ -20,6 +20,7 @@
 	for($i = 0; $i < count($columns); $i++) {
 	$excel->setActiveSheetIndex(0)
             ->setCellValue($column_excel[$i].'1', $columns[$i]);
+    $excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getFont()->setBold(true);
 	}
 
 	// connection variables
@@ -34,11 +35,12 @@
 		die("Connection failed: " . mysqli_connect_error());
 	}
 
-	$sql_dleader_information = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, civilStatus, occupation, contactNum, emailAd, birthdate FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID;";
+	$sql_dleader_information = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, civilStatus, occupation, contactNum, emailAd, birthdate FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID ORDER BY fullname ASC;";
 	$result = mysqli_query($conn, $sql_dleader_information);
 
 	if(mysqli_num_rows($result) > 0) {
 		$y = 2;
+		$strlen = array(0, 0, 0, 0, 0, 0);
 		while($row = mysqli_fetch_assoc($result)) {
 			$fullname = $row["fullname"];
 			$civilstatus = $row["civilStatus"];
@@ -46,12 +48,25 @@
 			$contactnum = $row["contactNum"];
 			$emailad  = $row["emailAd"];
 			$birthdate = date("F j, Y", strtotime($row["birthdate"]));
+
+			// stores max length of string of each value per column
+			if(strlen($fullname) > $strlen[0]) $strlen[0] = strlen($fullname);
+			if(strlen($civilstatus) > $strlen[1]) $strlen[1] = strlen($civilstatus);
+			if(strlen($occupation) > $strlen[2]) $strlen[2] = strlen($occupation);
+			if(strlen($contactnum) > $strlen[3]) $strlen[3] = strlen($contactnum);
+			if(strlen($emailad) > $strlen[4]) $strlen[4] = strlen($emailad);
+			if(strlen($birthdate) > $strlen[5]) $strlen[5] = strlen($birthdate);
 			$data = array($fullname, $civilstatus, $occupation, $contactnum, $emailad, $birthdate);
 			for($i = 0; $i < count($data); $i++) {
 				$excel->getActiveSheet()
 			          ->setCellValue($column_excel[$i].($y), $data[$i]);
 			}
 			$y++;
+		}
+		// set width per column based on the maximum length among each of its values
+		for($col = 'A', $i = 0; $col === $column_excel[count($column_excel) - 1]; $col++, $i++) {
+			//$excel->getActiveSheet()->getColumnDimension($col)->setAutoSize(false);
+			$excel->getActiveSheet()->getColumnDimension($col)->setWidth($strlen[$i]);	
 		}
 	}
 
@@ -60,6 +75,7 @@
 
 	// Clone 1st worksheet
 	$dgleaderschedules = $excel->createSheet(1);
+	$excel->setActiveSheetIndex(1);
 
 	// Add some data; generate columns
 	$columns = array("Dgroup Leader", "Age Bracket", "Dgroup Type", "Day", "Time", "Place");
@@ -67,9 +83,10 @@
 	for($i = 0; $i < count($columns); $i++) {
 	$dgleaderschedules
             ->setCellValue($column_excel[$i].'1', $columns[$i]);
+    $excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getFont()->setBold(true);
 	}
 
-	$sql_dgroup_schedule = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, ageBracket, gender, dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time, schedPlace FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID LEFT OUTER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+	$sql_dgroup_schedule = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, ageBracket, gender, dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time, schedPlace FROM discipleshipgroup_tbl LEFT OUTER JOIN member_tbl ON dgleader = memberID LEFT OUTER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID ORDER BY fullname ASC;";
 	$result = mysqli_query($conn, $sql_dgroup_schedule);
 
 	if(mysqli_num_rows($result) > 0) {
@@ -106,6 +123,7 @@
 
 	// Clone 1st worksheet
 	$d12Leaders = $excel->createSheet(2);
+	$excel->setActiveSheetIndex(2);
 
 	// Add some data; generate columns
 	$columns = array("D12 Leader", "Dgroup Leader");
@@ -113,9 +131,10 @@
 	for($i = 0; $i < count($columns); $i++) {
 	$d12Leaders
             ->setCellValue($column_excel[$i].'1', $columns[$i]);
+    $excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getFont()->setBold(true);
 	}	
 
-	$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2)";
+	$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2) ORDER BY dg12Leader ASC";
 	$result = mysqli_query($conn, $sql_d12Leaders);
 
 	if(mysqli_num_rows($result) > 0) {
@@ -137,6 +156,7 @@
 
 	// Clone 1st worksheet
 	$membersinfo = $excel->createSheet(3);
+	$excel->setActiveSheetIndex(3);
 
 	// Add some data; generate columns
 	$columns = array("Dgroup Leader", "Last Name", "First Name", "Middle Initial", "Gender", "Civil Status", "Birthdate", "Mobile Number", "Landline", "Email Address", "Member Type");
@@ -144,9 +164,10 @@
 	for($i = 0; $i < count($columns); $i++) {
 	$membersinfo
             ->setCellValue($column_excel[$i].'1', $columns[$i]);
+    $excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getFont()->setBold(true);
 	}	
 
-	$sql_membersinfo = "SELECT dgleader AS dgLeader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dgLeader) AS dgLeaderName, discipleshipgroupmembers_tbl.memberID AS dgMember, lastName, firstName, middleName, gender, civilStatus, birthdate, contactNum, homePhoneNumber, emailAd, memberType FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID;";
+	$sql_membersinfo = "SELECT dgleader AS dgLeader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dgLeader) AS dgLeaderName, discipleshipgroupmembers_tbl.memberID AS dgMember, lastName, firstName, middleName, gender, civilStatus, birthdate, contactNum, homePhoneNumber, emailAd, memberType FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID ORDER BY dgLeaderName ASC;";
 	$result = mysqli_query($conn, $sql_membersinfo);
 
 	if(mysqli_num_rows($result) > 0) {
