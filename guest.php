@@ -490,27 +490,27 @@
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
 								<label for="Lastname">Last Name</label>
-								<small class="error" id="lastname-required">This field is required.</small>
+								<small class="error" id="Lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
 								<label for="Firstname">First Name</label>
-								<small class="error" id="firstname-required">This field is required.</small>
+								<small class="error" id="Firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
 								<label for="Middlename">Middle Name</label>
-								<small class="error" id="middlename-required">This field is required.</small>
+								<small class="error" id="Middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
 								<label for="Nickname">Nickname</label>
-								<small class="error" id="nickname-required">This field is required.</small>
+								<small class="error" id="Nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
 								<label for="Birthdate">Birthdate</label>
-								<small class="error" id="birthdate-required">This field is required.</small>
+								<small class="error" id="Birthdate-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -538,18 +538,18 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
-									<small class="error" id="civilstatus-required">This field is required.</small>
+									<small class="error" id="Civilstatus-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
 								<label for="MobileNumber">Mobile Number</label>
-								<small class="error" id="mobilenumber-required">This field is required.</small>
+								<small class="error" id="MobileNumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
 								<label for="Profession">Profession/Occupation</label>
-								<small class="error" id="profession-required">This field is required.</small>
+								<small class="error" id="Profession-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -560,13 +560,13 @@
 							<div class="input-field col s12">
 								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
 								<label for="CompanyName">Company Name</label>
-								<small class="error" id="companyname-required">This field is required.</small>
+								<small class="error" id="CompanyName-required">This field is required.</small>
 							</div>
 							<h4 class="center">School</h4>
 							<div class="input-field col s12">
 								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
 								<label for="SchoolName">School Name</label>
-								<small class="error" id="schoolname-required">This field is required.</small>
+								<small class="error" id="SchoolName-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -599,7 +599,7 @@
 								<label for="username">Username</label>
 								<small class="error-with-icon" id="noInput">This field is required.</small>
 								<small class="error-with-icon" id="notusername">This username is already taken.</small>
-							</div>not
+							</div>
 							'; // originally having a value of own password
 							?>
 							<div class="input-field col s12">
@@ -704,6 +704,150 @@
 		});
 		*/
 	}
+	/*code ni paolo*/
+		// $('.error, .error-with-icon').hide(); // by default, hide all error classes
+
+		// function disableDefaultRequired(elem) {
+		// 	// disable default required tooltips
+		// 	document.addEventListener('invalid', (function () {
+		// 	    return function (e) {
+		// 	        e.preventDefault();
+		// 	    };
+		// 	})(), true);
+		// }
+
+		// $("#next").click(function(){
+		// 	var focused_element;
+		// 	var company = $(".company"), school = $(".school");
+		// 	$('.error').hide();
+		// 	company.show();
+		// 	school.show();
+		// 	$("#CompanyName").prop("required", true);
+		// 	$("#SchoolName").prop("required", true);
+		// 	$(this).blur();
+		// 	var check_iteration = true;
+
+		// 	var professionid = "#Profession";
+		// 	if($(professionid).val().toLowerCase() == "student") {
+		// 		company.hide();
+		// 		$(".company input").prop("required", false);
+		// 	}
+		// 	else {
+		// 		school.hide();
+		// 		$(".school input").prop("required", false);
+		// 	}
+
+		// 	$($("form#registration").find('input').reverse()).each(function() {
+		// 		if($(this).prop('required')) {
+		// 			if($(this).val() == "") {
+		// 				$("small#"+this.id+"-required").show();
+		// 				focused_element = $(this);
+		// 				disableDefaultRequired($(this));
+		// 				check_iteration = false;
+		// 			}
+		// 		}
+		// 	});
+		// 	if(!check_iteration) // checks if there is mali in form
+		// 	scrollTo(focused_element); // scrolls to focused element
+
+		// 	if(check_iteration) {
+		// 		confirmvalidated = true;
+		// 		if(checkLastPage()) {
+		// 			validated = true;
+		// 			confirmvalidated = false;
+		// 		}
+		// 		pagination(1, this.id.split("_")[0]);
+		// 	}
+		// });
+		// $("#next").click(function() {
+		// var focused_element;
+		// // default and initialization states
+		// var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+		// $('.error').hide();
+		// company.show();
+		// school.show();
+		// spouse.show();
+		// $("#CompanyName").prop("required", true);
+		// $("#SchoolName").prop("required", true);
+		// //$("#SpouseName").prop("required", true);
+		// $(this).blur(); // no focus in button once clicked
+		// var check_iteration = true;
+		
+		// /* ===== SPOUSE VALIDATION ===== */
+		// /*var civilstatusid = "#CivilStatus"
+		// if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+		// 	spouse.hide();
+		// 	$(".spouse input").prop("required", false);
+		// 	//$("h4").find(":contains('Spouse')").hide();
+		// 	//$("[id^=Spouse], [for^=Spouse]").hide();
+		// }*/
+
+		// /* ===== COMPANY AND SCHOOL VALIDATION ===== */
+		// var professionid = "#Profession";
+		// if($(professionid).val().toLowerCase() == "student") {
+		// 	company.hide();
+		// 	$(".company input").prop("required", false);
+		// }
+		// else {
+		// 	school.hide();
+		// 	$(".school input").prop("required", false);
+		// }
+
+		// $($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function() {
+		// // [FRONT-END] iterate to show error classes to required fields
+		// // [BACK-END] iterate to check blank fields and other factors before going to next pages
+		// 	if($(this).prop('required')) {
+		// 		if($(this).val() == "") {
+		// 			$('small#'+this.id+'-required').show();
+		// 			//$('#'+this.id).focus();
+		// 			focused_element = $(this);
+		// 			disableDefaultRequired($(this));
+		// 			check_iteration = false;
+		// 		}
+		// 		else if(this.id == "Email") {
+		// 			if(!isValidEmailAddress($(this).val())) {
+		// 				$('#Invalid-Email').show();
+		// 				//$('#'+this.id).focus();
+		// 				focused_element = $(this);
+		// 				disableDefaultRequired($(this));
+		// 				check_iteration = false;
+		// 			}
+		// 		}
+		// 	}
+		// });
+
+		// if(!check_iteration) // checks if there is mali in form
+		// 	scrollTo(focused_element); // scrolls to focused element
+
+		// if(check_iteration) {
+		// 	confirmvalidated = true;
+		// 	if(checkLastPage()) {
+		// 		validated = true;
+		// 		confirmvalidated = false;
+		// 	}
+		// 	pagination(1, this.id.split("_")[0]);
+		// }
+
+		// });
+
+		// function getCurrentPage(){
+		// 	var cp = "page"+currentpage;
+		// 	return cp;
+		// }
+
+		// function checkLastPage() {
+		// 	var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+		// 	pagenumber++; // page that is after the previous
+		// 	var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+		// 	if($('#'+lastpage).length > 0) return false;
+		// 	else return true;
+		// }
+
+		// function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
+		// 	var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+		// 	return pattern.test(emailAddress);
+		// };
+		/*end code ni paolo*/
 	</script>
 	<footer>
 	</footer>
