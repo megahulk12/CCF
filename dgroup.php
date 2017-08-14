@@ -594,17 +594,17 @@
 						if(mysqli_num_rows($lresult) > 0) {
 							while($lrow = mysqli_fetch_assoc($lresult)) {
 								$leader = $lrow["leader"];
-							}
-						}
-
-						$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
 								echo '
 						<td>
 							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
 							'.$leader.'<br><br><label>LEADER</label></a>
 						</td>
 								';
+							}
+						}
+
+						$result = mysqli_query($conn, $query);
+						if(mysqli_num_rows($result) > 0) {
 							$counter_row = 1;
 							while($row = mysqli_fetch_assoc($result)) {
 								$fullname = $row["fullname"];
