@@ -383,10 +383,11 @@
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
-		  	<li class="divider"></li>
 		  	<?php
 		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
-		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  			echo '
+			  		<li class="divider"></li>
+		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
 				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
@@ -410,6 +411,7 @@
 			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		';
 		  	?>
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->

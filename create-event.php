@@ -186,6 +186,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+			color: #fff;
 		}
 
 
@@ -445,6 +446,11 @@
 		/* ===== END ===== */
 
 		/*tables*/
+		.table-wrapper {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
 		table > tbody > tr:hover {
 			cursor: hand;
 			background-color: #f2f2f2 !important;
@@ -504,10 +510,8 @@
 				selectYears: 50, // Creates a dropdown of 15 years to control year
 				formatSubmit: 'yyyy-mm-dd'
 			});
-			 
-			$(document).ready(function() {
-				$('select').material_select();
-			}); 
+
+			$('select').material_select();
 
 			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
 			$('#receivedChrist').val();
@@ -548,6 +552,7 @@
 			$("#preloader").css("visibility", "hidden");
 			$('#preloader').css("left", $('#create-event').width()/2);
 			$('#preloader').css("top", $('#create-event').height()/2);
+			disableForm(true);
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -578,9 +583,16 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
+					disableForm(false);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 				}
+			});
+		}
+
+		function disableForm(flag) {
+			$('div#page1').children().find('input, textarea, select').each(function() {
+				$(this).prop("disabled", flag);
 			});
 		}
 	</script>
@@ -591,7 +603,9 @@
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
 		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
-		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  			echo '
+			  		<li class="divider"></li>
+		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
 				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
@@ -615,7 +629,7 @@
 			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		';
 		  	?>
-	  		<li class="divider"></li>
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -685,12 +699,12 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<h2 class="center">EVENT PROPOSAL</h2>
+			<h2 class="center">Event Proposals</h2>
 			<div class="row">
 				<div class="col s12 z-depth-4 card-panel">
 					<div class="col s5">
 						<div class="col s12">
-							<h3 class="center">Pending Events</h3>
+							<h3 class="center">Proposed Events</h3>
 							<table class="centered">
 								<thead>
 									<tr>
@@ -800,7 +814,7 @@
 									</div>
 								</div>
 								<div class="row">
-									<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit">PROPOSE</button>
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="submit" id="submit">Revise</button>
 								</div>
 							</form>
 						</div>
@@ -831,6 +845,10 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
+		// blur clickable elements
+		$('a#add-link').click(function() {
+			$('a#add-link').blur();
+		});
 
 		// preloader section
 		$('button').prop("disabled", true);

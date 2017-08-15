@@ -93,7 +93,7 @@
 
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
-			color: #424242;
+			color: #777;
 			font-family: proxima-nova;
 			text-transform: uppercase;
 		}
@@ -598,7 +598,9 @@
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
 		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
-		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  			echo '
+			  		<li class="divider"></li>
+		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
 				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
@@ -622,7 +624,7 @@
 			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		';
 		  	?>
-	  		<li class="divider"></li>
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
