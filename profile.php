@@ -2108,7 +2108,8 @@
 
 			// convert time values to timestamp
 			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getDate();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
 			start_time = spaceAMPM(start_time);
 			end_time = spaceAMPM(end_time);
 			start_time = new Date(d + " " + start_time);
