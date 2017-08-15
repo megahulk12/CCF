@@ -549,9 +549,7 @@
 		}
 
 		$(document).ready(function() {
-			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#Eform').width()/2);
-			$('#preloader').css("top", $('#Eform').height()/2);
+			preload();
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -570,6 +568,7 @@
 			// ajax + preloader
 
 			var url = "request_endorsements.php";
+			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
@@ -586,6 +585,19 @@
 					// ex. alert(data.a);
 				}
 			});
+		}
+
+		function disableForm(flag) {
+			$('div#page1').children().find('input, select').each(function() {
+				$(this).prop("disabled", flag);
+			});
+		}
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#Eform').width()/2);
+			$('#preloader').css("top", $('#Eform').height()/2);
+			disableForm(true);
 		}
 	</script>
 

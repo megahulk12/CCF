@@ -93,7 +93,7 @@
 		}
 
 		/*form*/
-		.create-event {
+		.proposed-events {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -429,7 +429,7 @@
 			position: relative;
 		}
 
-		#create-event {
+		#proposed-events {
 			margin: 0 auto;
 			height: 700px;
 		}
@@ -549,10 +549,7 @@
 		});
 
 		$(document).ready(function() {
-			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#create-event').width()/2);
-			$('#preloader').css("top", $('#create-event').height()/2);
-			disableForm(true);
+			preload();
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -565,12 +562,13 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "create-event.php?id="+id.split("_")[1]);
+			history.pushState(null, null, "proposed-events.php?id="+id.split("_")[1]);
 
 
 			// ajax + preloader
 
 			var url = "propose.php";
+			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
@@ -594,6 +592,13 @@
 			$('div#page1').children().find('input, textarea, select').each(function() {
 				$(this).prop("disabled", flag);
 			});
+		}
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#proposed-events').width()/2);
+			$('#preloader').css("top", $('#proposed-events').height()/2);
+			disableForm(true);
 		}
 	</script>
 
@@ -730,7 +735,7 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="create-event">
+							<form method="post" id="proposed-events">
 								<h3 class="center">Sample</h3>
 								<div class="row">
 									<div id="preloader">
@@ -858,12 +863,12 @@
 			$('button').blur();
 		});
 
-		$('#create-event').submit(function(e) {
+		$('#proposed-events').submit(function(e) {
 			var url = "propose.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: $('#create-event').serialize(),
+				data: $('#proposed-events').serialize(),
 				success: function(data) {
 					swal({
 						title: "Success!",
