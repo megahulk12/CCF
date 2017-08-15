@@ -500,20 +500,9 @@
 			position: relative;
 		}
 
-		#view {
-			position: relative;
-			top: 100;
-			cursor: pointer;
-		}
-
 		#Eform {
 			margin: 0 auto;
 			height: 700px;
-		}
-
-		.fadeIn {
-			opacity: 1;
-			transition: opacity 0.5s;
 		}
 
 		/* ===== PRELOADER ===== */
@@ -591,10 +580,13 @@
 				type: "POST",
 				url: url,
 				data: "id="+id,
+				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
+					// access echo values data.<key value of array>
+					// ex. alert(data.a);
 				}
 			});
 		}
@@ -971,7 +963,7 @@
 		});
 
 		// APPROVE SECTION
-		$('#approve').click(function() {
+		$('#Eform').submit(function(e) {
 			var url = "request_endorsements.php";
 			$.ajax({
 				type: "POST",
@@ -981,6 +973,7 @@
 					
 				}
 			});
+			e.preventDefault();
 		});
 	</script>
 </html>
