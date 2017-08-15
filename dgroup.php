@@ -476,6 +476,8 @@
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
 				  		';
 				  	if($_SESSION["memberType"] == 4)
 				  		echo '
