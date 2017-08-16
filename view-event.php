@@ -437,6 +437,8 @@
 				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
 				  		';
 				  	if($_SESSION["memberType"] == 4)
 				  		echo '
