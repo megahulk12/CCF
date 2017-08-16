@@ -92,12 +92,6 @@
 			font-size: 13px;
 		}
 
-		/*form*/
-		.participation-requests {
-			width:600px;
-		}
-		/*=======END=======*/
-
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
 			color: #777;
@@ -426,27 +420,6 @@
 			border-color: #16A5B8;
 		}
 
-		#preloader {
-			position: relative;
-			width: 0 !important;
-		}
-
-		#participation-requests {
-			margin: 0 auto;
-			height: 400px;
-		}
-
-		/* ===== PRELOADER ===== */
-		.preloader-wrapper.small {
-			width: 24px;
-			height: 24px;
-		}
-
-		.spinner-color-theme {
-			border-color: rgba(0, 0, 0, 0.4);
-		}
-		/* ===== END ===== */
-
 		/*tables*/
 		.table-wrapper {
 			max-height: 300px;
@@ -550,10 +523,6 @@
 			});
 		});
 
-		$(document).ready(function() {
-			preload();
-		});
-
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -564,42 +533,7 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "participation-requests.php?id="+id.split("_")[1]);
-
-
-			// ajax + preloader
-
-			var url = "propose.php";
-			preload();
-			$('button').prop("disabled", true);
-			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "id="+id,
-				dataType: 'json',
-				success: function(data) {
-					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
-					$('button').prop("disabled", false);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
-				}
-			});
-		}
-
-		function disableForm(flag) {
-			$('div#page1').children().find('input, textarea, select').each(function() {
-				$(this).prop("disabled", flag);
-			});
-		}
-
-		function preload() {
-			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#participation-requests').width()/2);
-			$('#preloader').css("top", $('#participation-requests').height()/2);
-			disableForm(true);
+			history.pushState(null, null, "event-summary-reports.php?id="+id.split("_")[1]);
 		}
 	</script>
 
@@ -711,169 +645,36 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<h2 class="center">Participation Requests</h2>
 			<div class="row">
-				<div class="col s12 z-depth-4 card-panel">
-					<div class="col s5">
-						<div class="col s12">
-							<h3 class="center">Requests</h3>
-							<table class="centered">
-								<thead>
-									<tr>
-										<th>Participant</th>
-										<th>Event to Attend</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
-								</tbody>
-								<tfoot></tfoot>
-							</table>
-						</div>
-					</div>
-					<div class="col s7" id="form">
-						<div class="container">
-							<form method="post" id="participation-requests">
-								<h3 class="center">Sample's Profile</h3>
-								<div class="row">
-									<div id="preloader">
-										<div class="preloader-wrapper small active">
-											<div class="spinner-layer spinner-blue-only spinner-color-theme">
-												<div class="circle-clipper left">
-													<div class="circle"></div>
-												</div><div class="gap-patch">
-													<div class="circle"></div>
-												</div><div class="circle-clipper right">
-													<div class="circle"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div id="page1" class="">
-										<div class="row">
-											<h4 class="center">Personal Information</h4>
-											<div class="input-field col s12">
-												<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
-												<label for="Lastname">Last Name</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
-												<label for="Firstname">First Name</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
-												<label for="Middlename">Middle Name</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
-												<label for="Nickname">Nickname</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="datepicker" id="Birthdate" name="Birthdate"> <!-- originally date type, OC ito haha -->
-												<label for="Birthdate">Birthdate</label>
-											</div>
-
-											<h4 class="center">Other Information</h4>
-											<p style="margin-top: 40px;">
-												<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-												<input type="radio" id="Gender_Male" name="Gender" value="Male"/>
-												<label for="Gender_Male">Male</label>
-												<input type="radio" id="Gender_Female" name="Gender" value="Female"/>
-												<label for="Gender_Female">Female</label>
-											</p>
-											<div class="input-field col s12">
-												<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
-												<label for="Citizenship">Citizenship</label>
-											</div>
-											<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
-												<div class="input-field col s12">
-													<input type="text" id="CivilStatus" name="CivilStatus">
-													<label for="CivilStatus">Civil Status</label>
-												</div>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
-												<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30">
-												<label for="Email" data-error="Invalid email address">Email Address</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30">
-												<label for="Profession">Profession/Occupation</label>
-											</div>
-
-
-											<h5 class="center">Home</h5>
-											<div class="input-field col s12">
-												<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
-												<label for="HomeAddress">Address</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
-												<label for="HomePhoneNumber">Home Phone Number</label>
-											</div>
-											<h5 class="center company">Company</h5>
-											<div class="input-field col s12 company">
-												<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
-												<label for="CompanyName">Company Name</label>
-											</div>
-											<div class="input-field col s12 company">
-												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
-												<label for="CompanyContactNum">Company Contact Number</label>
-											</div>
-											<div class="input-field col s12 company">
-												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
-												<label for="CompanyAddress">Company Address</label>
-											</div>
-											<h5 class="center school">School</h5>
-											<div class="input-field col s12 school">
-												<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
-												<label for="SchoolName">School Name</label>
-											</div>
-											<div class="input-field col s12 school">
-												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
-												<label for="SchoolContactNum">School Contact Number</label>
-											</div>
-											<div class="input-field col s12 school">
-												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
-												<label for="SchoolAddress">School Address</label>
-											</div>
-											<h5 class="center spouse">Spouse</h5>
-											<div class="input-field col s12 spouse">
-												<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
-												<label for="SpouseName">Spouse Name</label>
-											</div>
-											<div class="input-field col s12 spouse">
-												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
-												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
-											</div>
-											<div class="input-field col s12 spouse">
-												<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
-												<label for="SpouseBirthdate">Birthdate</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="button" name="approve" id="approve">Approve</button>
-									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
-								</div>
-							</form>
-						</div>
-					</div>
+				<div class="col s3">
+				</div>
+				<div class="col s6 z-depth-4 card-panel">
+					<h3 class="center">Event Summary Reports</h3>
+					<table class="centered">
+						<thead>
+							<tr>
+								<th>Event Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="row_1" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+							<tr id="row_2" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+							<tr id="row_3" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+					<form method="post" id="generate-event-report">
+						<button type="submit" class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;">Generate Report</button>
+					</form>
+				</div>
+				<div class="col s3">
+					
 				</div>
 			</div>
 		</div>
@@ -900,67 +701,6 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
-		// blur clickable elements
-		$('a#add-link').click(function() {
-			$('a#add-link').blur();
-		});
-
-		// preloader section
-		$('button').prop("disabled", true);
-		$('button').click(function() {
-			$('button').blur();
-		});
-
-		$('#participation-requests').submit(function(e) {
-			var url = "request_participation-request.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: $('#participation-requests').serialize(),
-				success: function(data) {
-					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					});
-				}
-			});
-			e.preventDefault();
-		});
-
-		function checkIfSingle() {
-			if(document.getElementById('SingleDay').checked) {
-				document.getElementById('Event_Date_End').style.display = "none";
-				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
-				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
-				document.getElementById('Weekly').checked = false;
-			}
-			else {
-				$('#Event_Date_End').fadeIn(200);
-				document.getElementById('lblEventDateStart').innerHTML = "Start";
-				document.getElementById('Event_Date_End').style.display = "inline";
-				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
-				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
-			}
-		}
-
-		$(document).ready(function() {
-			$('#WeeklyEvent').hide();
-		});
-		function checkIfWeekly() {
-			if(document.getElementById('Weekly').checked) {
-				$('#WeeklyEvent').show();
-				document.getElementById('SingleDay').checked = false;
-			}
-			else {
-				$('#WeeklyEvent').hide();
-
-			}
-		}
-
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -1040,5 +780,18 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		$('#generate-event-report').submit(function(e) {
+			var url = "request_event-summary-reports.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: $(this).serialize(),
+				success: function(data) {
+					
+				}
+			});
+			e.preventDefault();
+		});
 	</script>
 </html>
