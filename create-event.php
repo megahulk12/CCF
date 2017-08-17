@@ -436,6 +436,27 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		.close-error {
+			background: none;
+			float: right;
+			padding: 16px;
+			text-align: center;
+			border: 0;
+			opacity: 0.6;
+			color: inherit;
+			cursor: pointer;
+		}
+
+		.small {
+			font-size: 1.4rem !important;
+			font-weight: bold;
+		}
+
+		.close-error:hover {
+			text-decoration: none;
+			color: rgba(0, 0, 0, 1);
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -600,7 +621,7 @@
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="create-event" id="create-event"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="create-event" id="create-event" enctype="multipart/form-data"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
 						<h3 class="center">Event Proposal</h3>
 						<div class="row">
@@ -612,16 +633,27 @@
 								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
 								<label for="EventDesc">Event Description</label>
 							</div>
+							<div class="file-field input-field col s12">
+								<div class="btn">
+									<span>Picture</span>
+									<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+								</div>
+								<div class="row event-pic">
+								</div>
+							</div>
 							<h4 class="center">Date</h4>
 							<p>
-								<div class ="row" style="margin-left:10px;">
-									<input type="checkbox" class="filled-in" id="SingleDay" name="SingleDay" onclick="checkIfSingle();"/>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
 									<label for="SingleDay">Single Day Event</label>
 								</div>
 							</p>
 							<p>
-								<div class ="row" style="margin-left:10px;">
-									<input type="checkbox" class="filled-in" id="Weekly" name="Weekly" onclick="checkIfWeekly();"/>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
 									<label for="Weekly">Weekly Event</label>
 								</div>
 							</p>
@@ -665,13 +697,13 @@
 								<label for="Budget">Budget</label>
 							</div>
 							<div class="input-field col s12">
-								<textarea id="Remarks" class="materialize-textarea" name="Remarks" data-length="500" maxlength="500"></textarea>
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
 								<label for="Remarks">Remarks</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="submit" id="submit">Propose</button>
+						<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="propose" id="propose">Propose</button>
 					</div>
 				</form>
 			</div>
@@ -699,12 +731,29 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
+		function renderImage(input) {
+			if(input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#showImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);
+			}
+			else
+				$('.event-pic').html("");
+		}
+
+		$('#EventPicture').change(function() {
+			$('.event-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+			renderImage(this);
+		});
+
 		$('#create-event').submit(function(e) {
 			var url = "propose.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: $('#create-event').serialize(),
+				data: $(this).serialize(),
 				success: function(data) {
 					swal({
 						title: "Success!",
@@ -726,6 +775,7 @@
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
 				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
 				document.getElementById('Weekly').checked = false;
+				checkIfWeekly();
 			}
 			else {
 				$('#Event_Date_End').fadeIn(200);
@@ -738,11 +788,15 @@
 
 		$(document).ready(function() {
 			$('#WeeklyEvent').hide();
+			$('#SingleDay').prop("checked", true);
+			checkIfSingle();
 		});
+
 		function checkIfWeekly() {
 			if(document.getElementById('Weekly').checked) {
 				$('#WeeklyEvent').show();
 				document.getElementById('SingleDay').checked = false;
+				checkIfSingle();
 			}
 			else {
 				$('#WeeklyEvent').hide();

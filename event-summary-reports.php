@@ -290,7 +290,6 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
 			 overflow-y: auto;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
