@@ -509,20 +509,11 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd'
+				formatSubmit: 'yyyy-mm-dd',
+				min: true
 			});
 
 			$('select').material_select();
-
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
 
   			//old version of timepicker
   			/*
@@ -585,7 +576,48 @@
 					disableForm(false);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
-					
+					if(data.schedstatus == 0) {
+						$('#EventName').val(data.name);
+						$('#EventDesc').val(data.description);
+						$('#EventDesc').trigger("autoresize");
+						$('#EventHeadName').val(data.headID);
+						$('#SingleDay').prop("checked", true);
+						checkIfSingle();
+						$('#EventDateStart').val(data.startday);
+						$('#EventTime1').val(data.starttime);
+						$('#EventTime2').val(data.endtime);
+						$('#EventVenue').val(data.venue);
+						$('#Budget').val(data.budget);
+						$('#Remarks').val(data.remarks);
+						$('#Remarks').trigger("autoresize");
+
+
+
+						// re-initialize to update input fields
+						Materialize.updateTextFields();
+    					$('select').material_select();
+					}
+					else if(data.schedstatus == 1) {
+						$('#EventName').val(data.name);
+						$('#EventDesc').val(data.description);
+						$('#EventDesc').trigger("autoresize");
+						$('#EventHeadName').val(data.headID);
+						$('#Weekly').prop("checked", true);
+						checkIfWeekly();
+						$('#EventDateStart').val(data.startday);
+						$('#EventDateEnd').val(data.endday);
+						$('#WeeklyDay').val(data.weekly);
+						$('#EventTime1').val(data.starttime);
+						$('#EventTime2').val(data.endtime);
+						$('#EventVenue').val(data.venue);
+						$('#Budget').val(data.budget);
+						$('#Remarks').val(data.remarks);
+						$('#Remarks').trigger("autoresize");
+
+						// re-initialize to update input fields
+						Materialize.updateTextFields();
+    					$('select').material_select();
+					}
 					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
 					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
