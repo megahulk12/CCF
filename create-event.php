@@ -517,33 +517,33 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
-				  	if($_SESSION["memberType"] >= 2 )
+				  	if($_SESSION["memberType"] == 2 )
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
-				  	if($_SESSION["memberType"] == 3)
-				  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-				  		';
-				  	if($_SESSION["memberType"] == 4)
-				  		echo '
-				  		';
 		  		}
+			  	if($_SESSION["memberType"] == 3)
+			  		echo '
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		';
+			  	if($_SESSION["memberType"] == 4)
+			  		echo '
+			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 		  		<li class="divider"></li>
@@ -632,6 +632,28 @@
 							<div class="input-field col s12">
 								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
 								<label for="EventDesc">Event Description</label>
+							</div>
+							<div class="input-field col s12">
+									<select id="EventHeadName" name="EventHeadName">
+										<option value="" disabled selected>Choose your option...</option>
+										<?php
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+
+											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$memberID = $row["memberID"];
+													$fullname = $row["fullname"];
+													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
+												}
+											}
+										?>
+									</select>
+									<label>Event Head</label>
 							</div>
 							<div class="file-field input-field col s12">
 								<div class="btn">

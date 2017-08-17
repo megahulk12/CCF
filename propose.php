@@ -1,6 +1,6 @@
 <?php
 	// code for proposing events and ministries
-
+	include('globalfunctions.php');
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
@@ -30,6 +30,7 @@
 		// fetch data from form
 		$eventname = $_POST["EventName"];
 		$eventdesc = $_POST["EventDesc"];
+		$eventhead = $_POST["EventHeadName"];
 		$eventpicturepath = $target_dir.$_POST["EventPictureName"];
 		$eventschedstatus = $_POST["EventSchedStatus"];
 		if($eventschedstatus == "SingleDay") $eventschedstatus = 0;
@@ -41,6 +42,7 @@
 		$endtime = date("H:i:s", strtotime($_POST["EventTime2"]));
 		$venue = $_POST["EventVenue"];
 		$budget = $_POST["Budget"];
+		$dateEntry = date("Y-m-d"); // for budget details
 		$remarks = $_POST["Remarks"];
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -48,7 +50,11 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_propose_event = "INSERT INTO ";
+		$sql_budget = "INSERT INTO budgetdetails_tbl(budget, dateEntry) VALUES($budget, '$dateEntry')";
+		mysqli_query($conn, $sql_budget);
+
+		$sql_propose_budget = "INSERT INTO eventdetails_tbl(eventPicturePath, eventHeadID, eventName, eventDescription)";
+
 	}
 
 	if(isset($_POST['id'])) {

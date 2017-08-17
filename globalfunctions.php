@@ -369,4 +369,25 @@
 		$query = "UPDATE notifications_tbl SET notificationStatus = 1 WHERE receivermemberID = ".$_SESSION['userid'].";" ;
 		$result = mysqli_query($conn, $query);
 	}
+
+	function getCurrentBudgetID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT budgetID FROM budgetdetails_tbl ORDER BY budgetID DESC LIMIT 1;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$budgetID = $row["budgetID"];
+			}
+		}
+		return $schedID;
+	}
 ?>
