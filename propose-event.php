@@ -34,11 +34,16 @@
 		$eventhead = $_POST["EventHeadName"];
 		$eventpicturepath = $target_dir.$_POST["EventPictureName"];
 		$eventschedstatus = $_POST["EventSchedStatus"];
-		if($eventschedstatus == "SingleDay") $eventschedstatus = 0;
-		else if($eventschedstatus == "Weekly") $eventschedstatus = 1;
-		$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
-		$eventenddate = date("Y-m-d", strtotime($_POST["EventDateEnd"]));
-		$weekly = $_POST["WeeklyDay"];
+		if($eventschedstatus == "SingleDay") {
+			$eventschedstatus = 0;
+			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
+		}
+		else if($eventschedstatus == "Weekly") {
+			$eventschedstatus = 1;
+			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
+			$eventenddate = date("Y-m-d", strtotime($_POST["EventDateEnd"]));
+			$weekly = $_POST["WeeklyDay"];
+		}
 		$starttime = date("H:i:s", strtotime($_POST["EventTime1"]));
 		$endtime = date("H:i:s", strtotime($_POST["EventTime2"]));
 		$venue = $_POST["EventVenue"];
@@ -52,16 +57,16 @@
 		}
 
 		$sql_budget = "INSERT INTO budgetdetails_tbl(budget, dateEntry) VALUES('$budget', '$dateEntry')";
-
-		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$eventenddate', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus)";
-
 		mysqli_query($conn, $sql_budget);
+
+		if($eventschedstatus == 0) {
+		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
+		}
+		else if($eventschedstatus == 1) {
+		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$eventenddate', '$weekly', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
+		}
+
 		mysqli_query($conn, $sql_propose_event);
 		mysqli_close($conn);
 	//}
-
-	if(isset($_POST['id'])) {
-		$array = array('a'=>'a');
-		echo json_encode($array);
-	}
 ?>

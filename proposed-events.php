@@ -563,12 +563,12 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "proposed-events.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
-
-			var url = "propose.php";
+			var url = "request_proposed-events.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
@@ -585,6 +585,9 @@
 					disableForm(false);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
+					
+					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
 			});
 		}
@@ -593,6 +596,12 @@
 			$('div#page1').children().find('input, textarea, select').each(function() {
 				$(this).prop("disabled", flag);
 			});
+
+			// for the file upload button
+			if(flag)
+				$('#EventPicture').parent().addClass("disabled");
+			else
+				$('#EventPicture').parent().removeClass("disabled");
 		}
 
 		function preload() {
@@ -724,15 +733,26 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName DESC;";
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$eventID = $row["eventID"];
+												$eventname = $row["eventName"];
+												echo '
+												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+												    <td>'.$eventname.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -758,70 +778,103 @@
 									</div>
 									<div id="page1" class="">
 										<div class="row">
-											<div class="input-field col s12">
-												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
-												<label for="EventName">Event Name</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
-												<label for="EventDesc">Event Description</label>
-											</div>
-											<h4 class="center">Date</h4>
-											<p>
-												<div class ="row" style="margin-left:10px;">
-													<input type="checkbox" class="filled-in" id="SingleDay" name="SingleDay" onclick="checkIfSingle();"/>
-													<label for="SingleDay">Single Day Event</label>
-												</div>
-											</p>
-											<p>
-												<div class ="row" style="margin-left:10px;">
-													<input type="checkbox" class="filled-in" id="Weekly" name="Weekly" onclick="checkIfWeekly();"/>
-													<label for="Weekly">Weekly Event</label>
-												</div>
-											</p>
-											<div class="input-field col s6" id="Event_Date_Start">
-												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
-												<label for="EventDateStart" id="lblEventDateStart">Start</label>
-											</div>
-											<div class="input-field col s6" id="Event_Date_End">
-												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
-												<label for="EventDateEnd">End</label>
-											</div>
-												<div class="input-field col s12" id="WeeklyEvent">
-													<select id="WeeklyDay" name="WeeklyDay">
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunday</option>
-														<option value="Monday">Monday</option>
-														<option value="Tuesday">Tuesday</option>
-														<option value="Wednesday">Wednesday</option>
-														<option value="Thursday">Thursday</option>
-														<option value="Friday">Friday</option>
-														<option value="Saturday">Saturday</option>
-													</select>
-													<label>Day</label>
-												</div>
-											<h4 class="center">Time</h4>
-											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
-												<label for="EventTime1">Start</label>
-											</div>
-											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
-												<label for="EventTime2">End</label>
-											</div>
-											<h4 class="center">Location</h4>
-											<div class="input-field col s12">
-												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
-												<label for="EventVenue">Event Venue</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-												<label for="Budget">Budget</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="Remarks" class="materialize-textarea" name="Remarks" data-length="500" maxlength="500"></textarea>
-												<label for="Remarks">Remarks</label>
-											</div>
+							<div class="input-field col s12">
+								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+								<label for="EventName">Event Name</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+								<label for="EventDesc">Event Description</label>
+							</div>
+							<div class="input-field col s12">
+									<select id="EventHeadName" name="EventHeadName">
+										<option value="" disabled selected>Choose your option...</option>
+										<?php
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+
+											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$memberID = $row["memberID"];
+													$fullname = $row["fullname"];
+													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
+												}
+											}
+										?>
+									</select>
+									<label>Event Head</label>
+							</div>
+							<div class="file-field input-field col s12">
+								<div class="btn">
+									<span>Picture</span>
+									<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+								</div>
+								<div class="row event-pic">
+								</div>
+							</div>
+							<h4 class="center">Date</h4>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
+									<label for="SingleDay">Single Day Event</label>
+								</div>
+							</p>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
+									<label for="Weekly">Weekly Event</label>
+								</div>
+							</p>
+							<div class="input-field col s6" id="Event_Date_Start">
+								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+								<label for="EventDateStart" id="lblEventDateStart">Start</label>
+							</div>
+							<div class="input-field col s6" id="Event_Date_End">
+								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+								<label for="EventDateEnd">End</label>
+							</div>
+								<div class="input-field col s12" id="WeeklyEvent">
+									<select id="WeeklyDay" name="WeeklyDay">
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Sunday">Sunday</option>
+										<option value="Monday">Monday</option>
+										<option value="Tuesday">Tuesday</option>
+										<option value="Wednesday">Wednesday</option>
+										<option value="Thursday">Thursday</option>
+										<option value="Friday">Friday</option>
+										<option value="Saturday">Saturday</option>
+									</select>
+									<label>Day</label>
+								</div>
+							<h4 class="center">Time</h4>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+								<label for="EventTime1">Start</label>
+							</div>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+								<label for="EventTime2">End</label>
+							</div>
+							<h4 class="center">Location</h4>
+							<div class="input-field col s12">
+								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+								<label for="EventVenue">Event Venue</label>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<label for="Budget">Budget</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+								<label for="Remarks">Remarks</label>
+							</div>
 										</div>
 									</div>
 								</div>
@@ -868,12 +921,37 @@
 			$('button').blur();
 		});
 
+		function renderImage(input) {
+			if(input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#showImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);	
+			}
+			else
+				$('.event-pic').html("");
+		}
+
+		$('#EventPicture').change(function() {
+			$('.event-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+			renderImage(this);
+		});
+
 		$('#proposed-events').submit(function(e) {
-			var url = "propose.php";
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var url = "request_proposed-events.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: $('#proposed-events').serialize(),
+				data: new FormData(this),
+				contentType: false,
+				processData: false,
 				success: function(data) {
 					swal({
 						title: "Success!",
@@ -882,8 +960,7 @@
 						allowEscapeKey: true,
 						allowOutsideClick: true,
 						timer: 10000
-					}, function() { window.location.href = "index.php"; }
-					);
+					});
 				}
 			});
 			e.preventDefault();
@@ -895,6 +972,7 @@
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
 				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
 				document.getElementById('Weekly').checked = false;
+				checkIfWeekly();
 			}
 			else {
 				$('#Event_Date_End').fadeIn(200);
@@ -907,11 +985,15 @@
 
 		$(document).ready(function() {
 			$('#WeeklyEvent').hide();
+			$('#SingleDay').prop("checked", true);
+			checkIfSingle();
 		});
+
 		function checkIfWeekly() {
 			if(document.getElementById('Weekly').checked) {
 				$('#WeeklyEvent').show();
 				document.getElementById('SingleDay').checked = false;
+				checkIfSingle();
 			}
 			else {
 				$('#WeeklyEvent').hide();

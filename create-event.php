@@ -793,10 +793,8 @@
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
 						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
 						timer: 10000
-					});
+					}, function() { window.location.href = "index.php"; });
 				}
 			});
 			e.preventDefault();
