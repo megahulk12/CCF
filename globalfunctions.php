@@ -390,4 +390,25 @@
 		}
 		return $budgetID;
 	}
+
+	function getBudgetID($eventID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT budgetID FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$budgetID = $row["budgetID"];
+			}
+		}
+		return $budgetID;
+	}
 ?>

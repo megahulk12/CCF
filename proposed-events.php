@@ -574,6 +574,7 @@
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					disableForm(false);
+					$('#eventID').val(id);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 					if(data.schedstatus == 0) {
@@ -792,7 +793,7 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="proposed-events">
+							<form method="post" id="proposed-events" enctype="multipart/form-data">
 								<h3 class="center">Sample</h3>
 								<div class="row">
 									<div id="preloader">
@@ -911,7 +912,8 @@
 									</div>
 								</div>
 								<div class="row">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="submit" id="submit">Revise</button>
+									<input type="hidden" id="eventID" name="eventID">
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="revise" id="revise">Revise</button>
 								</div>
 							</form>
 						</div>
@@ -992,7 +994,7 @@
 						allowEscapeKey: true,
 						allowOutsideClick: true,
 						timer: 10000
-					});
+					}, function() { window.location.reload(); });
 				}
 			});
 			e.preventDefault();

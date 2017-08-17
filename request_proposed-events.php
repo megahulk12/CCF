@@ -1,11 +1,12 @@
 <?php
+	include('globalfunctions.php');
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
-	if(isset($_POST['id'])) {
-		$id = $_POST["id"];
+	$id = $_POST["id"];
 
+	if(isset($id)) {
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
 			die("Connection failed: " . mysqli_connect_error());
@@ -32,5 +33,67 @@
 				echo json_encode($array);
 			}
 		}
+	}
+	else {
+		$confirmUpload = true;
+		$target_dir = "uploads/";
+		$target_file = $target_dir.basename($_FILES["EventPicture"]["name"]);
+		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+
+		if(file_exists($target_file)) { // check if image exists
+			echo "File already exists.";
+			$confirmUpload = false;
+		}
+
+		if($_FILES["EventPicture"]["size"] > 20000000) { // limits the size of image
+			echo "File is too large.";
+			$confirmUpload = false;
+		}
+
+		if($confirmUpload) {
+			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
+		}
+			
+		// fetch data from form
+		$id = $_POST["eventID"];
+		$eventname = $_POST["EventName"];
+		$eventdesc = $_POST["EventDesc"];
+		$eventhead = $_POST["EventHeadName"];
+		$eventpicturepath = $target_dir.$_POST["EventPictureName"];
+		$eventschedstatus = $_POST["EventSchedStatus"];
+		if($eventschedstatus == "SingleDay") {
+			$eventschedstatus = 0;
+			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
+		}
+		else if($eventschedstatus == "Weekly") {
+			$eventschedstatus = 1;
+			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
+			$eventenddate = date("Y-m-d", strtotime($_POST["EventDateEnd"]));
+			$weekly = $_POST["WeeklyDay"];
+		}
+		$starttime = date("H:i:s", strtotime($_POST["EventTime1"]));
+		$endtime = date("H:i:s", strtotime($_POST["EventTime2"]));
+		$venue = $_POST["EventVenue"];
+		$budget = $_POST["Budget"];
+		$dateEntry = date("Y-m-d"); // for budget details
+		$remarks = $_POST["Remarks"];
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_budget = "UPDATE budgetdetails_tbl SET budget = '$budget', dateEntry = '$dateEntry' WHERE budgetID = ".getBudgetID($id);
+		mysqli_query($conn, $sql_budget);
+
+		if($eventschedstatus == 0) {
+		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = $eventhead, eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
+		}
+		else if($eventschedstatus == 1) {
+		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = $eventhead, eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventEndDay = '$eventenddate', eventWeekly = '$weekly', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
+		}
+
+		mysqli_query($conn, $sql_propose_event);
+		mysqli_close($conn);
 	}
 ?>
