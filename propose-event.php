@@ -6,7 +6,7 @@
 	$password = "root";
 	$dbname = "dbccf";
 
-	if(isset($_POST['propose'])) {
+	//if(isset($_POST['propose'])) {
 		// Image handling
 		$confirmUpload = true;
 		$target_dir = "uploads/";
@@ -26,7 +26,8 @@
 		if($confirmUpload) {
 			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
 		}
-
+		
+		
 		// fetch data from form
 		$eventname = $_POST["EventName"];
 		$eventdesc = $_POST["EventDesc"];
@@ -50,12 +51,14 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_budget = "INSERT INTO budgetdetails_tbl(budget, dateEntry) VALUES($budget, '$dateEntry')";
+		$sql_budget = "INSERT INTO budgetdetails_tbl(budget, dateEntry) VALUES('$budget', '$dateEntry')";
+
+		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$eventenddate', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus)";
+
 		mysqli_query($conn, $sql_budget);
-
-		$sql_propose_budget = "INSERT INTO eventdetails_tbl(eventPicturePath, eventHeadID, eventName, eventDescription)";
-
-	}
+		mysqli_query($conn, $sql_propose_event);
+		mysqli_close($conn);
+	//}
 
 	if(isset($_POST['id'])) {
 		$array = array('a'=>'a');

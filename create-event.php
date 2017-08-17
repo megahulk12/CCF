@@ -759,7 +759,7 @@
 				reader.onload = function(e) {
 					$('#showImage').attr('src', e.target.result);
 				}
-				reader.readAsDataURL(input.files[0]);
+				reader.readAsDataURL(input.files[0]);	
 			}
 			else
 				$('.event-pic').html("");
@@ -771,11 +771,23 @@
 		});
 
 		$('#create-event').submit(function(e) {
-			var url = "propose.php";
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var formdata = new FormData($(this));
+			console.log(formdata);
+			formdata = $(this).serialize();
+			console.log(formdata);
+			var url = "propose-event.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: $(this).serialize(),
+				data: new FormData(this),
+				contentType: false,
+				processData: false,
 				success: function(data) {
 					swal({
 						title: "Success!",
@@ -784,8 +796,7 @@
 						allowEscapeKey: true,
 						allowOutsideClick: true,
 						timer: 10000
-					}, function() { window.location.href = "index.php"; }
-					);
+					});
 				}
 			});
 			e.preventDefault();

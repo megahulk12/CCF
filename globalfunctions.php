@@ -388,6 +388,6 @@
 				$budgetID = $row["budgetID"];
 			}
 		}
-		return $schedID;
+		return $budgetID;
 	}
 ?>
