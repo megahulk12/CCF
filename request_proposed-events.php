@@ -49,6 +49,12 @@
 			echo "File is too large.";
 			$confirmUpload = false;
 		}
+		
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+		&& $imageFileType != "gif" ) {
+		    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+			$confirmUpload = false;
+		}
 
 		if($confirmUpload) {
 			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);

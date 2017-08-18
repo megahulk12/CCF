@@ -555,7 +555,7 @@
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			id = id.split("_")[1];
-			history.pushState(null, null, "proposed-events.php?id="+id);
+			//history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
@@ -772,7 +772,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName DESC;";
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
@@ -844,7 +844,7 @@
 							<div class="file-field input-field col s12">
 								<div class="btn">
 									<span>Picture</span>
-									<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
+									<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
 								</div>
 								<div class="file-path-wrapper">
 									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
@@ -979,6 +979,21 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			var url = "request_proposed-events.php";
 			$.ajax({
 				type: "POST",
@@ -987,6 +1002,8 @@
 				contentType: false,
 				processData: false,
 				success: function(data) {
+					$('.fixbutton').text('Revise');
+					$('.fixbutton').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
