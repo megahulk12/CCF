@@ -7,7 +7,18 @@
 	$dbname = "dbccf";
 	$id = $_POST["id"];
 
-	if(isset($id)) {
+	if(isset($_POST['notify'])) {
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$notificationdesc = "You have received some remarks about ".getEventName($id).".<br>Remarks: ".$_POST['notifvalue'];
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";
+		mysqli_query($conn, $sql_notifications);
+		mysqli_close($conn);
+	}
+	else if(isset($id)) {
 		/* for new event notif purposes
 		// set to seen the pending events that have recently been added
 		setSeenEventRequest($id);
@@ -39,18 +50,6 @@
 				echo json_encode($array);
 			}
 		}
-
-		mysqli_close($conn);
-	}
-
-	if(isset($_POST['notify'])) {
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
-		$sql_notifcations = "INSERT INTO";
-
 
 		mysqli_close($conn);
 	}

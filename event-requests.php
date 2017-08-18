@@ -740,7 +740,13 @@
 						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1) { // for event request notifs
 							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
+
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 
 						}
 						echo '<li class="divider"></li>';
@@ -931,7 +937,7 @@
 								<div class="row">
 									<input type="hidden" id="eventID" name="eventID">
 									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
-									<button class="waves-effect waves-light btn col s3 right " type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
+									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
 								</div>
 							</form>
 						</div>
@@ -1008,7 +1014,7 @@
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: "notify=g&"+value,
+					data: "notify=g&id="+$('#eventID').val()+"&notifvalue="+value,
 					success: function(data) {
 						swal({
 							title: "Success!",

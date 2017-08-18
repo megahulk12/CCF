@@ -434,6 +434,48 @@
 		return $eventID;
 	}
 
+	function getEventHeadID($eid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventHeadID FROM eventdetails_tbl WHERE eventID = $eid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventHeadID = $row["eventHeadID"];
+			}
+		}
+		return $eventHeadID;
+	}
+
+	function getEventName($eid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventName FROM eventdetails_tbl WHERE eventID = $eid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventName = $row["eventName"];
+			}
+		}
+		return $eventName;
+	}
+
 	function setSeenEventRequest($eid) { //  for new event notif purposes
 		include_once('session.php'); // this function requires a session call because it is external from the session itself
 		$servername = "localhost";
