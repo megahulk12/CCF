@@ -578,48 +578,37 @@
 					$('#form-header').text(data.name);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
+
+					$('#EventName').val(data.name);
+					$('#EventDesc').val(data.description);
+					$('#EventDesc').trigger("autoresize");
 					if(data.schedstatus == 0) {
-						$('#EventName').val(data.name);
-						$('#EventDesc').val(data.description);
-						$('#EventDesc').trigger("autoresize");
-						$('#EventHeadName').val(data.headID);
 						$('#SingleDay').prop("checked", true);
 						checkIfSingle();
-						$('#EventDateStart').val(data.startday);
-						$('#EventTime1').val(data.starttime);
-						$('#EventTime2').val(data.endtime);
-						$('#EventVenue').val(data.venue);
-						$('#Budget').val(data.budget);
-						$('#Remarks').val(data.remarks);
-						$('#Remarks').trigger("autoresize");
-
-
-
-						// re-initialize to update input fields
-						Materialize.updateTextFields();
-    					$('select').material_select();
 					}
 					else if(data.schedstatus == 1) {
-						$('#EventName').val(data.name);
-						$('#EventDesc').val(data.description);
-						$('#EventDesc').trigger("autoresize");
-						$('#EventHeadName').val(data.headID);
+						$('#MultipleDay').prop("checked", true);
+						checkIfMultiple();
+						$('#EventDateEnd').val(data.endday);
+					}
+					else if(data.schedstatus == 2) {
 						$('#Weekly').prop("checked", true);
 						checkIfWeekly();
-						$('#EventDateStart').val(data.startday);
-						$('#EventDateEnd').val(data.endday);
 						$('#WeeklyDay').val(data.weekly);
-						$('#EventTime1').val(data.starttime);
-						$('#EventTime2').val(data.endtime);
-						$('#EventVenue').val(data.venue);
-						$('#Budget').val(data.budget);
-						$('#Remarks').val(data.remarks);
-						$('#Remarks').trigger("autoresize");
-
-						// re-initialize to update input fields
-						Materialize.updateTextFields();
-    					$('select').material_select();
+						$('#EventDateEnd').val(data.endday);
 					}
+					$('#EventDateStart').val(data.startday);
+					$('#EventTime1').val(data.starttime);
+					$('#EventTime2').val(data.endtime);
+					$('#EventVenue').val(data.venue);
+					$('#Budget').val(data.budget);
+					$('#Remarks').val(data.remarks);
+					$('#Remarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
+
 					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
 					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
@@ -803,7 +792,7 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="proposed-events" enctype="multipart/form-data">
-								<h3 class="center" id="form-header">Sample</h3>
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">
@@ -844,6 +833,12 @@
 												<div class ="row" style="margin-left:5px;">
 													<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
 													<label for="SingleDay">Single Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+													<label for="MultipleDay">Multiple Day Event</label>
 												</div>
 											</p>
 											<p>
@@ -1018,6 +1013,13 @@
 				document.getElementById('Event_Date_End').style.display = "inline";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
 				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
 			}
 		}
 

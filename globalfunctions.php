@@ -491,4 +491,9 @@
 		$query = "UPDATE notifications_tbl SET notificationStatus = 1 WHERE eventID = $eid AND receivermemberID = ".$_SESSION['userid'].";" ;
 		$result = mysqli_query($conn, $query);
 	}
+
+	function escapeString($string) {
+		$string = mysqli_real_escape_string($string);
+		return $string;
+	}
 ?>

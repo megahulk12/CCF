@@ -6,16 +6,20 @@
 	$password = "root";
 	$dbname = "dbccf";
 	$id = $_POST["id"];
+	$conn = mysqli_connect($servername, $username, $password, $dbname);
+	if (!$conn) {
+		die("Connection failed: " . mysqli_connect_error());
+	}
 
 	if(isset($_POST['notify'])) {
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
-
 		$notificationdesc = "You have received some remarks about ".getEventName($id).".<br>Remarks: ".$_POST['notifvalue'];
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
+		mysqli_close($conn);
+	}
+	else if(isset($_POST['approve'])) {
+		$sql_event_approved = "UPDATE eventdetails_tbl SET eventStatus = 1 WHERE eventID = $id";
+		mysqli_query($conn, $sql_event_approved);
 		mysqli_close($conn);
 	}
 	else if(isset($id)) {
@@ -23,11 +27,6 @@
 		// set to seen the pending events that have recently been added
 		setSeenEventRequest($id);
 		*/
-
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
-		if (!$conn) {
-			die("Connection failed: " . mysqli_connect_error());
-		}
 
 		$query = "SELECT budget, CONCAT_WS(' ', firstName, lastName) AS fullname, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus FROM eventdetails_tbl LEFT OUTER JOIN budgetdetails_tbl ON eventdetails_tbl.budgetID = budgetdetails_tbl.budgetID LEFT OUTER JOIN member_tbl ON eventHeadID = memberID WHERE eventID = $id";
 		$result = mysqli_query($conn, $query);

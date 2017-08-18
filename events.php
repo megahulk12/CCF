@@ -303,7 +303,7 @@
 			margin: 0;
 			color: #6a6a6a;
 			font-family: sans-serif;
-			font-size: 11px;
+			font-size: 13px;
 			height: inherit;
 			text-align: justify;
 			line-height: 1.5rem;
@@ -334,6 +334,17 @@
 			height: 50px !important;
 			margin-bottom: 20px !important;
 			padding-top: 15px;
+		}
+
+		.schedule-weekly {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 70px !important;
+			margin-bottom: 20px !important;
+			padding: 10px;
 		}
 		/* ===============END=============== */
 
@@ -489,129 +500,100 @@
 	</header>
 	<body>
 		<div id="response"></div>
-		<!-- event cards -->
-		<?php
-			//position-x interval: 370px
-			//position-y interval: 540px
-		?>
 		<h3 class="center">UPCOMING EVENTS</h3>
 		<div class="container-events">
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<a href="view-event.php"><img src="resources/Elevate Unite Cover.jpg" class="stretch"></a>
-						</div>
-						<div class="card-content">
-							<a href="view-event.php" class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+			<?php
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
 
-								The time to act is NOW!
+				$sql_events = "SELECT eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 ORDER BY eventStartDay DESC";
+				$result = mysqli_query($conn, $sql_events);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						$name = $row["eventName"];
+						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["eventDescription"]));
+						$path = $row["eventPicturePath"];
+						$startday = $row["eventStartDay"];
+						$endday = $row["eventEndDay"];
+						$weekly = $row["eventWeekly"];
+						$starttime = date("h:i a", strtotime($row["eventStartTime"]));
+						$endtime = date("h:i a", strtotime($row["eventEndTime"]));
+						$schedstatus = $row["eventSchedStatus"];
 
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite Cover.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
+						if($schedstatus == 0) {
+							$startday = date("F j", strtotime($startday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<p class="schedule">
+												'.$startday.' @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+						else if($schedstatus == 1) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<p class="schedule-weekly">
+												'.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+						else if($schedstatus == 2) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<p class="schedule-weekly">
+												Every '.$weekly.' <br> '.$startday.' - '.$endday.' @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+					}
+				}
+			?>
+			<!--<div class="row">
 				<div class="col s12 m7">
 					<div class="card hoverable">
 						<div class="card-image">
@@ -633,76 +615,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
+			</div>-->
 		</div>
 	</body>
 

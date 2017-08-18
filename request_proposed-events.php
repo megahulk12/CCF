@@ -63,27 +63,31 @@
 			
 		// fetch data from form
 		$id = $_POST["eventID"];
-		$eventname = $_POST["EventName"];
-		$eventdesc = $_POST["EventDesc"];
-		$eventhead = $_POST["EventHeadName"];
+		$eventname = addSlashes($_POST["EventName"]);
+		$eventdesc = addSlashes($_POST["EventDesc"]);
 		$eventpicturepath = $target_dir.$_POST["EventPictureName"];
 		$eventschedstatus = $_POST["EventSchedStatus"];
 		if($eventschedstatus == "SingleDay") {
 			$eventschedstatus = 0;
 			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
 		}
-		else if($eventschedstatus == "Weekly") {
+		else if($eventschedstatus == "MultipleDay") {
 			$eventschedstatus = 1;
+			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
+			$eventenddate = date("Y-m-d", strtotime($_POST["EventDateEnd"]));
+		}
+		else if($eventschedstatus == "Weekly") {
+			$eventschedstatus = 2;
 			$eventstartdate = date("Y-m-d", strtotime($_POST["EventDateStart"]));
 			$eventenddate = date("Y-m-d", strtotime($_POST["EventDateEnd"]));
 			$weekly = $_POST["WeeklyDay"];
 		}
 		$starttime = date("H:i:s", strtotime($_POST["EventTime1"]));
 		$endtime = date("H:i:s", strtotime($_POST["EventTime2"]));
-		$venue = $_POST["EventVenue"];
+		$venue = addSlashes($_POST["EventVenue"]);
 		$budget = $_POST["Budget"];
 		$dateEntry = date("Y-m-d"); // for budget details
-		$remarks = $_POST["Remarks"];
+		$remarks = addSlashes($_POST["Remarks"]); // put addSlashes to escape apostrophes
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
@@ -97,6 +101,9 @@
 		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = ".$_SESSION['userid'].", eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
 		}
 		else if($eventschedstatus == 1) {
+		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = ".$_SESSION['userid'].", eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventEndDay = '$eventenddate', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
+		}
+		else if($eventschedstatus == 2) {
 		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = ".$_SESSION['userid'].", eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventEndDay = '$eventenddate', eventWeekly = '$weekly', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
 		}
 

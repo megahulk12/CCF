@@ -457,6 +457,17 @@
 			text-decoration: none;
 			color: rgba(0, 0, 0, 1);
 		}
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -654,6 +665,12 @@
 							</p>
 							<p>
 								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+									<label for="MultipleDay">Multiple Day Event</label>
+								</div>
+							</p>
+							<p>
+								<div class ="row" style="margin-left:5px;">
 									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
 									<label for="Weekly">Weekly Event</label>
 								</div>
@@ -756,11 +773,22 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var formdata = new FormData($(this));
-			console.log(formdata);
-			formdata = $(this).serialize();
-			console.log(formdata);
 			var url = "propose-event.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -768,6 +796,8 @@
 				contentType: false,
 				processData: false,
 				success: function(data) {
+					$('.fixbutton').text('Propose');
+					$('.fixbutton').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
@@ -796,6 +826,13 @@
 			}
 		}
 
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
+			}
+		}
+
 		$(document).ready(function() {
 			$('#WeeklyEvent').hide();
 			$('#SingleDay').prop("checked", true);
@@ -810,7 +847,6 @@
 			}
 			else {
 				$('#WeeklyEvent').hide();
-
 			}
 		}
 

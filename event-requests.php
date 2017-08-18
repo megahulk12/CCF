@@ -591,48 +591,38 @@
 
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
+
+					$('#EventName').val(data.name);
+					$('#EventDesc').val(data.description);
+					$('#EventDesc').trigger("autoresize");
+					$('#EventHeadName').val(data.fullname);
 					if(data.schedstatus == 0) {
-						$('#EventName').val(data.name);
-						$('#EventDesc').val(data.description);
-						$('#EventDesc').trigger("autoresize");
-						$('#EventHeadName').val(data.fullname);
 						$('#SingleDay').prop("checked", true);
 						checkIfSingle();
-						$('#EventDateStart').val(data.startday);
-						$('#EventTime1').val(data.starttime);
-						$('#EventTime2').val(data.endtime);
-						$('#EventVenue').val(data.venue);
-						$('#Budget').val(data.budget);
-						$('#Remarks').val(data.remarks);
-						$('#Remarks').trigger("autoresize");
-
-
-
-						// re-initialize to update input fields
-						Materialize.updateTextFields();
-    					$('select').material_select();
 					}
 					else if(data.schedstatus == 1) {
-						$('#EventName').val(data.name);
-						$('#EventDesc').val(data.description);
-						$('#EventDesc').trigger("autoresize");
-						$('#EventHeadName').val(data.fullname);
+						$('#MultipleDay').prop("checked", true);
+						checkIfMultiple();
+						$('#EventDateEnd').val(data.endday);
+					}
+					else if(data.schedstatus == 2) {
 						$('#Weekly').prop("checked", true);
 						checkIfWeekly();
-						$('#EventDateStart').val(data.startday);
-						$('#EventDateEnd').val(data.endday);
 						$('#WeeklyDay').val(data.weekly);
-						$('#EventTime1').val(data.starttime);
-						$('#EventTime2').val(data.endtime);
-						$('#EventVenue').val(data.venue);
-						$('#Budget').val(data.budget);
-						$('#Remarks').val(data.remarks);
-						$('#Remarks').trigger("autoresize");
-
-						// re-initialize to update input fields
-						Materialize.updateTextFields();
-    					$('select').material_select();
+						$('#EventDateEnd').val(data.endday);
 					}
+					$('#EventDateStart').val(data.startday);
+					$('#EventTime1').val(data.starttime);
+					$('#EventTime2').val(data.endtime);
+					$('#EventVenue').val(data.venue);
+					$('#Budget').val(data.budget);
+					$('#Remarks').val(data.remarks);
+					$('#Remarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
+
 					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
 					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
@@ -884,6 +874,12 @@
 											</p>
 											<p>
 												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+													<label for="MultipleDay">Multiple Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
 													<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
 													<label for="Weekly">Weekly Event</label>
 												</div>
@@ -1052,13 +1048,13 @@
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: $(this).serialize(),
+				data: "id="+$('#eventID').val()+"&approve",
 				success: function(data) {
-					$('.fixbutton').text('Revise');
+					$('.fixbutton').text('Approve');
 					$('.fixbutton').prop("disabled", false);
 					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+						title: "Event Approved!",
+						text: "This event will now be open for people to join.",
 						type: "success",
 						allowEscapeKey: true,
 						allowOutsideClick: true,
@@ -1083,6 +1079,13 @@
 				document.getElementById('Event_Date_End').style.display = "inline";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
 				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
 			}
 		}
 
