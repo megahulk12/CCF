@@ -462,22 +462,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -518,8 +520,8 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
-
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
 						}
 						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
 

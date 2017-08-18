@@ -354,6 +354,7 @@
 		}
 		return $status;
 	}
+
 	if(isset($_POST['seen'])) {
 		include_once('session.php'); // this function requires a session call because it is external from the session itself
 		$servername = "localhost";
@@ -410,5 +411,42 @@
 			}
 		}
 		return $budgetID;
+	}
+
+	function getCurrentEventID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventID FROM eventdetails_tbl ORDER BY eventID DESC LIMIT 1;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventID = $row["eventID"];
+			}
+		}
+		return $eventID;
+	}
+
+	function setSeenEventRequest($eid) { //  for new event notif purposes
+		include_once('session.php'); // this function requires a session call because it is external from the session itself
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		// insert code set notificationStatus = 1 when user clicks notification area
+		$query = "UPDATE notifications_tbl SET notificationStatus = 1 WHERE eventID = $eid AND receivermemberID = ".$_SESSION['userid'].";" ;
+		$result = mysqli_query($conn, $query);
 	}
 ?>

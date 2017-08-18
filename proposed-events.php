@@ -575,6 +575,7 @@
 					$('button').prop("disabled", false);
 					disableForm(false);
 					$('#eventID').val(id);
+					$('#form-header').text(data.name);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 					if(data.schedstatus == 0) {
@@ -794,7 +795,7 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="proposed-events" enctype="multipart/form-data">
-								<h3 class="center">Sample</h3>
+								<h3 class="center" id="form-header">Sample</h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">

@@ -462,6 +462,10 @@
 			color: #fff;
 		}
 
+		table > tbody > tr.new {
+			background-color: #f2f2f2;
+		}
+
 		table > tbody > tr.active:hover {
 			background-color: #16A5B8 !important;
 			color: #fff !important;
@@ -573,8 +577,18 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					disableForm(false);
+					//disableForm(false);
 					$('#eventID').val(id);
+					$('#form-header').text(data.name);
+
+					/* for new event notif purposes
+					// update notification badge
+					if(data.notifcount >= 1)
+						$('.notification-badge').text(data.notifcount);
+					else
+						$('.notification-badge').remove();
+					*/
+
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 					if(data.schedstatus == 0) {
@@ -665,22 +679,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -721,8 +737,8 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
-
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
 						}
 						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
 
@@ -773,11 +789,30 @@
 										}
 
 										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName ASC;";
+										/* for new event notif purposes
+										$new = "SELECT eventID FROM notifications_tbl WHERE notificationType = 1 AND request = 1 AND notificationStatus = 0;";
+										$result = mysqli_query($conn, $new);
+										$notificationsEventID = "";
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$notificationsEventID = $row["eventID"];
+											}
+										}
+										*/
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
 												$eventID = $row["eventID"];
 												$eventname = $row["eventName"];
+												/* for new event notif purposes
+												if($eventID == $notificationsEventID) 
+													echo '
+													<tr id="row_'.$eventID.'" onclick="cellActive(this.id)" class="new">
+													    <td>'.$eventname.'</td>
+													</tr>
+													';
+												else
+												*/
 												echo '
 												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
 												    <td>'.$eventname.'</td>
@@ -794,9 +829,9 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="event-requests" enctype="multipart/form-data">
-								<h3 class="center">Sample</h3>
+								<h3 class="center" id="form-header">Sample</h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
@@ -913,7 +948,8 @@
 								</div>
 								<div class="row">
 									<input type="hidden" id="eventID" name="eventID">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="revise" id="revise">Revise</button>
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
+									<button class="waves-effect waves-light btn col s3 right " type="button" name="approve" id="approve" style="margin-right: 10px;">Notify</button>
 								</div>
 							</form>
 						</div>

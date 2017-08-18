@@ -1,6 +1,7 @@
 <?php
 	// code for proposing events and ministries
 	include('globalfunctions.php');
+	include('session.php');
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
@@ -67,6 +68,18 @@
 		}
 
 		mysqli_query($conn, $sql_propose_event);
+
+		$sql_all_admins = "SELECT memberID FROM member_tbl WHERE memberType = 5";
+		$result = mysqli_query($conn, $sql_all_admins);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$memberid = $row["memberID"];
+				$notificationdesc = "You have a new event request - $eventname.";
+				$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType, request) VALUES(".$_SESSION["userid"].", $memberid, ".getCurrentEventID().", '$notificationdesc', 1, 1)";
+				mysqli_query($conn, $sql_notifications);
+			}
+		}
+
 		mysqli_close($conn);
 	//}
 ?>
