@@ -61,10 +61,10 @@
 		mysqli_query($conn, $sql_budget);
 
 		if($eventschedstatus == 0) {
-		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
+		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", ".$_SESSION['userid'].", '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
 		}
 		else if($eventschedstatus == 1) {
-		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", $eventhead, '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$eventenddate', '$weekly', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
+		$sql_propose_event = "INSERT INTO eventdetails_tbl(budgetID, eventHeadID, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus) VALUES(".getCurrentBudgetID().", ".$_SESSION['userid'].", '$eventpicturepath', '$eventname', '$eventdesc', '$eventstartdate', '$eventenddate', '$weekly', '$starttime', '$endtime', '$venue', '$remarks', $eventschedstatus);";
 		}
 
 		mysqli_query($conn, $sql_propose_event);

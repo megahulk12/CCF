@@ -1,4 +1,5 @@
 <?php
+	include('session.php');
 	include('globalfunctions.php');
 	$servername = "localhost";
 	$username = "root";
@@ -49,7 +50,7 @@
 			echo "File is too large.";
 			$confirmUpload = false;
 		}
-		
+
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 		&& $imageFileType != "gif" ) {
 		    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
@@ -93,10 +94,10 @@
 		mysqli_query($conn, $sql_budget);
 
 		if($eventschedstatus == 0) {
-		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = $eventhead, eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
+		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = ".$_SESSION['userid'].", eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
 		}
 		else if($eventschedstatus == 1) {
-		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = $eventhead, eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventEndDay = '$eventenddate', eventWeekly = '$weekly', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
+		$sql_propose_event = "UPDATE eventdetails_tbl SET budgetID = ".getBudgetID($id).", eventHeadID = ".$_SESSION['userid'].", eventPicturePath = '$eventpicturepath', eventName = '$eventname', eventDescription = '$eventdesc', eventStartDay = '$eventstartdate', eventEndDay = '$eventenddate', eventWeekly = '$weekly', eventStartTime = '$starttime', eventEndTime = '$endtime', eventVenue = '$venue', remarks = '$remarks', eventSchedStatus = $eventschedstatus WHERE eventID = ".$id;
 		}
 
 		mysqli_query($conn, $sql_propose_event);

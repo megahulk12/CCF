@@ -773,7 +773,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
@@ -812,103 +812,81 @@
 									</div>
 									<div id="page1" class="">
 										<div class="row">
-							<div class="input-field col s12">
-								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
-								<label for="EventName">Event Name</label>
-							</div>
-							<div class="input-field col s12">
-								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
-								<label for="EventDesc">Event Description</label>
-							</div>
-							<div class="input-field col s12">
-									<select id="EventHeadName" name="EventHeadName">
-										<option value="" disabled selected>Choose your option...</option>
-										<?php
-											$conn = mysqli_connect($servername, $username, $password, $dbname);
-											if (!$conn) {
-												die("Connection failed: " . mysqli_connect_error());
-											}
-
-											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
-											$result = mysqli_query($conn, $query);
-											if(mysqli_num_rows($result) > 0) {
-												while($row = mysqli_fetch_assoc($result)) {
-													$memberID = $row["memberID"];
-													$fullname = $row["fullname"];
-													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
-												}
-											}
-										?>
-									</select>
-									<label>Event Head</label>
-							</div>
-							<div class="file-field input-field col s12">
-								<div class="btn">
-									<span>Picture</span>
-									<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
-								</div>
-								<div class="file-path-wrapper">
-									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
-								</div>
-								<div class="row event-pic">
-								</div>
-							</div>
-							<h4 class="center">Date</h4>
-							<p>
-								<div class ="row" style="margin-left:5px;">
-									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
-									<label for="SingleDay">Single Day Event</label>
-								</div>
-							</p>
-							<p>
-								<div class ="row" style="margin-left:5px;">
-									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
-									<label for="Weekly">Weekly Event</label>
-								</div>
-							</p>
-							<div class="input-field col s6" id="Event_Date_Start">
-								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
-								<label for="EventDateStart" id="lblEventDateStart">Start</label>
-							</div>
-							<div class="input-field col s6" id="Event_Date_End">
-								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
-								<label for="EventDateEnd">End</label>
-							</div>
-								<div class="input-field col s12" id="WeeklyEvent">
-									<select id="WeeklyDay" name="WeeklyDay">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunday</option>
-										<option value="Monday">Monday</option>
-										<option value="Tuesday">Tuesday</option>
-										<option value="Wednesday">Wednesday</option>
-										<option value="Thursday">Thursday</option>
-										<option value="Friday">Friday</option>
-										<option value="Saturday">Saturday</option>
-									</select>
-									<label>Day</label>
-								</div>
-							<h4 class="center">Time</h4>
-							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
-								<label for="EventTime1">Start</label>
-							</div>
-							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
-								<label for="EventTime2">End</label>
-							</div>
-							<h4 class="center">Location</h4>
-							<div class="input-field col s12">
-								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
-								<label for="EventVenue">Event Venue</label>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="Budget">Budget</label>
-							</div>
-							<div class="input-field col s12">
-								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
-								<label for="Remarks">Remarks</label>
-							</div>
+											<div class="input-field col s12">
+												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+												<label for="EventName">Event Name</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+												<label for="EventDesc">Event Description</label>
+											</div>
+											<div class="file-field input-field col s12">
+												<div class="btn">
+													<span>Picture</span>
+													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
+												</div>
+												<div class="file-path-wrapper">
+													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+												</div>
+												<div class="row event-pic">
+												</div>
+											</div>
+											<h4 class="center">Date</h4>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
+													<label for="SingleDay">Single Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
+													<label for="Weekly">Weekly Event</label>
+												</div>
+											</p>
+											<div class="input-field col s6" id="Event_Date_Start">
+												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+												<label for="EventDateStart" id="lblEventDateStart">Start</label>
+											</div>
+											<div class="input-field col s6" id="Event_Date_End">
+												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+												<label for="EventDateEnd">End</label>
+											</div>
+												<div class="input-field col s12" id="WeeklyEvent">
+													<select id="WeeklyDay" name="WeeklyDay">
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											<h4 class="center">Time</h4>
+											<div class="input-field col s6">
+												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+												<label for="EventTime1">Start</label>
+											</div>
+											<div class="input-field col s6">
+												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+												<label for="EventTime2">End</label>
+											</div>
+											<h4 class="center">Location</h4>
+											<div class="input-field col s12">
+												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+												<label for="EventVenue">Event Venue</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+												<label for="Budget">Budget</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+												<label for="Remarks">Remarks</label>
+											</div>
 										</div>
 									</div>
 								</div>

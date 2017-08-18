@@ -628,28 +628,6 @@
 								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
 								<label for="EventDesc">Event Description</label>
 							</div>
-							<div class="input-field col s12">
-									<select id="EventHeadName" name="EventHeadName">
-										<option value="" disabled selected>Choose your option...</option>
-										<?php
-											$conn = mysqli_connect($servername, $username, $password, $dbname);
-											if (!$conn) {
-												die("Connection failed: " . mysqli_connect_error());
-											}
-
-											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
-											$result = mysqli_query($conn, $query);
-											if(mysqli_num_rows($result) > 0) {
-												while($row = mysqli_fetch_assoc($result)) {
-													$memberID = $row["memberID"];
-													$fullname = $row["fullname"];
-													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
-												}
-											}
-										?>
-									</select>
-									<label>Event Head</label>
-							</div>
 							<div class="file-field input-field col s12">
 								<div class="btn">
 									<span>Picture</span>
