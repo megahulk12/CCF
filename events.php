@@ -508,10 +508,11 @@
 					die("Connection failed: " . mysqli_connect_error());
 				}
 
-				$sql_events = "SELECT eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 ORDER BY eventStartDay DESC";
+				$sql_events = "SELECT eventID, eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 ORDER BY eventStartDay DESC";
 				$result = mysqli_query($conn, $sql_events);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
+						$id = $row["eventID"];
 						$name = $row["eventName"];
 						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["eventDescription"]));
 						$path = $row["eventPicturePath"];
@@ -529,10 +530,10 @@
 								<div class="col s12 m7">
 									<div class="card hoverable">
 										<div class="card-image">
-											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
 										</div>
 										<div class="card-content">
-											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
 											<p class="schedule">
 												'.$startday.' @ '.$starttime.' - '.$endtime.'
 											</p>
@@ -552,10 +553,10 @@
 								<div class="col s12 m7">
 									<div class="card hoverable">
 										<div class="card-image">
-											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
 										</div>
 										<div class="card-content">
-											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
 											<p class="schedule-weekly">
 												'.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
 											</p>
@@ -575,10 +576,10 @@
 								<div class="col s12 m7">
 									<div class="card hoverable">
 										<div class="card-image">
-											<a href="view-event.php"><img src="'.$path.'" class="stretch"></a>
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
 										</div>
 										<div class="card-content">
-											<a href="view-event.php" class="card-title events">'.$name.'</a>
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
 											<p class="schedule-weekly">
 												Every '.$weekly.' <br> '.$startday.' - '.$endday.' @ '.$starttime.' - '.$endtime.'
 											</p>

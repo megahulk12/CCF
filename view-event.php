@@ -528,47 +528,112 @@
 	</header>
 	<body>
 		<div id="response"></div>
-		<div class="container-events">
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card">
-						<div class="card-image">
-							<img src="resources/Elevate Unite Cover.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title">ELEVATE UNITE</a>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-							</p>
-							<p>
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-							</p>
-							<p>
-								The time to act is NOW!
-							</p>
-							<p>
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-							<p>
-								<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
-								<br>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12 m7">
-					<div class="card card-schedule">
-						<div class="card-content card-content-schedule">
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>July 1</dd> </span></a>
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>1:00 pm - 5:30 pm</dd> </span></a>
-							<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>CCF DAVAO</dd> </span></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+			<?php
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
+
+				$sql_events = "SELECT eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 AND eventID = ".$_GET['id']." ORDER BY eventStartDay DESC";
+				$result = mysqli_query($conn, $sql_events);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						$name = $row["eventName"];
+						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["eventDescription"]));
+						$path = $row["eventPicturePath"];
+						$startday = $row["eventStartDay"];
+						$endday = $row["eventEndDay"];
+						$weekly = $row["eventWeekly"];
+						$starttime = date("h:i a", strtotime($row["eventStartTime"]));
+						$endtime = date("h:i a", strtotime($row["eventEndTime"]));
+						$venue = $row["eventVenue"];
+						$schedstatus = $row["eventSchedStatus"];
+
+						if($schedstatus == 0) {
+							$startday = date("F j", strtotime($startday));
+							echo '
+							<div class="container-events">
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card">
+											<div class="card-image">
+												<img src="'.$path.'" class="stretch">
+											</div>
+											<div class="card-content">
+												<a class="card-title">'.$name.'</a>
+												<p>
+													'.$description.'
+												</p>
+												<p>
+													<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
+													<br>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card card-schedule">
+											<div class="card-content card-content-schedule">
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							';
+						}
+						else if($schedstatus == 1) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+							<div class="container-events">
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card">
+											<div class="card-image">
+												<img src="'.$path.'" class="stretch">
+											</div>
+											<div class="card-content">
+												<a class="card-title">'.$name.'</a>
+												<p>
+													'.$description.'
+												</p>
+												<p>
+													<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
+													<br>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card card-schedule">
+											<div class="card-content card-content-schedule">
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							';
+						}
+						else if($schedstatus == 2) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+
+							';
+						}
+					}
+				}
+			?>
 	</body>
 
 	<main>
