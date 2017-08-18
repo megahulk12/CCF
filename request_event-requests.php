@@ -21,6 +21,8 @@
 		$sql_event_approved = "UPDATE eventdetails_tbl SET eventStatus = 1 WHERE eventID = $id";
 		mysqli_query($conn, $sql_event_approved);
 		$notificationdesc = getEventName($id)." has been approved and is now open for people to view and join.";
+		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE eventID = ".$id;
+		mysqli_query($conn, $sql_notifications);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);

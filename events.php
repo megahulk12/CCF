@@ -336,13 +336,24 @@
 			padding-top: 15px;
 		}
 
-		.schedule-weekly {
+		.schedule-multiple {
 			background-color: #e4e4e4;
 			font-size: 14px !important;
 			font-weight: bolder;
 			color: #424242 !important;
 			text-align: center !important;
 			height: 70px !important;
+			margin-bottom: 20px !important;
+			padding: 10px;
+		}
+
+		.schedule-weekly {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 90px !important;
 			margin-bottom: 20px !important;
 			padding: 10px;
 		}
@@ -557,7 +568,7 @@
 										</div>
 										<div class="card-content">
 											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
-											<p class="schedule-weekly">
+											<p class="schedule-multiple">
 												'.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
 											</p>
 											<p>
@@ -581,7 +592,7 @@
 										<div class="card-content">
 											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
 											<p class="schedule-weekly">
-												Every '.$weekly.' <br> '.$startday.' - '.$endday.' @ '.$starttime.' - '.$endtime.'
+												Every '.$weekly.' <br> '.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
 											</p>
 											<p>
 												'.$description.'

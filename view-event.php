@@ -628,7 +628,39 @@
 							$startday = date("F j", strtotime($startday));
 							$endday = date("F j", strtotime($endday));
 							echo '
-
+							<div class="container-events">
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card">
+											<div class="card-image">
+												<img src="'.$path.'" class="stretch">
+											</div>
+											<div class="card-content">
+												<a class="card-title">'.$name.'</a>
+												<p>
+													'.$description.'
+												</p>
+												<p>
+													<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join" onclick="joinEvent()">JOIN THIS EVENT</button>
+													<br>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col s12 m7">
+										<div class="card card-schedule">
+											<div class="card-content card-content-schedule">
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+												<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							';
 						}
 					}
