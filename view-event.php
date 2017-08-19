@@ -564,9 +564,16 @@
 						$schedstatus = $row["eventSchedStatus"];
 						$join_form = '
 							<form method="post" id="join-event">
-							<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
-							<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join">JOIN THIS EVENT</button>
-							<br>
+								<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
+								<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join">JOIN THIS EVENT</button>
+								<br>
+							</form>
+						';
+						$close_form = '
+							<form method="post" id="close-event">
+								<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
+								<button class="waves-effect waves-light btn col s3 right close-event" type="submit" name="close" id="close">CLOSE THIS EVENT</button>
+								<br>
 							</form>
 						';
 
@@ -590,6 +597,41 @@
 													</p>
 													<p>
 														'.$join_form.'
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card card-schedule">
+												<div class="card-content card-content-schedule">
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								';
+							}
+							else if($_SESSION['memberType'] == 3) {
+								echo '
+								<div class="container-events">
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card">
+												<div class="card-image">
+													<img src="'.$path.'" class="stretch">
+												</div>
+												<div class="card-content">
+													<a class="card-title">'.$name.'</a>
+													<p>
+														'.$description.'
+													</p>
+													<p>
+														'.$close_form.'
 													</p>
 												</div>
 											</div>
@@ -646,7 +688,7 @@
 							$startday = date("F j", strtotime($startday));
 							$endday = date("F j", strtotime($endday));
 							if($_SESSION['memberType'] <= 2 && $partstat == "") {
-							echo '
+								echo '
 								<div class="container-events">
 									<div class="row">
 										<div class="col s12 m7">
@@ -680,8 +722,43 @@
 								</div>
 								';
 							}
+							else if($_SESSION['memberType'] == 3) {
+								echo '
+								<div class="container-events">
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card">
+												<div class="card-image">
+													<img src="'.$path.'" class="stretch">
+												</div>
+												<div class="card-content">
+													<a class="card-title">'.$name.'</a>
+													<p>
+														'.$description.'
+													</p>
+													<p>
+														'.$close_form.'
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card card-schedule">
+												<div class="card-content card-content-schedule">
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								';
+							}
 							else {
-							echo '
+								echo '
 								<div class="container-events">
 									<div class="row">
 										<div class="col s12 m7">
@@ -732,6 +809,42 @@
 													</p>
 													<p>
 														'.$join_form.'
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card card-schedule">
+												<div class="card-content card-content-schedule">
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+													<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								';
+							}
+							else if($_SESSION['memberType'] == 3) {
+								echo '
+								<div class="container-events">
+									<div class="row">
+										<div class="col s12 m7">
+											<div class="card">
+												<div class="card-image">
+													<img src="'.$path.'" class="stretch">
+												</div>
+												<div class="card-content">
+													<a class="card-title">'.$name.'</a>
+													<p>
+														'.$description.'
+													</p>
+													<p>
+														'.$close_form.'
 													</p>
 												</div>
 											</div>
@@ -895,13 +1008,63 @@
 						title: "Error!",
 						text: "Please try again later!",
 						type: "error",
-						allowEscapeKey: true,
+						allowEscapeKey: false,
 						allowOutsideClick: false,
 						timer: 10000
 					}, function() { window.location.reload(); });
 					$('body').removeClass('stop-scrolling');
 					$('.join-event').html('JOIN THIS EVENT');
 					$('.join-event').prop("disabled", false);
+				}
+			});
+			e.preventDefault();
+		});
+
+		$('#close-event').submit(function(e) {
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div>';
+			$('.close-event').html(preloader);
+			$('.close-event').prop("disabled", true);
+			var url="join-event.php";
+				$.ajax({
+				type: "POST",
+				url: url,
+				data: "close=g&"+$(this).serialize(),
+				success: function() {
+					swal({
+						title: "Event Closed!",
+						text: "This event has been closed.",
+						type: "success",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.href = "events.php"; });
+					$('body').removeClass('stop-scrolling');
+					$('.close-event').html('CLOSE THIS EVENT');
+					$('.close-event').prop("disabled", false);
+				},
+				error: function() {
+					swal({
+						title: "Error!",
+						text: "Please try again later!",
+						type: "error",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.href = "events.php"; });
+					$('body').removeClass('stop-scrolling');
+					$('.close-event').html('CLOSE THIS EVENT');
+					$('.close-event').prop("disabled", false);
 				}
 			});
 			e.preventDefault();

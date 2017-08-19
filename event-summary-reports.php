@@ -530,9 +530,9 @@
 				document.getElementsByTagName("TR")[i].setAttribute("class", "");
 			}
 			document.getElementById(id).setAttribute("class", "active");
-			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "event-summary-reports.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			$('#generate').attr("href", "request_event-summary-reports.php?id="+id);
 		}
 	</script>
 
@@ -663,25 +663,34 @@
 					<table class="centered">
 						<thead>
 							<tr>
-								<th>Event Name</th>
+								<th>Event Name(s)</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr id="row_1" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_2" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_3" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
+							<?php
+								$conn = mysqli_connect($servername, $username, $password, $dbname);
+								if (!$conn) {
+									die("Connection failed: " . mysqli_connect_error());
+								}
+
+								$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+								$result = mysqli_query($conn, $query);
+								if(mysqli_num_rows($result) > 0) {
+									while($row = mysqli_fetch_assoc($result)) {
+										$eventID = $row["eventID"];
+										$eventname = $row["eventName"];
+										echo '
+										<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+										    <td>'.$eventname.'</td>
+										</tr>
+										';
+									}
+								}
+							?>
 						</tbody>
 						<tfoot></tfoot>
 					</table>
-					<form method="post" id="generate-event-report">
-						<button type="submit" class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;">Generate Report</button>
-					</form>
+					<a class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;" href="request_event-summary-reports.php">Generate Report</a>
 				</div>
 				<div class="col s3">
 					
