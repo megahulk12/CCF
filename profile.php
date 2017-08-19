@@ -340,7 +340,8 @@
 		.card-panel {
 		 	 transition: box-shadow .25s;
 		 	 padding: 24px;
-		 	 margin: 0.5rem 0 1rem 0;
+		 	 /*margin: 0.5rem 0 1rem 0;*/
+		 	 margin: 0 !important;
 		 	 border-radius: 2px;
 		 	 background-color: #fff;
 		}
@@ -457,11 +458,6 @@
 		.content {
 			width: 700px;
 			border-left: 2px solid #cccccc;
-		}
-
-		td.fixed {
-			height: 100%;
-			padding-bottom: 4.5%;
 		}
 
 		.forms {
@@ -709,17 +705,33 @@
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
-		  	<li class="divider"></li>
-
 		  	<?php
-		  		if($_SESSION["memberType"] > 0) echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
+		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		';
+				  	if($_SESSION["memberType"] >= 2 )
+				  		echo '
+			  		<li class="divider"></li>
+				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
+				  	<li class="divider"></li>
+				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  		';
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		';
+				  	if($_SESSION["memberType"] == 4)
+				  		echo '
+				  		';
+		  		}
+			  	if($_SESSION["memberType"] == 5)
+			  		echo '
 		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  	<li class="divider"></li>
-			  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-		  		<li class="divider"></li>';
+			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		';
 		  	?>
-		  	
+	  		<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -790,9 +802,8 @@
 		<div id="response"></div>
 		<div class="row row-profile">
 			<div class="col col-profile s12 card-panel z-depth-4">
-				<table>
-					<tr>
-						<td class="fixed">
+				<div class="row" style="width: 1002px; margin: 0;">
+					<div class="col s3 fixed" style="padding: 0; margin-top: 70px;">
 							<ul class="sidenav">
 								<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
 								<li class="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
@@ -809,77 +820,13 @@
 									<li class="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								?>
 							</ul>
-						</td>
-						<td class="content">
-							<div class="container">
-								<form method="post" class="forms" id="fcpinfo">
-									<div id="cpinfo">
-										<div class="row">
-											<?php
-												// database connection variables
-
-												$servername = "localhost";
-												$username = "root";
-												$password = "root";
-												$dbname = "dbccf";
-												$conn = mysqli_connect($servername, $username, $password, $dbname);
-												if (!$conn) {
-													die("Connection failed: " . mysqli_connect_error());
-												}
-												$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
-												$result = mysqli_query($conn, $query);
-												if(mysqli_num_rows($result) > 0) {
-													while($row = mysqli_fetch_assoc($result)) {
-														$lastname = $row["lastName"];
-														$firstname = $row["firstName"];
-														$middlename = $row["middleName"];
-														$nickname = $row["nickName"];
-														$birthdate = date("j F, Y", strtotime($row["birthdate"]));
-														if(is_null($row["birthdate"]))
-															$birthdate = "";
-														//$birthdate = $row["birthdate"];
-													}
-												}
-												echo '
-												<div class="input-field col s12">
-													<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'" required>
-													<label for="Lastname">Last Name</label>
-													<small class="error" id="lastname-required"></small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'" required>
-													<label for="Firstname">First Name</label>
-													<small class="error" id="firstname-required"></small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'" required>
-													<label for="Middlename">Middle Name</label>
-													<small class="error" id="middlename-required"></small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'" required>
-													<label for="Nickname">Nickname</label>
-													<small class="error" id="nickname-required"></small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'" required> <!-- originally date type, OC ito haha -->
-													<label for="Birthdate">Birthdate</label>
-													<small class="error" id="birthdate-required"></small>
-												</div>
-												';
-											?>
-										</div>
-										<div class="row">
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
-										</div>
-									</div>
-								</form>
-								<form method="post" class="forms" id="fcoinfo">
-									<div id="coinfo" style="display: none;">
-										<div class="row">
-											<!-- page 1 -->
-											<div id="coinfo_page1">
-											<?php
+					</div>
+					<div class="col s9 content">
+						<div class="container">
+							<form method="post" class="forms" id="fcpinfo">
+								<div id="cpinfo">
+									<div class="row">
+										<?php
 											// database connection variables
 
 											$servername = "localhost";
@@ -890,82 +837,373 @@
 											if (!$conn) {
 												die("Connection failed: " . mysqli_connect_error());
 											}
-											$query = "SELECT (SELECT CASE
-															  WHEN gender = '0' THEN 'Male'
-															  ELSE 'Female'
-															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
 											$result = mysqli_query($conn, $query);
 											if(mysqli_num_rows($result) > 0) {
 												while($row = mysqli_fetch_assoc($result)) {
-													$gender = $row["gender"];
-													$male = "";
-													$female = "";
-													if($gender == "Male") $male = "checked";
-													else $female = "checked";
-													$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
-													$civilstatus = $row["civilStatus"];
-													if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
-													else if($civilstatus == "Married") $selectedcivilstatus[2] = "selected";
-													else if($civilstatus == "Single Parent") $selectedcivilstatus[3] = "selected";
-													else if($civilstatus == "Annulled") $selectedcivilstatus[4] = "selected";
-													else if($civilstatus == "Separated") $selectedcivilstatus[5] = "selected";
-													else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
-													else $selectedcivilstatus[0] = "selected";
-													$citizenship = $row["citizenship"];
-													$contactnum = $row["contactNum"];
-													$emailad = $row["emailAd"];
-													$occupation = $row["occupation"];
+													$lastname = $row["lastName"];
+													$firstname = $row["firstName"];
+													$middlename = $row["middleName"];
+													$nickname = $row["nickName"];
+													$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+													if(is_null($row["birthdate"]))
+														$birthdate = "";
+													//$birthdate = $row["birthdate"];
 												}
 											}
 											echo '
-												<p style="margin-top: 40px;">
-													<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-													<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.'/>
-													<label for="Gender_Male">Male</label>
-													<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.'/>
-													<label for="Gender_Female">Female</label>
-												</p>
-												<div class="input-field col s12">
-													<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
-													<label for="Citizenship">Citizenship</label>
-													<small class="error" id="Citizenship-required">This field is required.</small>
-												</div>
-												<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
-													<div class="input-field col s12">
-														<select id="CivilStatus" name="CivilStatus">
-															<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
-															<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
-															<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
-															<option value="Single Parent" '.$selectedcivilstatus[3].'>Single Parent</option>
-															<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
-															<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
-															<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
-														</select>
-														<label>Civil Status</label>
-													</div>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
-													<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
-													<small class="error" id="MobileNumber-required">This field is required.</small>
-												</div>
-												<div class="input-field col s12">
-													<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
-													<label for="Email" data-error="Invalid email address">Email Address</label>
-													<small class="error" id="Email-required">This field is required.</small>
-													<small class="error" id="Invalid-Email">Invalid Email Address</small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
-													<label for="Profession">Profession/Occupation</label>
-													<small class="error" id="Profession-required">This field is required.</small>
-												</div>';
-												?>
+											<div class="input-field col s12">
+												<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'" required>
+												<label for="Lastname">Last Name</label>
+												<small class="error" id="lastname-required"></small>
 											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'" required>
+												<label for="Firstname">First Name</label>
+												<small class="error" id="firstname-required"></small>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'" required>
+												<label for="Middlename">Middle Name</label>
+												<small class="error" id="middlename-required"></small>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'" required>
+												<label for="Nickname">Nickname</label>
+												<small class="error" id="nickname-required"></small>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'" required> <!-- originally date type, OC ito haha -->
+												<label for="Birthdate">Birthdate</label>
+												<small class="error" id="birthdate-required"></small>
+											</div>
+											';
+										?>
+									</div>
+									<div class="row">
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
+									</div>
+								</div>
+							</form>
+							<form method="post" class="forms" id="fcoinfo">
+								<div id="coinfo" style="display: none;">
+									<div class="row">
+										<!-- page 1 -->
+										<div id="coinfo_page1">
+										<?php
+										// database connection variables
 
-											<!-- page 2 -->
-											<div id="coinfo_page2" style="display: none;">
-											<?php
+										$servername = "localhost";
+										$username = "root";
+										$password = "root";
+										$dbname = "dbccf";
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT (SELECT CASE
+														  WHEN gender = '0' THEN 'Male'
+														  ELSE 'Female'
+														  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$gender = $row["gender"];
+												$male = "";
+												$female = "";
+												if($gender == "Male") $male = "checked";
+												else $female = "checked";
+												$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
+												$civilstatus = $row["civilStatus"];
+												if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
+												else if($civilstatus == "Married") $selectedcivilstatus[2] = "selected";
+												else if($civilstatus == "Single Parent") $selectedcivilstatus[3] = "selected";
+												else if($civilstatus == "Annulled") $selectedcivilstatus[4] = "selected";
+												else if($civilstatus == "Separated") $selectedcivilstatus[5] = "selected";
+												else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
+												else $selectedcivilstatus[0] = "selected";
+												$citizenship = $row["citizenship"];
+												$contactnum = $row["contactNum"];
+												$emailad = $row["emailAd"];
+												$occupation = $row["occupation"];
+											}
+										}
+										echo '
+											<p style="margin-top: 40px;">
+												<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
+												<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.'/>
+												<label for="Gender_Male">Male</label>
+												<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.'/>
+												<label for="Gender_Female">Female</label>
+											</p>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
+												<label for="Citizenship">Citizenship</label>
+												<small class="error" id="Citizenship-required">This field is required.</small>
+											</div>
+											<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
+												<div class="input-field col s12">
+													<select id="CivilStatus" name="CivilStatus">
+														<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
+														<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
+														<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
+														<option value="Single Parent" '.$selectedcivilstatus[3].'>Single Parent</option>
+														<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
+														<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
+														<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
+													</select>
+													<label>Civil Status</label>
+												</div>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
+												<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
+												<small class="error" id="MobileNumber-required">This field is required.</small>
+											</div>
+											<div class="input-field col s12">
+												<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
+												<label for="Email" data-error="Invalid email address">Email Address</label>
+												<small class="error" id="Email-required">This field is required.</small>
+												<small class="error" id="Invalid-Email">Invalid Email Address</small>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
+												<label for="Profession">Profession/Occupation</label>
+												<small class="error" id="Profession-required">This field is required.</small>
+											</div>';
+											?>
+										</div>
+
+										<!-- page 2 -->
+										<div id="coinfo_page2" style="display: none;">
+										<?php
+										// database connection variables
+
+										$servername = "localhost";
+										$username = "root";
+										$password = "root";
+										$dbname = "dbccf";
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT (SELECT CASE
+														  WHEN gender = '0' THEN 'Male'
+														  ELSE 'Female'
+														  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$homeaddress = $row["homeAddress"];
+												$homephonenumber = $row["homePhoneNumber"];
+												$companyname = $row["companyName"];
+												$companycontactnum = $row["companyContactNum"];
+												$companyaddress = $row["companyAddress"];
+												$schoolname = $row["schoolName"];
+												$schoolcontactnum = $row["schoolContactNum"];
+												$schooladdress = $row["schoolAddress"];
+												$spousename = $row["spouseName"];
+												$spousecontactnum = $row["spouseContactNum"];
+												$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+												if(is_null($row["spouseBirthdate"]))
+													$spousebirthdate = "";
+											}
+										}
+										echo'
+											<h4 class="center">Home</h4>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
+												<label for="HomeAddress">Address</label>
+												<small class="error" id="HomeAddress-required">This field is required.</small>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
+												<label for="HomePhoneNumber">Home Phone Number</label>
+											</div>
+											<h4 class="center company">Company</h4>
+											<div class="input-field col s12 company">
+												<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
+												<label for="CompanyName">Company Name</label>
+												<small class="error" id="CompanyName-required">This field is required.</small>
+											</div>
+											<div class="input-field col s12 company">
+												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
+												<label for="CompanyContactNum">Company Contact Number</label>
+											</div>
+											<div class="input-field col s12 company">
+												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
+												<label for="CompanyAddress">Company Address</label>
+											</div>
+											<h4 class="center school">School</h4>
+											<div class="input-field col s12 school">
+												<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
+												<label for="SchoolName">School Name</label>
+												<small class="error" id="SchoolName-required">This field is required.</small>
+											</div>
+											<div class="input-field col s12 school">
+												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
+												<label for="SchoolContactNum">School Contact Number</label>
+											</div>
+											<div class="input-field col s12 school">
+												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
+												<label for="SchoolAddress">School Address</label>
+											</div>
+											<h4 class="center spouse">Spouse</h4>
+											<div class="input-field col s12 spouse">
+												<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
+												<label for="SpouseName">Spouse Name</label>
+												<small class="error" id="SpouseName-required">This field is required.</small>
+											</div>
+											<div class="input-field col s12 spouse">
+												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
+												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+											</div>
+											<div class="input-field col s12 spouse">
+												<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
+												<label for="SpouseBirthdate">Birthdate</label>
+											</div>';
+										?>
+										</div>
+									</div>
+									<div class="row">
+										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+											<div class="determinate" style="" id="coinfo_progressbar">
+											</div>
+										</div>&nbsp; &nbsp;
+										<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
+										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
+									</div>
+								</div>
+							</form>
+							<form method="post" class="forms" id="fcprefer">
+								<div id="cprefer" style="display: none;">
+									<div class="row">
+										<!-- page 1 -->
+										<div id="cprefer_page1">
+										<?php
+										// database connection variables
+
+										$servername = "localhost";
+										$username = "root";
+										$password = "root";
+										$dbname = "dbccf";
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2 FROM member_tbl LEFT OUTER JOIN preferencedetails_tbl ON member_tbl.prefID = preferencedetails_tbl.prefID WHERE memberID = ".$_SESSION['userid'];
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$preflanguage = $row["prefLanguage"];
+												$prefvenue1 = $row["prefVenue1"];
+												$prefvenue2 = $row["prefVenue2"];
+												$prefstarttime1 = date("H:i", strtotime($row["prefStartTime1"]));
+												$prefendtime1 = date("H:i", strtotime($row["prefEndTime1"]));
+												$prefstarttime2 = date("H:i", strtotime($row["prefStartTime2"]));
+												$prefendtime2 = date("H:i", strtotime($row["prefEndTime2"]));
+												$selectedprefday1 = array("", "", "", "", "", "", "", "");
+												$prefday1 = $row["prefDay1"];
+												if($prefday1 == "Sunday") $selectedprefday1[1] = "Sunday";
+												else if($prefday1 == "Monday") $selectedprefday1[2] = "Monday";
+												else if($prefday1 == "Tuesday") $selectedprefday1[3] = "Tuesday";
+												else if($prefday1 == "Wednesday") $selectedprefday1[4] = "Wednesday";
+												else if($prefday1 == "Thursday") $selectedprefday1[5] = "Thursday";
+												else if($prefday1 == "Friday") $selectedprefday1[6] = "Friday";
+												else if($prefday1 == "Saturday") $selectedprefday1[7] = "Saturday";
+												else $selectedprefday1[0] = "selected";
+												$selectedprefday2 = array("", "", "", "", "", "", "", "");
+												$prefday2 = $row["prefDay2"];
+												if($prefday2 == "Sunday") $selectedprefday2[1] = "Sunday";
+												else if($prefday2 == "Monday") $selectedprefday2[2] = "Monday";
+												else if($prefday2 == "Tuesday") $selectedprefday2[3] = "Tuesday";
+												else if($prefday2 == "Wednesday") $selectedprefday2[4] = "Wednesday";
+												else if($prefday2 == "Thursday") $selectedprefday2[5] = "Thursday";
+												else if($prefday2 == "Friday") $selectedprefday2[6] = "Friday";
+												else if($prefday2 == "Saturday") $selectedprefday2[7] = "Saturday";
+												else $selectedprefday2[0] = "selected";
+											}
+										}
+										echo '
+											<div class="input-field col s12">
+												<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'" placeholder="ex. English, Bisaya, Tagalog" required>
+												<label for="Language">Language</label>
+												<small class="error" id="Language-required">This field is required.</small>
+											</div>
+											<h4 class="center">Schedule</h4>
+											<h5 class="center">Option 1</h5>
+											<div class="row" style="margin: 0">
+												<div class="input-field col s12">
+													<select id="Option1Day" name="Option1Day">
+														<option value="" disabled '.$selectedprefday1[0].'>Choose your option...</option>
+														<option value="Sunday" '.$selectedprefday1[1].'>Sunday</option>
+														<option value="Monday" '.$selectedprefday1[2].'>Monday</option>
+														<option value="Tuesday" '.$selectedprefday1[3].'>Tuesday</option>
+														<option value="Wednesday" '.$selectedprefday1[4].'>Wednesday</option>
+														<option value="Thursday" '.$selectedprefday1[5].'>Thursday</option>
+														<option value="Friday" '.$selectedprefday1[6].'>Friday</option>
+														<option value="Saturday" '.$selectedprefday1[7].'>Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											</div>
+												<div class="input-field col s6">
+													<label for="timepicker1opt1">Start Time</label>
+													<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
+													<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+													<small class="error greater1">Start Time should be before than End Time.</small>
+												</div>
+												<div class="input-field col s6">
+													<label for="timepicker1opt2">End Time</label>
+													<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
+													<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
+													<small class="error greater1">Start Time should be before than End Time.</small>
+												</div>
+											<div class="col s12">
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
+												<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+											</div>
+											<h5 class="center">Option 2</h5>
+											<div class="row" style="margin: 0">
+												<div class="input-field col s12">
+													<select id="Option2Day" name="Option2Day">
+														<option value="" disabled '.$selectedprefday2[0].'>Choose your option...</option>
+														<option value="Sunday" '.$selectedprefday2[1].'>Sunday</option>
+														<option value="Monday" '.$selectedprefday2[2].'>Monday</option>
+														<option value="Tuesday" '.$selectedprefday2[3].'>Tuesday</option>
+														<option value="Wednesday" '.$selectedprefday2[4].'>Wednesday</option>
+														<option value="Thursday" '.$selectedprefday2[5].'>Thursday</option>
+														<option value="Friday" '.$selectedprefday2[6].'>Friday</option>
+														<option value="Saturday" '.$selectedprefday2[7].'>Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											</div>
+												<div class="input-field col s6">
+													<label for="timepicker2opt1">Start Time</label>
+													<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
+													<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
+													<small class="error greater2">Start Time should be before than End Time.</small>
+												</div>
+												<div class="input-field col s6">
+													<label for="timepicker2opt2">End Time</label>
+													<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
+													<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
+													<small class="error greater2">Start Time should be before than End Time.</small>
+												</div>
+											<div class="input-field col s12">
+												<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
+												<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+											</div>';
+											?>
+										</div>
+
+										<!-- page 2 -->
+										<div id="cprefer_page2" style="display: none;">
+										<?php
 											// database connection variables
 
 											$servername = "localhost";
@@ -976,101 +1214,50 @@
 											if (!$conn) {
 												die("Connection failed: " . mysqli_connect_error());
 											}
-											$query = "SELECT (SELECT CASE
-															  WHEN gender = '0' THEN 'Male'
-															  ELSE 'Female'
-															  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+											$query = "SELECT receivedChrist, attendCCF, regularlyAttendsAt FROM discipleshipgroupmembers_tbl WHERE memberID = ".$_SESSION['userid'];
 											$result = mysqli_query($conn, $query);
 											if(mysqli_num_rows($result) > 0) {
 												while($row = mysqli_fetch_assoc($result)) {
-													$homeaddress = $row["homeAddress"];
-													$homephonenumber = $row["homePhoneNumber"];
-													$companyname = $row["companyName"];
-													$companycontactnum = $row["companyContactNum"];
-													$companyaddress = $row["companyAddress"];
-													$schoolname = $row["schoolName"];
-													$schoolcontactnum = $row["schoolContactNum"];
-													$schooladdress = $row["schoolAddress"];
-													$spousename = $row["spouseName"];
-													$spousecontactnum = $row["spouseContactNum"];
-													$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
-													if(is_null($row["spouseBirthdate"]))
-														$spousebirthdate = "";
+													$receivedChrist = trim(preg_replace('/\s+/', '\n', $row["receivedChrist"]));
+													$attendCCF = trim(preg_replace('/\s+/', '\n', $row["attendCCF"]));
+													$regularlyAttendsAt = trim(preg_replace('/\s+/', '\n', $row["regularlyAttendsAt"]));
 												}
 											}
-											echo'
-												<h4 class="center">Home</h4>
-												<div class="input-field col s12">
-													<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
-													<label for="HomeAddress">Address</label>
-													<small class="error" id="HomeAddress-required">This field is required.</small>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
-													<label for="HomePhoneNumber">Home Phone Number</label>
-												</div>
-												<h4 class="center company">Company</h4>
-												<div class="input-field col s12 company">
-													<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
-													<label for="CompanyName">Company Name</label>
-													<small class="error" id="CompanyName-required">This field is required.</small>
-												</div>
-												<div class="input-field col s12 company">
-													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
-													<label for="CompanyContactNum">Company Contact Number</label>
-												</div>
-												<div class="input-field col s12 company">
-													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
-													<label for="CompanyAddress">Company Address</label>
-												</div>
-												<h4 class="center school">School</h4>
-												<div class="input-field col s12 school">
-													<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
-													<label for="SchoolName">School Name</label>
-													<small class="error" id="SchoolName-required">This field is required.</small>
-												</div>
-												<div class="input-field col s12 school">
-													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
-													<label for="SchoolContactNum">School Contact Number</label>
-												</div>
-												<div class="input-field col s12 school">
-													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
-													<label for="SchoolAddress">School Address</label>
-												</div>
-												<h4 class="center spouse">Spouse</h4>
-												<div class="input-field col s12 spouse">
-													<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
-													<label for="SpouseName">Spouse Name</label>
-													<small class="error" id="SpouseName-required">This field is required.</small>
-												</div>
-												<div class="input-field col s12 spouse">
-													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
-													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
-												</div>
-												<div class="input-field col s12 spouse">
-													<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
-													<label for="SpouseBirthdate">Birthdate</label>
-												</div>';
-											?>
+										echo '
+											<script>
+												reTextArea("'.$receivedChrist.'", "'.$attendCCF.'", "'.$regularlyAttendsAt.'");
+											</script>
+											';
+										echo '
+											<div class="input-field col s12">
+												<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+												<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
 											</div>
-										</div>
-										<div class="row">
-											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
-												<div class="determinate" style="" id="coinfo_progressbar">
-												</div>
-											</div>&nbsp; &nbsp;
-											<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
-											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
+											<div class="input-field col s12">
+												<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
+												<label for="attendCCF">How long you have been attending CCF?</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+												<label for="regularlyAttendsAt">Where do you regularly attend?</label>
+											</div>';
+										?>
 										</div>
 									</div>
-								</form>
-								<form method="post" class="forms" id="fcprefer">
-									<div id="cprefer" style="display: none;">
-										<div class="row">
-											<!-- page 1 -->
-											<div id="cprefer_page1">
-											<?php
+									<!-- progressbar & buttons -->
+									<div class="row">
+										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+											<div class="determinate" style="" id="cprefer_progressbar"></div>
+										</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next">NEXT</button>
+										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
+									</div>
+								</div>
+							</form>
+							<form method="post" id="fcpass">
+								<div id="cpass" style="display: none;">
+									<div class="row">
+										<?php
 											// database connection variables
 
 											$servername = "localhost";
@@ -1081,464 +1268,287 @@
 											if (!$conn) {
 												die("Connection failed: " . mysqli_connect_error());
 											}
-											$query = "SELECT prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2 FROM member_tbl LEFT OUTER JOIN preferencedetails_tbl ON member_tbl.prefID = preferencedetails_tbl.prefID WHERE memberID = ".$_SESSION['userid'];
+											$query = "SELECT password FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
 											$result = mysqli_query($conn, $query);
 											if(mysqli_num_rows($result) > 0) {
 												while($row = mysqli_fetch_assoc($result)) {
-													$preflanguage = $row["prefLanguage"];
-													$prefvenue1 = $row["prefVenue1"];
-													$prefvenue2 = $row["prefVenue2"];
-													$prefstarttime1 = date("H:i", strtotime($row["prefStartTime1"]));
-													$prefendtime1 = date("H:i", strtotime($row["prefEndTime1"]));
-													$prefstarttime2 = date("H:i", strtotime($row["prefStartTime2"]));
-													$prefendtime2 = date("H:i", strtotime($row["prefEndTime2"]));
-													$selectedprefday1 = array("", "", "", "", "", "", "", "");
-													$prefday1 = $row["prefDay1"];
-													if($prefday1 == "Sunday") $selectedprefday1[1] = "Sunday";
-													else if($prefday1 == "Monday") $selectedprefday1[2] = "Monday";
-													else if($prefday1 == "Tuesday") $selectedprefday1[3] = "Tuesday";
-													else if($prefday1 == "Wednesday") $selectedprefday1[4] = "Wednesday";
-													else if($prefday1 == "Thursday") $selectedprefday1[5] = "Thursday";
-													else if($prefday1 == "Friday") $selectedprefday1[6] = "Friday";
-													else if($prefday1 == "Saturday") $selectedprefday1[7] = "Saturday";
-													else $selectedprefday1[0] = "selected";
-													$selectedprefday2 = array("", "", "", "", "", "", "", "");
-													$prefday2 = $row["prefDay2"];
-													if($prefday2 == "Sunday") $selectedprefday2[1] = "Sunday";
-													else if($prefday2 == "Monday") $selectedprefday2[2] = "Monday";
-													else if($prefday2 == "Tuesday") $selectedprefday2[3] = "Tuesday";
-													else if($prefday2 == "Wednesday") $selectedprefday2[4] = "Wednesday";
-													else if($prefday2 == "Thursday") $selectedprefday2[5] = "Thursday";
-													else if($prefday2 == "Friday") $selectedprefday2[6] = "Friday";
-													else if($prefday2 == "Saturday") $selectedprefday2[7] = "Saturday";
-													else $selectedprefday2[0] = "selected";
+													$password = $row["password"];
 												}
 											}
-											echo '
-												<div class="input-field col s12">
-													<input type="text" name="Language" id="Language" data-length="50" maxlength="50" value="'.$preflanguage.'" placeholder="ex. English, Bisaya, Tagalog" required>
-													<label for="Language">Language</label>
-													<small class="error" id="Language-required">This field is required.</small>
-												</div>
-												<h4 class="center">Schedule</h4>
-												<h5 class="center">Option 1</h5>
-												<div class="row" style="margin: 0">
-													<div class="input-field col s12">
-														<select id="Option1Day" name="Option1Day">
-															<option value="" disabled '.$selectedprefday1[0].'>Choose your option...</option>
-															<option value="Sunday" '.$selectedprefday1[1].'>Sunday</option>
-															<option value="Monday" '.$selectedprefday1[2].'>Monday</option>
-															<option value="Tuesday" '.$selectedprefday1[3].'>Tuesday</option>
-															<option value="Wednesday" '.$selectedprefday1[4].'>Wednesday</option>
-															<option value="Thursday" '.$selectedprefday1[5].'>Thursday</option>
-															<option value="Friday" '.$selectedprefday1[6].'>Friday</option>
-															<option value="Saturday" '.$selectedprefday1[7].'>Saturday</option>
-														</select>
-														<label>Day</label>
-													</div>
-												</div>
-													<div class="input-field col s6">
-														<label for="timepicker1opt1">Start Time</label>
-														<input type="text" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" value="'.$prefstarttime1.'">
-														<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
-														<small class="error greater1">Start Time should be before than End Time.</small>
-													</div>
-													<div class="input-field col s6">
-														<label for="timepicker1opt2">End Time</label>
-														<input type="text" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" value="'.$prefendtime1.'">
-														<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
-														<small class="error greater1">Start Time should be before than End Time.</small>
-													</div>
-												<div class="col s12">
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" value="'.$prefvenue1.'">
-													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
-												</div>
-												<h5 class="center">Option 2</h5>
-												<div class="row" style="margin: 0">
-													<div class="input-field col s12">
-														<select id="Option2Day" name="Option2Day">
-															<option value="" disabled '.$selectedprefday2[0].'>Choose your option...</option>
-															<option value="Sunday" '.$selectedprefday2[1].'>Sunday</option>
-															<option value="Monday" '.$selectedprefday2[2].'>Monday</option>
-															<option value="Tuesday" '.$selectedprefday2[3].'>Tuesday</option>
-															<option value="Wednesday" '.$selectedprefday2[4].'>Wednesday</option>
-															<option value="Thursday" '.$selectedprefday2[5].'>Thursday</option>
-															<option value="Friday" '.$selectedprefday2[6].'>Friday</option>
-															<option value="Saturday" '.$selectedprefday2[7].'>Saturday</option>
-														</select>
-														<label>Day</label>
-													</div>
-												</div>
-													<div class="input-field col s6">
-														<label for="timepicker2opt1">Start Time</label>
-														<input type="text" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" value="'.$prefstarttime2.'">
-														<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
-														<small class="error greater2">Start Time should be before than End Time.</small>
-													</div>
-													<div class="input-field col s6">
-														<label for="timepicker2opt2">End Time</label>
-														<input type="text" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" value="'.$prefendtime2.'">
-														<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
-														<small class="error greater2">Start Time should be before than End Time.</small>
-													</div>
-												<div class="input-field col s12">
-													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
-													<label for="Option2Venue" style=" font-size:14px;">Venue</label>
-												</div>';
-												?>
-											</div>
-
-											<!-- page 2 -->
-											<div id="cprefer_page2" style="display: none;">
-											<?php
-												// database connection variables
-
-												$servername = "localhost";
-												$username = "root";
-												$password = "root";
-												$dbname = "dbccf";
-												$conn = mysqli_connect($servername, $username, $password, $dbname);
-												if (!$conn) {
-													die("Connection failed: " . mysqli_connect_error());
-												}
-												$query = "SELECT receivedChrist, attendCCF, regularlyAttendsAt FROM discipleshipgroupmembers_tbl WHERE memberID = ".$_SESSION['userid'];
-												$result = mysqli_query($conn, $query);
-												if(mysqli_num_rows($result) > 0) {
-													while($row = mysqli_fetch_assoc($result)) {
-														$receivedChrist = trim(preg_replace('/\s+/', '\n', $row["receivedChrist"]));
-														$attendCCF = trim(preg_replace('/\s+/', '\n', $row["attendCCF"]));
-														$regularlyAttendsAt = trim(preg_replace('/\s+/', '\n', $row["regularlyAttendsAt"]));
-													}
-												}
-											echo '
-												<script>
-													reTextArea("'.$receivedChrist.'", "'.$attendCCF.'", "'.$regularlyAttendsAt.'");
-												</script>
-												';
-											echo '
-												<div class="input-field col s12">
-													<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
-													<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
-												</div>
-												<div class="input-field col s12">
-													<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
-													<label for="attendCCF">How long you have been attending CCF?</label>
-												</div>
-												<div class="input-field col s12">
-													<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
-													<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-												</div>';
-											?>
-											</div>
+										echo '
+										<div class="input-field col s12">
+											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+											<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
+											<label for="old-password">Old Password</label>
+											<small class="error-with-icon" id="oldpass">This field is required.</small>
+											<small class="error-with-icon" id="notpass">This is not your password.</small>
 										</div>
-										<!-- progressbar & buttons -->
-										<div class="row">
-											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
-												<div class="determinate" style="" id="cprefer_progressbar"></div>
-											</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next">NEXT</button>
-											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
+										<div class="input-field col s12">
+											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+											<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
+											<label for="new-password">New Password</label>
+											<small class="error-with-icon" id="newpass">This field is required.</small>
+											<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
 										</div>
+										<div class="input-field col s12">
+											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+											<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
+											<label for="confirm-password">Confirm New Password</label>
+											<small class="error-with-icon" id="confirmpass">This field is required.</small>
+											<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
+										</div>
+										'; // originally having a value of own password
+										?>
 									</div>
-								</form>
-								<form method="post" id="fcpass">
-									<div id="cpass" style="display: none;">
-										<div class="row">
-											<?php
-												// database connection variables
-
-												$servername = "localhost";
-												$username = "root";
-												$password = "root";
-												$dbname = "dbccf";
-												$conn = mysqli_connect($servername, $username, $password, $dbname);
-												if (!$conn) {
-													die("Connection failed: " . mysqli_connect_error());
-												}
-												$query = "SELECT password FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
-												$result = mysqli_query($conn, $query);
-												if(mysqli_num_rows($result) > 0) {
-													while($row = mysqli_fetch_assoc($result)) {
-														$password = $row["password"];
-													}
-												}
-											echo '
-											<div class="input-field col s12">
-												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
-												<label for="old-password">Old Password</label>
-												<small class="error-with-icon" id="oldpass">This field is required.</small>
-												<small class="error-with-icon" id="notpass">This is not your password.</small>
-											</div>
-											<div class="input-field col s12">
-												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
-												<label for="new-password">New Password</label>
-												<small class="error-with-icon" id="newpass">This field is required.</small>
-												<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
-											</div>
-											<div class="input-field col s12">
-												<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-												<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
-												<label for="confirm-password">Confirm New Password</label>
-												<small class="error-with-icon" id="confirmpass">This field is required.</small>
-												<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
-											</div>
-											'; // originally having a value of own password
-											?>
-										</div>
-										<div class="row">
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
-										</div>
+									<div class="row">
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
 									</div>
-								</form>
-								<form method="post" id="fregister">
-									<div id="register" style="display: none;">
-										<div class="row">
-											<div id="register_page1">
-												<h3 class="center">Other Information</h3>
+								</div>
+							</form>
+							<form method="post" id="fregister">
+								<div id="register" style="display: none;">
+									<div class="row">
+										<div id="register_page1">
+											<h3 class="center">Other Information</h3>
+											<div class="input-field col s12">
+												<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+												<label for="Citizenship">Citizenship</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+												<label for="Email" data-error="Invalid email address">Email Address</label>
+											</div>
+											<h4 class="center">Home</h4>
+											<div class="input-field col s12">
+												<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+												<label for="HomeAddress" style=" font-size:14px;">Address</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+												<label for="HomePhoneNumber">Home Phone Number</label>
+											</div>
+											<h4 class="center">Company</h4>
+											<div class="input-field col s12">
+												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+												<label for="CompanyContactNum">Company Contact Number</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+												<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
+											</div>
+											<h4 class="center">School</h4>
+											<div class="input-field col s12">
+												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+												<label for="SchoolContactNum">School Contact Number</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+												<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
+											</div>
+											<h4 class="center">Spouse</h4>
+											<div class="input-field col s12">
+												<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+												<label for="SpouseName">Spouse Name</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+												<label for="SpouseBirthdate">Birthdate</label>
+											</div>
+										</div>
+
+										<div id="register_page2" style="display: none;">
+											<h3 class="center">Preferences</h3>
+											<div class="input-field col s12">
+												<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
+												<label for="Language">Language</label>
+											</div>
+											<h4 class="center">Schedule</h4>
+											<h5 class="center">Option 1</h5>
+											<div class="row" style="margin: 0;">
 												<div class="input-field col s12">
-													<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
-													<label for="Citizenship">Citizenship</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
-													<label for="Email" data-error="Invalid email address">Email Address</label>
-												</div>
-												<h4 class="center">Home</h4>
-												<div class="input-field col s12">
-													<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
-													<label for="HomeAddress" style=" font-size:14px;">Address</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
-													<label for="HomePhoneNumber">Home Phone Number</label>
-												</div>
-												<h4 class="center">Company</h4>
-												<div class="input-field col s12">
-													<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
-													<label for="CompanyContactNum">Company Contact Number</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
-													<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
-												</div>
-												<h4 class="center">School</h4>
-												<div class="input-field col s12">
-													<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
-													<label for="SchoolContactNum">School Contact Number</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
-													<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
-												</div>
-												<h4 class="center">Spouse</h4>
-												<div class="input-field col s12">
-													<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
-													<label for="SpouseName">Spouse Name</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
-													<label for="SpouseMobileNumber">Spouse Mobile Number</label>
-												</div>
-												<div class="input-field col s12">
-													<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
-													<label for="SpouseBirthdate">Birthdate</label>
+													<select id="Option1Day" name="Option1Day">
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
 												</div>
 											</div>
-
-											<div id="register_page2" style="display: none;">
-												<h3 class="center">Preferences</h3>
+												<div class="input-field col s6">
+													<label for="timepicker1opt1">Start Time</label>
+													<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+												</div>
+												<div class="input-field col s6 right">
+													<label for="timepicker2opt1">End Time</label>
+													<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+												</div>
+											<div class="input-field col s12">
+												<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+												<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+											</div>
+											<h5 class="center">Option 2</h5>
+											<div class="row" style="margin: 0;">
 												<div class="input-field col s12">
-													<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
-													<label for="Language">Language</label>
-												</div>
-												<h4 class="center">Schedule</h4>
-												<h5 class="center">Option 1</h5>
-												<div class="row" style="margin: 0;">
-													<div class="input-field col s12">
-														<select id="Option1Day" name="Option1Day">
-															<option value="" disabled selected>Choose your option...</option>
-															<option value="Sunday">Sunday</option>
-															<option value="Monday">Monday</option>
-															<option value="Tuesday">Tuesday</option>
-															<option value="Wednesday">Wednesday</option>
-															<option value="Thursday">Thursday</option>
-															<option value="Friday">Friday</option>
-															<option value="Saturday">Saturday</option>
-														</select>
-														<label>Day</label>
-													</div>
-												</div>
-													<div class="input-field col s6">
-														<label for="timepicker1opt1">Start Time</label>
-														<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-													</div>
-													<div class="input-field col s6 right">
-														<label for="timepicker2opt1">End Time</label>
-														<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
-													</div>
-												<div class="input-field col s12">
-													<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
-													<label for="Option1Venue" style=" font-size:14px;">Venue</label>
-												</div>
-												<h5 class="center">Option 2</h5>
-												<div class="row" style="margin: 0;">
-													<div class="input-field col s12">
-														<select id="Option2Day" name="Option2Day">
-															<option value="" disabled selected>Choose your option...</option>
-															<option value="Sunday">Sunday</option>
-															<option value="Monday">Monday</option>
-															<option value="Tuesday">Tuesday</option>
-															<option value="Wednesday">Wednesday</option>
-															<option value="Thursday">Thursday</option>
-															<option value="Friday">Friday</option>
-															<option value="Saturday">Saturday</option>
-														</select>
-														<label>Day</label>
-													</div>
-												</div>
-													<div class="input-field col s6">
-														<label for="timepicker1opt2">Start Time</label>
-														<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-													</div>
-													<div class="input-field col s6">
-														<label for="timepicker2opt2">End Time</label>
-														<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
-													</div>
-												<div class="input-field col s12">
-													<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
-													<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+													<select id="Option2Day" name="Option2Day">
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
 												</div>
 											</div>
-
-											<div id="register_page3" style="display: none;">
-												<div class="input-field col s12">
-													<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
-													<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
+												<div class="input-field col s6">
+													<label for="timepicker1opt2">Start Time</label>
+													<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
 												</div>
-												<div class="input-field col s12">
-													<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
-													<label for="attendCCF">How long you have been attending CCF?</label>
+												<div class="input-field col s6">
+													<label for="timepicker2opt2">End Time</label>
+													<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
 												</div>
-												<div class="input-field col s12">
-													<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
-													<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-												</div>
+											<div class="input-field col s12">
+												<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+												<label for="Option2Venue" style=" font-size:14px;">Venue</label>
 											</div>
-											<div id="register_page4" style="display: none;">
-												<h3 class="center">Choose a Dgroup Leader</h3>
-												<table class="cursor centered" id="table" style="margin-bottom: 20px;">
-													<thead>
-														<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
-														<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
-														<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
-														<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
-														<th style="width: <?php echo widthRow(5); ?>%">Day</th>
-														<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
-													</thead>
-													<?php
-														// database connection variables
+										</div>
 
-														$servername = "localhost";
-														$username = "root";
-														$password = "root";
-														$dbname = "dbccf";
+										<div id="register_page3" style="display: none;">
+											<div class="input-field col s12">
+												<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+												<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
+												<label for="attendCCF">How long you have been attending CCF?</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+												<label for="regularlyAttendsAt">Where do you regularly attend?</label>
+											</div>
+										</div>
+										<div id="register_page4" style="display: none;">
+											<h3 class="center">Choose a Dgroup Leader</h3>
+											<table class="cursor centered" id="table" style="margin-bottom: 20px;">
+												<thead>
+													<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
+													<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
+													<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
+													<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
+													<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+													<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
+												</thead>
+												<?php
+													// database connection variables
 
+													$servername = "localhost";
+													$username = "root";
+													$password = "root";
+													$dbname = "dbccf";
+
+													$conn = mysqli_connect($servername, $username, $password, $dbname);
+													if (!$conn) {
+														die("Connection failed: " . mysqli_connect_error());
+													}
+
+													/*
+													function countDgroups() {
 														$conn = mysqli_connect($servername, $username, $password, $dbname);
 														if (!$conn) {
 															die("Connection failed: " . mysqli_connect_error());
 														}
 
-														/*
-														function countDgroups() {
-															$conn = mysqli_connect($servername, $username, $password, $dbname);
-															if (!$conn) {
-																die("Connection failed: " . mysqli_connect_error());
-															}
-
-															$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
-															$result = mysqli_query($conn, $sql);
-															if(mysqli_num_rows($result) > 0){
-																while($row = mysqli_fetch_assoc($result)){
-																	$count = $row["numOfDgroup"];
-																}
-															}
-														}*/
-
-														$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
-																		CASE
-																			WHEN gender = '0' THEN 'Male'
-																			ELSE 'Female'
-																		END) AS gender,
-																		(SELECT CASE
-																			WHEN dgroupType = '0' THEN 'Youth'
-																			WHEN dgroupType = '1' THEN 'Singles'
-																			WHEN dgroupType = '2' THEN 'Single Parents'
-																			WHEN dgroupType = '3' THEN 'Married'
-																			WHEN dgroupType = '4' THEN 'Couples'
-																		END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
-														$result = mysqli_query($conn, $sql_dgroups);
-														if(mysqli_num_rows($result) > 0) {
-															$count = 1;
-															while($row = mysqli_fetch_assoc($result)) {
-																echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
-																$dgroupid = $row["dgroupID"];
-																$fullname = $row["fullname"];
-																$gender = $row["gender"];
-																$dgrouptype = $row["dgroupType"];
-																$schedday = $row["schedDay"];
-																$schedule = $row["schedule"];
-																echo '<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
-																<td class="choose">'.$fullname.'</td>
-																<td class="choose">'.$gender.'</td>
-																<td class="choose">'.$dgrouptype.'</td>
-																<td class="choose">'.$schedday.'</td>
-																<td class="choose">'.$schedule.'</td>';
-																echo '</tr>';
-																$count++;
+														$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
+														$result = mysqli_query($conn, $sql);
+														if(mysqli_num_rows($result) > 0){
+															while($row = mysqli_fetch_assoc($result)){
+																$count = $row["numOfDgroup"];
 															}
 														}
-														echo ' ';
-													?>
-													<!--
-													<tr id="row1" onclick="cellActive('row1')">
-														<td>Sample 1</td>
-														<td>Sample 1</td>
-														<td>Sample 1</td>
-														<td>Sample 1</td>
-													</tr>
-													<tr id="row2" onclick="cellActive('row2')">
-														<td>Sample 2</td>
-														<td>Sample 2</td>
-														<td>Sample 2</td>
-														<td>Sample 2</td>
-													</tr>
-													<tr id="row3" onclick="cellActive('row3')">
-														<td>Sample 3</td>
-														<td>Sample 3</td>
-														<td>Sample 3</td>
-														<td>Sample 3</td>
-													</tr>
-													-->
-												</table>
-											</div>
-										</div>
-										<div class="row">
-											<div class="progress col s6 left" style=" margin-left: 0.8rem;">
-												<div class="determinate" style="" id="register_progressbar"></div>
-											</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
-											<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
-											<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
+													}*/
+
+													$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
+																	CASE
+																		WHEN gender = '0' THEN 'Male'
+																		ELSE 'Female'
+																	END) AS gender,
+																	(SELECT CASE
+																		WHEN dgroupType = '0' THEN 'Youth'
+																		WHEN dgroupType = '1' THEN 'Singles'
+																		WHEN dgroupType = '2' THEN 'Single Parents'
+																		WHEN dgroupType = '3' THEN 'Married'
+																		WHEN dgroupType = '4' THEN 'Couples'
+																	END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+													$result = mysqli_query($conn, $sql_dgroups);
+													if(mysqli_num_rows($result) > 0) {
+														$count = 1;
+														while($row = mysqli_fetch_assoc($result)) {
+															echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
+															$dgroupid = $row["dgroupID"];
+															$fullname = $row["fullname"];
+															$gender = $row["gender"];
+															$dgrouptype = $row["dgroupType"];
+															$schedday = $row["schedDay"];
+															$schedule = $row["schedule"];
+															echo '<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
+															<td class="choose">'.$fullname.'</td>
+															<td class="choose">'.$gender.'</td>
+															<td class="choose">'.$dgrouptype.'</td>
+															<td class="choose">'.$schedday.'</td>
+															<td class="choose">'.$schedule.'</td>';
+															echo '</tr>';
+															$count++;
+														}
+													}
+													echo ' ';
+												?>
+												<!--
+												<tr id="row1" onclick="cellActive('row1')">
+													<td>Sample 1</td>
+													<td>Sample 1</td>
+													<td>Sample 1</td>
+													<td>Sample 1</td>
+												</tr>
+												<tr id="row2" onclick="cellActive('row2')">
+													<td>Sample 2</td>
+													<td>Sample 2</td>
+													<td>Sample 2</td>
+													<td>Sample 2</td>
+												</tr>
+												<tr id="row3" onclick="cellActive('row3')">
+													<td>Sample 3</td>
+													<td>Sample 3</td>
+													<td>Sample 3</td>
+													<td>Sample 3</td>
+												</tr>
+												-->
+											</table>
 										</div>
 									</div>
-								</form>
-							</div>
-						</td>
-					</tr>
-				</table>
+									<div class="row">
+										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+											<div class="determinate" style="" id="register_progressbar"></div>
+										</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
+										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
@@ -2073,19 +2083,6 @@
 			$(this).blur(); // no focus in button once clicked
 			var check_iteration = true;
 
-			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
-			// [FRONT-END] iterate to show error classes to required fields
-			// [BACK-END] iterate to check blank fields and other factors before going to next pages
-				if($(this).prop('required')) {
-					if($(this).val() == "") {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this);
-						disableDefaultRequired($(this));
-						check_iteration = false;
-					}
-				}
-			});
-
 			// convert time values to timestamp
 			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
 			d = (new Date()).getDate();
@@ -2129,6 +2126,19 @@
 				focused_element = $("#timepicker2opt1");
 				check_iteration = false;
 			}
+
+			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
 
 			if(!check_iteration)
 				scrollTo(focused_element);
