@@ -515,7 +515,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -533,8 +533,11 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1) { // for event request notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
 							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
+							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
 						}
 						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
 							echo '<li><a>'.$notificationDesc.'</a></li>';
