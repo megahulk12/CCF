@@ -655,8 +655,8 @@
 				allowEscapeKey: true
 			});
 		}
-			 <!-- this section is for notification approval of requests -->
-	
+			 //this section is for notification approval of requests
+			 	
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
