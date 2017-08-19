@@ -515,16 +515,6 @@
 
 			$('select').material_select();
 
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
-
   			//old version of timepicker
   			/*
   			$('#timepicker1opt1').pickatime({
@@ -564,12 +554,11 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "participation-requests.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
 
 
 			// ajax + preloader
-
-			var url = "propose.php";
+			var url = "request_participation-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
@@ -583,8 +572,58 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
+					$('#eventPartID').val(id);
+
+					$('#form-header').text(data.fname + ' ' + data.lname);
+					$('#Lastname').val(data.lname);
+					$('#Firstname').val(data.fname);
+					$('#Middlename').val(data.mname);
+					$('#Nickname').val(data.nname);
+					$('#Birthdate').val(data.birthdate);
+					if(data.gender == "Male")
+						$('#Gender_Male').prop("checked", true);
+					else
+						$('#Gender_Female').prop("checked", true);
+					$('#Citizenship').val(data.citizenship);
+					$('#CivilStatus').val(data.civilstatus);
+					$('#MobileNumber').val(data.contactnum);
+					$('#Email').val(data.emailad);
+					$('#Profession').val(data.occupation);
+					$('#HomeAddress').val(data.haddress);
+					$('#HomePhoneNumber').val(data.hphonenumber);
+					$('#CompanyName').val(data.cname);
+					$('#CompanyContactNum').val(data.ccontactnum);
+					$('#CompanyAddress').val(data.caddress);
+					$('#SchoolName').val(data.sname);
+					$('#SchoolContactNum').val(data.scontactnum);
+					$('#SchoolAddress').val(data.saddress);
+					$('#SpouseName').val(data.spname);
+					$('#SpouseMobileNumber').val(data.spcontactnum);
+					$('#SpouseBirthdate').val(data.spbirthdate);
+
+					// re-initialize to update text field
+					Materialize.updateTextFields();
+
+					// data validation display part
+
+					// default and initialization states
+					var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+					
+					/* ===== SPOUSE VALIDATION ===== */
+					var civilstatusid = "#CivilStatus"
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+						spouse.hide();
+					}
+
+					/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+					var professionid = "#Profession";
+					if($(professionid).val().toLowerCase() == "student") {
+						company.hide();
+					}
+					else {
+						school.hide();
+					}
+
 				}
 			});
 		}
@@ -623,22 +662,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -661,7 +702,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -679,10 +720,19 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
+							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
 
 						}
-						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 
 						}
 						echo '<li class="divider"></li>';
@@ -725,18 +775,28 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-										<td> Elevate Unite </td>
-									</tr>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+
+										$query = "SELECT eventParticipationID, eventparticipation_tbl.eventID AS eid, eventName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM eventparticipation_tbl LEFT OUTER JOIN eventdetails_tbl ON eventparticipation_tbl.eventID = eventdetails_tbl.eventID LEFT OUTER JOIN member_tbl ON eventparticipation_tbl.memberID = member_tbl.memberID WHERE eventPartStatus = 0 ORDER BY eventName ASC;";
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$epartid = $row["eventParticipationID"];
+												$name = $row["eventName"];
+												$fullname = $row["fullname"];
+												echo '
+												<tr id="row_'.$epartid.'" onclick="cellActive(this.id)">
+												    <td>'.$fullname.'</td>
+												    <td>'.$name.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -745,7 +805,7 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="participation-requests">
-								<h3 class="center">Sample's Profile</h3>
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">
@@ -868,7 +928,8 @@
 									</div>
 								</div>
 								<div class="row">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="button" name="approve" id="approve">Approve</button>
+									<input type="hidden" id="eventPartID" name="eventPartID">
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
 									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
 								</div>
 							</form>
@@ -909,26 +970,6 @@
 		$('button').prop("disabled", true);
 		$('button').click(function() {
 			$('button').blur();
-		});
-
-		$('#participation-requests').submit(function(e) {
-			var url = "request_participation-request.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: $('#participation-requests').serialize(),
-				success: function(data) {
-					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					});
-				}
-			});
-			e.preventDefault();
 		});
 
 		function checkIfSingle() {
@@ -1040,5 +1081,78 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		$('#notify').click(function() {
+			swal({
+				title: "Remarks",
+				type: "input",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+				inputPlaceholder: "Say something about this request"
+			}, function(value) {
+				if(value === false) return false
+				if(value === "") {
+					swal.showInputError("Oops! It seems that you haven't typed anything.");
+					return false;
+				}
+				var url = "request_participation-requests.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "notify=g&id="+$('#eventPartID').val()+"&notifvalue="+value,
+					success: function(data) {
+						swal({
+							title: "Success!",
+							type: "success",
+							text: "Remarks successfully sent!"
+						});
+					}
+				});
+			});
+		});
+
+		$('#participation-requests').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
+			var url = "request_participation-requests.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+$('#eventPartID').val()+"&approve",
+				success: function(data) {
+					$('.fixbutton').text('Approve');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Request Approved!",
+						text: "Attendance will now be recorded.",
+						type: "success",
+						allowEscapeKey: true,
+						allowOutsideClick: true,
+						timer: 10000
+					}, function() { window.location.reload(); });
+				}
+			});
+			e.preventDefault();
+		});
 	</script>
 </html>

@@ -457,6 +457,17 @@
 			text-decoration: none;
 			color: rgba(0, 0, 0, 1);
 		}
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -471,20 +482,13 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd'
+				formatSubmit: 'yyyy-mm-dd',
+				min: true
 			});
 
 			$('select').material_select();
 
 			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
 
   			//old version of timepicker
   			/*
@@ -532,22 +536,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -570,7 +576,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -588,10 +594,19 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
+							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
 
 						}
-						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 
 						}
 						echo '<li class="divider"></li>';
@@ -633,28 +648,6 @@
 								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
 								<label for="EventDesc">Event Description</label>
 							</div>
-							<div class="input-field col s12">
-									<select id="EventHeadName" name="EventHeadName">
-										<option value="" disabled selected>Choose your option...</option>
-										<?php
-											$conn = mysqli_connect($servername, $username, $password, $dbname);
-											if (!$conn) {
-												die("Connection failed: " . mysqli_connect_error());
-											}
-
-											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
-											$result = mysqli_query($conn, $query);
-											if(mysqli_num_rows($result) > 0) {
-												while($row = mysqli_fetch_assoc($result)) {
-													$memberID = $row["memberID"];
-													$fullname = $row["fullname"];
-													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
-												}
-											}
-										?>
-									</select>
-									<label>Event Head</label>
-							</div>
 							<div class="file-field input-field col s12">
 								<div class="btn">
 									<span>Picture</span>
@@ -671,6 +664,12 @@
 								<div class ="row" style="margin-left:5px;">
 									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
 									<label for="SingleDay">Single Day Event</label>
+								</div>
+							</p>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+									<label for="MultipleDay">Multiple Day Event</label>
 								</div>
 							</p>
 							<p>
@@ -777,11 +776,22 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var formdata = new FormData($(this));
-			console.log(formdata);
-			formdata = $(this).serialize();
-			console.log(formdata);
 			var url = "propose-event.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -789,6 +799,8 @@
 				contentType: false,
 				processData: false,
 				success: function(data) {
+					$('.fixbutton').text('Propose');
+					$('.fixbutton').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
@@ -817,6 +829,13 @@
 			}
 		}
 
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
+			}
+		}
+
 		$(document).ready(function() {
 			$('#WeeklyEvent').hide();
 			$('#SingleDay').prop("checked", true);
@@ -831,7 +850,6 @@
 			}
 			else {
 				$('#WeeklyEvent').hide();
-
 			}
 		}
 

@@ -509,20 +509,11 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd'
+				formatSubmit: 'yyyy-mm-dd',
+				min: true
 			});
 
 			$('select').material_select();
-
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
 
   			//old version of timepicker
   			/*
@@ -564,7 +555,7 @@
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			id = id.split("_")[1];
-			history.pushState(null, null, "proposed-events.php?id="+id);
+			//history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
@@ -583,9 +574,41 @@
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					disableForm(false);
+					$('#eventID').val(id);
+					$('#form-header').text(data.name);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
-					
+
+					$('#EventName').val(data.name);
+					$('#EventDesc').val(data.description);
+					$('#EventDesc').trigger("autoresize");
+					if(data.schedstatus == 0) {
+						$('#SingleDay').prop("checked", true);
+						checkIfSingle();
+					}
+					else if(data.schedstatus == 1) {
+						$('#MultipleDay').prop("checked", true);
+						checkIfMultiple();
+						$('#EventDateEnd').val(data.endday);
+					}
+					else if(data.schedstatus == 2) {
+						$('#Weekly').prop("checked", true);
+						checkIfWeekly();
+						$('#WeeklyDay').val(data.weekly);
+						$('#EventDateEnd').val(data.endday);
+					}
+					$('#EventDateStart').val(data.startday);
+					$('#EventTime1').val(data.starttime);
+					$('#EventTime2').val(data.endtime);
+					$('#EventVenue').val(data.venue);
+					$('#Budget').val(data.budget);
+					$('#Remarks').val(data.remarks);
+					$('#Remarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
+
 					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
 					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
@@ -632,22 +655,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -670,7 +695,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -688,10 +713,19 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
+							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
 
 						}
-						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 
 						}
 						echo '<li class="divider"></li>';
@@ -739,7 +773,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName DESC;";
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
@@ -760,8 +794,8 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="proposed-events">
-								<h3 class="center">Sample</h3>
+							<form method="post" id="proposed-events" enctype="multipart/form-data">
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">
@@ -778,108 +812,93 @@
 									</div>
 									<div id="page1" class="">
 										<div class="row">
-							<div class="input-field col s12">
-								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
-								<label for="EventName">Event Name</label>
-							</div>
-							<div class="input-field col s12">
-								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
-								<label for="EventDesc">Event Description</label>
-							</div>
-							<div class="input-field col s12">
-									<select id="EventHeadName" name="EventHeadName">
-										<option value="" disabled selected>Choose your option...</option>
-										<?php
-											$conn = mysqli_connect($servername, $username, $password, $dbname);
-											if (!$conn) {
-												die("Connection failed: " . mysqli_connect_error());
-											}
-
-											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
-											$result = mysqli_query($conn, $query);
-											if(mysqli_num_rows($result) > 0) {
-												while($row = mysqli_fetch_assoc($result)) {
-													$memberID = $row["memberID"];
-													$fullname = $row["fullname"];
-													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
-												}
-											}
-										?>
-									</select>
-									<label>Event Head</label>
-							</div>
-							<div class="file-field input-field col s12">
-								<div class="btn">
-									<span>Picture</span>
-									<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
-								</div>
-								<div class="file-path-wrapper">
-									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
-								</div>
-								<div class="row event-pic">
-								</div>
-							</div>
-							<h4 class="center">Date</h4>
-							<p>
-								<div class ="row" style="margin-left:5px;">
-									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
-									<label for="SingleDay">Single Day Event</label>
-								</div>
-							</p>
-							<p>
-								<div class ="row" style="margin-left:5px;">
-									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
-									<label for="Weekly">Weekly Event</label>
-								</div>
-							</p>
-							<div class="input-field col s6" id="Event_Date_Start">
-								<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
-								<label for="EventDateStart" id="lblEventDateStart">Start</label>
-							</div>
-							<div class="input-field col s6" id="Event_Date_End">
-								<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
-								<label for="EventDateEnd">End</label>
-							</div>
-								<div class="input-field col s12" id="WeeklyEvent">
-									<select id="WeeklyDay" name="WeeklyDay">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunday</option>
-										<option value="Monday">Monday</option>
-										<option value="Tuesday">Tuesday</option>
-										<option value="Wednesday">Wednesday</option>
-										<option value="Thursday">Thursday</option>
-										<option value="Friday">Friday</option>
-										<option value="Saturday">Saturday</option>
-									</select>
-									<label>Day</label>
-								</div>
-							<h4 class="center">Time</h4>
-							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
-								<label for="EventTime1">Start</label>
-							</div>
-							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
-								<label for="EventTime2">End</label>
-							</div>
-							<h4 class="center">Location</h4>
-							<div class="input-field col s12">
-								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
-								<label for="EventVenue">Event Venue</label>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="Budget">Budget</label>
-							</div>
-							<div class="input-field col s12">
-								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
-								<label for="Remarks">Remarks</label>
-							</div>
+											<div class="input-field col s12">
+												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+												<label for="EventName">Event Name</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+												<label for="EventDesc">Event Description</label>
+											</div>
+											<div class="file-field input-field col s12">
+												<div class="btn">
+													<span>Picture</span>
+													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
+												</div>
+												<div class="file-path-wrapper">
+													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+												</div>
+												<div class="row event-pic">
+												</div>
+											</div>
+											<h4 class="center">Date</h4>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
+													<label for="SingleDay">Single Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+													<label for="MultipleDay">Multiple Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
+													<label for="Weekly">Weekly Event</label>
+												</div>
+											</p>
+											<div class="input-field col s6" id="Event_Date_Start">
+												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+												<label for="EventDateStart" id="lblEventDateStart">Start</label>
+											</div>
+											<div class="input-field col s6" id="Event_Date_End">
+												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+												<label for="EventDateEnd">End</label>
+											</div>
+												<div class="input-field col s12" id="WeeklyEvent">
+													<select id="WeeklyDay" name="WeeklyDay">
+														<option value="" disabled selected>Choose your option...</option>
+														<option value="Sunday">Sunday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+													<label>Day</label>
+												</div>
+											<h4 class="center">Time</h4>
+											<div class="input-field col s6">
+												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+												<label for="EventTime1">Start</label>
+											</div>
+											<div class="input-field col s6">
+												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+												<label for="EventTime2">End</label>
+											</div>
+											<h4 class="center">Location</h4>
+											<div class="input-field col s12">
+												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+												<label for="EventVenue">Event Venue</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+												<label for="Budget">Budget</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+												<label for="Remarks">Remarks</label>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="submit" id="submit">Revise</button>
+									<input type="hidden" id="eventID" name="eventID">
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="revise" id="revise">Revise</button>
 								</div>
 							</form>
 						</div>
@@ -945,6 +964,21 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			var url = "request_proposed-events.php";
 			$.ajax({
 				type: "POST",
@@ -953,6 +987,8 @@
 				contentType: false,
 				processData: false,
 				success: function(data) {
+					$('.fixbutton').text('Revise');
+					$('.fixbutton').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
@@ -960,7 +996,7 @@
 						allowEscapeKey: true,
 						allowOutsideClick: true,
 						timer: 10000
-					});
+					}, function() { window.location.reload(); });
 				}
 			});
 			e.preventDefault();
@@ -980,6 +1016,13 @@
 				document.getElementById('Event_Date_End').style.display = "inline";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
 				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
 			}
 		}
 

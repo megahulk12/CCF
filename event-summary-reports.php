@@ -530,9 +530,9 @@
 				document.getElementsByTagName("TR")[i].setAttribute("class", "");
 			}
 			document.getElementById(id).setAttribute("class", "active");
-			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "event-summary-reports.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			$('#generate').attr("href", "request_event-summary-reports.php?id="+id);
 		}
 	</script>
 
@@ -556,22 +556,24 @@
 		  		}
 			  	if($_SESSION["memberType"] == 3)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-		  		<li class="divider"></li>
-			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		';
 			  	if($_SESSION["memberType"] == 4)
 			  		echo '
 			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
-		  		<li class="divider"></li>
-			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -594,7 +596,7 @@
 				}
 
 				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].");";
+				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 				$result = mysqli_query($conn, $query);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
@@ -612,10 +614,19 @@
 						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
 							echo '<li><a>'.$notificationDesc.'</a></li>';
 						}
-						else if($notificationStatus <= 1 && $notificationType == 1) { // for event notifs
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
+							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
+							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
+							echo '<li><a>'.$notificationDesc.'</a></li>';
+						}
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
 
 						}
-						else if($notificationStatus <= 1 && $notificationType == 2) { // for ministry notifs
+						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 
 						}
 						echo '<li class="divider"></li>';
@@ -652,25 +663,34 @@
 					<table class="centered">
 						<thead>
 							<tr>
-								<th>Event Name</th>
+								<th>Event Name(s)</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr id="row_1" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_2" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
-							<tr id="row_3" onclick="cellActive(this.id)">
-								<td> Sample </td>
-							</tr>
+							<?php
+								$conn = mysqli_connect($servername, $username, $password, $dbname);
+								if (!$conn) {
+									die("Connection failed: " . mysqli_connect_error());
+								}
+
+								$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+								$result = mysqli_query($conn, $query);
+								if(mysqli_num_rows($result) > 0) {
+									while($row = mysqli_fetch_assoc($result)) {
+										$eventID = $row["eventID"];
+										$eventname = $row["eventName"];
+										echo '
+										<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+										    <td>'.$eventname.'</td>
+										</tr>
+										';
+									}
+								}
+							?>
 						</tbody>
 						<tfoot></tfoot>
 					</table>
-					<form method="post" id="generate-event-report">
-						<button type="submit" class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;">Generate Report</button>
-					</form>
+					<a class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;" href="request_event-summary-reports.php">Generate Report</a>
 				</div>
 				<div class="col s3">
 					

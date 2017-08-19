@@ -354,6 +354,7 @@
 		}
 		return $status;
 	}
+
 	if(isset($_POST['seen'])) {
 		include_once('session.php'); // this function requires a session call because it is external from the session itself
 		$servername = "localhost";
@@ -389,5 +390,198 @@
 			}
 		}
 		return $budgetID;
+	}
+
+	function getBudgetID($eventID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT budgetID FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$budgetID = $row["budgetID"];
+			}
+		}
+		return $budgetID;
+	}
+
+	function getCurrentEventID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventID FROM eventdetails_tbl ORDER BY eventID DESC LIMIT 1;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventID = $row["eventID"];
+			}
+		}
+		return $eventID;
+	}
+
+	function getEventHeadID($eid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventHeadID FROM eventdetails_tbl WHERE eventID = $eid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventHeadID = $row["eventHeadID"];
+			}
+		}
+		return $eventHeadID;
+	}
+
+	function getEventName($eid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventName FROM eventdetails_tbl WHERE eventID = $eid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$eventName = $row["eventName"];
+			}
+		}
+		return $eventName;
+	}
+
+	function setSeenEventRequest($eid) { //  for new event notif purposes
+		include_once('session.php'); // this function requires a session call because it is external from the session itself
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		// insert code set notificationStatus = 1 when user clicks notification area
+		$query = "UPDATE notifications_tbl SET notificationStatus = 1 WHERE eventID = $eid AND receivermemberID = ".$_SESSION['userid'].";" ;
+		$result = mysqli_query($conn, $query);
+	}
+
+	function escapeString($string) {
+		$string = mysqli_real_escape_string($string);
+		return $string;
+	}
+
+	function getCurrentEventParticipationID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventParticipationID FROM eventparticipation_tbl ORDER BY eventParticipationID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventParticipationID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMemberIDFromEventPart($epartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT memberID FROM eventparticipation_tbl WHERE eventParticipationID = $epartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["memberID"];
+			}
+		}
+		return $value;
+	}
+
+	function getEventIDFromEventPart($epartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventID FROM eventparticipation_tbl WHERE eventParticipationID = $epartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventID"];
+			}
+		}
+		return $value;
+	}
+
+	function countEventParticipationForMember($membID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT count(eventParticipationID) AS participation FROM eventparticipation_tbl WHERE memberID = $membID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["participation"];
+			}
+		}
+		return $value;
+	}
+
+	function countNewLines($string) {
+		return substr_count($string, '\n');
 	}
 ?>

@@ -1,19 +1,18 @@
 <?php
-	include('session.php'); 
+	include('session.php');
 	include('globalfunctions.php');
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
-	<link href="universal.css" rel="stylesheet">
-	<link rel="stylesheet" href="materialize/css/materialize.css" media="screen,projection">
-	<script src="jquery-3.2.1.js"></script>
+	<link href="materialize/css/materialize.css" rel="stylesheet">
+	<script src="jquery-3.2.1.min.js"></script>
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
+	<link href="universal.css" rel="stylesheet">
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
@@ -22,12 +21,14 @@
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
+
 	<style>
 		::selection {
 			background-color: #16A5B8;
 			color: #fff;
 		}
-
+		
+		/* containers*/
 		div {
 			display: block;
 		}
@@ -37,17 +38,16 @@
 			max-width: 1280px;
 			width: 80%;
 		}
+		/*=======END=======*/
 
-		.card-panel {
-		 	 transition: box-shadow .25s;
-		 	 padding: 24px !important;
-		 	 margin: 0.5rem 0 1rem 0;
-		 	 border-radius: 2px;
-		 	 background-color: #fff;
-		}
-
+		/*logo*/
 		#logo {
 			margin-top: 10px;
+		}
+
+		img#loginlogo {
+			height: 150px;
+			width: 300px;
 		}
 
 		/*
@@ -74,6 +74,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -91,6 +92,12 @@
 			font-size: 13px;
 		}
 
+		/*form*/
+		.event-requests {
+			width:600px;
+		}
+		/*=======END=======*/
+
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
 			color: #777;
@@ -99,7 +106,6 @@
 		}
 		/*=======END=======*/
 
-		
 		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
 		/* input custom colors*/
 		/*Text inputs*/
@@ -136,9 +142,6 @@
 			color: #16A5B8;
 		}
 
-		/*===============BUTTONS===============*/
-
-		/*=====FORM BUTTONS=====*/
 		.btn, .btn-large {
 		  text-decoration: none;
 		  color: #777;
@@ -155,6 +158,22 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
+		  	/* margin-right: 9px; */
+		  	z-index: 1;
+		}
+
+		/*background-color for icons if focus is inactive*/
+		.input-field .prefix {
+			position: absolute;
+			width: 3rem;
+			font-size: 2rem;
+		    transition: color .2s;
+		    color: #777;
+		}
+
+		/*background-color for icons if focus is active*/
+		.input-field .prefix.active {
+		  color: #16A5B8;
 		}
 
 		/*hover of button*/
@@ -167,10 +186,110 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
-		  	color: #fff;
+			color: #fff;
 		}
 
-		/*===============END===============*/
+
+		.card-panel {
+		 	 transition: box-shadow .25s;
+		 	 padding: 24px !important;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 border-radius: 2px;
+		 	 background-color: #fff;
+		}
+		/* ============================END=========================== */  
+
+		/*CUSTOM DATEPICKER*/
+		.picker__weekday-display {
+		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
+		 	padding: 10px;
+		 	font-weight: 200;
+		 	letter-spacing: .5;
+		 	font-size: 1rem;
+			margin-bottom: 15px;
+		}
+
+		.picker__date-display {
+			text-align: center;
+		  	background-color: #16A5B8;
+		 	color: #fff;
+		 	padding-bottom: 15px;
+		  	font-weight: 300;
+		}
+
+		.picker__day.picker__day--today {
+		 	color: #16A5B8;
+		}
+
+		.picker__day--selected,
+		.picker__day--selected:hover,
+		.picker--focused .picker__day--selected {
+		  	border-radius: 50%;
+		    -webkit-transform: scale(0.9);
+		          transform: scale(0.9);
+		 	 background-color: #16A5B8;
+		 	 color: #ffffff;
+		}
+
+		.picker__close, .picker__today {
+		  	font-size: 1.1rem;
+		  	padding: 0 1rem;
+		 	color: #16A5B8;
+		}
+		/*==========END==========*/
+
+		/*page progress bar*/
+		.progress {
+		 	 position: relative;
+		 	 height: 8px;
+		 	 display: block;
+		 	 width: 100%;
+		 	 max-width: 200px;
+		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
+		 	 border-radius: 2px;
+		 	 margin: 0.5rem 0 1rem 0;
+		 	 overflow: hidden;
+		}
+
+		.progress .determinate {
+		  	position: absolute;
+		  	top: 0;
+		  	left: 0;
+		  	bottom: 0;
+		  	background-color: #16A5B8;
+		  	transition: width .3s linear;
+		}
+		/*==========END==========*/
+
+		/*radio buttons*/
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:before,
+		[type="radio"].with-gap:checked + label:after {
+		  	border: 2px solid #16A5B8;
+		}
+
+		[type="radio"]:checked + label:after,
+		[type="radio"].with-gap:checked + label:after {
+		  	background-color: #16A5B8;
+		}
+
+		/*selects*/
+		.dropdown-content li > a, .dropdown-content li > span {
+		  	font-size: 16px;
+		  	color: #16A5B8;
+		  	display: block;
+		  	line-height: 22px;
+		  	padding: 14px 16px;
+		}
+
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
+		/*==========END==========*/
 
 		.dropdown-content-list {
 		 	 background-color: #fff;	
@@ -183,7 +302,7 @@
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
-		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
+		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
 		}
 
 		.dropdown-content-list li {
@@ -289,219 +408,29 @@
 			top: 19px;
 			left: 13px
 		}
-		/* for animation of notification
-		.notifications {
-			animation: notification ease-in-out 2s infinite;
-			/*
-			animation-name: notification;
-			animation-duration: 0.3s;
-			animation-iteration-count: infinite;
-			animation-timing-function: ease-in-out;
-			animation-direction: alternate;
-		}
 
-		@keyframes notification1 {
-			0% { transform: rotate(0deg) }
-			5% { transform: rotate(25deg) }
-			15% { transform: rotate(-17deg) }
-			25% { transform: rotate(13deg) }
-			35% { transform: rotate(-7deg) }
-			45% { transform: rotate(3deg) }
-			55% { transform: rotate(-1deg) }
-			60% { transform: rotate(0deg) }
-			100% { transform: rotate(0deg) }
-		}
-		*/
-		.prefix {
-			color: #16A5B8;
-		}
-
-		.prefix:hover {
-			transition: 0.3s ease-out;
-			color: #1bcde4;
-		}
-
-		.prefix-leader {
-			color: #777;
-		}
-
-		.prefix-leader:hover {
-			transition: 0.3s ease-out;
-			color: #999;
-		}
-
-		.dgroup-icons {
-			font-size: 200px;
-		}
-
-		.dgroup-names {
-			font-family: proxima-nova;
-			color: #424242;
-			font-size: 13px;
-			text-transform: uppercase;
-			-webkit-user-select: none;
-			cursor: default;
-		}
-
-		.dgroup-table-spacing {
-			margin-bottom: 100px;
-		}
-
-		.dgroup-view-profile {
-			animation-name: view-profile;
-			animation-duration: 2s;
-			animation-timing-function: ease;
-		}
-
-		@keyframes view-profile {
-			
-		}
-		/*CUSTOM DATEPICKER*/
-		.picker__weekday-display {
-		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
-		 	padding: 10px;
-		 	font-weight: 200;
-		 	letter-spacing: .5;
-		 	font-size: 1rem;
-			margin-bottom: 15px;
-		}
-
-		.picker__date-display {
-			text-align: center;
-		  	background-color: #16A5B8;
-		 	color: #fff;
-		 	padding-bottom: 15px;
-		  	font-weight: 300;
-		}
-
-		.picker__day.picker__day--today {
-		 	color: #16A5B8;
-		}
-
-		.picker__day--selected,
-		.picker__day--selected:hover,
-		.picker--focused .picker__day--selected {
-		  	border-radius: 50%;
-		    -webkit-transform: scale(0.9);
-		          transform: scale(0.9);
-		 	 background-color: #16A5B8;
-		 	 color: #ffffff;
-		}
-
-		.picker__close, .picker__today {
-		  	font-size: 1.1rem;
-		  	padding: 0 1rem;
-		 	color: #16A5B8;
-		}
-
-		/*page progress bar*/
-		.progress {
-		 	 position: relative;
-		 	 height: 8px;
-		 	 display: block;
-		 	 width: 100%;
-		 	 max-width: 200px;
-		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
-		 	 border-radius: 2px;
-		 	 margin: 0.5rem 0 1rem 0;
-		 	 overflow: hidden;
-		}
-
-		.progress .determinate {
-		  	position: absolute;
-		  	top: 0;
-		  	left: 0;
-		  	bottom: 0;
-		  	background-color: #16A5B8;
-		  	transition: width .3s linear;
-		}
-
-		/*radio buttons*/
-		[type="radio"]:checked + label:after,
-		[type="radio"].with-gap:checked + label:before,
-		[type="radio"].with-gap:checked + label:after {
-		  	border: 2px solid #16A5B8;
-		}
-
-		[type="radio"]:checked + label:after,
-		[type="radio"].with-gap:checked + label:after {
-		  	background-color: #16A5B8;
-		}
-
-		/*selects*/
-		.dropdown-content li > a, .dropdown-content li > span {
-		  	font-size: 16px;
-		  	color: #16A5B8;
-		  	display: block;
-		  	line-height: 22px;
-		  	padding: 14px 16px;
-		}
-
-		/*timepicker*/
-		.clockpicker-span-am-pm {
-		 	 display: inline-block;
-		 	 font-size: 30px;
-		 	 line-height: 82px;
-		 	 color: #b2dfdb;
-		}
-
-		/*tables*/
-		table > tbody > tr:hover {
-			cursor: hand;
-			background-color: #f2f2f2 !important;
-		}
-
-		table > tbody > tr.active {
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
 			background-color: #16A5B8;
-			color: #fff;
+			z-index: 0;
 		}
 
-		table > tbody > tr.active:hover {
-			background-color: #16A5B8 !important;
-			color: #fff !important;
-		}
-
-		td {
-		  	padding: 15px 5px;
-		  	display: table-cell;
-		  	text-align: left;
-		  	vertical-align: middle;
-		  	border-radius: 0px; /* complete horizontal highlight bar*/
-		}
-		/* ============================END=========================== */  
-
-		/*validation*/
-		.input-field div.error {
-			font-size: 0.8rem;
-			color: #16A5B8;
-		}
-
-		th {
-			color: #424242;
-		}
-
-		tbody tr:hover {
-			cursor: pointer;
-		}
-
-		/* ===== FOOTER ===== */
-		.page-footer {
-			margin-top: 100px;
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
 			background-color: #16A5B8;
+			border-color: #16A5B8;
 		}
-
-		p.footer-cpyrght {
-			font-family: sans-serif;
-			color: #fff;
-		}
-		/* ===== END ===== */
 
 		#preloader {
 			position: relative;
 			width: 0 !important;
 		}
 
-		#Eform {
+		#event-requests {
 			margin: 0 auto;
 			height: 700px;
 		}
@@ -516,28 +445,94 @@
 			border-color: rgba(0, 0, 0, 0.4);
 		}
 		/* ===== END ===== */
+
+		/*tables*/
+		.table-wrapper {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		table > tbody > tr:hover {
+			cursor: hand;
+			background-color: #f2f2f2 !important;
+		}
+
+		table > tbody > tr.active {
+			background-color: #16A5B8;
+			color: #fff;
+		}
+
+		table > tbody > tr.new {
+			background-color: #f2f2f2;
+		}
+
+		table > tbody > tr.active:hover {
+			background-color: #16A5B8 !important;
+			color: #fff !important;
+		}
+
+		td {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal highlight bar*/
+		}
+
+		th {
+			color: #424242;
+		}
+
+		tbody tr:hover {
+			cursor: pointer;
+		}
+		/* ========== END ========== */
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			init();
-		});
-
-		function init() {
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-
+		}); 
+	</script>
+	<script>
+	$(document).ready(function(){
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 100, // Creates a dropdown of 15 years to control year
-				max: true
+				selectYears: 50, // Creates a dropdown of 15 years to control year
+				formatSubmit: 'yyyy-mm-dd',
+				min: true
 			});
-			
+
 			$('select').material_select();
-				
+
+  			//old version of timepicker
+  			/*
+  			$('#timepicker1opt1').pickatime({
+  				autoclose: false
+  			});
+
+  			$('#timepicker1opt2').pickatime({
+  				autoclose: false
+  			});
+			
+			*/
+  			//new version of timepicker
 			$('.timepicker').pickatime({
-				//default: 'now', // Set default time; do not set default time in viewing of time
+				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
 				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
@@ -547,7 +542,7 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
-		}
+		});
 
 		$(document).ready(function() {
 			preload();
@@ -563,12 +558,12 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "endorsements.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			//history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
-
-			var url = "request_endorsements.php";
+			var url = "request_event-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
@@ -582,22 +577,74 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
+					//disableForm(false);
+					$('#eventID').val(id);
+					$('#form-header').text(data.name);
+
+					/* for new event notif purposes
+					// update notification badge
+					if(data.notifcount >= 1)
+						$('.notification-badge').text(data.notifcount);
+					else
+						$('.notification-badge').remove();
+					*/
+
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
+
+					$('#EventName').val(data.name);
+					$('#EventDesc').val(data.description);
+					$('#EventDesc').trigger("autoresize");
+					$('#EventHeadName').val(data.fullname);
+					if(data.schedstatus == 0) {
+						$('#SingleDay').prop("checked", true);
+						checkIfSingle();
+					}
+					else if(data.schedstatus == 1) {
+						$('#MultipleDay').prop("checked", true);
+						checkIfMultiple();
+						$('#EventDateEnd').val(data.endday);
+					}
+					else if(data.schedstatus == 2) {
+						$('#Weekly').prop("checked", true);
+						checkIfWeekly();
+						$('#WeeklyDay').val(data.weekly);
+						$('#EventDateEnd').val(data.endday);
+					}
+					$('#EventDateStart').val(data.startday);
+					$('#EventTime1').val(data.starttime);
+					$('#EventTime2').val(data.endtime);
+					$('#EventVenue').val(data.venue);
+					$('#Budget').val(data.budget);
+					$('#Remarks').val(data.remarks);
+					$('#Remarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
+
+					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#EventPictureName').val(data.picturepath.split("/")[1]);
 				}
 			});
 		}
 
 		function disableForm(flag) {
-			$('div#page1').children().find('input, select').each(function() {
+			$('div#page1').children().find('input, textarea, select').each(function() {
 				$(this).prop("disabled", flag);
 			});
+
+			// for the file upload button
+			if(flag)
+				$('#EventPicture').parent().addClass("disabled");
+			else
+				$('#EventPicture').parent().removeClass("disabled");
 		}
 
 		function preload() {
 			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#Eform').width()/2);
-			$('#preloader').css("top", $('#Eform').height()/2);
+			$('#preloader').css("left", $('#event-requests').width()/2);
+			$('#preloader').css("top", $('#event-requests').height()/2);
 			disableForm(true);
 		}
 	</script>
@@ -721,28 +768,58 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<h2 class="center">Endorsements</h2>
+			<h2 class="center">Event Proposals</h2>
 			<div class="row">
 				<div class="col s12 z-depth-4 card-panel">
 					<div class="col s5">
 						<div class="col s12">
-							<h3 class="center">Request Lists</h3>
+							<h3 class="center">Proposed Events</h3>
 							<table class="centered">
 								<thead>
 									<tr>
-										<th>Name(s)</th>
+										<th>Event Name(s)</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName ASC;";
+										/* for new event notif purposes
+										$new = "SELECT eventID FROM notifications_tbl WHERE notificationType = 1 AND request = 1 AND notificationStatus = 0;";
+										$result = mysqli_query($conn, $new);
+										$notificationsEventID = "";
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$notificationsEventID = $row["eventID"];
+											}
+										}
+										*/
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$eventID = $row["eventID"];
+												$eventname = $row["eventName"];
+												/* for new event notif purposes
+												if($eventID == $notificationsEventID) 
+													echo '
+													<tr id="row_'.$eventID.'" onclick="cellActive(this.id)" class="new">
+													    <td>'.$eventname.'</td>
+													</tr>
+													';
+												else
+												*/
+												echo '
+												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+												    <td>'.$eventname.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -750,10 +827,10 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="Eform">
-								<h3 class="center">Sample's Form</h3>
+							<form method="post" id="event-requests" enctype="multipart/form-data">
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
@@ -767,37 +844,61 @@
 										</div>
 									</div>
 									<div id="page1" class="">
-										<h4 class="center">BAPTISMAL</h4>
 										<div class="row">
 											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" disabled>
-												<label for="BaptismalDate" class>When were you baptized?</label>
+												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+												<label for="EventName">Event Name</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" disabled>
-												<label for="BaptismalPlace">Where were you baptized?</label>
+												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+												<label for="EventDesc">Event Description</label>
 											</div>
-											<h4 class="center">DGROUP</h4>
-												<div class="input-field col s12">
-													<select id="DgroupType" name="DgroupType" disabled>
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Youth">Youth</option>
-														<option value="Singles">Singles</option>
-														<option value="Single_Parents">Single Parents</option>
-														<option value="Married">Married</option>
-														<option value="Couples">Couples</option>
-													</select>
-													<label>Type of Dgroup</label>
+											<div class="input-field col s12">
+												<input type="text" id="EventHeadName" name="EventHeadName">
+												<label for="EventHeadName">Event Head</label>
+											</div>
+											<div class="file-field input-field col s12">
+												<div class="btn">
+													<span>Picture</span>
+													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
 												</div>
-											<div class="input-field col s12">
-												<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' disabled>
-												<label for="AgeBracket">Age Bracket</label>
+												<div class="file-path-wrapper">
+													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+												</div>
+												<div class="row event-pic">
+												</div>
 											</div>
-											<h4 class="center">MEETING</h4>
-												<div class="input-field col s12">
-													<select id="MeetingDay" name="MeetingDay" disabled>
+											<h4 class="center">Date</h4>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
+													<label for="SingleDay">Single Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
+													<label for="MultipleDay">Multiple Day Event</label>
+												</div>
+											</p>
+											<p>
+												<div class ="row" style="margin-left:5px;">
+													<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
+													<label for="Weekly">Weekly Event</label>
+												</div>
+											</p>
+											<div class="input-field col s6" id="Event_Date_Start">
+												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+												<label for="EventDateStart" id="lblEventDateStart">Start</label>
+											</div>
+											<div class="input-field col s6" id="Event_Date_End">
+												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+												<label for="EventDateEnd">End</label>
+											</div>
+												<div class="input-field col s12" id="WeeklyEvent">
+													<select id="WeeklyDay" name="WeeklyDay">
 														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunnday</option>
+														<option value="Sunday">Sunday</option>
 														<option value="Monday">Monday</option>
 														<option value="Tuesday">Tuesday</option>
 														<option value="Wednesday">Wednesday</option>
@@ -807,24 +908,35 @@
 													</select>
 													<label>Day</label>
 												</div>
+											<h4 class="center">Time</h4>
 											<div class="input-field col s6">
-												<label for="timepicker1opt1">Start Time</label>
-												<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" disabled>
+												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+												<label for="EventTime1">Start</label>
 											</div>
 											<div class="input-field col s6">
-												<label for="timepicker1opt2">End Time</label>
-												<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" disabled>
+												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+												<label for="EventTime2">End</label>
+											</div>
+											<h4 class="center">Location</h4>
+											<div class="input-field col s12">
+												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+												<label for="EventVenue">Event Venue</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" disabled>
-												<label for="MeetingPlace">Place</label>
+												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+												<label for="Budget">Budget</label>
+											</div>
+											<div class="input-field col s12">
+												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+												<label for="Remarks">Remarks</label>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="row">
-									<button class="waves-effect waves-light btn col s3 fixbutton right" type="submit" id="approve" name="approve">Approve</button>
-									<button class="modal-action modal-close waves-effect waves-light btn col s3 right" type="button" id="notify" name="notify" data-target="!" style="margin-right: 10px;">Notify</button>
+									<input type="hidden" id="eventID" name="eventID">
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
+									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
 								</div>
 							</form>
 						</div>
@@ -852,68 +964,152 @@
 			</div>
 		</div>
 	</footer>
-
-	<?php
-		if(isset($_POST['seen-request'])) {
-			// script also prevents to confirm form resubmission para there are no duplicates in the data
-			/*
-			echo '
-			<script>
-			setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-						type: "success",
-						allowEscapeKey: true
-					},
-					function() { window.location = "dgroup.php"; }
-					), 1000);
-			</script>';
-			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
-			*/
-			setRequestSeen();
-		}
-
-		function getRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			$result = mysqli_query($conn, $sql);
-			$request = "";
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$request = $row["request"];
-				}
-			}
-			return $request;
-		}
-
-		function setRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			mysqli_query($conn, $sql);
-		}
-	?>
 	
 	 <!-- this section is for notification approval of requests -->
-	 
 	<script>
+		// blur clickable elements
+		$('a#add-link').click(function() {
+			$('a#add-link').blur();
+		});
+
+		// preloader section
+		$('button').prop("disabled", true);
+		$('button').click(function() {
+			$('button').blur();
+		});
+
+		function renderImage(input) {
+			if(input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#showImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);	
+			}
+			else
+				$('.event-pic').html("");
+		}
+
+		$('#EventPicture').change(function() {
+			$('.event-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+			renderImage(this);
+		});
+
+		$('#notify').click(function() {
+			swal({
+				title: "Remarks",
+				type: "input",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+				inputPlaceholder: "Say something about this proposal"
+			}, function(value) {
+				if(value === false) return false
+				if(value === "") {
+					swal.showInputError("Oops! It seems that you haven't typed anything.");
+					return false;
+				}
+				var url = "request_event-requests.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "notify=g&id="+$('#eventID').val()+"&notifvalue="+value,
+					success: function(data) {
+						swal({
+							title: "Success!",
+							type: "success",
+							text: "Remarks successfully sent!"
+						});
+					}
+				});
+			});
+		});
+
+		$('#event-requests').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
+			var url = "request_event-requests.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+$('#eventID').val()+"&approve",
+				success: function(data) {
+					$('.fixbutton').text('Approve');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Event Approved!",
+						text: "This event will now be open for people to join.",
+						type: "success",
+						allowEscapeKey: true,
+						allowOutsideClick: true,
+						timer: 10000
+					}, function() { window.location.reload(); });
+				}
+			});
+			e.preventDefault();
+		});
+
+		function checkIfSingle() {
+			if(document.getElementById('SingleDay').checked) {
+				document.getElementById('Event_Date_End').style.display = "none";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
+				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
+				document.getElementById('Weekly').checked = false;
+				checkIfWeekly();
+			}
+			else {
+				$('#Event_Date_End').fadeIn(200);
+				document.getElementById('lblEventDateStart').innerHTML = "Start";
+				document.getElementById('Event_Date_End').style.display = "inline";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
+				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		function checkIfMultiple() {
+			if($('#MultipleDay').prop("checked")) {
+				$('#SingleDay').prop("checked", false);
+				checkIfSingle();
+			}
+		}
+
+		$(document).ready(function() {
+			$('#WeeklyEvent').hide();
+			$('#SingleDay').prop("checked", true);
+			checkIfSingle();
+		});
+
+		function checkIfWeekly() {
+			if(document.getElementById('Weekly').checked) {
+				$('#WeeklyEvent').show();
+				document.getElementById('SingleDay').checked = false;
+				checkIfSingle();
+			}
+			else {
+				$('#WeeklyEvent').hide();
+
+			}
+		}
+
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -962,8 +1158,17 @@
 								allowOutsideClick: true
 							});
 					}
-				}
-			);
+					/*
+				setTimeout( 
+					swal({
+							title: "Approved!",
+							text: "You have approved this request.",
+							type: "success"
+						},
+						function() { //window.location here ?apr=y }
+						), 1000);
+						*/
+				});
 		}
 		
 		function seen() { // this function gets rid of the badge every after click event 
@@ -984,25 +1189,5 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
-
-		// preloader section
-		$('button').prop("disabled", true);
-		$('button').click(function() {
-			$('button').blur();
-		});
-
-		// APPROVE SECTION
-		$('#Eform').submit(function(e) {
-			var url = "request_endorsements.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "approve",
-				success: function(data) {
-					
-				}
-			});
-			e.preventDefault();
-		});
 	</script>
 </html>
