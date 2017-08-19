@@ -6,51 +6,58 @@
 	$password = "root";
 	$dbname = "dbccf";
 	$id = $_POST["id"];
+
 	$conn = mysqli_connect($servername, $username, $password, $dbname);
 	if (!$conn) {
 		die("Connection failed: " . mysqli_connect_error());
 	}
 
 	if(isset($_POST['notify'])) {
-		$notificationdesc = "You have received some remarks about ".getEventName($id).".<br>Remarks: ".$_POST['notifvalue'];
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";
+		$notificationdesc = "You have received some remarks about your request.<br>Remarks: ".addSlashes($_POST['notifvalue']);
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, eventParticipationID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromEventPart($id).", ".getEventIDFromEventPart($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}
 	else if(isset($_POST['approve'])) {
-		$sql_event_approved = "UPDATE eventdetails_tbl SET eventStatus = 1 WHERE eventID = $id";
-		mysqli_query($conn, $sql_event_approved);
-		$notificationdesc = getEventName($id)." has been approved and is now open for people to view and join.";
-		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE eventID = ".$id;
+		$sql_event_participation_approved = "UPDATE eventparticipation_tbl SET eventPartStatus = 1 WHERE eventParticipationID = $id";
+		mysqli_query($conn, $sql_event_participation_approved);
+		$notificationdesc = "You have joined the event ".getEventName(getEventIDFromEventPart($id)).". We hope to see you there and God bless!";
+		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE eventParticipationID = ".$id;
 		mysqli_query($conn, $sql_notifications);
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, eventParticipationID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromEventPart($id).", ".getEventIDFromEventPart($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}
 	else if(isset($id)) {
-		/* for new event notif purposes
-		// set to seen the pending events that have recently been added
-		setSeenEventRequest($id);
-		*/
-
-		$query = "SELECT budget, CONCAT_WS(' ', firstName, lastName) AS fullname, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus FROM eventdetails_tbl LEFT OUTER JOIN budgetdetails_tbl ON eventdetails_tbl.budgetID = budgetdetails_tbl.budgetID LEFT OUTER JOIN member_tbl ON eventHeadID = memberID WHERE eventID = $id";
+		$query = "SELECT lastName, firstName, middleName, nickName, birthdate, gender, citizenship, civilStatus, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".getMemberIDFromEventPart($id);
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
-				$budget = $row["budget"];
-				$fullname = $row["fullname"];
-				$picturepath = $row["eventPicturePath"];
-				$name = $row["eventName"];
-				$description = $row["eventDescription"];
-				$startday = date("j F, Y", strtotime($row["eventStartDay"]));
-				$endday = date("j F, Y", strtotime($row["eventEndDay"]));
-				$weekly = $row["eventWeekly"];
-				$starttime = date("h:i A", strtotime($row["eventStartTime"]));;
-				$endtime = date("h:i A", strtotime($row["eventEndTime"]));
-				$venue = $row["eventVenue"];
-				$remarks = $row["remarks"];
-				$schedstatus = $row["eventSchedStatus"];
-				$array = array("budget"=>$budget, "fullname"=>$fullname, "picturepath"=>$picturepath, "name"=>$name, "description"=>$description, "startday"=>$startday, "endday"=>$endday, "weekly"=>$weekly, "starttime"=>$starttime, "endtime"=>$endtime, "venue"=>$venue, "remarks"=>$remarks, "schedstatus"=>$schedstatus);
+				$lname = $row["lastName"];
+				$fname = $row["firstName"];
+				$mname = $row["middleName"];
+				$nname = $row["nickName"];
+				$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+				$gender = $row["gender"];
+				if($gender == 0) $gender = "Male";
+				else $gender = "Female";
+				$citizenship = $row["citizenship"];
+				$civilstatus = $row["civilStatus"];
+				$contactnum = $row["contactNum"];
+				$emailad = $row["emailAd"];
+				$occupation = $row["occupation"];
+				$haddress = $row["homeAddress"];
+				$hphonenumber = $row["homePhoneNumber"];
+				$cname = $row["companyName"];
+				$ccontactnum = $row["companyContactNum"];
+				$caddress = $row["companyAddress"];
+				$sname = $row["schoolName"];
+				$scontactnum = $row["schoolContactNum"];
+				$saddress = $row["schoolAddress"];
+				$spname = $row["spouseName"];
+				$spcontactnum = $row["spouseContactNum"];
+				$spbirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+				$array = array("lname"=>$lname, "fname"=>$fname, "mname"=>$mname, "nname"=>$nname, "birthdate"=>$birthdate, "gender"=>$gender, "citizenship"=>$citizenship, "civilstatus"=>$civilstatus, "contactnum"=>$contactnum, "emailad"=>$emailad, "occupation"=>$occupation, "haddress"=>$haddress, "hphonenumber"=>$hphonenumber, "cname"=>$cname, "ccontactnum"=>$ccontactnum, "caddress"=>$caddress, "sname"=>$sname, "scontactnum"=>$scontactnum, "saddress"=>$saddress, "spname"=>$spname, "spcontactnum"=>$spcontactnum, "spbirthdate"=>$spbirthdate);
 				echo json_encode($array);
 			}
 		}

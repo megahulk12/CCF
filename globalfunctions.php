@@ -496,4 +496,67 @@
 		$string = mysqli_real_escape_string($string);
 		return $string;
 	}
+
+	function getCurrentEventParticipationID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventParticipationID FROM eventparticipation_tbl ORDER BY eventParticipationID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventParticipationID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMemberIDFromEventPart($epartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT memberID FROM eventparticipation_tbl WHERE eventParticipationID = $epartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["memberID"];
+			}
+		}
+		return $value;
+	}
+
+	function getEventIDFromEventPart($epartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventID FROM eventparticipation_tbl WHERE eventParticipationID = $epartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventID"];
+			}
+		}
+		return $value;
+	}
 ?>

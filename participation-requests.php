@@ -515,16 +515,6 @@
 
 			$('select').material_select();
 
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
-
   			//old version of timepicker
   			/*
   			$('#timepicker1opt1').pickatime({
@@ -566,9 +556,9 @@
 
 			id = id.split("_")[1];
 
-			// ajax + preloader
 
-			var url = "propose.php";
+			// ajax + preloader
+			var url = "request_participation-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
@@ -582,8 +572,58 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
+					$('#eventPartID').val(id);
+
+					$('#form-header').text(data.fname + ' ' + data.lname);
+					$('#Lastname').val(data.lname);
+					$('#Firstname').val(data.fname);
+					$('#Middlename').val(data.mname);
+					$('#Nickname').val(data.nname);
+					$('#Birthdate').val(data.birthdate);
+					if(data.gender == "Male")
+						$('#Gender_Male').prop("checked", true);
+					else
+						$('#Gender_Female').prop("checked", true);
+					$('#Citizenship').val(data.citizenship);
+					$('#CivilStatus').val(data.civilstatus);
+					$('#MobileNumber').val(data.contactnum);
+					$('#Email').val(data.emailad);
+					$('#Profession').val(data.occupation);
+					$('#HomeAddress').val(data.haddress);
+					$('#HomePhoneNumber').val(data.hphonenumber);
+					$('#CompanyName').val(data.cname);
+					$('#CompanyContactNum').val(data.ccontactnum);
+					$('#CompanyAddress').val(data.caddress);
+					$('#SchoolName').val(data.sname);
+					$('#SchoolContactNum').val(data.scontactnum);
+					$('#SchoolAddress').val(data.saddress);
+					$('#SpouseName').val(data.spname);
+					$('#SpouseMobileNumber').val(data.spcontactnum);
+					$('#SpouseBirthdate').val(data.spbirthdate);
+
+					// re-initialize to update text field
+					Materialize.updateTextFields();
+
+					// data validation display part
+
+					// default and initialization states
+					var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+					
+					/* ===== SPOUSE VALIDATION ===== */
+					var civilstatusid = "#CivilStatus"
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+						spouse.hide();
+					}
+
+					/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+					var professionid = "#Profession";
+					if($(professionid).val().toLowerCase() == "student") {
+						company.hide();
+					}
+					else {
+						school.hide();
+					}
+
 				}
 			});
 		}
@@ -765,7 +805,7 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="participation-requests">
-								<h3 class="center">Sample's Profile</h3>
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">
@@ -889,7 +929,7 @@
 								</div>
 								<div class="row">
 									<input type="hidden" id="eventPartID" name="eventPartID">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="button" name="approve" id="approve">Approve</button>
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
 									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
 								</div>
 							</form>
@@ -930,26 +970,6 @@
 		$('button').prop("disabled", true);
 		$('button').click(function() {
 			$('button').blur();
-		});
-
-		$('#participation-requests').submit(function(e) {
-			var url = "request_participation-request.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: $('#participation-requests').serialize(),
-				success: function(data) {
-					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					});
-				}
-			});
-			e.preventDefault();
 		});
 
 		function checkIfSingle() {
@@ -1062,8 +1082,6 @@
 			xhttp.send("seen");
 		}
 
-
-
 		$('#notify').click(function() {
 			swal({
 				title: "Remarks",
@@ -1078,7 +1096,7 @@
 					swal.showInputError("Oops! It seems that you haven't typed anything.");
 					return false;
 				}
-				var url = "request_participation-request.php";
+				var url = "request_participation-requests.php";
 				$.ajax({
 					type: "POST",
 					url: url,
@@ -1116,7 +1134,7 @@
 			  ';
 			$('.fixbutton').html(preloader);
 			$('.fixbutton').prop("disabled", true);
-			var url = "request_participation-request.php";
+			var url = "request_participation-requests.php";
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -1135,26 +1153,6 @@
 				}
 			});
 			e.preventDefault();
-		});
-
-		$(document).ready(function() {
-			// default and initialization states
-			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
-			
-			/* ===== SPOUSE VALIDATION ===== */
-			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
-				spouse.hide();
-			}
-
-			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
-			var professionid = "#Profession";
-			if($(professionid).val().toLowerCase() == "student") {
-				company.hide();
-			}
-			else {
-				school.hide();
-			}
 		});
 	</script>
 </html>
