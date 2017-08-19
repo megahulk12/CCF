@@ -10,7 +10,7 @@
 	if(isset($_POST['join'])) {
 		$sql_event_participation = "INSERT INTO eventparticipation_tbl(eventID, memberID) VALUES($id, ".$_SESSION['userid'].")";
 		mysqli_query($conn, $sql_event_participation);
-		$fullname = $_SESSION['lastName']." ".$_SESSION['firstName'];
+		$fullname = $_SESSION['firstName']." ".$_SESSION['lastName'];
 		$notificationdesc = $fullname." wishes to join ".getEventName($id);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, eventParticipationID, notificationDesc, notificationType, request) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, ".getCurrentEventParticipationID().", '$notificationdesc', 1, 1)";
 		mysqli_query($conn, $sql_notifications);

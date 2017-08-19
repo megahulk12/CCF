@@ -13,13 +13,16 @@
 	}
 
 	if(isset($_POST['notify'])) {
+		$sql_event_participation_notify = "UPDATE eventparticipation_tbl SET eventPartStatus = 2 WHERE eventParticipationID = $id";
+		mysqli_query($conn, $sql_event_participation_notify);
 		$notificationdesc = "You have received some remarks about your request.<br>Remarks: ".addSlashes($_POST['notifvalue']);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, eventParticipationID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromEventPart($id).", ".getEventIDFromEventPart($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}
 	else if(isset($_POST['approve'])) {
-		$sql_event_participation_approved = "UPDATE eventparticipation_tbl SET eventPartStatus = 1 WHERE eventParticipationID = $id";
+		$dateJoined = date("Y-m-d");
+		$sql_event_participation_approved = "UPDATE eventparticipation_tbl SET dateParticipation = '$dateJoined', eventPartStatus = 1 WHERE eventParticipationID = $id";
 		mysqli_query($conn, $sql_event_participation_approved);
 		$notificationdesc = "You have joined the event ".getEventName(getEventIDFromEventPart($id)).". We hope to see you there and God bless!";
 		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE eventParticipationID = ".$id;

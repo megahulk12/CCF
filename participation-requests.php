@@ -1143,8 +1143,8 @@
 					$('.fixbutton').text('Approve');
 					$('.fixbutton').prop("disabled", false);
 					swal({
-						title: "Event Approved!",
-						text: "This event will now be open for people to join.",
+						title: "Request Approved!",
+						text: "Attendance will now be recorded.",
 						type: "success",
 						allowEscapeKey: true,
 						allowOutsideClick: true,
