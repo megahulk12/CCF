@@ -186,6 +186,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+			color: #fff;
 		}
 
 
@@ -423,6 +424,39 @@
 			background-color: #16A5B8;
 			border-color: #16A5B8;
 		}
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
+
+		.close-error {
+			background: none;
+			float: right;
+			padding: 16px;
+			text-align: center;
+			border: 0;
+			opacity: 0.6;
+			color: inherit;
+			cursor: pointer;
+		}
+
+		.small {
+			font-size: 1.4rem !important;
+			font-weight: bold;
+		}
+
+		.close-error:hover {
+			text-decoration: none;
+			color: rgba(0, 0, 0, 1);
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -439,10 +473,8 @@
 				selectYears: 50, // Creates a dropdown of 15 years to control year
 				formatSubmit: 'yyyy-mm-dd'
 			});
-			 
-			$(document).ready(function() {
-				$('select').material_select();
-			}); 
+
+			$('select').material_select();
 
 			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
 			$('#receivedChrist').val();
@@ -485,32 +517,40 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
-		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  			echo '
+			  		<li class="divider"></li>
+		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
-				  	if($_SESSION["memberType"] >= 2 )
+				  	if($_SESSION["memberType"] == 2 )
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
-				  	if($_SESSION["memberType"] == 3)
-				  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-				  		';
-				  	if($_SESSION["memberType"] == 4)
-				  		echo '
-				  		';
 		  		}
+			  	if($_SESSION["memberType"] == 3)
+			  		echo '
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		';
+			  	if($_SESSION["memberType"] == 4)
+			  		echo '
+			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 		  		<li class="divider"></li>
 			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		';
 		  	?>
-	  		<li class="divider"></li>
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -581,9 +621,9 @@
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="create-event" id="create-event"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="create-event" id="create-event" enctype="multipart/form-data"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
-						<h3 class="center">EVENT PROPOSAL</h3>
+						<h3 class="center">Event Proposal</h3>
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
@@ -593,16 +633,49 @@
 								<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
 								<label for="EventDesc">Event Description</label>
 							</div>
+							<div class="input-field col s12">
+									<select id="EventHeadName" name="EventHeadName">
+										<option value="" disabled selected>Choose your option...</option>
+										<?php
+											$conn = mysqli_connect($servername, $username, $password, $dbname);
+											if (!$conn) {
+												die("Connection failed: " . mysqli_connect_error());
+											}
+
+											$query = "SELECT memberID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE memberType = 2 ORDER BY fullname DESC;";
+											$result = mysqli_query($conn, $query);
+											if(mysqli_num_rows($result) > 0) {
+												while($row = mysqli_fetch_assoc($result)) {
+													$memberID = $row["memberID"];
+													$fullname = $row["fullname"];
+													echo '<option value="'.$memberID.'">'.$fullname.'</option>';
+												}
+											}
+										?>
+									</select>
+									<label>Event Head</label>
+							</div>
+							<div class="file-field input-field col s12">
+								<div class="btn">
+									<span>Picture</span>
+									<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+								</div>
+								<div class="row event-pic">
+								</div>
+							</div>
 							<h4 class="center">Date</h4>
 							<p>
-								<div class ="row" style="margin-left:10px;">
-									<input type="checkbox" class="filled-in" id="SingleDay" name="SingleDay" onclick="checkIfSingle();"/>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
 									<label for="SingleDay">Single Day Event</label>
 								</div>
 							</p>
 							<p>
-								<div class ="row" style="margin-left:10px;">
-									<input type="checkbox" class="filled-in" id="Weekly" name="Weekly" onclick="checkIfWeekly();"/>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
 									<label for="Weekly">Weekly Event</label>
 								</div>
 							</p>
@@ -646,43 +719,86 @@
 								<label for="Budget">Budget</label>
 							</div>
 							<div class="input-field col s12">
-								<textarea id="Remarks" class="materialize-textarea" name="Remarks" data-length="500" maxlength="500"></textarea>
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
 								<label for="Remarks">Remarks</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton" type="submit" name="submit" id="submit" onclick="propose()">PROPOSE</button>
+						<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="propose" id="propose">Propose</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
+
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
-		function propose() {
-			$('#create-event').submit(function(e) {
-				var url = "propose.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: $('#create-event').serialize(),
-					success: function(data) {
-						swal({
-							title: "Success!",
-							text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-							type: "success",
-							allowEscapeKey: true,
-							allowOutsideClick: true,
-							timer: 10000
-						}, function() { window.location.href = "index.php"; }
-						);
-					}
-				});
-				e.preventDefault();
-			});
+		function renderImage(input) {
+			if(input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#showImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);	
+			}
+			else
+				$('.event-pic').html("");
 		}
+
+		$('#EventPicture').change(function() {
+			$('.event-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+			renderImage(this);
+		});
+
+		$('#create-event').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var formdata = new FormData($(this));
+			console.log(formdata);
+			formdata = $(this).serialize();
+			console.log(formdata);
+			var url = "propose-event.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: new FormData(this),
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					swal({
+						title: "Success!",
+						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+						type: "success",
+						timer: 10000
+					}, function() { window.location.href = "index.php"; });
+				}
+			});
+			e.preventDefault();
+		});
 
 		function checkIfSingle() {
 			if(document.getElementById('SingleDay').checked) {
@@ -690,6 +806,7 @@
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
 				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
 				document.getElementById('Weekly').checked = false;
+				checkIfWeekly();
 			}
 			else {
 				$('#Event_Date_End').fadeIn(200);
@@ -702,11 +819,15 @@
 
 		$(document).ready(function() {
 			$('#WeeklyEvent').hide();
+			$('#SingleDay').prop("checked", true);
+			checkIfSingle();
 		});
+
 		function checkIfWeekly() {
 			if(document.getElementById('Weekly').checked) {
 				$('#WeeklyEvent').show();
 				document.getElementById('SingleDay').checked = false;
+				checkIfSingle();
 			}
 			else {
 				$('#WeeklyEvent').hide();

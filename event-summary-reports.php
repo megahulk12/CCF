@@ -19,7 +19,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	
+
 	<title>Christ's Commission Fellowship</title>
 
 	<style>
@@ -74,6 +74,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -91,18 +92,13 @@
 			font-size: 13px;
 		}
 
-		/*form*/
-		.endorsement {
-			width:600px;
-		}
-		/*=======END=======*/
-
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
 			color: #777;
 			font-family: proxima-nova;
 			text-transform: uppercase;
 		}
+
 		/*=======END=======*/
 
 		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
@@ -157,10 +153,8 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.profile-next-or-submit-button {
-			margin-right: 9px;
+		  	/* margin-right: 9px; */
+		  	z-index: 1;
 		}
 
 		/*background-color for icons if focus is inactive*/
@@ -187,12 +181,13 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+			color: #fff;
 		}
 
 
 		.card-panel {
 		 	 transition: box-shadow .25s;
-		 	 padding: 24px;
+		 	 padding: 24px !important;
 		 	 margin: 0.5rem 0 1rem 0;
 		 	 border-radius: 2px;
 		 	 background-color: #fff;
@@ -295,7 +290,6 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
 			 overflow-y: auto;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
@@ -408,6 +402,72 @@
 			top: 19px;
 			left: 13px
 		}
+
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
+			background-color: #16A5B8;
+			z-index: 0;
+		}
+
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
+			background-color: #16A5B8;
+			border-color: #16A5B8;
+		}
+
+		/*tables*/
+		.table-wrapper {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		table > tbody > tr:hover {
+			cursor: hand;
+			background-color: #f2f2f2 !important;
+		}
+
+		table > tbody > tr.active {
+			background-color: #16A5B8;
+			color: #fff;
+		}
+
+		table > tbody > tr.active:hover {
+			background-color: #16A5B8 !important;
+			color: #fff !important;
+		}
+
+		td {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal highlight bar*/
+		}
+
+		th {
+			color: #424242;
+		}
+
+		tbody tr:hover {
+			cursor: pointer;
+		}
+		/* ========== END ========== */
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -422,13 +482,10 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
-				max: true
+				formatSubmit: 'yyyy-mm-dd'
 			});
-			 
-			$(document).ready(function() {
-				$('select').material_select();
-			}); 
+
+			$('select').material_select();
 
 			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
 			$('#receivedChrist').val();
@@ -455,15 +512,28 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
+				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
+				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 		});
+
+		function cellActive(id) { // this function allows you to highlight the table rows you select
+			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
+			var num_of_rows = document.getElementsByTagName("TR").length;
+			var rownumber = id.charAt(3);
+			for(var i = 0; i < num_of_rows; i++) {
+				document.getElementsByTagName("TR")[i].setAttribute("class", "");
+			}
+			document.getElementById(id).setAttribute("class", "active");
+			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			history.pushState(null, null, "event-summary-reports.php?id="+id.split("_")[1]);
+		}
 	</script>
 
 	<header class="top-nav">
@@ -571,116 +641,65 @@
 		</nav>
 	</header>
 
-	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div id="response"></div>
-		<div class="row">
-			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
-					<div id="page1">
-						<h3 class="center">ENDORSEMENT FORM</h3>
-						<h4 class="center">BAPTISMAL</h4>
-						<div class="row">
-							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
-								<label for="BaptismalDate" class>When were you baptized?</label>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
-								<label for="BaptismalPlace">Where were you baptized?</label>
-							</div>
-							<h4 class="center">DGROUP</h4>
-							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
-								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Youth">Youth</option>
-										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
-										<option value="Married">Married</option>
-										<option value="Couples">Couples</option>
-									</select>
-									<label>Type of Dgroup</label>
-								</div>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="AgeBracket">Age Bracket</label>
-							</div>
-							<h4 class="center">MEETING</h4>
-							<div class="row" style="margin-bottom: 0px;">
-								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
-										<option value="Monday">Monday</option>
-										<option value="Tuesday">Tuesday</option>
-										<option value="Wednesday">Wednesday</option>
-										<option value="Thursday">Thursday</option>
-										<option value="Friday">Friday</option>
-										<option value="Saturday">Saturday</option>
-									</select>
-									<label>Day</label>
-								</div>
-							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt1">Start Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt2">End Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
-								<label for="MeetingPlace">Place</label>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
-					</div>
-				</form>
+		<div class="container">
+			<div class="row">
+				<div class="col s3">
+				</div>
+				<div class="col s6 z-depth-4 card-panel">
+					<h3 class="center">Event Summary Reports</h3>
+					<table class="centered">
+						<thead>
+							<tr>
+								<th>Event Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="row_1" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+							<tr id="row_2" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+							<tr id="row_3" onclick="cellActive(this.id)">
+								<td> Sample </td>
+							</tr>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+					<form method="post" id="generate-event-report">
+						<button type="submit" class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;">Generate Report</button>
+					</form>
+				</div>
+				<div class="col s3">
+					
+				</div>
 			</div>
 		</div>
 	</body>
-	<script>
-		function requestLeader() {
-			$('#Eform').submit(function(e) {
-				var url="request.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: 'request=g&'+$('#Eform').serialize(), 
-					success: function(data) {
-						alert(data);
-						swal({
-							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-							type: "success",
-							allowEscapeKey: true
-						},
-							function() { window.location.href = "index.php"; }
-						);
-					}
-				});
-				e.preventDefault();
-			});
-			
-		}
-	</script>
 
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	
+	 <!-- this section is for notification approval of requests -->
 	<script>
-		function endorsementComplete() {
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		}
-			 //this section is for notification approval of requests
-			 	
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -760,20 +779,18 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
-	</script>
 
-	<?php /*
-		if(isset($_POST['submit'])) {
-			echo '
-		<script>
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
+		$('#generate-event-report').submit(function(e) {
+			var url = "request_event-summary-reports.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: $(this).serialize(),
+				success: function(data) {
+					
+				}
 			});
-		</script>
-			';
-		} */
-	?>
+			e.preventDefault();
+		});
+	</script>
 </html>

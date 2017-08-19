@@ -93,7 +93,7 @@
 
 		/*headers*/
 		h1, h2, h3, h4, h5, h6 {
-			color: #424242;
+			color: #777;
 			font-family: proxima-nova;
 			text-transform: uppercase;
 		}
@@ -498,22 +498,12 @@
 
 		#preloader {
 			position: relative;
-		}
-
-		#view {
-			position: relative;
-			top: 100;
-			cursor: pointer;
+			width: 0 !important;
 		}
 
 		#Eform {
 			margin: 0 auto;
 			height: 700px;
-		}
-
-		.fadeIn {
-			opacity: 1;
-			transition: opacity 0.5s;
 		}
 
 		/* ===== PRELOADER ===== */
@@ -538,9 +528,6 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 
-			// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-			$('.modal').modal();
-
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 100, // Creates a dropdown of 15 years to control year
@@ -563,9 +550,7 @@
 		}
 
 		$(document).ready(function() {
-			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#Eform').width()/2);
-			$('#preloader').css("top", $('#Eform').height()/2);
+			preload();
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -584,6 +569,7 @@
 			// ajax + preloader
 
 			var url = "request_endorsements.php";
+			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
@@ -591,12 +577,28 @@
 				type: "POST",
 				url: url,
 				data: "id="+id,
+				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
+					// access echo values data.<key value of array>
+					// ex. alert(data.a);
 				}
 			});
+		}
+
+		function disableForm(flag) {
+			$('div#page1').children().find('input, select').each(function() {
+				$(this).prop("disabled", flag);
+			});
+		}
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#Eform').width()/2);
+			$('#preloader').css("top", $('#Eform').height()/2);
+			disableForm(true);
 		}
 	</script>
 
@@ -605,32 +607,40 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
-		  			echo '<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  			echo '
+			  		<li class="divider"></li>
+		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
 			  		';
-				  	if($_SESSION["memberType"] >= 2 )
+				  	if($_SESSION["memberType"] == 2 )
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
-				  	if($_SESSION["memberType"] == 3)
-				  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-				  		';
-				  	if($_SESSION["memberType"] == 4)
-				  		echo '
-				  		';
 		  		}
+			  	if($_SESSION["memberType"] == 3)
+			  		echo '
+		  		<li class="divider"></li>
+			  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+		  		<li class="divider"></li>
+			  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		';
+			  	if($_SESSION["memberType"] == 4)
+			  		echo '
+			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 		  		<li class="divider"></li>
 			  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		';
 		  	?>
-	  		<li class="divider"></li>
+		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
@@ -971,7 +981,7 @@
 		});
 
 		// APPROVE SECTION
-		$('#approve').click(function() {
+		$('#Eform').submit(function(e) {
 			var url = "request_endorsements.php";
 			$.ajax({
 				type: "POST",
@@ -981,6 +991,7 @@
 					
 				}
 			});
+			e.preventDefault();
 		});
 	</script>
 </html>
