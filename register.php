@@ -626,6 +626,7 @@
 		.error {
 			color: #ff3333;
 		}
+
 	</style>
 
 	<script>
@@ -1225,11 +1226,11 @@
 			$("#SchoolName").prop("required", true);
 			$("#SpouseName").prop("required", true);
 			$(this).blur();
-			check_iteration = true;
+			var check_iteration = true;
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
 				//$("h4").find(":contains('Spouse')").hide();
@@ -1317,20 +1318,20 @@
 				}
 			});
 
-			// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getDate();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
+			// // convert time values to timestamp
+			// var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			// d = (new Date()).getDate();
+			// start_time = spaceAMPM(start_time);
+			// end_time = spaceAMPM(end_time);
+			// start_time = new Date(d + " " + start_time);
+			// end_time = new Date(d + " " + end_time);
+			// start_time = start_time.getTime();
+			// end_time = end_time.getTime();
+			// if(start_time > end_time) {
+			// 	$(".greater2").show();
+			// 	focused_element = $("#timepicker2opt1");
+			// 	check_iteration = false;
+			// }
 
 			// // convert time values to timestamp
 			// start_time = $("#timepicker1opt1").val();
@@ -1369,7 +1370,7 @@
 				if(checkLastPage()) {
 					confirmvalidated = false;
 				}
-				pagination(1, this.id.split("_")[0]);
+				pagination(1);
 			}
 		});
 
@@ -1449,6 +1450,17 @@
 		/*end code ni paolo*/
 	</script>
 	<script type="text/javascript">
+	$('.timepicker').pickatime({
+		//default: 'now', // Set default time; do not set default time in viewing of time
+		fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+		twelvehour: true, // Use AM/PM or 24-hour format
+		donetext: 'DONE', // text for done-button
+		cleartext: 'Clear', // text for clear-button
+		canceltext: 'Cancel', // Text for cancel-button
+		autoclose: false, // automatic close timepicker
+		ampmclickable: false, // make AM PM clickable
+		aftershow: function(){} //Function for after opening timepicker  
+	});
 	/*
 		// jquery form validation
 		// source: https://jqueryvalidation.org/
