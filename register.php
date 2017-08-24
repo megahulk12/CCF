@@ -620,6 +620,7 @@
 		.error {
 			color: #ff3333;
 		}
+
 	</style>
 
 	<script>
@@ -1196,7 +1197,7 @@
 			*/
 		}
 
-		/*code ni paolo*/
+		/*--------------------------code ni paolo-----------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
 		function disableDefaultRequired(elem) {
@@ -1207,6 +1208,13 @@
 			    };
 			})(), true);
 		}
+
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
 
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
@@ -1219,11 +1227,11 @@
 			$("#SchoolName").prop("required", true);
 			$("#SpouseName").prop("required", true);
 			$(this).blur();
-			check_iteration = true;
+			var check_iteration = true;
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
 				//$("h4").find(":contains('Spouse')").hide();
@@ -1311,20 +1319,20 @@
 				}
 			});
 
-			// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getDate();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
+			// // convert time values to timestamp
+			// var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			// d = (new Date()).getDate();
+			// start_time = spaceAMPM(start_time);
+			// end_time = spaceAMPM(end_time);
+			// start_time = new Date(d + " " + start_time);
+			// end_time = new Date(d + " " + end_time);
+			// start_time = start_time.getTime();
+			// end_time = end_time.getTime();
+			// if(start_time > end_time) {
+			// 	$(".greater2").show();
+			// 	focused_element = $("#timepicker2opt1");
+			// 	check_iteration = false;
+			// }
 
 			// // convert time values to timestamp
 			// start_time = $("#timepicker1opt1").val();
@@ -1440,8 +1448,152 @@
 		}
 
 		/* ===== END ===== */
-		/*end code ni paolo*/
+		/*----------------------------------end code ni paolo----------------------------------------*/
 	</script>
+<<<<<<< HEAD
+=======
+	<script type="text/javascript">
+	$('.timepicker').pickatime({
+		//default: 'now', // Set default time; do not set default time in viewing of time
+		fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+		twelvehour: true, // Use AM/PM or 24-hour format
+		donetext: 'DONE', // text for done-button
+		cleartext: 'Clear', // text for clear-button
+		canceltext: 'Cancel', // Text for cancel-button
+		autoclose: false, // automatic close timepicker
+		ampmclickable: false, // make AM PM clickable
+		aftershow: function(){} //Function for after opening timepicker  
+	});
+	/*
+		// jquery form validation
+		// source: https://jqueryvalidation.org/
+		$("#registration").validate({
+		rules: {
+			Firstname: {
+			required: true,
+			minlength: 3
+		},
+			Middlename: {
+			required: true
+		},
+			Lastname: {
+			required: true
+		},
+			Nickname: {
+			required: true
+		},
+			Birthdate: {
+			required: true
+		},
+			Gender:"required",
+			Citizenship: {
+			required: true
+		},
+			CivilStatus: "required",
+			MobileNumber: {
+			required: true
+		},
+			Email: {
+			required: true,
+			email: true
+		},
+			Profession: {
+			required: true
+		},
+			HomeAddress: {
+			required: true
+		},
+			HomePhoneNumber: {
+			required: true
+		},
+			CompanyName: {
+			required: true
+		},
+			CompanyContactNum: {
+			required: true
+		},
+			CompanyAddress: {
+			required: true
+		},
+			SchoolName: {
+			required: true
+		},
+			SchoolContactNum: {
+			required: true
+		},
+			SchoolAddress: {
+			required: true
+		},
+			SpouseName: {
+			required: true
+		},
+			SpouseMobileNumber: {
+			required: true
+		},
+			SpouseBirthdate: {
+			required: true
+		},
+			Language: {
+			required: true
+		},
+			Option1Day: "required",
+			timepicker1opt1: {
+			required: true
+		},
+			timepicker1opt2: {
+			required: true
+		},
+			Option1Venue: {
+			required: true
+		},
+			Option2Day: "required",
+			timepicker2opt1: {
+			required: true
+		},
+			timepicker2opt2: {
+			required: true
+		},
+			Option2Venue: {
+			required: true
+		},
+			username: {
+			required: true,
+			minlength: 5
+		},
+			password: {
+			required: true,
+			minlength: 5
+		},
+			cpassword: {
+			required: true,
+			minlength: 5,
+			equalTo: "#password"
+		}
+		},
+		//For custom messages
+		messages: {
+			username: {
+				required: "Enter a username",
+				minlength: "Enter at least 5 characters"
+			},
+			password: {
+				required: "Enter a password",
+				minlength: "Enter at least 5 characters"
+			}
+		  },
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+          var placement = $(element).data('error');
+          if (placement) {
+            $(placement).append(error)
+          } else {
+            error.insertAfter(element);
+          }
+        }
+     });
+     */
+	</script>
+>>>>>>> Paolo-Edits
 	<footer>
 	</footer>
 </html>
