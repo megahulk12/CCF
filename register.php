@@ -1203,7 +1203,7 @@
 			*/
 		}
 
-		/*code ni paolo*/
+		/*--------------------------code ni paolo-----------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
 		function disableDefaultRequired(elem) {
@@ -1214,6 +1214,13 @@
 			    };
 			})(), true);
 		}
+
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
 
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
@@ -1447,7 +1454,7 @@
 		}
 
 		/* ===== END ===== */
-		/*end code ni paolo*/
+		/*----------------------------------end code ni paolo----------------------------------------*/
 	</script>
 	<script type="text/javascript">
 	$('.timepicker').pickatime({
