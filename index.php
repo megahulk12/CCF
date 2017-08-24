@@ -395,7 +395,7 @@
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
-				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
 		  		}
 			  	if($_SESSION["memberType"] == 3)
@@ -484,7 +484,7 @@
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos8" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 						<li><a href="events.php" class="transition">EVENTS</a></li>
-						<li><a href="ministry.php" class="transition">MINISTRIES</a></li>
+						<li><a href="ministries.php" class="transition">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button transition" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
 						<li><a class="dropdown-button notifications transition" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>

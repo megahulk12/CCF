@@ -93,7 +93,7 @@
 		}
 
 		/*form*/
-		.proposed-events {
+		.propose-ministry {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -158,7 +158,7 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		  	/* margin-right: 9px; */
+		  	margin-right: 9px;
 		  	z-index: 1;
 		}
 
@@ -192,7 +192,7 @@
 
 		.card-panel {
 		 	 transition: box-shadow .25s;
-		 	 padding: 24px !important;
+		 	 padding: 24px;
 		 	 margin: 0.5rem 0 1rem 0;
 		 	 border-radius: 2px;
 		 	 background-color: #fff;
@@ -425,14 +425,37 @@
 			border-color: #16A5B8;
 		}
 
-		#preloader {
-			position: relative;
-			width: 0 !important;
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
 		}
 
-		#proposed-events {
-			margin: 0 auto;
-			height: 700px;
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
+
+		.close-error {
+			background: none;
+			float: right;
+			padding: 16px;
+			text-align: center;
+			border: 0;
+			opacity: 0.6;
+			color: inherit;
+			cursor: pointer;
+		}
+
+		.small {
+			font-size: 1.4rem !important;
+			font-weight: bold;
+		}
+
+		.close-error:hover {
+			text-decoration: none;
+			color: rgba(0, 0, 0, 1);
 		}
 
 		/* ===== PRELOADER ===== */
@@ -443,56 +466,6 @@
 
 		.spinner-color-theme {
 			border-color: rgba(0, 0, 0, 0.4);
-		}
-		/* ===== END ===== */
-
-		/*tables*/
-		.table-wrapper {
-			max-height: 300px;
-			overflow-y: auto;
-		}
-
-		table > tbody > tr:hover {
-			cursor: hand;
-			background-color: #f2f2f2 !important;
-		}
-
-		table > tbody > tr.active {
-			background-color: #16A5B8;
-			color: #fff;
-		}
-
-		table > tbody > tr.active:hover {
-			background-color: #16A5B8 !important;
-			color: #fff !important;
-		}
-
-		td {
-		  	padding: 15px 5px;
-		  	display: table-cell;
-		  	text-align: left;
-		  	vertical-align: middle;
-		  	border-radius: 0px; /* complete horizontal highlight bar*/
-		}
-
-		th {
-			color: #424242;
-		}
-
-		tbody tr:hover {
-			cursor: pointer;
-		}
-		/* ========== END ========== */
-
-		/* ===== FOOTER ===== */
-		.page-footer {
-			margin-top: 100px;
-			background-color: #16A5B8;
-		}
-
-		p.footer-cpyrght {
-			font-family: sans-serif;
-			color: #fff;
 		}
 		/* ===== END ===== */
 	</style>
@@ -514,6 +487,8 @@
 			});
 
 			$('select').material_select();
+
+			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
 
   			//old version of timepicker
   			/*
@@ -539,100 +514,6 @@
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 		});
-
-		$(document).ready(function() {
-			preload();
-		});
-
-		function cellActive(id) { // this function allows you to highlight the table rows you select
-			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
-			var num_of_rows = document.getElementsByTagName("TR").length;
-			var rownumber = id.charAt(3);
-			for(var i = 0; i < num_of_rows; i++) {
-				document.getElementsByTagName("TR")[i].setAttribute("class", "");
-			}
-			document.getElementById(id).setAttribute("class", "active");
-			//document.getElementById("table").setAttribute("class", "highlight centered");
-
-			id = id.split("_")[1];
-			//history.pushState(null, null, "proposed-events.php?id="+id);
-
-
-			// ajax + preloader
-			var url = "request_proposed-events.php";
-			preload();
-			$('button').prop("disabled", true);
-			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "id="+id,
-				dataType: 'json',
-				success: function(data) {
-					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
-					$('button').prop("disabled", false);
-					disableForm(false);
-					$('#eventID').val(id);
-					$('#form-header').text(data.name);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
-
-					$('#EventName').val(data.name);
-					$('#EventDesc').val(data.description);
-					$('#EventDesc').trigger("autoresize");
-					if(data.schedstatus == 0) {
-						$('#SingleDay').prop("checked", true);
-						checkIfSingle();
-					}
-					else if(data.schedstatus == 1) {
-						$('#MultipleDay').prop("checked", true);
-						checkIfMultiple();
-						$('#EventDateEnd').val(data.endday);
-					}
-					else if(data.schedstatus == 2) {
-						$('#Weekly').prop("checked", true);
-						checkIfWeekly();
-						$('#WeeklyDay').val(data.weekly);
-						$('#EventDateEnd').val(data.endday);
-					}
-					$('#EventDateStart').val(data.startday);
-					$('#EventTime1').val(data.starttime);
-					$('#EventTime2').val(data.endtime);
-					$('#EventVenue').val(data.venue);
-					$('#Budget').val(data.budget);
-					$('#Remarks').val(data.remarks);
-					$('#Remarks').trigger("autoresize");
-
-					// re-initialize to update input fields
-					Materialize.updateTextFields();
-					$('select').material_select();
-
-					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
-				}
-			});
-		}
-
-		function disableForm(flag) {
-			$('div#page1').children().find('input, textarea, select').each(function() {
-				$(this).prop("disabled", flag);
-			});
-
-			// for the file upload button
-			if(flag)
-				$('#EventPicture').parent().addClass("disabled");
-			else
-				$('#EventPicture').parent().removeClass("disabled");
-		}
-
-		function preload() {
-			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#proposed-events').width()/2);
-			$('#preloader').css("top", $('#proposed-events').height()/2);
-			disableForm(true);
-		}
 	</script>
 
 	<header class="top-nav">
@@ -750,157 +631,89 @@
 
 	<body>
 		<div id="response"></div>
-		<div class="container">
-			<h2 class="center">Event Proposals</h2>
-			<div class="row">
-				<div class="col s12 z-depth-4 card-panel">
-					<div class="col s5">
-						<div class="col s12">
-							<h3 class="center">Proposed Events</h3>
-							<table class="centered">
-								<thead>
-									<tr>
-										<th>Event Name(s)</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-										$conn = mysqli_connect($servername, $username, $password, $dbname);
-										if (!$conn) {
-											die("Connection failed: " . mysqli_connect_error());
-										}
-
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
-										$result = mysqli_query($conn, $query);
-										if(mysqli_num_rows($result) > 0) {
-											while($row = mysqli_fetch_assoc($result)) {
-												$eventID = $row["eventID"];
-												$eventname = $row["eventName"];
-												echo '
-												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
-												    <td>'.$eventname.'</td>
-												</tr>
-												';
-											}
-										}
-									?>
-								</tbody>
-								<tfoot></tfoot>
-							</table>
+		<div class="row">
+			<div class="col s12 z-depth-4 card-panel">
+				<form method="post" class="propose-ministry" id="propose-ministry" enctype="multipart/form-data"> <!--if php is applied, action value will then become the header -->
+					<div id="page1">
+						<h3 class="center">Ministry Proposal</h3>
+						<div class="row">
+							<div class="input-field col s12">
+								<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50">
+								<label for="MinistryName">Ministry Name</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500"></textarea>
+								<label for="MinistryDesc">Ministry Description</label>
+							</div>
+							<div class="file-field input-field col s12">
+								<div class="btn">
+									<span>Picture</span>
+									<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
+								</div>
+								<div class="row ministry-pic">
+								</div>
+							</div>
+							<h4 class="center">Date</h4>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Custom" name="MeetingStatus" value="Custom" onclick="checkIfCustom();"/>
+									<label for="Custom">Custom Meeting</label>
+								</div>
+							</p>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Weekly" name="MeetingStatus" value="Weekly" onclick="checkIfWeekly();"/>
+									<label for="Weekly">Weekly Meeting</label>
+								</div>
+							</p>
+							<div class="input-field col s12" id="Meeting_Date">
+								<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate">
+								<label for="MeetingDate">Meeting Date</label>
+							</div>
+								<div class="input-field col s12" id="WeeklyMeeting">
+									<select id="WeeklyDay" name="WeeklyDay">
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Sunday">Sunday</option>
+										<option value="Monday">Monday</option>
+										<option value="Tuesday">Tuesday</option>
+										<option value="Wednesday">Wednesday</option>
+										<option value="Thursday">Thursday</option>
+										<option value="Friday">Friday</option>
+										<option value="Saturday">Saturday</option>
+									</select>
+									<label>Day</label>
+								</div>
+							<h4 class="center">Time</h4>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1">
+								<label for="MinistryTime1">Start</label>
+							</div>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2">
+								<label for="MinistryTime2">End</label>
+							</div>
+							<h4 class="center">Location</h4>
+							<div class="input-field col s12">
+								<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50">
+								<label for="MinistryVenue">Ministry Venue</label>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<label for="Budget">Budget</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+								<label for="Remarks">Remarks</label>
+							</div>
 						</div>
 					</div>
-					<div class="col s7" id="form">
-						<div class="container">
-							<form method="post" id="proposed-events" enctype="multipart/form-data">
-								<h3 class="center" id="form-header"></h3>
-								<div class="row">
-									<div id="preloader">
-										<div class="preloader-wrapper small active">
-											<div class="spinner-layer spinner-blue-only spinner-color-theme">
-												<div class="circle-clipper left">
-													<div class="circle"></div>
-												</div><div class="gap-patch">
-													<div class="circle"></div>
-												</div><div class="circle-clipper right">
-													<div class="circle"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div id="page1" class="">
-										<div class="row">
-											<div class="input-field col s12">
-												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
-												<label for="EventName">Event Name</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
-												<label for="EventDesc">Event Description</label>
-											</div>
-											<div class="file-field input-field col s12">
-												<div class="btn">
-													<span>Picture</span>
-													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
-												</div>
-												<div class="file-path-wrapper">
-													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
-												</div>
-												<div class="row event-pic">
-												</div>
-											</div>
-											<h4 class="center">Date</h4>
-											<p>
-												<div class ="row" style="margin-left:5px;">
-													<input type="radio" id="SingleDay" name="EventSchedStatus" value="SingleDay" onclick="checkIfSingle();"/>
-													<label for="SingleDay">Single Day Event</label>
-												</div>
-											</p>
-											<p>
-												<div class ="row" style="margin-left:5px;">
-													<input type="radio" id="MultipleDay" name="EventSchedStatus" value="MultipleDay" onclick="checkIfMultiple();"/>
-													<label for="MultipleDay">Multiple Day Event</label>
-												</div>
-											</p>
-											<p>
-												<div class ="row" style="margin-left:5px;">
-													<input type="radio" id="Weekly" name="EventSchedStatus" value="Weekly" onclick="checkIfWeekly();"/>
-													<label for="Weekly">Weekly Event</label>
-												</div>
-											</p>
-											<div class="input-field col s6" id="Event_Date_Start">
-												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
-												<label for="EventDateStart" id="lblEventDateStart">Start</label>
-											</div>
-											<div class="input-field col s6" id="Event_Date_End">
-												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
-												<label for="EventDateEnd">End</label>
-											</div>
-												<div class="input-field col s12" id="WeeklyEvent">
-													<select id="WeeklyDay" name="WeeklyDay">
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunday</option>
-														<option value="Monday">Monday</option>
-														<option value="Tuesday">Tuesday</option>
-														<option value="Wednesday">Wednesday</option>
-														<option value="Thursday">Thursday</option>
-														<option value="Friday">Friday</option>
-														<option value="Saturday">Saturday</option>
-													</select>
-													<label>Day</label>
-												</div>
-											<h4 class="center">Time</h4>
-											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
-												<label for="EventTime1">Start</label>
-											</div>
-											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
-												<label for="EventTime2">End</label>
-											</div>
-											<h4 class="center">Location</h4>
-											<div class="input-field col s12">
-												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
-												<label for="EventVenue">Event Venue</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-												<label for="Budget">Budget</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
-												<label for="Remarks">Remarks</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<input type="hidden" id="eventID" name="eventID">
-									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="revise" id="revise">Revise</button>
-								</div>
-							</form>
-						</div>
+					<div class="row">
+						<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="propose" id="propose">Propose</button>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</body>
@@ -926,17 +739,6 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
-		// blur clickable elements
-		$('a#add-link').click(function() {
-			$('a#add-link').blur();
-		});
-
-		// preloader section
-		$('button').prop("disabled", true);
-		$('button').click(function() {
-			$('button').blur();
-		});
-
 		function renderImage(input) {
 			if(input.files && input.files[0]) {
 				var reader = new FileReader();
@@ -946,21 +748,22 @@
 				reader.readAsDataURL(input.files[0]);	
 			}
 			else
-				$('.event-pic').html("");
+				$('.ministry-pic').html("");
 		}
 
-		$('#EventPicture').change(function() {
-			$('.event-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+		$('#MinistryPicture').change(function() {
+			$('.ministry-pic').html('<img src="" id="showImage" style="width: 100%;" />');
 			renderImage(this);
 		});
 
-		$('#proposed-events').submit(function(e) {
+		$('#propose-ministry').submit(function(e) {
 			/*
 				NOTE:
 				contentType and processData doesn't coincide with string queries in passing data to server
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
+			var url = "propose-event.php";
 			var preloader = '\
 				<div class="preloader-wrapper small active"> \
 					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
@@ -976,7 +779,6 @@
 			  ';
 			$('.fixbutton').html(preloader);
 			$('.fixbutton').prop("disabled", true);
-			var url = "request_proposed-events.php";
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -984,60 +786,40 @@
 				contentType: false,
 				processData: false,
 				success: function(data) {
-					$('.fixbutton').text('Revise');
+					$('.fixbutton').text('Propose');
 					$('.fixbutton').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
 						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
 						timer: 10000
-					}, function() { window.location.reload(); });
+					}, function() { window.location.href = "index.php"; });
 				}
 			});
 			e.preventDefault();
 		});
 
-		function checkIfSingle() {
-			if(document.getElementById('SingleDay').checked) {
-				document.getElementById('Event_Date_End').style.display = "none";
-				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
-				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
-				document.getElementById('Weekly').checked = false;
+		function checkIfCustom() {
+			if($('#Custom').prop("checked")) {
+				$('#Weekly').prop("checked", false);
 				checkIfWeekly();
-			}
-			else {
-				$('#Event_Date_End').fadeIn(200);
-				document.getElementById('lblEventDateStart').innerHTML = "Start";
-				document.getElementById('Event_Date_End').style.display = "inline";
-				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
-				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
-			}
-		}
-
-		function checkIfMultiple() {
-			if($('#MultipleDay').prop("checked")) {
-				$('#SingleDay').prop("checked", false);
-				checkIfSingle();
 			}
 		}
 
 		$(document).ready(function() {
-			$('#WeeklyEvent').hide();
-			$('#SingleDay').prop("checked", true);
-			checkIfSingle();
+			$('#WeeklyMeeting').hide();
+			$('#Custom').prop("checked", true);
+			checkIfCustom();
 		});
 
 		function checkIfWeekly() {
-			if(document.getElementById('Weekly').checked) {
-				$('#WeeklyEvent').show();
-				document.getElementById('SingleDay').checked = false;
-				checkIfSingle();
+			if($('#Weekly').prop("checked")) {
+				$('#WeeklyMeeting').show();
+				$('#Custom').prop("checked", false);
+				checkIfCustom();
 			}
 			else {
-				$('#WeeklyEvent').hide();
-
+				$('#WeeklyMeeting').hide();
 			}
 		}
 

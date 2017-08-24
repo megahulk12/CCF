@@ -13,6 +13,7 @@
 		$target_dir = "uploads/";
 		$target_file = $target_dir.basename($_FILES["EventPicture"]["name"]);
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+		$target_file = $target_dir.removeExtension(basename($_FILES["EventPicture"]["name"])).uniqid().'.'.$imageFileType;
 
 		if(file_exists($target_file)) { // check if image exists
 			echo "File already exists.";
@@ -32,7 +33,7 @@
 		$id = $_POST["eventID"];
 		$eventname = addSlashes($_POST["EventName"]);
 		$eventdesc = addSlashes($_POST["EventDesc"]);
-		$eventpicturepath = $target_dir.$_POST["EventPictureName"];
+		$eventpicturepath = $target_file;
 		$eventschedstatus = $_POST["EventSchedStatus"];
 		if($eventschedstatus == "SingleDay") {
 			$eventschedstatus = 0;
@@ -89,4 +90,7 @@
 
 		mysqli_close($conn);
 	//}
+	function removeExtension($filename) {
+		return preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
+	}
 ?>

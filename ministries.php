@@ -1,6 +1,6 @@
-<?php
-	include('session.php');
-	include('globalfunctions.php');
+<?php 
+	include('session.php'); 
+	include('globalfunctions.php'); 
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -13,22 +13,18 @@
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
-	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
-	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
-	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert-dev.js"></script>
-	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<!-- layout plugin -->
+	<script src="isotope.pkgd.min.js"></script>
+	<script src="imagesloaded.pkgd.js"></script>
 
 	<title>Christ's Commission Fellowship</title>
-
 	<style>
 		::selection {
 			background-color: #16A5B8;
 			color: #fff;
 		}
-		
-		/* containers*/
+
 		div {
 			display: block;
 		}
@@ -38,16 +34,20 @@
 			max-width: 1280px;
 			width: 80%;
 		}
-		/*=======END=======*/
 
-		/*logo*/
-		#logo {
-			margin-top: 10px;
+		.container-events {
+			margin: 0 auto;
+			position: relative;
+			max-width: 1080px;
+			width: 100%;
 		}
 
-		img#loginlogo {
-			height: 150px;
-			width: 300px;
+		body {
+			padding-top: 150px;
+		}
+
+		#logo {
+			margin-top: 10px;
 		}
 
 		/*
@@ -69,17 +69,17 @@
 			width: 100%;
 			height: 97px;
 			line-height: 97px;
-			z-index: 2;
-		}
-
-		body {
-			margin-top: 150px;
-			overflow-x: auto;
+			z-index: 1;
+			/*
+			box-shadow: none;
+			border-bottom: 0.5px solid rgba(0,0,0,0.2);
+			*/
 		}
 		
 		li a:hover {
 			color: #16A5B8;
 		}
+
 		@font-face {
 			font-family: proxima-nova;
 			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
@@ -92,211 +92,17 @@
 			font-size: 13px;
 		}
 
-		/*headers*/
-		h1, h2, h3, h4, h5, h6 {
-			color: #777;
-			font-family: proxima-nova;
-			text-transform: uppercase;
-		}
-
-		/*=======END=======*/
-
-		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
-		/* input custom colors*/
-		/*Text inputs*/
-		input:not([type]):focus:not([readonly]),
-		input[type=text]:focus:not([readonly]),
-		input[type=password]:focus:not([readonly]),
-		input[type=email]:focus:not([readonly]),
-		input[type=url]:focus:not([readonly]),
-		input[type=time]:focus:not([readonly]),
-		input[type=date]:focus:not([readonly]),
-		input[type=datetime]:focus:not([readonly]),
-		input[type=datetime-local]:focus:not([readonly]),
-		input[type=tel]:focus:not([readonly]),
-		input[type=number]:focus:not([readonly]),
-		input[type=search]:focus:not([readonly]),
-		textarea.materialize-textarea:focus:not([readonly]) {
-			border-bottom: 1px solid #16A5B8;
-			box-shadow: 0 1px 0 0 #16A5B8;
-		}
-
-		input:not([type]):focus:not([readonly])+label,
-		input[type=text]:focus:not([readonly])+label,
-		input[type=password]:focus:not([readonly])+label,
-		input[type=email]:focus:not([readonly])+label,
-		input[type=url]:focus:not([readonly])+label,
-		input[type=time]:focus:not([readonly])+label,
-		input[type=date]:focus:not([readonly])+label,
-		input[type=datetime]:focus:not([readonly])+label,
-		input[type=datetime-local]:focus:not([readonly])+label,
-		input[type=tel]:focus:not([readonly])+label,
-		input[type=number]:focus:not([readonly])+label,
-		input[type=search]:focus:not([readonly])+label,
-		textarea.materialize-textarea:focus:not([readonly])+label {
-			color: #16A5B8;
-		}
-
-		.btn, .btn-large {
-		  text-decoration: none;
-		  color: #777;
-		  background-color: #ebebeb;
-		  text-align: center;
-		  letter-spacing: .5px;
-		  transition: .2s ease-out;
-		  cursor: pointer;
-		  font-family: proxima-nova;
-		  font-size: 13px;
-		  /*border-radius: 20px;*/
-		}
-
-		.fixbutton {
-		  	background-color: #16A5B8;
-		  	color: #fff;
-		  	/* margin-right: 9px; */
-		  	z-index: 1;
-		}
-
-		/*background-color for icons if focus is inactive*/
-		.input-field .prefix {
-			position: absolute;
-			width: 3rem;
-			font-size: 2rem;
-		    transition: color .2s;
-		    color: #777;
-		}
-
-		/*background-color for icons if focus is active*/
-		.input-field .prefix.active {
-		  color: #16A5B8;
-		}
-
-		/*hover of button*/
-		.btn:hover, .btn-large:hover {
-			background-color: #1bcde4;
-			color: #fff;
-		}
-
-		/*focus of button*/
-		.btn:focus, .btn-large:focus,
-		.btn-floating:focus {
-		  	background-color: #1bcde4;
-			color: #fff;
-		}
-
-
-		.card-panel {
-		 	 transition: box-shadow .25s;
-		 	 padding: 24px !important;
-		 	 margin: 0.5rem 0 1rem 0;
-		 	 border-radius: 2px;
-		 	 background-color: #fff;
-		}
-		/* ============================END=========================== */  
-
-		/*CUSTOM DATEPICKER*/
-		.picker__weekday-display {
-		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
-		 	padding: 10px;
-		 	font-weight: 200;
-		 	letter-spacing: .5;
-		 	font-size: 1rem;
-			margin-bottom: 15px;
-		}
-
-		.picker__date-display {
-			text-align: center;
-		  	background-color: #16A5B8;
-		 	color: #fff;
-		 	padding-bottom: 15px;
-		  	font-weight: 300;
-		}
-
-		.picker__day.picker__day--today {
-		 	color: #16A5B8;
-		}
-
-		.picker__day--selected,
-		.picker__day--selected:hover,
-		.picker--focused .picker__day--selected {
-		  	border-radius: 50%;
-		    -webkit-transform: scale(0.9);
-		          transform: scale(0.9);
-		 	 background-color: #16A5B8;
-		 	 color: #ffffff;
-		}
-
-		.picker__close, .picker__today {
-		  	font-size: 1.1rem;
-		  	padding: 0 1rem;
-		 	color: #16A5B8;
-		}
-		/*==========END==========*/
-
-		/*page progress bar*/
-		.progress {
-		 	 position: relative;
-		 	 height: 8px;
-		 	 display: block;
-		 	 width: 100%;
-		 	 max-width: 200px;
-		 	 background-color: #a4ebf4; /* six levels up of #16A5B8 (40% up)*/
-		 	 border-radius: 2px;
-		 	 margin: 0.5rem 0 1rem 0;
-		 	 overflow: hidden;
-		}
-
-		.progress .determinate {
-		  	position: absolute;
-		  	top: 0;
-		  	left: 0;
-		  	bottom: 0;
-		  	background-color: #16A5B8;
-		  	transition: width .3s linear;
-		}
-		/*==========END==========*/
-
-		/*radio buttons*/
-		[type="radio"]:checked + label:after,
-		[type="radio"].with-gap:checked + label:before,
-		[type="radio"].with-gap:checked + label:after {
-		  	border: 2px solid #16A5B8;
-		}
-
-		[type="radio"]:checked + label:after,
-		[type="radio"].with-gap:checked + label:after {
-		  	background-color: #16A5B8;
-		}
-
-		/*selects*/
-		.dropdown-content li > a, .dropdown-content li > span {
-		  	font-size: 16px;
-		  	color: #16A5B8;
-		  	display: block;
-		  	line-height: 22px;
-		  	padding: 14px 16px;
-		}
-
-		/*timepicker*/
-		.clockpicker-span-am-pm {
-		 	 display: inline-block;
-		 	 font-size: 30px;
-		 	 line-height: 82px;
-		 	 color: #b2dfdb;
-		}
-		/*==========END==========*/
-
 		.dropdown-content-list {
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
 			 overflow-y: auto;
 		 	 opacity: 0;
-		 	 position: absolute; /*original: absolute*/
+		 	 position: absolute !important; /*original: absolute*/
 		 	 z-index: 999;
 		 	 will-change: width, height;
 		 	 margin-top: 97px;
-		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown */
+		 	 margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
 		}
 
 		.dropdown-content-list li {
@@ -318,6 +124,10 @@
 		  	padding: 14px 16px;
 		}
 
+		.notifcation-new {
+			background-color: #ebebeb;
+		}
+
 		.dropdown-content-notification {
 		 	 background-color: #fff;	
 		 	 display: none;
@@ -327,7 +137,6 @@
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
-		 	 will-change: width, height;
 		 	 margin-top: 97px;
 		 	 height: 350px;
 		}
@@ -371,7 +180,7 @@
 		.notifications {
 			padding-top: 15px;
 			height: 100%;
-			position: relative;
+			position: relative !important;
 		}
 
 		.notifications-header, .notifications-body {
@@ -396,66 +205,159 @@
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 50%;
-			padding: 1px 3px;
+			border-radius: 100%;
+			padding: 1 4 1 4;
 			position: relative;
 			top: 19px;
 			left: 13px
 		}
-
-		/* checkbox */
-		[type="checkbox"].filled-in:checked + label:after {
-			top: 0;
-			width: 20px;
-			height: 20px;
-			border: 2px solid #16A5B8;
-			background-color: #16A5B8;
-			z-index: 0;
+		/* for animation of notification
+		.notifications {
+			animation: notification ease-in-out 2s infinite;
+			/*
+			animation-name: notification;
+			animation-duration: 0.3s;
+			animation-iteration-count: infinite;
+			animation-timing-function: ease-in-out;
+			animation-direction: alternate;
 		}
 
-		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+		@keyframes notification1 {
+			0% { transform: rotate(0deg) }
+			5% { transform: rotate(25deg) }
+			15% { transform: rotate(-17deg) }
+			25% { transform: rotate(13deg) }
+			35% { transform: rotate(-7deg) }
+			45% { transform: rotate(3deg) }
+			55% { transform: rotate(-1deg) }
+			60% { transform: rotate(0deg) }
+			100% { transform: rotate(0deg) }
+		}
+		*/
+
+		/* ===============CARDS=============== */
+		/*headers*/
+		h1, h2, h3, h4, h5, h6 {
+			color: #292929;
+			font-family: proxima-nova;
+			text-transform: uppercase;
+		}
+
+		@font-face {
+			font-family: proxima-nova-header;
+			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
+			font-weight: bold;
+		}
+		/*=======END=======*/
+
+		.card {
+			position: relative;
+			margin: 0.5rem 0 1rem 0;
+			background-color: #f4f7f8;
+			transition: box-shadow .25s;
 			border-radius: 2px;
-			background-color: #16A5B8;
-			border-color: #16A5B8;
+			width: 330px;
+			box-shadow: none;
 		}
 
-		/*tables*/
-		.table-wrapper {
-			max-height: 300px;
-			overflow-y: auto;
+		.card:hover {
+			position: relative;
+			margin: 0.5rem 0 1rem 0;	
+			background-color: #fff;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+			transition: box-shadow .25s;
+			border-radius: 2px;
 		}
 
-		table > tbody > tr:hover {
-			cursor: hand;
-			background-color: #f2f2f2 !important;
+		.card .card-title {
+			font-size: 24px;
+			font-weight: 300;
+			font-family: proxima-nova;
+			text-transform: uppercase;
 		}
 
-		table > tbody > tr.active {
-			background-color: #16A5B8;
-			color: #fff;
-		}
-
-		table > tbody > tr.active:hover {
-			background-color: #16A5B8 !important;
-			color: #fff !important;
-		}
-
-		td {
-		  	padding: 15px 5px;
-		  	display: table-cell;
-		  	text-align: left;
-		  	vertical-align: middle;
-		  	border-radius: 0px; /* complete horizontal highlight bar*/
-		}
-
-		th {
-			color: #424242;
-		}
-
-		tbody tr:hover {
+		.card .card-image img {
+			display: block;
+			border-radius: 2px 2px 0 0;
+			position: relative;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			width: 100%;
 			cursor: pointer;
 		}
-		/* ========== END ========== */
+
+		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+			color: #16A5B8;
+			margin-right: 24px;
+			transition: color .3s ease;
+			text-transform: uppercase;
+		}
+
+		.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating):hover {
+			color: #1bcde4;
+		}
+
+		.card .card-content p {
+			margin: 0;
+			color: #6a6a6a;
+			font-family: sans-serif;
+			font-size: 13px;
+			height: inherit;
+			text-align: justify;
+			line-height: 1.5rem;
+		}
+
+		a.events {
+		    font-family: proxima-nova;
+		    font-size: 21px;
+		    color: #292929 !important;
+			cursor: pointer;
+
+		}
+
+		a.events:hover {
+		    color: #16A5B8 !important;
+		}
+
+		a.events:focus {
+			color: #1bcde4 !important;
+		}
+
+		.schedule {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 50px !important;
+			margin-bottom: 20px !important;
+			padding-top: 15px;
+		}
+
+		.schedule-multiple {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 70px !important;
+			margin-bottom: 20px !important;
+			padding: 10px;
+		}
+
+		.schedule-weekly {
+			background-color: #e4e4e4;
+			font-size: 14px !important;
+			font-weight: bolder;
+			color: #424242 !important;
+			text-align: center !important;
+			height: 90px !important;
+			margin-bottom: 20px !important;
+			padding: 10px;
+		}
+		/* ===============END=============== */
 
 		/* ===== FOOTER ===== */
 		.page-footer {
@@ -475,65 +377,24 @@
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		}); 
-	</script>
-	<script>
-	$(document).ready(function(){
-			$('.datepicker').pickadate({
-				selectMonths: true, // Creates a dropdown to control month
-				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd'
-			});
-
-			$('select').material_select();
-
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
-
-  			//old version of timepicker
-  			/*
-  			$('#timepicker1opt1').pickatime({
-  				autoclose: false
-  			});
-
-  			$('#timepicker1opt2').pickatime({
-  				autoclose: false
-  			});
-			
-			*/
-  			//new version of timepicker
-			$('.timepicker').pickatime({
-				default: 'now', // Set default time
-				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: true, // Use AM/PM or 24-hour format
-				donetext: 'DONE', // text for done-button
-				cleartext: 'Clear', // text for clear-button
-				canceltext: 'Cancel', // Text for cancel-button
-				autoclose: false, // automatic close timepicker
-				ampmclickable: false, // make AM PM clickable
-				aftershow: function(){} //Function for after opening timepicker  
-			});
 		});
 
-		function cellActive(id) { // this function allows you to highlight the table rows you select
-			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
-			var num_of_rows = document.getElementsByTagName("TR").length;
-			var rownumber = id.charAt(3);
-			for(var i = 0; i < num_of_rows; i++) {
-				document.getElementsByTagName("TR")[i].setAttribute("class", "");
+		/*
+		window.addEventListener("scroll", function() {
+			if(window.scrollY > 150) {
+				$('nav').slideUp("fast");
 			}
-			document.getElementById(id).setAttribute("class", "active");
+			else {
+				$('nav').slideDown("fast");
+			}
+		}, false);
+		*/
 
-			id = id.split("_")[1];
-			$('#generate').attr("href", "request_event-summary-reports.php?id="+id);
-		}
+		setTimeout(function() {
+			window.addEventListener("scroll", function() {
+				behavior: 'smooth'
+			});
+		}, 500);
 	</script>
 
 	<header class="top-nav">
@@ -552,6 +413,8 @@
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+			  		<li class="divider"></li>
+				  	<li><a href="proposed-ministries.php"><i class="material-icons prefix>">library_books</i>Proposed Ministries</a></li>
 				  		';
 		  		}
 			  	if($_SESSION["memberType"] == 3)
@@ -574,6 +437,10 @@
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -648,59 +515,132 @@
 			</div>
 		</nav>
 	</header>
-
 	<body>
 		<div id="response"></div>
-		<div class="container">
-			<div class="row">
-				<div class="col s3">
-				</div>
-				<div class="col s6 z-depth-4 card-panel">
-					<h3 class="center">Event Summary Reports</h3>
-					<table class="centered">
-						<thead>
-							<tr>
-								<th>Event Name(s)</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-								$conn = mysqli_connect($servername, $username, $password, $dbname);
-								if (!$conn) {
-									die("Connection failed: " . mysqli_connect_error());
-								}
+		<h3 class="center">Ministries</h3>
+		<div class="container-events">
+			<?php
+			/*
+				$conn = mysqli_connect($servername, $username, $password, $dbname);
+				if (!$conn) {
+					die("Connection failed: " . mysqli_connect_error());
+				}
 
-								if($_SESSION["memberType"] == 3)
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
-								else
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 2 ORDER BY eventName ASC;";
-								$result = mysqli_query($conn, $query);
-								if(mysqli_num_rows($result) > 0) {
-									while($row = mysqli_fetch_assoc($result)) {
-										$eventID = $row["eventID"];
-										$eventname = $row["eventName"];
-										echo '
-										<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
-										    <td>'.$eventname.'</td>
-										</tr>
-										';
-									}
-								}
-							?>
-						</tbody>
-						<tfoot></tfoot>
-					</table>
-					<a class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;" href="request_event-summary-reports.php">Generate Report</a>
+				$sql_events = "SELECT eventID, eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 ORDER BY eventStartDay DESC";
+				$result = mysqli_query($conn, $sql_events);
+				if(mysqli_num_rows($result) > 0) {
+					while($row = mysqli_fetch_assoc($result)) {
+						$id = $row["eventID"];
+						$name = $row["eventName"];
+						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["eventDescription"]));
+						$path = $row["eventPicturePath"];
+						$startday = $row["eventStartDay"];
+						$endday = $row["eventEndDay"];
+						$weekly = $row["eventWeekly"];
+						$starttime = date("h:i a", strtotime($row["eventStartTime"]));
+						$endtime = date("h:i a", strtotime($row["eventEndTime"]));
+						$schedstatus = $row["eventSchedStatus"];
+
+						if($schedstatus == 0) {
+							$startday = date("F j", strtotime($startday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
+											<p class="schedule">
+												'.$startday.' @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+						else if($schedstatus == 1) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
+											<p class="schedule-multiple">
+												'.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+						else if($schedstatus == 2) {
+							$startday = date("F j", strtotime($startday));
+							$endday = date("F j", strtotime($endday));
+							echo '
+							<div class="row">
+								<div class="col s12 m7">
+									<div class="card hoverable">
+										<div class="card-image">
+											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
+										</div>
+										<div class="card-content">
+											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
+											<p class="schedule-weekly">
+												Every '.$weekly.' <br> '.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
+											</p>
+											<p>
+												'.$description.'
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>';
+						}
+					}
+				}
+				*/
+			?>
+			<!--<div class="row">
+				<div class="col s12 m7">
+					<div class="card hoverable">
+						<div class="card-image">
+							<img src="resources/Elevate Unite.jpg" class="stretch">
+						</div>
+						<div class="card-content">
+							<a class="card-title events">ELEVATE UNITE</a>
+							<p class="schedule">
+								July 15 @ 1:00 pm - 5:30 pm
+							</p>
+							<p>
+								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
+								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
+
+								The time to act is NOW!
+
+								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
+							</p>
+						</div>
+					</div>
 				</div>
-				<div class="col s3">
-					
-				</div>
-			</div>
+			</div>-->
 		</div>
 	</body>
 
 	<main>
-	</main>
+	</main>	
 
 	<footer class="page-footer">
 		<div class="container">
@@ -717,7 +657,48 @@
 			</div>
 		</div>
 	</footer>
-	
+
+	<script>
+	// initialize
+	var $container = jQuery('.container-events');
+	$container.isotope({
+		// options
+		itemSelector: '.row',
+		layoutMode: 'masonry',
+		masonry: {
+			columnWidth: 20
+		}
+	});
+
+	$(window).resize(function() { // in every event of zoom in/out, isotope re-initializes
+		var $container = jQuery('.container-events');
+		setTimeout(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		}, 500);
+	});
+
+	// re-initialize
+	jQuery(function() { // allows to load the image first before layout isotope executes
+		var $container = jQuery('.container-events');
+		$container.imagesLoaded(function() {
+			$container.isotope({
+				// options
+				itemSelector: '.row',
+				layoutMode: 'masonry',
+				masonry: {
+					columnWidth: 20
+				}
+			});
+		});
+	});
+	</script>
 	 <!-- this section is for notification approval of requests -->
 	<script>
 		function approval() {
@@ -799,18 +780,5 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
-
-		$('#generate-event-report').submit(function(e) {
-			var url = "request_event-summary-reports.php";
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: $(this).serialize(),
-				success: function(data) {
-					
-				}
-			});
-			e.preventDefault();
-		});
 	</script>
 </html>
