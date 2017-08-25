@@ -551,7 +551,7 @@
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
-				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
 		  		}
 			  	if($_SESSION["memberType"] == 3)
@@ -639,11 +639,8 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      		<!-- FOR DGROUP MEMERS
-			        	<li><a href="profile.php">PROFILE</a></li>
-			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
 						<li><a href="events.php">EVENTS</a></li>
-						<li><a href="ministry.php">MINISTRIES</a></li>
+						<li><a href="ministries.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
 						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
 			     	 </ul>
@@ -673,7 +670,10 @@
 									die("Connection failed: " . mysqli_connect_error());
 								}
 
-								$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+								if($_SESSION["memberType"] == 3)
+									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+								else
+									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 2 ORDER BY eventName ASC;";
 								$result = mysqli_query($conn, $query);
 								if(mysqli_num_rows($result) > 0) {
 									while($row = mysqli_fetch_assoc($result)) {

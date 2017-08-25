@@ -716,7 +716,7 @@
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
-				  	<li><a href="pministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
 		  		}
 			  	if($_SESSION["memberType"] == 3)
@@ -804,14 +804,17 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+<<<<<<< HEAD
 			      		<!-- FOR DGROUP MEMBERS
 			        	<li><a href="profile.php">PROFILE</a></li>
 			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
+=======
+>>>>>>> Jasper-Edits
 						<li><a href="events.php">EVENTS</a></li>
-						<li><a href="ministry.php">MINISTRIES</a></li>
-						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account" style="position: relative;">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
+						<li><a href="ministries.php">MINISTRIES</a></li>
+						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
 						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
-					</ul>
+			     	 </ul>
 			    </div>
 			</div>
 		</nav>
