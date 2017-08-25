@@ -734,15 +734,26 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT CONCAT_WS(' ', firstName, lastName) AS fullname, endorsementID, dgmemberID FROM member_tbl LEFT OUTER JOIN discipleshipgroupmembers_tbl ON member_tbl.memberID = discipleshipgroupmembers_tbl.memberID LEFT OUTER JOIN endorsement_tbl ON discipleshipgroupmembers_tbl.dgroupmemberID = endorsement_tbl.dgmemberID LEFT OUTER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID	WHERE endorsementStatus = 0 AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'].";";
+
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$endorsementID = $row["endorsementID"];
+												$fullname = $row["fullname"];
+												echo '
+												<tr id="row_'.$endorsementID.'" onclick="cellActive(this.id)">
+												    <td>'.$fullname.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -1004,5 +1015,60 @@
 			});
 			e.preventDefault();
 		});
+
+		function cellActive(id) { // this function allows you to highlight the table rows you select
+			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
+			var num_of_rows = document.getElementsByTagName("TR").length;
+			var rownumber = id.charAt(3);
+			for(var i = 0; i < num_of_rows; i++) {
+				document.getElementsByTagName("TR")[i].setAttribute("class", "");
+			}
+			document.getElementById(id).setAttribute("class", "active");
+			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			id = id.split("_")[1];
+			//history.pushState(null, null, "proposed-events.php?id="+id);
+
+
+			// ajax + preloader
+			var url = "request_endorsements.php";
+			preload();
+			$('button').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$("#page1").css("opacity", 0.2);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+id,
+				dataType: 'json',
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$("#page1").css("opacity", 1);
+					$('button').prop("disabled", false);
+					disableForm(false);
+					$('#eventID').val(id);
+					$('#form-header').text(data.name);
+					// access echo values data.<key value of array>
+					// ex. alert(data.a);
+
+					$('#BaptismalDate').val(data.bpdate);
+					$('#BaptismalPlace').val(data.bpplace);
+					$('#DgroupType').val(data.dgtype);
+					$('#AgeBracket').val(data.agebracket);
+					$('#MeetingDay').val(data.meetday);
+					$('#timepicker1opt1').val(data.starttime);
+					$('#timepicker1opt2').val(data.endtime);
+					$('#MeetingPlace').val(data.meetplace);
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
+
+					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#EventPictureName').val(data.picturepath.split("/")[1]);
+				}
+			});
+		}
+		
 	</script>
 </html>
