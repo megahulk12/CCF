@@ -770,6 +770,26 @@
 		}
 	</script>
 
+	<script>
+		// real time update notification
+		// SSE - Server-Sent Events
+
+		if(typeof(EventSource) !== "undefined") {
+			var source = new EventSource("push_notifs.php");
+			source.onmessage = function(e) {
+				if(e.data >= 1) {
+					// data should always be the attribute
+					$('#bell').html('<i class="material-icons material-icon-notification">notifications</i>\
+									 <sup class="notification-badge">'+e.data+'</sup>');
+				}
+			};
+		}
+		else {
+			// pass
+		}
+
+	</script>
+
 	<?php /*
 		if(isset($_POST['submit'])) {
 			echo '

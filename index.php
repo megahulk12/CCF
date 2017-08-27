@@ -487,6 +487,11 @@
 						<li><a href="ministries.php" class="transition">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button transition" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
 						<li><a class="dropdown-button notifications transition" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
+						<?php
+							echo '
+								<input type="hidden" id="push-notif" name="push-notif" value="'.$_SESSION['userid'].'">
+							';
+						?>
 			     	 </ul>
 			    </div>
 			</div>
@@ -708,8 +713,28 @@
 				else {
 					ticker += 400;
 					$(this).delay(ticker).fadeIn(500); //1800
-				}
+				}	
 			});
 		});
+	</script>
+
+	<script>
+		// real time update notification
+		// SSE - Server-Sent Events
+
+		if(typeof(EventSource) !== "undefined") {
+			var source = new EventSource("push_notifs.php");
+			source.onmessage = function(e) {
+				if(e.data >= 1) {
+					// data should always be the attribute
+					$('#bell').html('<i class="material-icons material-icon-notification">notifications</i>\
+									 <sup class="notification-badge">'+e.data+'</sup>');
+				}
+			};
+		}
+		else {
+			// pass
+		}
+
 	</script>
 </html>
