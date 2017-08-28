@@ -15,11 +15,11 @@
 		// insert code set notificationStatus = 1 when user clicks notification area
 		$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 		$result = mysqli_query($conn, $query);
+		$view = '
+		<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
+		<li class="divider"></li>
+		';
 		if(mysqli_num_rows($result) > 0) {
-			$view = '
-			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
-			<li class="divider"></li>
-			';
 			while($row = mysqli_fetch_assoc($result)) {
 				//$receivermemberID = $row['receivermemberID']; testing muna ito
 				$notificationDesc = $row['notificationDesc'];
@@ -53,7 +53,8 @@
 				$view .= '<li class="divider"></li>';
 			}
 		}
-		$data = array('view'=>$view);
+		$count = allNotifCount();
+		$data = array("view"=>$view, "count"=>$count);
 		echo json_encode($data);
 	}
 ?>

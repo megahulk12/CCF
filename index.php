@@ -335,7 +335,7 @@
 
 		.spinner-color-notif-transition {
 			border-color: #fff !important;
-			transition: border-color 0.3s;
+			transition: border-color 0.3s !important;
 		}
 		/* ===== END ===== */
 	</style>
@@ -672,16 +672,32 @@
 					</div> \
 				</div> \
 			  ';
-			$('#notifications').append(preloader);
+			var notification = 
+			$('#notifications').html('\
+			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+			<li class="divider"></li>'+preloader);
+			$('.dropdown-content li').addClass('transition');
+			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');	
+			$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
 			$.ajax({
 				type: 'POST',
 				url: url,
 				data: 'view',
 				dataType: 'json',
 				success: function(data) {
-					$('#notifications').html(data.view);
-					$('.dropdown-content li').addClass('transition');
-					$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+					if(data.count >= 1) {
+						$('#notifications').html(data.view);
+						$('.dropdown-content li').addClass('transition');
+						$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+					}
+					else {
+						$('#notifications').html('\
+						<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+						<li class="divider"></li>\
+						<li><a class="center">No new notifications</a></li>');
+						$('.dropdown-content li').addClass('transition');
+						$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+					}
 				}
 			});
 		}

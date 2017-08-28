@@ -737,14 +737,25 @@
 					</div> \
 				</div> \
 			  ';
-			$('#notifications').append(preloader);
+			var notification = 
+			$('#notifications').html('\
+			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+			<li class="divider"></li>'+preloader);
 			$.ajax({
 				type: 'POST',
 				url: url,
 				data: 'view',
 				dataType: 'json',
 				success: function(data) {
-					$('#notifications').html(data.view);
+					if(data.count >= 1) {
+						$('#notifications').html(data.view);
+					}
+					else {
+						$('#notifications').html('\
+						<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+						<li class="divider"></li>\
+						<li><a class="center">No new notifications</a></li>');
+					}
 				}
 			});
 		}
