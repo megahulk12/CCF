@@ -20,6 +20,7 @@
 		while($row = mysqli_fetch_assoc($result)) {
 			$count = $row['count'];
 			// data should always be the attribute
+			echo "retry: 10000\n";
 			echo "data: {$count}\n\n";
 			flush();
 		}
