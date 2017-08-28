@@ -710,9 +710,8 @@
 								<label>Day</label>
 								<small class="error" id="WeeklyDay-required"></small>
 							</div>
-							<div>
-								<h4 class="center">Time</h4>
-							</div>
+							&nbsp;
+							<h4 class="center">Time</h4>
 							<div class="input-field col s6">
 								<input type="date" class="timepicker" id="EventTime1" name="EventTime1" required>
 								<label for="EventTime1">Start</label>
@@ -727,6 +726,7 @@
 								<small class="error" id="EventTime2-greatertime"></small>
 								<small class="error" id="EventTime2-equaltime"></small>
 							</div>
+							&nbsp;
 							<h4 class="center">Location</h4>
 							<div class="input-field col s12">
 								<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50" required>
@@ -1004,7 +1004,7 @@
 			end_time = new Date(d + " " + end_time);
 			start_time = start_time.getTime();
 			end_time = end_time.getTime();
-			if(start_time > end_time) {
+			if((start_time > end_time) && !($('#EventTime2').val() == "")) {
 				$("[id$=greatertime]").show();
 				focused_element = $("#EventTime1");
 				check_iteration = false;
@@ -1020,7 +1020,7 @@
 			// convert date values to timestamp; DATE VALIDATION
 			if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
 				var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
-				var day = start_date.split(",")[0].split(" ")[0], month = end_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
+				var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
 				start_date = month + " " + day + "," + year;
 				day = end_date.split(",")[0].split(" ")[0];
 				month = end_date.split(",")[0].split(" ")[1];
@@ -1054,7 +1054,7 @@
 					if($(this).is('select')) {
 						if($(this).val() == null) {
 							$("small#"+this.id+"-required").show();
-							focused_element = $(this);
+							focused_element = $('#WeeklyEvent');
 							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
