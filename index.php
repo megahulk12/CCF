@@ -371,6 +371,7 @@
 		});
 
 		// navbar scroll state
+		var belowTop = false;
 		window.addEventListener("scroll", function() {
 			if(window.scrollY > 10) {
 				$('nav').removeClass('transition');
@@ -386,6 +387,7 @@
 				$('.dropdown-content li > a, .dropdown-content li > h6').removeClass('transition');
 				$('#notifications div.spinner-layer').removeClass('spinner-color-notif-transition');
 				$('nav a img').attr('src', "resources/CCF Logos6.png");
+				belowTop = false;
 			}
 			else {
 				$('nav').addClass('transition');
@@ -403,6 +405,7 @@
 				$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
 				$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
 				$('nav a img').attr('src', "resources/CCF Logos8.png");
+				belowTop = true;
 			}
 		}, false);
 	</script>
@@ -676,9 +679,11 @@
 			$('#notifications').html('\
 			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
 			<li class="divider"></li>'+preloader);
-			$('.dropdown-content li').addClass('transition');
-			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');	
-			$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
+			if(belowTop) {
+				$('.dropdown-content li').addClass('transition');
+				$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+				$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
+			}
 			$.ajax({
 				type: 'POST',
 				url: url,
@@ -687,16 +692,20 @@
 				success: function(data) {
 					if(data.count >= 1) {
 						$('#notifications').html(data.view);
-						$('.dropdown-content li').addClass('transition');
-						$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+						if(belowTop) {
+							$('.dropdown-content li').addClass('transition');
+							$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+						}
 					}
 					else {
 						$('#notifications').html('\
 						<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
 						<li class="divider"></li>\
 						<li><a class="center">No new notifications</a></li>');
-						$('.dropdown-content li').addClass('transition');
-						$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+						if(belowTop) {
+							$('.dropdown-content li').addClass('transition');
+							$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
+						}
 					}
 				}
 			});
