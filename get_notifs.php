@@ -42,7 +42,7 @@
 					$view .= '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
-					$view .= '<li><a>'.$notificationDesc.'</a></li>';
+					$view .= '<li><a href="events.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
 

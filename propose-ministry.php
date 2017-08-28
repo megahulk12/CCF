@@ -561,58 +561,8 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
 			<li class="divider"></li>
-			<?php
-				// database connection variables
-
-				$servername = "localhost";
-				$username = "root";
-				$password = "root";
-				$dbname = "dbccf";
-				$conn = mysqli_connect($servername, $username, $password, $dbname);
-				if (!$conn) {
-					die("Connection failed: " . mysqli_connect_error());
-				}
-
-				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
-				$result = mysqli_query($conn, $query);
-				if(mysqli_num_rows($result) > 0) {
-					while($row = mysqli_fetch_assoc($result)) {
-						//$receivermemberID = $row['receivermemberID']; testing muna ito
-						$notificationDesc = $row['notificationDesc'];
-						$notificationStatus = $row['notificationStatus'];
-						$notificationType = $row['notificationType'];
-						$request = $row['request'];
-						if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
-							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 1) { // for result notifs of request approve
-							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
-							echo '<li><a>'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
-							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
-							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
-							echo '<li><a>'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
-
-						}
-						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
-
-						}
-						echo '<li class="divider"></li>';
-					}
-				}
-			?>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
