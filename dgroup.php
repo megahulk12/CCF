@@ -849,6 +849,32 @@
 			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
 			document.getElementById('badge').innerHTML = "Notifications";
 			setSeenRequest(); // records in the database that user has seen or read the notifications
+			
+			// get Notifications using ajax
+			var url = "get_notifs.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active spinner-notif"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('#notifications').append(preloader);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'view',
+				dataType: 'json',
+				success: function(data) {
+					$('#notifications').html(data.view);
+				}
+			});
 		}
 		
 		function setSeenRequest() {
