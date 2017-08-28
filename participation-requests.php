@@ -445,6 +445,16 @@
 		.spinner-color-theme {
 			border-color: rgba(0, 0, 0, 0.4);
 		}
+
+		.spinner-notif {
+			position: relative;
+			left: 190px; /* half of width of notif list*/
+			top: 100px; /* half of height of notif list*/
+		}
+
+		.spinner-color-notif {
+			border-color: #777;
+		}
 		/* ===== END ===== */
 
 		/*tables*/

@@ -370,6 +370,23 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.spinner-notif {
+			position: relative;
+			left: 190px; /* half of width of notif list*/
+			top: 100px; /* half of height of notif list*/
+		}
+
+		.spinner-color-notif {
+			border-color: #777;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
