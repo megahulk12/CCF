@@ -1,6 +1,12 @@
 <?php
    include('config.php');
    session_start();
+
+   // initialization of database connection variables
+   $servername = "localhost";
+   $username = "root";
+   $password = "root";
+   $dbname = "dbccf";
    
    $user_check = $_SESSION['user'];
    

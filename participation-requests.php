@@ -19,7 +19,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	
+
 	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 
 	<style>
@@ -74,6 +74,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -92,7 +93,7 @@
 		}
 
 		/*form*/
-		.endorsement {
+		.participation-requests {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -103,6 +104,7 @@
 			font-family: proxima-nova;
 			text-transform: uppercase;
 		}
+
 		/*=======END=======*/
 
 		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
@@ -157,10 +159,8 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.profile-next-or-submit-button {
-			margin-right: 9px;
+		  	/* margin-right: 9px; */
+		  	z-index: 1;
 		}
 
 		/*background-color for icons if focus is inactive*/
@@ -187,12 +187,13 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+			color: #fff;
 		}
 
 
 		.card-panel {
 		 	 transition: box-shadow .25s;
-		 	 padding: 24px;
+		 	 padding: 24px !important;
 		 	 margin: 0.5rem 0 1rem 0;
 		 	 border-radius: 2px;
 		 	 background-color: #fff;
@@ -410,10 +411,40 @@
 			left: 13px
 		}
 
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
+			background-color: #16A5B8;
+			z-index: 0;
+		}
+
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
+			background-color: #16A5B8;
+			border-color: #16A5B8;
+		}
+
+		#preloader {
+			position: relative;
+			width: 0 !important;
+		}
+
+		#participation-requests {
+			margin: 0 auto;
+			height: 400px;
+		}
+
 		/* ===== PRELOADER ===== */
 		.preloader-wrapper.small {
 			width: 24px;
 			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
 		}
 
 		.spinner-notif {
@@ -424,6 +455,56 @@
 
 		.spinner-color-notif {
 			border-color: #777;
+		}
+		/* ===== END ===== */
+
+		/*tables*/
+		.table-wrapper {
+			max-height: 300px;
+			overflow-y: auto;
+		}
+
+		table > tbody > tr:hover {
+			cursor: hand;
+			background-color: #f2f2f2 !important;
+		}
+
+		table > tbody > tr.active {
+			background-color: #16A5B8;
+			color: #fff;
+		}
+
+		table > tbody > tr.active:hover {
+			background-color: #16A5B8 !important;
+			color: #fff !important;
+		}
+
+		td {
+		  	padding: 15px 5px;
+		  	display: table-cell;
+		  	text-align: left;
+		  	vertical-align: middle;
+		  	border-radius: 0px; /* complete horizontal highlight bar*/
+		}
+
+		th {
+			color: #424242;
+		}
+
+		tbody tr:hover {
+			cursor: pointer;
+		}
+		/* ========== END ========== */
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
 		}
 		/* ===== END ===== */
 	</style>
@@ -440,23 +521,10 @@
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
-				formatSubmit: 'yyyy-mm-dd',
-				max: true
+				formatSubmit: 'yyyy-mm-dd'
 			});
-			 
-			$(document).ready(function() {
-				$('select').material_select();
-			}); 
 
-			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
+			$('select').material_select();
 
   			//old version of timepicker
   			/*
@@ -473,15 +541,116 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
+				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
+				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 		});
+
+		$(document).ready(function() {
+			preload();
+		});
+
+		function cellActive(id) { // this function allows you to highlight the table rows you select
+			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
+			var num_of_rows = document.getElementsByTagName("TR").length;
+			var rownumber = id.charAt(3);
+			for(var i = 0; i < num_of_rows; i++) {
+				document.getElementsByTagName("TR")[i].setAttribute("class", "");
+			}
+			document.getElementById(id).setAttribute("class", "active");
+			//document.getElementById("table").setAttribute("class", "highlight centered");
+
+			id = id.split("_")[1];
+
+
+			// ajax + preloader
+			var url = "request_participation-requests.php";
+			preload();
+			$('button').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$("#page1").css("opacity", 0.2);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+id,
+				dataType: 'json',
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$("#page1").css("opacity", 1);
+					$('button').prop("disabled", false);
+					$('#eventPartID').val(id);
+
+					$('#form-header').text(data.fname + ' ' + data.lname);
+					$('#Lastname').val(data.lname);
+					$('#Firstname').val(data.fname);
+					$('#Middlename').val(data.mname);
+					$('#Nickname').val(data.nname);
+					$('#Birthdate').val(data.birthdate);
+					if(data.gender == "Male")
+						$('#Gender_Male').prop("checked", true);
+					else
+						$('#Gender_Female').prop("checked", true);
+					$('#Citizenship').val(data.citizenship);
+					$('#CivilStatus').val(data.civilstatus);
+					$('#MobileNumber').val(data.contactnum);
+					$('#Email').val(data.emailad);
+					$('#Profession').val(data.occupation);
+					$('#HomeAddress').val(data.haddress);
+					$('#HomePhoneNumber').val(data.hphonenumber);
+					$('#CompanyName').val(data.cname);
+					$('#CompanyContactNum').val(data.ccontactnum);
+					$('#CompanyAddress').val(data.caddress);
+					$('#SchoolName').val(data.sname);
+					$('#SchoolContactNum').val(data.scontactnum);
+					$('#SchoolAddress').val(data.saddress);
+					$('#SpouseName').val(data.spname);
+					$('#SpouseMobileNumber').val(data.spcontactnum);
+					$('#SpouseBirthdate').val(data.spbirthdate);
+
+					// re-initialize to update text field
+					Materialize.updateTextFields();
+
+					// data validation display part
+
+					// default and initialization states
+					var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+					
+					/* ===== SPOUSE VALIDATION ===== */
+					var civilstatusid = "#CivilStatus"
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
+						spouse.hide();
+					}
+
+					/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+					var professionid = "#Profession";
+					if($(professionid).val().toLowerCase() == "student") {
+						company.hide();
+					}
+					else {
+						school.hide();
+					}
+
+				}
+			});
+		}
+
+		function disableForm(flag) {
+			$('div#page1').children().find('input, textarea, select').each(function() {
+				$(this).prop("disabled", flag);
+			});
+		}
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#participation-requests').width()/2);
+			$('#preloader').css("top", $('#participation-requests').height()/2);
+			disableForm(true);
+		}
 	</script>
 
 	<header class="top-nav">
@@ -558,116 +727,250 @@
 		</nav>
 	</header>
 
-	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div id="response"></div>
-		<div class="row">
-			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
-					<div id="page1">
-						<h3 class="center">ENDORSEMENT FORM</h3>
-						<h4 class="center">BAPTISMAL</h4>
-						<div class="row">
-							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
-								<label for="BaptismalDate" class>When were you baptized?</label>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
-								<label for="BaptismalPlace">Where were you baptized?</label>
-							</div>
-							<h4 class="center">DGROUP</h4>
-							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
-								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Youth">Youth</option>
-										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
-										<option value="Married">Married</option>
-										<option value="Couples">Couples</option>
-									</select>
-									<label>Type of Dgroup</label>
-								</div>
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="AgeBracket">Age Bracket</label>
-							</div>
-							<h4 class="center">MEETING</h4>
-							<div class="row" style="margin-bottom: 0px;">
-								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
-										<option value="Monday">Monday</option>
-										<option value="Tuesday">Tuesday</option>
-										<option value="Wednesday">Wednesday</option>
-										<option value="Thursday">Thursday</option>
-										<option value="Friday">Friday</option>
-										<option value="Saturday">Saturday</option>
-									</select>
-									<label>Day</label>
-								</div>
-							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt1">Start Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt2">End Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-							</div>
-							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
-								<label for="MeetingPlace">Place</label>
-							</div>
+		<div class="container">
+			<h2 class="center">Participation Requests</h2>
+			<div class="row">
+				<div class="col s12 z-depth-4 card-panel">
+					<div class="col s5">
+						<div class="col s12">
+							<h3 class="center">Requests</h3>
+							<table class="centered">
+								<thead>
+									<tr>
+										<th>Participant</th>
+										<th>Event to Attend</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+
+										$query = "SELECT eventParticipationID, eventparticipation_tbl.eventID AS eid, eventName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM eventparticipation_tbl LEFT OUTER JOIN eventdetails_tbl ON eventparticipation_tbl.eventID = eventdetails_tbl.eventID LEFT OUTER JOIN member_tbl ON eventparticipation_tbl.memberID = member_tbl.memberID WHERE eventPartStatus = 0 ORDER BY eventName ASC;";
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$epartid = $row["eventParticipationID"];
+												$name = $row["eventName"];
+												$fullname = $row["fullname"];
+												echo '
+												<tr id="row_'.$epartid.'" onclick="cellActive(this.id)">
+												    <td>'.$fullname.'</td>
+												    <td>'.$name.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
+								</tbody>
+								<tfoot></tfoot>
+							</table>
 						</div>
 					</div>
-					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
+					<div class="col s7" id="form">
+						<div class="container">
+							<form method="post" id="participation-requests">
+								<h3 class="center" id="form-header"></h3>
+								<div class="row">
+									<div id="preloader">
+										<div class="preloader-wrapper small active">
+											<div class="spinner-layer spinner-blue-only spinner-color-theme">
+												<div class="circle-clipper left">
+													<div class="circle"></div>
+												</div><div class="gap-patch">
+													<div class="circle"></div>
+												</div><div class="circle-clipper right">
+													<div class="circle"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="page1" class="">
+										<div class="row">
+											<h4 class="center">Personal Information</h4>
+											<div class="input-field col s12">
+												<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
+												<label for="Lastname">Last Name</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
+												<label for="Firstname">First Name</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
+												<label for="Middlename">Middle Name</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
+												<label for="Nickname">Nickname</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="datepicker" id="Birthdate" name="Birthdate"> <!-- originally date type, OC ito haha -->
+												<label for="Birthdate">Birthdate</label>
+											</div>
+
+											<h4 class="center">Other Information</h4>
+											<p style="margin-top: 40px;">
+												<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
+												<input type="radio" id="Gender_Male" name="Gender" value="Male"/>
+												<label for="Gender_Male">Male</label>
+												<input type="radio" id="Gender_Female" name="Gender" value="Female"/>
+												<label for="Gender_Female">Female</label>
+											</p>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+												<label for="Citizenship">Citizenship</label>
+											</div>
+											<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
+												<div class="input-field col s12">
+													<input type="text" id="CivilStatus" name="CivilStatus">
+													<label for="CivilStatus">Civil Status</label>
+												</div>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
+												<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30">
+												<label for="Email" data-error="Invalid email address">Email Address</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30">
+												<label for="Profession">Profession/Occupation</label>
+											</div>
+
+
+											<h5 class="center">Home</h5>
+											<div class="input-field col s12">
+												<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+												<label for="HomeAddress">Address</label>
+											</div>
+											<div class="input-field col s12">
+												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+												<label for="HomePhoneNumber">Home Phone Number</label>
+											</div>
+											<h5 class="center company">Company</h5>
+											<div class="input-field col s12 company">
+												<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+												<label for="CompanyName">Company Name</label>
+											</div>
+											<div class="input-field col s12 company">
+												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+												<label for="CompanyContactNum">Company Contact Number</label>
+											</div>
+											<div class="input-field col s12 company">
+												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+												<label for="CompanyAddress">Company Address</label>
+											</div>
+											<h5 class="center school">School</h5>
+											<div class="input-field col s12 school">
+												<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+												<label for="SchoolName">School Name</label>
+											</div>
+											<div class="input-field col s12 school">
+												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+												<label for="SchoolContactNum">School Contact Number</label>
+											</div>
+											<div class="input-field col s12 school">
+												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+												<label for="SchoolAddress">School Address</label>
+											</div>
+											<h5 class="center spouse">Spouse</h5>
+											<div class="input-field col s12 spouse">
+												<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+												<label for="SpouseName">Spouse Name</label>
+											</div>
+											<div class="input-field col s12 spouse">
+												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+											</div>
+											<div class="input-field col s12 spouse">
+												<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+												<label for="SpouseBirthdate">Birthdate</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<input type="hidden" id="eventPartID" name="eventPartID">
+									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
+									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
+								</div>
+							</form>
+						</div>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	</body>
-	<script>
-		function requestLeader() {
-			$('#Eform').submit(function(e) {
-				var url="request.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: 'request=g&'+$('#Eform').serialize(), 
-					success: function(data) {
-						alert(data);
-						swal({
-							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-							type: "success",
-							allowEscapeKey: true
-						},
-							function() { window.location.href = "index.php"; }
-						);
-					}
-				});
-				e.preventDefault();
-			});
-			
-		}
-	</script>
 
-	<script>
-		function endorsementComplete() {
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		}
-			 <!-- this section is for notification approval of requests -->
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 	
+	 <!-- this section is for notification approval of requests -->
+	<script>
+		// blur clickable elements
+		$('a#add-link').click(function() {
+			$('a#add-link').blur();
+		});
+
+		// preloader section
+		$('button').prop("disabled", true);
+		$('button').click(function() {
+			$('button').blur();
+		});
+
+		function checkIfSingle() {
+			if(document.getElementById('SingleDay').checked) {
+				document.getElementById('Event_Date_End').style.display = "none";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
+				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
+				document.getElementById('Weekly').checked = false;
+			}
+			else {
+				$('#Event_Date_End').fadeIn(200);
+				document.getElementById('lblEventDateStart').innerHTML = "Start";
+				document.getElementById('Event_Date_End').style.display = "inline";
+				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
+				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+			}
+		}
+
+		$(document).ready(function() {
+			$('#WeeklyEvent').hide();
+		});
+		function checkIfWeekly() {
+			if(document.getElementById('Weekly').checked) {
+				$('#WeeklyEvent').show();
+				document.getElementById('SingleDay').checked = false;
+			}
+			else {
+				$('#WeeklyEvent').hide();
+
+			}
+		}
+
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -788,6 +1091,79 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		$('#notify').click(function() {
+			swal({
+				title: "Remarks",
+				type: "input",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+				inputPlaceholder: "Say something about this request"
+			}, function(value) {
+				if(value === false) return false
+				if(value === "") {
+					swal.showInputError("Oops! It seems that you haven't typed anything.");
+					return false;
+				}
+				var url = "request_participation-requests.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "notify=g&id="+$('#eventPartID').val()+"&notifvalue="+value,
+					success: function(data) {
+						swal({
+							title: "Success!",
+							type: "success",
+							text: "Remarks successfully sent!"
+						});
+					}
+				});
+			});
+		});
+
+		$('#participation-requests').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
+			var url = "request_participation-requests.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+$('#eventPartID').val()+"&approve",
+				success: function(data) {
+					$('.fixbutton').text('Approve');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Request Approved!",
+						text: "Attendance will now be recorded.",
+						type: "success",
+						allowEscapeKey: true,
+						allowOutsideClick: true,
+						timer: 10000
+					}, function() { window.location.reload(); });
+				}
+			});
+			e.preventDefault();
+		});
 	</script>
 
 	<script>
@@ -810,19 +1186,4 @@
 		}
 
 	</script>
-
-	<?php /*
-		if(isset($_POST['submit'])) {
-			echo '
-		<script>
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		</script>
-			';
-		} */
-	?>
 </html>

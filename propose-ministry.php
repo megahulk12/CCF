@@ -19,7 +19,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	
+
 	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 
 	<style>
@@ -74,6 +74,7 @@
 
 		body {
 			margin-top: 150px;
+			overflow-x: auto;
 		}
 		
 		li a:hover {
@@ -92,7 +93,7 @@
 		}
 
 		/*form*/
-		.endorsement {
+		.propose-ministry {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -157,10 +158,8 @@
 		.fixbutton {
 		  	background-color: #16A5B8;
 		  	color: #fff;
-		}
-
-		.profile-next-or-submit-button {
-			margin-right: 9px;
+		  	margin-right: 9px;
+		  	z-index: 1;
 		}
 
 		/*background-color for icons if focus is inactive*/
@@ -187,6 +186,7 @@
 		.btn:focus, .btn-large:focus,
 		.btn-floating:focus {
 		  	background-color: #1bcde4;
+			color: #fff;
 		}
 
 
@@ -410,10 +410,63 @@
 			left: 13px
 		}
 
+		/* checkbox */
+		[type="checkbox"].filled-in:checked + label:after {
+			top: 0;
+			width: 20px;
+			height: 20px;
+			border: 2px solid #16A5B8;
+			background-color: #16A5B8;
+			z-index: 0;
+		}
+
+		[type="checkbox"].filled-in.tabbed:checked:focus + label:after {
+			border-radius: 2px;
+			background-color: #16A5B8;
+			border-color: #16A5B8;
+		}
+
+		/* ===== FOOTER ===== */
+		.page-footer {
+			margin-top: 100px;
+			background-color: #16A5B8;
+		}
+
+		p.footer-cpyrght {
+			font-family: sans-serif;
+			color: #fff;
+		}
+		/* ===== END ===== */
+
+		.close-error {
+			background: none;
+			float: right;
+			padding: 16px;
+			text-align: center;
+			border: 0;
+			opacity: 0.6;
+			color: inherit;
+			cursor: pointer;
+		}
+
+		.small {
+			font-size: 1.4rem !important;
+			font-weight: bold;
+		}
+
+		.close-error:hover {
+			text-decoration: none;
+			color: rgba(0, 0, 0, 1);
+		}
+
 		/* ===== PRELOADER ===== */
 		.preloader-wrapper.small {
 			width: 24px;
 			height: 24px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
 		}
 
 		.spinner-notif {
@@ -441,22 +494,12 @@
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
 				formatSubmit: 'yyyy-mm-dd',
-				max: true
+				min: true
 			});
-			 
-			$(document).ready(function() {
-				$('select').material_select();
-			}); 
+
+			$('select').material_select();
 
 			// when dynamic changes are applied to textareas, reinitialize autoresize (call it again)
-			$('#receivedChrist').val();
-  			$('#receivedChrist').trigger('autoresize');
-
-			$('#attendCCF').val();
-  			$('#attendCCF').trigger('autoresize');
-
-			$('#regularlyAttendsAt').val();
-  			$('#regularlyAttendsAt').trigger('autoresize');
 
   			//old version of timepicker
   			/*
@@ -473,12 +516,12 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
+				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
 				autoclose: false, // automatic close timepicker
-				ampmclickable: true, // make AM PM clickable
+				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
 		});
@@ -558,48 +601,54 @@
 		</nav>
 	</header>
 
-	<!-- do not show endorsement form when he/she is already a leader and he/she is a member that is not requesting to be a leader --> 
 	<body>
 		<div id="response"></div>
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
-				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
+				<form method="post" class="propose-ministry" id="propose-ministry" enctype="multipart/form-data"> <!--if php is applied, action value will then become the header -->
 					<div id="page1">
-						<h3 class="center">ENDORSEMENT FORM</h3>
-						<h4 class="center">BAPTISMAL</h4>
+						<h3 class="center">Ministry Proposal</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
-								<label for="BaptismalDate" class>When were you baptized?</label>
+								<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50">
+								<label for="MinistryName">Ministry Name</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
-								<label for="BaptismalPlace">Where were you baptized?</label>
+								<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500"></textarea>
+								<label for="MinistryDesc">Ministry Description</label>
 							</div>
-							<h4 class="center">DGROUP</h4>
-							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
-								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
-										<option value="" disabled selected>Choose your option...</option>
-										<option value="Youth">Youth</option>
-										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
-										<option value="Married">Married</option>
-										<option value="Couples">Couples</option>
-									</select>
-									<label>Type of Dgroup</label>
+							<div class="file-field input-field col s12">
+								<div class="btn">
+									<span>Picture</span>
+									<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
+								</div>
+								<div class="file-path-wrapper">
+									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
+								</div>
+								<div class="row ministry-pic">
 								</div>
 							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
-								<label for="AgeBracket">Age Bracket</label>
+							<h4 class="center">Date</h4>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Custom" name="MeetingStatus" value="Custom" onclick="checkIfCustom();"/>
+									<label for="Custom">Custom Meeting</label>
+								</div>
+							</p>
+							<p>
+								<div class ="row" style="margin-left:5px;">
+									<input type="radio" id="Weekly" name="MeetingStatus" value="Weekly" onclick="checkIfWeekly();"/>
+									<label for="Weekly">Weekly Meeting</label>
+								</div>
+							</p>
+							<div class="input-field col s12" id="Meeting_Date">
+								<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate">
+								<label for="MeetingDate">Meeting Date</label>
 							</div>
-							<h4 class="center">MEETING</h4>
-							<div class="row" style="margin-bottom: 0px;">
-								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
+								<div class="input-field col s12" id="WeeklyMeeting">
+									<select id="WeeklyDay" name="WeeklyDay">
 										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
+										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
 										<option value="Tuesday">Tuesday</option>
 										<option value="Wednesday">Wednesday</option>
@@ -609,65 +658,143 @@
 									</select>
 									<label>Day</label>
 								</div>
+							<h4 class="center">Time</h4>
+							<div class="input-field col s6">
+								<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1">
+								<label for="MinistryTime1">Start</label>
 							</div>
 							<div class="input-field col s6">
-								<label for="timepicker1opt1">Start Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+								<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2">
+								<label for="MinistryTime2">End</label>
 							</div>
-							<div class="input-field col s6">
-								<label for="timepicker1opt2">End Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+							<h4 class="center">Location</h4>
+							<div class="input-field col s12">
+								<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50">
+								<label for="MinistryVenue">Ministry Venue</label>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
-								<label for="MeetingPlace">Place</label>
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<label for="Budget">Budget</label>
+							</div>
+							<div class="input-field col s12">
+								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
+								<label for="Remarks">Remarks</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="propose" id="propose">Propose</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
-	<script>
-		function requestLeader() {
-			$('#Eform').submit(function(e) {
-				var url="request.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: 'request=g&'+$('#Eform').serialize(), 
-					success: function(data) {
-						alert(data);
-						swal({
-							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-							type: "success",
-							allowEscapeKey: true
-						},
-							function() { window.location.href = "index.php"; }
-						);
-					}
-				});
-				e.preventDefault();
-			});
-			
-		}
-	</script>
 
-	<script>
-		function endorsementComplete() {
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		}
-			 <!-- this section is for notification approval of requests -->
+	<main>
+	</main>
+
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s8">
+					<img src="resources/CCF Logos7.png" />
+				</div>
+				<div class="col 14 offset-12 s4">
+					<p class="footer-cpyrght">
+						Christ's Commission Fellowship © 2016 <br>
+						All Rights Reserved.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 	
+	 <!-- this section is for notification approval of requests -->
+	<script>
+		function renderImage(input) {
+			if(input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#showImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);	
+			}
+			else
+				$('.ministry-pic').html("");
+		}
+
+		$('#MinistryPicture').change(function() {
+			$('.ministry-pic').html('<img src="" id="showImage" style="width: 100%;" />');
+			renderImage(this);
+		});
+
+		$('#propose-ministry').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			var url = "propose-event.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: new FormData(this),
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					$('.fixbutton').text('Propose');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Success!",
+						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+						type: "success",
+						timer: 10000
+					}, function() { window.location.href = "index.php"; });
+				}
+			});
+			e.preventDefault();
+		});
+
+		function checkIfCustom() {
+			if($('#Custom').prop("checked")) {
+				$('#Weekly').prop("checked", false);
+				checkIfWeekly();
+			}
+		}
+
+		$(document).ready(function() {
+			$('#WeeklyMeeting').hide();
+			$('#Custom').prop("checked", true);
+			checkIfCustom();
+		});
+
+		function checkIfWeekly() {
+			if($('#Weekly').prop("checked")) {
+				$('#WeeklyMeeting').show();
+				$('#Custom').prop("checked", false);
+				checkIfCustom();
+			}
+			else {
+				$('#WeeklyMeeting').hide();
+			}
+		}
+
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -810,19 +937,4 @@
 		}
 
 	</script>
-
-	<?php /*
-		if(isset($_POST['submit'])) {
-			echo '
-		<script>
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		</script>
-			';
-		} */
-	?>
 </html>

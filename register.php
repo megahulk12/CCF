@@ -43,12 +43,8 @@
 		if($birthdate=="")
 			$birthdate="";
 		$gender = $_POST["Gender"];
-		if ($gender == "Male") {
-			$gender = 0;
-		}
-		else {
-			$gender = 1;
-		}
+		if($gender == "Male") $gender = 0;
+		else $gender = 1;
 		$civilstatus = $_POST["CivilStatus"];
 		$citizenship = $_POST["Citizenship"];
 		$homeaddress = $_POST["HomeAddress"];
@@ -57,9 +53,8 @@
 		$email = $_POST["EmailAd"];
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
-		if(isset($_GET['id'])) {
+		if(isset($_GET['id'])) 
 			$count = "dgroupID".$_GET['id'];
-		}
 		$dgroupid = $_POST[$count];
 		$receivedChrist = $_POST["receivedChrist"];
 		$attendCCF = $_POST["attendCCF"];
@@ -88,8 +83,7 @@
 			echo 'alert("Username is Already Taken, Sorry")';
 		}
 		*/
-		else{
-
+		else {
 			$companyIDField = "";
 			$schoolIDField = "";
 			$spouseIDField = "";
@@ -673,7 +667,7 @@
 			$('.timepicker').pickatime({
 				default: 'now', // Set default time
 				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-				twelvehour: false, // Use AM/PM or 24-hour format
+				twelvehour: true, // Use AM/PM or 24-hour format
 				donetext: 'DONE', // text for done-button
 				cleartext: 'Clear', // text for clear-button
 				canceltext: 'Cancel', // Text for cancel-button
