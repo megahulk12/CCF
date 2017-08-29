@@ -563,16 +563,17 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "endorsements.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			//history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
-
 			var url = "request_endorsements.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
+			disableForm(true);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -582,8 +583,19 @@
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
+					$('#form-header').text(data.name);
+					$('#BaptismalDate').val(data.bpdate);
+					$('#BaptismalPlace').val(data.bpplace);
+					$('#DgroupType').val(data.dgtype);
+					$('#AgeBracket').val(data.agebracket);
+					$('#MeetingDay').val(data.meetday);
+					$('#timepicker1opt1').val(data.starttime);
+					$('#timepicker1opt2').val(data.endtime);
+					$('#MeetingPlace').val(data.meetplace);
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
 				}
 			});
 		}
@@ -1012,56 +1024,6 @@
 			});
 			e.preventDefault();
 		});
-
-		function cellActive(id) { // this function allows you to highlight the table rows you select
-			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
-			var num_of_rows = document.getElementsByTagName("TR").length;
-			var rownumber = id.charAt(3);
-			for(var i = 0; i < num_of_rows; i++) {
-				document.getElementsByTagName("TR")[i].setAttribute("class", "");
-			}
-			document.getElementById(id).setAttribute("class", "active");
-			//document.getElementById("table").setAttribute("class", "highlight centered");
-
-			id = id.split("_")[1];
-			//history.pushState(null, null, "proposed-events.php?id="+id);
-
-
-			// ajax + preloader
-			var url = "request_endorsements.php";
-			preload();
-			$('button').prop("disabled", true);
-			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "id="+id,
-				dataType: 'json',
-				success: function(data) {
-					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
-					$('button').prop("disabled", false);
-					disableForm(false);
-					$('#form-header').text(data.name);
-					$('#BaptismalDate').val(data.bpdate);
-					$('#BaptismalPlace').val(data.bpplace);
-					$('#DgroupType').val(data.dgtype);
-					$('#AgeBracket').val(data.agebracket);
-					$('#MeetingDay').val(data.meetday);
-					$('#timepicker1opt1').val(data.starttime);
-					$('#timepicker1opt2').val(data.endtime);
-					$('#MeetingPlace').val(data.meetplace);
-
-					// re-initialize to update input fields
-					Materialize.updateTextFields();
-					$('select').material_select();
-
-					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
-				}
-			});
-		}
 		
 	</script>
 </html>
