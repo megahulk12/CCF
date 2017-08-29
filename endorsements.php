@@ -1043,11 +1043,7 @@
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					disableForm(false);
-					$('#eventID').val(id);
 					$('#form-header').text(data.name);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
-
 					$('#BaptismalDate').val(data.bpdate);
 					$('#BaptismalPlace').val(data.bpplace);
 					$('#DgroupType').val(data.dgtype);
