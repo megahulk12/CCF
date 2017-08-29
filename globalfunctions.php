@@ -331,6 +331,30 @@
 		// <!----------------------------------------THE END-------------------------------------->
 		return $count;
 	}
+	function allNotifCount(){
+		// <!---------------------------------code ni paolo------------------------------------>
+		include_once('session.php');
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		// insert code set notificationStatus = 1 when user clicks notification area
+		$query = "SELECT count(notificationID) AS count FROM notifications_tbl WHERE notificationStatus = 1 AND (receivermemberID = ".$_SESSION['userid'].");" ;
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				//$receivermemberID = $row['receivermemberID']; testing muna ito
+				$count = $row['count'];
+			}
+		}
+		// <!----------------------------------------THE END-------------------------------------->
+		return $count;
+	}
 	
 	function getNotificationStatus() {
 		$servername = "localhost";

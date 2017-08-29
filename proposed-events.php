@@ -20,7 +20,7 @@
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
-	<title>Christ's Commission Fellowship</title>
+	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 
 	<style>
 		::selection {
@@ -330,6 +330,7 @@
 		 	 min-width: 400px;
 		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -444,6 +445,16 @@
 		.spinner-color-theme {
 			border-color: rgba(0, 0, 0, 0.4);
 		}
+
+		.spinner-notif {
+			position: relative;
+			left: 190px; /* half of width of notif list*/
+			top: 100px; /* half of height of notif list*/
+		}
+
+		.spinner-color-notif {
+			border-color: #777;
+		}
 		/* ===== END ===== */
 
 		/*tables*/
@@ -452,7 +463,7 @@
 			overflow-y: auto;
 		}
 
-		table > tbody > tr:hover {
+		table > tbody > tr.choose:hover {
 			cursor: hand;
 			background-color: #f2f2f2 !important;
 		}
@@ -495,6 +506,10 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
+
+		.error, .error-picture {
+			color: #ff3333;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -680,58 +695,19 @@
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header" id="badge">Notifications<?php if(getNotificationStatus() == 0) echo '<span class="new badge">'.notifCount().'</span>'; ?></h6></li>
+			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
 			<li class="divider"></li>
-			<?php
-				// database connection variables
-
-				$servername = "localhost";
-				$username = "root";
-				$password = "root";
-				$dbname = "dbccf";
-				$conn = mysqli_connect($servername, $username, $password, $dbname);
-				if (!$conn) {
-					die("Connection failed: " . mysqli_connect_error());
-				}
-
-				// insert code set notificationStatus = 1 when user clicks notification area
-				$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
-				$result = mysqli_query($conn, $query);
-				if(mysqli_num_rows($result) > 0) {
-					while($row = mysqli_fetch_assoc($result)) {
-						//$receivermemberID = $row['receivermemberID']; testing muna ito
-						$notificationDesc = $row['notificationDesc'];
-						$notificationStatus = $row['notificationStatus'];
-						$notificationType = $row['notificationType'];
-						$request = $row['request'];
-						if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
-							echo '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 1) { // for result notifs of request approve
-							echo '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
-							echo '<li><a>'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs
-							echo '<li><a href="event-requests.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 3) { // for event participant request notifs
-							echo '<li><a href="participation-requests.php">'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
-							echo '<li><a>'.$notificationDesc.'</a></li>';
-						}
-						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
-
-						}
-						else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
-
-						}
-						echo '<li class="divider"></li>';
-					}
-				}
-			?>
+			<div class="preloader-wrapper small active spinner-notif">
+				<div class="spinner-layer spinner-blue-only spinner-color-notif">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div><div class="gap-patch">
+						<div class="circle"></div>
+					</div><div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -777,7 +753,7 @@
 												$eventID = $row["eventID"];
 												$eventname = $row["eventName"];
 												echo '
-												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+												<tr class="choose" id="row_'.$eventID.'" onclick="cellActive(this.id)">
 												    <td>'.$eventname.'</td>
 												</tr>
 												';
@@ -810,20 +786,23 @@
 									<div id="page1" class="">
 										<div class="row">
 											<div class="input-field col s12">
-												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50">
+												<input type="text" name="EventName" id="EventName" data-length="50" maxlength="50" required>
 												<label for="EventName">Event Name</label>
+												<small class="error" id="EventName-required"></small>
 											</div>
 											<div class="input-field col s12">
-												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500"></textarea>
+												<textarea id="EventDesc" class="materialize-textarea" name="EventDesc" data-length="500" maxlength="500" required></textarea>
 												<label for="EventDesc">Event Description</label>
+												<small class="error" id="EventDesc-required"></small>
 											</div>
 											<div class="file-field input-field col s12">
-												<div class="btn">
-													<span>Picture</span>
-													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
+												<div class="btn col s4">
+													<span>Choose a picture</span>
+													<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
 												</div>
-												<div class="file-path-wrapper">
-													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
+												<div class="file-path-wrapper col s8">
+													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture" required tabindex="-1">
+													<small class="error-picture" id="EventPictureName-required"></small>
 												</div>
 												<div class="row event-pic">
 												</div>
@@ -847,44 +826,61 @@
 													<label for="Weekly">Weekly Event</label>
 												</div>
 											</p>
-											<div class="input-field col s6" id="Event_Date_Start">
-												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart">
+											<div class="input-field col s12" id="Event_Date_Start">
+												<input type="date" class="datepicker" id="EventDateStart" name="EventDateStart" required>
 												<label for="EventDateStart" id="lblEventDateStart">Start</label>
+												<small class="error" id="EventDateStart-required"></small>
+												<small class="error" id="EventDateStart-greaterdate"></small>
+												<small class="error" id="EventDateStart-equaldate"></small>
 											</div>
-											<div class="input-field col s6" id="Event_Date_End">
-												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd">
+											<div class="input-field col s6" id="Event_Date_End" style="display: none">
+												<input type="date" class="datepicker" id="EventDateEnd" name="EventDateEnd" required>
 												<label for="EventDateEnd">End</label>
+												<small class="error" id="EventDateEnd-required"></small>
+												<small class="error" id="EventDateEnd-greaterdate"></small>
+												<small class="error" id="EventDateEnd-equaldate"></small>
 											</div>
-												<div class="input-field col s12" id="WeeklyEvent">
-													<select id="WeeklyDay" name="WeeklyDay">
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunday</option>
-														<option value="Monday">Monday</option>
-														<option value="Tuesday">Tuesday</option>
-														<option value="Wednesday">Wednesday</option>
-														<option value="Thursday">Thursday</option>
-														<option value="Friday">Friday</option>
-														<option value="Saturday">Saturday</option>
-													</select>
-													<label>Day</label>
-												</div>
+											<div class="input-field col s12" id="WeeklyEvent" style="display: none">
+												<select id="WeeklyDay" name="WeeklyDay" required>
+													<option value="" disabled selected>Choose your option...</option>
+													<option value="Sunday">Sunday</option>
+													<option value="Monday">Monday</option>
+													<option value="Tuesday">Tuesday</option>
+													<option value="Wednesday">Wednesday</option>
+													<option value="Thursday">Thursday</option>
+													<option value="Friday">Friday</option>
+													<option value="Saturday">Saturday</option>
+												</select>
+												<label>Day</label>
+												<small class="error" id="WeeklyDay-required"></small>
+											</div>
+											&nbsp;
 											<h4 class="center">Time</h4>
 											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime1" name="EventTime1">
+												<input type="date" class="timepicker" id="EventTime1" name="EventTime1" required>
 												<label for="EventTime1">Start</label>
+												<small class="error" id="EventTime1-required"></small>
+												<small class="error" id="EventTime1-greatertime"></small>
+												<small class="error" id="EventTime1-equaltime"></small>
 											</div>
 											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="EventTime2" name="EventTime2">
+												<input type="date" class="timepicker" id="EventTime2" name="EventTime2" required>
 												<label for="EventTime2">End</label>
+												<small class="error" id="EventTime2-required"></small>
+												<small class="error" id="EventTime2-greatertime"></small>
+												<small class="error" id="EventTime2-equaltime"></small>
 											</div>
+											&nbsp;
 											<h4 class="center">Location</h4>
 											<div class="input-field col s12">
-												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50">
+												<input type="text" name="EventVenue" id="EventVenue" data-length="50" maxlength="50" required>
 												<label for="EventVenue">Event Venue</label>
+												<small class="error" id="EventVenue-required"></small>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 												<label for="Budget">Budget</label>
+												<small class="error" id="Budget-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
@@ -954,6 +950,7 @@
 			renderImage(this);
 		});
 
+		var validated = false;
 		$('#proposed-events').submit(function(e) {
 			/*
 				NOTE:
@@ -961,41 +958,43 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var preloader = '\
-				<div class="preloader-wrapper small active"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
+			if(validated) {
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
 						</div> \
 					</div> \
-				</div> \
-			  ';
-			$('.fixbutton').html(preloader);
-			$('.fixbutton').prop("disabled", true);
-			var url = "request_proposed-events.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: new FormData(this),
-				contentType: false,
-				processData: false,
-				success: function(data) {
-					$('.fixbutton').text('Revise');
-					$('.fixbutton').prop("disabled", false);
-					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					}, function() { window.location.reload(); });
-				}
-			});
+				  ';
+				$('.fixbutton').html(preloader);
+				$('.fixbutton').prop("disabled", true);
+				var url = "request_proposed-events.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: new FormData(this),
+					contentType: false,
+					processData: false,
+					success: function(data) {
+						$('.fixbutton').text('Revise');
+						$('.fixbutton').prop("disabled", false);
+						swal({
+							title: "Success!",
+							text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.reload(); });
+					}
+				});
+			}
 			e.preventDefault();
 		});
 
@@ -1004,7 +1003,8 @@
 				document.getElementById('Event_Date_End').style.display = "none";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s12");
 				document.getElementById('lblEventDateStart').innerHTML = "Event Date";
-				document.getElementById('Weekly').checked = false;
+				$('#EventDateEnd').prop("required", false);
+				checkIfMultiple();
 				checkIfWeekly();
 			}
 			else {
@@ -1013,31 +1013,32 @@
 				document.getElementById('Event_Date_End').style.display = "inline";
 				document.getElementById('Event_Date_Start').setAttribute("class", "input-field col s6");
 				document.getElementById('Event_Date_End').setAttribute("class", "input-field col s6");
+				$('#EventDateEnd').prop("required", true);
 			}
 		}
 
 		function checkIfMultiple() {
 			if($('#MultipleDay').prop("checked")) {
-				$('#SingleDay').prop("checked", false);
 				checkIfSingle();
+				checkIfWeekly();
 			}
 		}
 
 		$(document).ready(function() {
-			$('#WeeklyEvent').hide();
 			$('#SingleDay').prop("checked", true);
 			checkIfSingle();
 		});
 
 		function checkIfWeekly() {
-			if(document.getElementById('Weekly').checked) {
+			if($('#Weekly').prop("checked")) {
 				$('#WeeklyEvent').show();
-				document.getElementById('SingleDay').checked = false;
+				$('#WeeklyDay').prop("required", true);
 				checkIfSingle();
+				checkIfMultiple();
 			}
 			else {
 				$('#WeeklyEvent').hide();
-
+				$('#WeeklyDay').prop("required", false);
 			}
 		}
 
@@ -1102,10 +1103,51 @@
 				});
 		}
 		
+		var title = "Christ's Commission Fellowship";
 		function seen() { // this function gets rid of the badge every after click event 
 			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
 			document.getElementById('badge').innerHTML = "Notifications";
 			setSeenRequest(); // records in the database that user has seen or read the notifications
+
+			// get Notifications using ajax
+			var url = "get_notifs.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active spinner-notif"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('title').text(title); // re-initialize the title
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'view',
+				dataType: 'json',
+				success: function(data) {
+					if(data.count >= 1) {
+						$('#notifications').html(data.view);
+					}
+					else {
+						$('#notifications').html('\
+						<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+						<li class="divider"></li>\
+						<li><a class="center">No new notifications</a></li>');
+					}
+				},
+				error: function(data) {
+					$('#notifications').html('\
+					<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+					<li class="divider"></li>\
+					<li><a>Failed to load. Please check your connection and try again.</a></li>');
+				}
+			});
 		}
 		
 		function setSeenRequest() {
@@ -1120,5 +1162,268 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+
+
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+		$('.error, .error-picture').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('.error-picture').text('Please choose a picture.');
+			$('[id$=greatertime]').text('Start Time should be before than End Time.');
+			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
+			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		// personal info form validation
+		$("#revise").click(function() {
+			$('.error, .error-picture').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
+
+			// convert time values to timestamp; TIME VALIDATION
+			var start_time = $("#EventTime1").val(), end_time = $("#EventTime2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if((start_time > end_time) && !($('#EventTime2').val() == "")) {
+				$("[id$=greatertime]").show();
+				focused_element = $("#EventTime1");
+				check_iteration = false;
+			}
+
+			if(($("#EventTime1").val() == $("#EventTime2").val()) && !($('[id^=EventTime]').val() == "")) {
+				$("[id$=equaltime]").show();
+				focused_element = $("#EventTime1");
+				check_iteration = false;
+			}
+
+
+			// convert date values to timestamp; DATE VALIDATION
+			if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
+				var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
+				var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
+				start_date = month + " " + day + "," + year;
+				day = end_date.split(",")[0].split(" ")[0];
+				month = end_date.split(",")[0].split(" ")[1];
+				year = end_date.split(",")[1];
+				end_date = month + " " + day + "," + year;
+				start_date = new Date(start_date);
+				end_date = new Date(end_date);
+				if(start_date > end_date) {
+					$("[id$=greaterdate]").show();
+					focused_element = $("#EventDateStart");
+					check_iteration = false;
+				}
+
+			}
+
+			if(($("#EventDateStart").val() == $("#EventDateEnd").val()) && !($('[id^=EventDate]').val() == "")) {
+				$("[id$=equaldate]").show();
+				focused_element = $("#EventDateStart");
+				check_iteration = false;
+			}
+
+
+			$($("#proposed-events").find('input, select, textarea').reverse()).each(function() {
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$("small#"+this.id+"-required").show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $('#WeeklyEvent');
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+				}
+			});
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		// change event handler removes leading
+		$("[id^=EventTime]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
+		/*
+		$("#cprefer_next").click(function() {
+			// default states
+			$('.error').hide();
+			$(this).blur(); // no focus in button once clicked
+			var check_iteration = true;
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// convert time values to timestamp
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
+			// [FRONT-END] iterate to show error classes to required fields
+			// [BACK-END] iterate to check blank fields and other factors before going to next pages
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					validated = true;
+					confirmvalidated = false;
+				}
+				pagination(1, this.id.split("_")[0]);
+			}
+		});
+		*/
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
+	</script>
+
+	<script>
+		// real time update notification
+		// SSE - Server-Sent Events
+
+		if(typeof(EventSource) !== "undefined") {
+			var source = new EventSource("push_notifs.php");
+			source.onmessage = function(e) {
+				if(e.data >= 1) {
+					// data should always be the attribute
+					$('#bell').html('<i class="material-icons material-icon-notification">notifications</i>\
+									 <sup class="notification-badge">'+e.data+'</sup>');
+					$('title').text("("+e.data+") "+title);
+				}
+			};
+		}
+		else {
+			// pass
+		}
+
 	</script>
 </html>
