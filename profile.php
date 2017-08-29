@@ -20,7 +20,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	<title>Christ's Commission Fellowship</title>
+	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -131,6 +131,7 @@
 		 	 min-width: 400px;
 		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: relative; /*original: absolute*/
 		 	 z-index: 999;
@@ -758,6 +759,17 @@
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
 			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
 			<li class="divider"></li>
+			<div class="preloader-wrapper small active spinner-notif">
+				<div class="spinner-layer spinner-blue-only spinner-color-notif">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div><div class="gap-patch">
+						<div class="circle"></div>
+					</div><div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
 		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
@@ -1929,6 +1941,7 @@
 				});
 		}
 		
+		var title = "Christ's Commission Fellowship";
 		function seen() { // this function gets rid of the badge every after click event 
 			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
 			document.getElementById('badge').innerHTML = "Notifications";
@@ -1949,10 +1962,7 @@
 					</div> \
 				</div> \
 			  ';
-			var notification = 
-			$('#notifications').html('\
-			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
-			<li class="divider"></li>'+preloader);
+			$('title').text(title); // re-initialize the title
 			$.ajax({
 				type: 'POST',
 				url: url,
@@ -1968,6 +1978,12 @@
 						<li class="divider"></li>\
 						<li><a class="center">No new notifications</a></li>');
 					}
+				},
+				error: function(data) {
+					$('#notifications').html('\
+					<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
+					<li class="divider"></li>\
+					<li><a>Failed to load. Please check your connection and try again.</a></li>');
 				}
 			});
 		}
@@ -2343,6 +2359,7 @@
 					// data should always be the attribute
 					$('#bell').html('<i class="material-icons material-icon-notification">notifications</i>\
 									 <sup class="notification-badge">'+e.data+'</sup>');
+					$('title').text("("+e.data+") "+title);
 				}
 			};
 		}
