@@ -621,6 +621,16 @@
 			color: #ff3333;
 		}
 
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small-username {
+			width: 15px;
+			height: 15px;
+		}
+
+		.spinner-color-theme {
+			border-color: #777;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script>
@@ -711,27 +721,27 @@
 							<div class="input-field col s12">
 								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" required>
 								<label for="Lastname">Last Name</label>
-								<small class="error" id="Lastname-required">This field is required.</small>
+								<small class="error" id="Lastname-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" required>
 								<label for="Firstname">First Name</label>
-								<small class="error" id="Firstname-required">This field is required.</small>
+								<small class="error" id="Firstname-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" required>
 								<label for="Middlename">Middle Name</label>
-								<small class="error" id="Middlename-required">This field is required.</small>
+								<small class="error" id="Middlename-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" required>
 								<label for="Nickname">Nickname</label>
-								<small class="error" id="Nickname-required">This field is required.</small>
+								<small class="error" id="Nickname-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" value="" required>
 								<label for="Birthdate" class>Birthdate</label>
-								<small class="error" id="Birthdate-required">This field is required.</small>
+								<small class="error" id="Birthdate-required"></small>
 							</div>
 						</div>
 					</div>
@@ -873,17 +883,17 @@
 							<div class="row">
 								<div class="input-field col s6">
 									<label for="timepicker1opt1">Start Time</label>
-									<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
+									<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
 									<small class="error" id="timepicker1opt1-required">This field is required.</small>
-									<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
-									<small class="error greater1">Start Time should be before than End Time.</small>
+									<small class="error" id="timepicker1opt1-equal1">Both should not be equal.</small>
+									<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
 								</div>
 								<div class="input-field col s6 right">
-									<label for="timepicker2opt1">End Time</label>
-									<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" required>
-									<small class="error" id="timepicker2opt1-required">This field is required.</small>
-									<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>
-									<small class="error greater2">Start Time should be before than End Time.</small>
+									<label for="timepicker1opt2">End Time</label>
+									<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
+									<small class="error" id="timepicker1opt2-required">This field is required.</small>
+									<small class="error" id="timepicker1opt2-equal1">Both should not be equal.</small>
+									<small class="error" id="timepicker1opt2-greater1">Start Time should be before than End Time.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
@@ -909,18 +919,18 @@
 								</div>
 							</div>
 								<div class="input-field col s6">
-									<label for="timepicker1opt2">Start Time</label>
-									<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
-									<small class="error" id="timepicker1opt2-required">This field is required.</small>
-									<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
-									<small class="error greater1">Start Time should be before than End Time.</small>
+									<label for="timepicker2opt1">Start Time</label>
+									<input type="date" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" required>
+									<small class="error" id="timepicker2opt1-required">This field is required.</small>
+									<small class="error" id="timepicker2opt1-equal2">Both should not be equal.</small>	
+									<small class="error" id="timepicker2opt1-greater2">Start Time should be before than End Time.</small>
 								</div>
 								<div class="input-field col s6">
 									<label for="timepicker2opt2">End Time</label>
-									<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" required>
+									<input type="date" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" required>
 									<small class="error" id="timepicker2opt2-required">This field is required.</small>
-									<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>
-									<small class="error greater2">Start Time should be before than End Time.</small>
+									<small class="error" id="timepicker2opt2-equal2">Both should not be equal.</small>
+									<small class="error" id="timepicker2opt2-greater2">Start Time should be before than End Time.</small>
 								</div>
 							<div class="input-field col s12">
 								<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" required>
@@ -1198,6 +1208,7 @@
 
 		/*--------------------------code ni paolo-----------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('div#page1 .error').text("This field is required.");
 
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
@@ -1215,28 +1226,9 @@
 			}
 		});
 
-		//----------------check password---------------//
-		// if(confirmpass=="") {
-		// 	$("small#confirmpass-required").show();
-		// 	$("input#confirm-password").focus();
-		// }
-
-		// if(pass=="") {
-		// 	$("small#newpass-required").show();
-		// 	$("input#password").focus();
-		// }
-		var pass = $("#password").val();
-		var confirmpass = $("#confirm-password").val();
-		if(confirmpass!=pass) {
-			$("small#confirmpass-required").hide();
-			$("small#checkpass-required").show();
-			$("input#confirm-password").focus();
-			check_iteration = false;
-		}
-
+		var check_iteration = true, check_username = true, focused_element;
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
-			var focused_element;
 			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
 			company.show();
 			school.show();
@@ -1247,7 +1239,8 @@
 
 			//var checkpass = true, checknewpass = true, checkoldpass = true;
 			$(this).blur();
-			var check_iteration = true;
+			check_iteration = true;
+			check_username = true;
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
@@ -1275,16 +1268,6 @@
 				$(".school input").prop("required", false);
 			}
 
-			//----------------check password---------------//
-			// if(confirmpass=="") {
-			// 	$("small#confirmpass-required").show();
-			// 	$("input#confirm-password").focus();
-			// }
-
-			// if(pass=="") {
-			// 	$("small#newpass-required").show();
-			// 	$("input#password").focus();
-			// }
 			var pass = $("#password").val();
 			var confirmpass = $("#confirm-password").val();
 			if(confirmpass!=pass) {
@@ -1294,7 +1277,56 @@
 				check_iteration = false;
 			}
 
-			$($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function(){
+			// TIMEPICKER VALIDATION
+
+			if(getCurrentPage() == 'page4') {			
+
+				// convert time values to timestamp; TIME VALIDATION
+				var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+				d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+				//d = "2015-03-25";
+				start_time = spaceAMPM(start_time);
+				end_time = spaceAMPM(end_time);
+				start_time = new Date(d + " " + start_time);
+				end_time = new Date(d + " " + end_time);
+				start_time = start_time.getTime();
+				end_time = end_time.getTime();
+				if((start_time > end_time)  && !($('#timepicker1opt1').val() == "" || $('#timepicker1opt2').val() == "")) {
+					$("[id$=greater1]").show();
+					focused_element = $("#timepicker1opt1");
+					check_iteration = false;
+				}
+
+				if(($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) && !($('#timepicker1opt1').val() == "" || $('#timepicker1opt2').val() == "")) {
+					$("[id$=equal1]").show();
+					focused_element = $("#timepicker1opt1");
+					check_iteration = false;
+				}
+
+				start_time = $("#timepicker2opt1").val();
+				end_time = $("#timepicker2opt2").val();
+				d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+				//d = "2015-03-25";
+				start_time = spaceAMPM(start_time);
+				end_time = spaceAMPM(end_time);
+				start_time = new Date(d + " " + start_time);
+				end_time = new Date(d + " " + end_time);
+				start_time = start_time.getTime();
+				end_time = end_time.getTime();
+				if((start_time > end_time) && !($('#timepicker2opt1').val() == "" || $('#timepicker2opt2').val() == "")) {
+					$("[id$=greater2]").show();
+					focused_element = $("#timepicker2opt1");
+					check_iteration = false;
+				}
+
+				if(($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) && !($('#timepicker2opt1').val() == "" || $('#timepicker2opt2').val() == "")) {
+					$("[id$=equal2]").show();
+					focused_element = $("#timepicker2opt1");
+					check_iteration = false;
+				}
+			}
+
+			$($('form#registration #'+getCurrentPage()).find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
 						$('small#'+this.id+'-required').show();
@@ -1319,119 +1351,100 @@
 							check_iteration = false;
 						}
 					}
-					else if(this.id == 'username') {
-						var url = "check-username.php";
-						$.ajax({
-							type: 'POST',
-							url: url,
-							async: false,
-							data: 'username='+$(this).val(),
-							success: function(data){
-								// async should be true if there is bad user experience
-								if(data == 1){
-									$('small#notusername').show();
-									focused_element = $(this);
-									disableDefaultRequired($(this));
-									check_iteration = false;
-								}
-							}
-						});
+					else if(this.id == "CivilStatus") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
-
-					$('form#registration #'+getCurrentPage()).find('select').each(function() {
-						if($(this).prop('required')) {
-							if(this.id == "CivilStatus") {
-								if($(this).val() == null) {
-									$('small#'+this.id+'-required').show();
-									focused_element = $(this);
-									disableDefaultRequired($(this));
-									check_iteration = false;
-								}
-							}
+					else if(this.id == "Option1Day") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
 						}
-					});
-					$('form#registration #'+getCurrentPage()).find('select').each(function() {
-						if($(this).prop('required')) {
-							if(this.id == "Option1Day") {
-								if($(this).val() == null) {
-									$('small#'+this.id+'-required').show();
-									focused_element = $(this);
-									disableDefaultRequired($(this));
-									check_iteration = false;
-								}
-							}
+					}
+					else if(this.id == "Option2Day") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
 						}
-					});
-					$('form#registration #'+getCurrentPage()).find('select').each(function() {
-						if($(this).prop('required')) {
-							if(this.id == "Option2Day") {
-								if($(this).val() == null) {
-									$('small#'+this.id+'-required').show();
-									focused_element = $(this);
-									disableDefaultRequired($(this));
-									check_iteration = false;
-								}
-							}
-						}
-					});
+					}
+					else if(this.id == "username") {
+						$(this).trigger("change");
+						check_username = false;
+					}
 				}
 			});
 
+			
 
-			/*// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getDate();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			// convert time values to timestamp
-			start_time = $("#timepicker1opt1").val();
-			end_time = $("#timepicker1opt2").val();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater1").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
-				$("#timepicker1opt1-equal").show();
-				$("#timepicker1opt2-equal").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
-				$("#timepicker2opt1-equal").show();
-				$("#timepicker2opt2-equal").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}*/
-
-			if(!check_iteration) // checks if there is mali in form
+			if(!check_iteration && check_username) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
-			if(check_iteration) {
+			if(check_iteration && check_username) {
 				confirmvalidated = true;
 				if(checkLastPage()) {
 					confirmvalidated = false;
 				}
 				pagination(1);
 			}
+		});
+
+		// USERNAME VALIDATION
+
+		$('#username').keypress(function() {
+			// when username error appears, it will be display:none if next is clicked
+			$('#username-required').hide();
+			$('small#notusername').show();
+			var preloader = '\
+				<div class="preloader-wrapper small-username active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+					  ';
+			var url = "check-username.php";
+			$('#next').prop("disabled", true);
+			$('small#notusername').html(preloader);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'username='+$(this).val(),
+				success: function(data){
+					// async should be true if there is bad user experience
+					if(data == 1) {
+						$('small#notusername').text($('#username').val() + " is already taken.").css("color", "#ff3333");
+						focused_element = $('#username');
+						disableDefaultRequired = $('#username');
+						check_username = false;
+						$('#next').prop("disabled", false);
+					}
+					else {
+						if($('#username').val() != "")
+							$('small#notusername').text($('#username').val() + " is available.").css("color", "#33cc33");
+						else
+							$('small#notusername').hide();
+						if(check_iteration)
+							setTimeout(function() {
+							$('#next').prop("disabled", false);
+							check_username = true;
+								pagination(1);
+							}, 1000);
+					}
+				}
+			});
 		});
 
 		function checkLastPage() {
@@ -1475,6 +1488,8 @@
 
 		$("[id$=back]").click(function() {
 			confirmvalidated = true;
+			check_iteration = true;
+			check_username = true;
 		});
 
 		$("[id$=next], [id$=back]").click(function() {
@@ -1508,149 +1523,6 @@
 
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
-	</script>
-
-
-	<script type="text/javascript">
-	$('.timepicker').pickatime({
-		//default: 'now', // Set default time; do not set default time in viewing of time
-		fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-		twelvehour: true, // Use AM/PM or 24-hour format
-		donetext: 'DONE', // text for done-button
-		cleartext: 'Clear', // text for clear-button
-		canceltext: 'Cancel', // Text for cancel-button
-		autoclose: false, // automatic close timepicker
-		ampmclickable: false, // make AM PM clickable
-		aftershow: function(){} //Function for after opening timepicker  
-	});
-	/*
-		// jquery form validation
-		// source: https://jqueryvalidation.org/
-		$("#registration").validate({
-		rules: {
-			Firstname: {
-			required: true,
-			minlength: 3
-		},
-			Middlename: {
-			required: true
-		},
-			Lastname: {
-			required: true
-		},
-			Nickname: {
-			required: true
-		},
-			Birthdate: {
-			required: true
-		},
-			Gender:"required",
-			Citizenship: {
-			required: true
-		},
-			CivilStatus: "required",
-			MobileNumber: {
-			required: true
-		},
-			Email: {
-			required: true,
-			email: true
-		},
-			Profession: {
-			required: true
-		},
-			HomeAddress: {
-			required: true
-		},
-			HomePhoneNumber: {
-			required: true
-		},
-			CompanyName: {
-			required: true
-		},
-			CompanyContactNum: {
-			required: true
-		},
-			CompanyAddress: {
-			required: true
-		},
-			SchoolName: {
-			required: true
-		},
-			SchoolContactNum: {
-			required: true
-		},
-			SchoolAddress: {
-			required: true
-		},
-			SpouseName: {
-			required: true
-		},
-			SpouseMobileNumber: {
-			required: true
-		},
-			SpouseBirthdate: {
-			required: true
-		},
-			Language: {
-			required: true
-		},
-			Option1Day: "required",
-			timepicker1opt1: {
-			required: true
-		},
-			timepicker1opt2: {
-			required: true
-		},
-			Option1Venue: {
-			required: true
-		},
-			Option2Day: "required",
-			timepicker2opt1: {
-			required: true
-		},
-			timepicker2opt2: {
-			required: true
-		},
-			Option2Venue: {
-			required: true
-		},
-			username: {
-			required: true,
-			minlength: 5
-		},
-			password: {
-			required: true,
-			minlength: 5
-		},
-			cpassword: {
-			required: true,
-			minlength: 5,
-			equalTo: "#password"
-		}
-		},
-		//For custom messages
-		messages: {
-			username: {
-				required: "Enter a username",
-				minlength: "Enter at least 5 characters"
-			},
-			password: {
-				required: "Enter a password",
-				minlength: "Enter at least 5 characters"
-			}
-		  },
-        errorElement : 'div',
-        errorPlacement: function(error, element) {
-          var placement = $(element).data('error');
-          if (placement) {
-            $(placement).append(error)
-          } else {
-            error.insertAfter(element);
-          }
-        }
-     });
-     */
 	</script>
 	<footer>
 	</footer>
