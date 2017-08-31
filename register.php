@@ -975,27 +975,26 @@
 								}
 								//checking if username exist
 							echo '
-							<div class="input-field col s12">
-								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" name="username" id="username" data-length="16" maxlength="16">
-								<label for="username">Username</label>
-								<small class="error-with-icon" id="noInput">This field is required.</small>
-								<small class="error-with-icon" id="notusername">This username is already taken.</small>
-							</div>
-							<div class="input-field col s12">
-								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="password" id="password" data-length="16" maxlength="16">
-								<label for="password">Password</label>
-								<small class="error-with-icon" id="newpass">This field is required.</small>
-							</div>
-							<div class="input-field col s12">
-								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="cpassword" id="cpassword" data-length="16" maxlength="16">
-								<label for="cpassword">Confirm Password</label>
-								<small class="error-with-icon" id="confirmpass">This field is required.</small>
-								<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
-							</div>
-							'; // originally having a value of own password
+								<div class="input-field col s12">
+									<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
+									<input type="text" name="username" id="username" data-length="16" maxlength="16" required>
+									<label for="username">Username</label>
+									<small class="error-with-icon" id="username-required">This field is required.</small>
+									<small class="error-with-icon" id="notusername">This username is already taken.</small>
+								</div>
+								<div class="input-field col s12">
+									<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+									<input type="password" name="password" id="password" data-length="16" maxlength="16" required>
+									<label for="password">Password</label>
+									<small class="error-with-icon" id="password-required">This field is required.</small>
+								</div>
+								<div class="input-field col s12">
+									<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+									<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16" required>
+									<label for="confirm-password">Confirm New Password</label>
+									<small class="error-with-icon" id="confirm-password-required">This field is required.</small>
+									<small class="error-with-icon" id="checkpass-required">Passwords do not match.</small>
+								</div>'; // originally having a value of own password
 							?>
 						</div>
 					</div>
@@ -1216,6 +1215,25 @@
 			}
 		});
 
+		//----------------check password---------------//
+		// if(confirmpass=="") {
+		// 	$("small#confirmpass-required").show();
+		// 	$("input#confirm-password").focus();
+		// }
+
+		// if(pass=="") {
+		// 	$("small#newpass-required").show();
+		// 	$("input#password").focus();
+		// }
+		var pass = $("#password").val();
+		var confirmpass = $("#confirm-password").val();
+		if(confirmpass!=pass) {
+			$("small#confirmpass-required").hide();
+			$("small#checkpass-required").show();
+			$("input#confirm-password").focus();
+			check_iteration = false;
+		}
+
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			var focused_element;
@@ -1226,6 +1244,8 @@
 			$("#CompanyName").prop("required", true);
 			$("#SchoolName").prop("required", true);
 			$("#SpouseName").prop("required", true);
+
+			//var checkpass = true, checknewpass = true, checkoldpass = true;
 			$(this).blur();
 			var check_iteration = true;
 
@@ -1255,6 +1275,25 @@
 				$(".school input").prop("required", false);
 			}
 
+			//----------------check password---------------//
+			// if(confirmpass=="") {
+			// 	$("small#confirmpass-required").show();
+			// 	$("input#confirm-password").focus();
+			// }
+
+			// if(pass=="") {
+			// 	$("small#newpass-required").show();
+			// 	$("input#password").focus();
+			// }
+			var pass = $("#password").val();
+			var confirmpass = $("#confirm-password").val();
+			if(confirmpass!=pass) {
+				$("small#confirmpass-required").hide();
+				$("small#checkpass-required").show();
+				$("input#confirm-password").focus();
+				check_iteration = false;
+			}
+
 			$($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1280,6 +1319,25 @@
 							check_iteration = false;
 						}
 					}
+					else if(this.id == 'username') {
+						var url = "check-username.php";
+						$.ajax({
+							type: 'POST',
+							url: url,
+							async: false,
+							data: 'username='+$(this).val(),
+							success: function(data){
+								// async should be true if there is bad user experience
+								if(data == 1){
+									$('small#notusername').show();
+									focused_element = $(this);
+									disableDefaultRequired($(this));
+									check_iteration = false;
+								}
+							}
+						});
+					}
+
 					$('form#registration #'+getCurrentPage()).find('select').each(function() {
 						if($(this).prop('required')) {
 							if(this.id == "CivilStatus") {
@@ -1319,49 +1377,50 @@
 				}
 			});
 
-			// // convert time values to timestamp
-			// var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			// d = (new Date()).getDate();
-			// start_time = spaceAMPM(start_time);
-			// end_time = spaceAMPM(end_time);
-			// start_time = new Date(d + " " + start_time);
-			// end_time = new Date(d + " " + end_time);
-			// start_time = start_time.getTime();
-			// end_time = end_time.getTime();
-			// if(start_time > end_time) {
-			// 	$(".greater2").show();
-			// 	focused_element = $("#timepicker2opt1");
-			// 	check_iteration = false;
-			// }
 
-			// // convert time values to timestamp
-			// start_time = $("#timepicker1opt1").val();
-			// end_time = $("#timepicker1opt2").val();
-			// start_time = spaceAMPM(start_time);
-			// end_time = spaceAMPM(end_time);
-			// start_time = new Date(d + " " + start_time);
-			// end_time = new Date(d + " " + end_time);
-			// start_time = start_time.getTime();
-			// end_time = end_time.getTime();
-			// if(start_time > end_time) {
-			// 	$(".greater1").show();
-			// 	focused_element = $("#timepicker1opt1");
-			// 	check_iteration = false;
-			// }
+			/*// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getDate();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
 
-			// if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
-			// 	$("#timepicker1opt1-equal").show();
-			// 	$("#timepicker1opt2-equal").show();
-			// 	focused_element = $("#timepicker1opt1");
-			// 	check_iteration = false;
-			// }
+			// convert time values to timestamp
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
 
-			// if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
-			// 	$("#timepicker2opt1-equal").show();
-			// 	$("#timepicker2opt2-equal").show();
-			// 	focused_element = $("#timepicker2opt1");
-			// 	check_iteration = false;
-			// }
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}*/
 
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
@@ -1450,6 +1509,8 @@
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
 	</script>
+
+
 	<script type="text/javascript">
 	$('.timepicker').pickatime({
 		//default: 'now', // Set default time; do not set default time in viewing of time

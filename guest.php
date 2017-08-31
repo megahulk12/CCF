@@ -488,27 +488,27 @@
 						<h3 class="center">Personal Information</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20">
+								<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" required>
 								<label for="Lastname">Last Name</label>
 								<small class="error" id="Lastname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20">
+								<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" required>
 								<label for="Firstname">First Name</label>
 								<small class="error" id="Firstname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20">
+								<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" required>
 								<label for="Middlename">Middle Name</label>
 								<small class="error" id="Middlename-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20">
+								<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" required>
 								<label for="Nickname">Nickname</label>
 								<small class="error" id="Nickname-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="Birthdate" name="Birthdate">
+								<input type="date" class="datepicker" id="Birthdate" name="Birthdate" required>
 								<label for="Birthdate">Birthdate</label>
 								<small class="error" id="Birthdate-required">This field is required.</small>
 							</div>
@@ -517,18 +517,19 @@
 					<div id="page2" style="display: none;">
 						<h3 class="center">Other Information</h3>
 						<div class="row">
-							<p style="margin-top: 40px;">
-								<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-								<spans>
-									<input type="radio" id="Gender_Male" name="Gender" value="Male"/>
+							<p>
+								<div class="col s12" style="padding: 0 !important;">
+									<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
+									<input type="radio" id="Gender_Male" name="Gender" value="Male" required />
 									<label for="Gender_Male">Male</label>
-									<input type="radio" id="Gender_Female" name="Gender" value="Female"/>
-									<label for="Gender_Female">Female</label>
-								</span>
+									<input type="radio" id="Gender_Female" name="Gender" value="Female" required />
+									<label for="Gender_Female">Female</label><br>
+									<small class="error" id="Gender-required" style="margin-left: 11; position: relative; top: 10px;">Please select one.</small>
+								</div>
 							</p>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
-									<select id="CivilStatus" name="CivilStatus">
+									<select id="CivilStatus" name="CivilStatus" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Single">Single</option>
 										<option value="Single Parent">Single Parent</option>
@@ -542,12 +543,12 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18">
+								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" required>
 								<label for="MobileNumber">Mobile Number</label>
 								<small class="error" id="MobileNumber-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30">
+								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" required>
 								<label for="Profession">Profession/Occupation</label>
 								<small class="error" id="Profession-required">This field is required.</small>
 							</div>
@@ -558,13 +559,13 @@
 						<div class="row" style="margin-top: 0px;">
 							<h4 class="center">Company</h4>
 							<div class="input-field col s12">
-								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30">
+								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" required>
 								<label for="CompanyName">Company Name</label>
 								<small class="error" id="CompanyName-required">This field is required.</small>
 							</div>
 							<h4 class="center">School</h4>
 							<div class="input-field col s12">
-								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30">
+								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" required>
 								<label for="SchoolName">School Name</label>
 								<small class="error" id="SchoolName-required">This field is required.</small>
 							</div>
@@ -595,7 +596,7 @@
 							echo '
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
-								<input type="text" name="username" id="username" data-length="16" maxlength="16">
+								<input type="text" name="username" id="username" data-length="16" maxlength="16" required>
 								<label for="username">Username</label>
 								<small class="error-with-icon" id="noInput">This field is required.</small>
 								<small class="error-with-icon" id="notusername">This username is already taken.</small>
@@ -604,7 +605,7 @@
 							?>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="password" data-length="16" maxlength="16">
+								<input type="password" name="password" data-length="16" maxlength="16" required>
 								<label for="password">Password</label>
 								<small class="error" id="password-required">This field is required.</small>
 							</div>
@@ -704,150 +705,129 @@
 		});
 		*/
 	}
-	/*code ni paolo*/
-		// $('.error, .error-with-icon').hide(); // by default, hide all error classes
+		/*code ni paolo*/
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
-		// function disableDefaultRequired(elem) {
-		// 	// disable default required tooltips
-		// 	document.addEventListener('invalid', (function () {
-		// 	    return function (e) {
-		// 	        e.preventDefault();
-		// 	    };
-		// 	})(), true);
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		// var pass = $("#password").val();
+		// var confirmpass = $("#confirm-password").val();
+		// if(confirmpass!=pass) {
+		// 	$("small#confirmpass-required").hide();
+		// 	$("small#checkpass-required").show();
+		// 	$("input#confirm-password").focus();
+		// 	check_iteration = false;
 		// }
 
-		// $("#next").click(function(){
-		// 	var focused_element;
-		// 	var company = $(".company"), school = $(".school");
-		// 	$('.error').hide();
-		// 	company.show();
-		// 	school.show();
-		// 	$("#CompanyName").prop("required", true);
-		// 	$("#SchoolName").prop("required", true);
-		// 	$(this).blur();
-		// 	var check_iteration = true;
+		$("#next").click(function(){
+			$('.error').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
 
-		// 	var professionid = "#Profession";
-		// 	if($(professionid).val().toLowerCase() == "student") {
-		// 		company.hide();
-		// 		$(".company input").prop("required", false);
-		// 	}
-		// 	else {
-		// 		school.hide();
-		// 		$(".school input").prop("required", false);
-		// 	}
+			$($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function() {
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$("small#"+this.id+"-required").show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
 
-		// 	$($("form#registration").find('input').reverse()).each(function() {
-		// 		if($(this).prop('required')) {
-		// 			if($(this).val() == "") {
-		// 				$("small#"+this.id+"-required").show();
-		// 				focused_element = $(this);
-		// 				disableDefaultRequired($(this));
-		// 				check_iteration = false;
-		// 			}
-		// 		}
-		// 	});
-		// 	if(!check_iteration) // checks if there is mali in form
-		// 	scrollTo(focused_element); // scrolls to focused element
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
 
-		// 	if(check_iteration) {
-		// 		confirmvalidated = true;
-		// 		if(checkLastPage()) {
-		// 			validated = true;
-		// 			confirmvalidated = false;
-		// 		}
-		// 		pagination(1, this.id.split("_")[0]);
-		// 	}
-		// });
-		// $("#next").click(function() {
-		// var focused_element;
-		// // default and initialization states
-		// var company = $(".company"), school = $(".school"), spouse = $(".spouse");
-		// $('.error').hide();
-		// company.show();
-		// school.show();
-		// spouse.show();
-		// $("#CompanyName").prop("required", true);
-		// $("#SchoolName").prop("required", true);
-		// //$("#SpouseName").prop("required", true);
-		// $(this).blur(); // no focus in button once clicked
-		// var check_iteration = true;
-		
-		// /* ===== SPOUSE VALIDATION ===== */
-		// /*var civilstatusid = "#CivilStatus"
-		// if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er") {
-		// 	spouse.hide();
-		// 	$(".spouse input").prop("required", false);
-		// 	//$("h4").find(":contains('Spouse')").hide();
-		// 	//$("[id^=Spouse], [for^=Spouse]").hide();
-		// }*/
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					confirmvalidated = false;
+				}
+				pagination(1);
+			}
+		});
 
-		// /* ===== COMPANY AND SCHOOL VALIDATION ===== */
-		// var professionid = "#Profession";
-		// if($(professionid).val().toLowerCase() == "student") {
-		// 	company.hide();
-		// 	$(".company input").prop("required", false);
-		// }
-		// else {
-		// 	school.hide();
-		// 	$(".school input").prop("required", false);
-		// }
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
 
-		// $($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function() {
-		// // [FRONT-END] iterate to show error classes to required fields
-		// // [BACK-END] iterate to check blank fields and other factors before going to next pages
-		// 	if($(this).prop('required')) {
-		// 		if($(this).val() == "") {
-		// 			$('small#'+this.id+'-required').show();
-		// 			//$('#'+this.id).focus();
-		// 			focused_element = $(this);
-		// 			disableDefaultRequired($(this));
-		// 			check_iteration = false;
-		// 		}
-		// 		else if(this.id == "Email") {
-		// 			if(!isValidEmailAddress($(this).val())) {
-		// 				$('#Invalid-Email').show();
-		// 				//$('#'+this.id).focus();
-		// 				focused_element = $(this);
-		// 				disableDefaultRequired($(this));
-		// 				check_iteration = false;
-		// 			}
-		// 		}
-		// 	}
-		// });
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
 
-		// if(!check_iteration) // checks if there is mali in form
-		// 	scrollTo(focused_element); // scrolls to focused element
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
 
-		// if(check_iteration) {
-		// 	confirmvalidated = true;
-		// 	if(checkLastPage()) {
-		// 		validated = true;
-		// 		confirmvalidated = false;
-		// 	}
-		// 	pagination(1, this.id.split("_")[0]);
-		// }
+		function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
+			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+			return pattern.test(emailAddress);
+		};
 
-		// });
+		function getCurrentPage() {
+			var cp = "page"+currentpage;
+			return cp;
+		}
 
-		// function getCurrentPage(){
-		// 	var cp = "page"+currentpage;
-		// 	return cp;
-		// }
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
 
-		// function checkLastPage() {
-		// 	var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
-		// 	pagenumber++; // page that is after the previous
-		// 	var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
-		// 	if($('#'+lastpage).length > 0) return false;
-		// 	else return true;
-		// }
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
 
-		// function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
-		// 	var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-		// 	return pattern.test(emailAddress);
-		// };
-		/*end code ni paolo*/
+		$("[id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				animateBodyScrollTop();
+				confirmvalidated = false;
+			}
+		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
+	/*end code ni paolo*/
 	</script>
 	<footer>
 	</footer>
