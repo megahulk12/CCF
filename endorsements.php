@@ -591,6 +591,7 @@
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
+					$('#endorsementID').val(id);
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
@@ -815,6 +816,7 @@
 									</div>
 								</div>
 								<div class="row">
+									<input type="hidden" id="endorsementID" name="endorsementID">
 									<button class="waves-effect waves-light btn col s3 fixbutton right" type="submit" id="approve" name="approve">Approve</button>
 									<button class="modal-action modal-close waves-effect waves-light btn col s3 right" type="button" id="notify" name="notify" data-target="!" style="margin-right: 10px;">Notify</button>
 								</div>
@@ -1024,20 +1026,75 @@
 			$('button').blur();
 		});
 
+		$('#notify').click(function() {
+			swal({
+				title: "Remarks",
+				type: "input",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+				inputPlaceholder: "Say something about this endorsement"
+			}, function(value) {
+				if(value === false) return false
+				if(value === "") {
+					swal.showInputError("Oops! It seems that you haven't typed anything.");
+					return false;
+				}
+				var url = "request_endorsements.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "notify=g&id="+$('#endorsementID').val()+"&notifvalue="+value,
+					success: function(data) {
+						swal({
+							title: "Success!",
+							type: "success",
+							text: "Remarks successfully sent!"
+						});
+					}
+				});
+			});
+		});
+
 		// APPROVE SECTION
 		$('#Eform').submit(function(e) {
+			var url = "request_endorsements.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			var url = "request_endorsements.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: "approve",
+				data: "id="+$('#endorsementID').val()+"&approve",
 				success: function(data) {
-					
+					$('.fixbutton').text('Approve');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Endorsement Approved!",
+						text: "You have approved this endorsement.",
+						type: "success",
+						allowEscapeKey: true,
+						allowOutsideClick: true,
+						timer: 10000
+					}, function() { window.location.reload(); });
 				}
 			});
 			e.preventDefault();
 		});
-		
+
 	</script>
 
 	<script>
