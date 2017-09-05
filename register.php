@@ -1240,7 +1240,6 @@
 			//var checkpass = true, checknewpass = true, checkoldpass = true;
 			$(this).blur();
 			check_iteration = true;
-			check_username = true;
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
@@ -1266,15 +1265,6 @@
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
-			}
-
-			var pass = $("#password").val();
-			var confirmpass = $("#confirm-password").val();
-			if(confirmpass!=pass) {
-				$("small#confirmpass-required").hide();
-				$("small#checkpass-required").show();
-				$("input#confirm-password").focus();
-				check_iteration = false;
 			}
 
 			// TIMEPICKER VALIDATION
@@ -1362,7 +1352,7 @@
 					else if(this.id == "Option1Day") {
 						if($(this).val() == null) {
 							$('small#'+this.id+'-required').show();
-							focused_element = $(this);
+							focused_element = $(this).parent();
 							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
@@ -1370,21 +1360,34 @@
 					else if(this.id == "Option2Day") {
 						if($(this).val() == null) {
 							$('small#'+this.id+'-required').show();
-							focused_element = $(this);
+							focused_element = $(this).parent();
 							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
 					}
 					else if(this.id == "username") {
-						$(this).trigger("change");
+						checkUsername();
 						check_username = false;
 					}
 				}
 			});
 
-			
+			var pass = $("#password").val();
+			var confirmpass = $("#confirm-password").val();
+			if(confirmpass!=pass) {
+				if(confirmpass!="") {
+					$("small#checkpass-required").show();
+					$("input#confirm-password").focus();
+					check_iteration = false;
+				}
+			}
 
-			if(!check_iteration && check_username) // checks if there is mali in form
+			if(check_username)
+				nextPage();
+		});
+
+		function nextPage() {
+			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
 			if(check_iteration && check_username) {
@@ -1394,11 +1397,31 @@
 				}
 				pagination(1);
 			}
-		});
+		}
 
 		// USERNAME VALIDATION
+		//setup before functions
+		var typingTimer;                //timer identifier
+		var doneTypingInterval = 500;  //time in ms, 5 second for example
+		var $input = $('#username');
 
-		$('#username').keypress(function() {
+		//on keyup, start the countdown
+		$input.on('keyup', function () {
+		  clearTimeout(typingTimer);
+		  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+		});
+
+		//on keydown, clear the countdown 
+		$input.on('keydown', function () {
+		  clearTimeout(typingTimer);
+		});
+
+		//user is "finished typing," do something
+		function doneTyping() {
+			$('#username').trigger("change");
+		}
+
+		function checkUsername() {
 			// when username error appears, it will be display:none if next is clicked
 			$('#username-required').hide();
 			$('small#notusername').show();
@@ -1421,31 +1444,34 @@
 			$.ajax({
 				type: 'POST',
 				url: url,
-				data: 'username='+$(this).val(),
+				data: 'username='+$('#username').val(),
 				success: function(data){
 					// async should be true if there is bad user experience
 					if(data == 1) {
 						$('small#notusername').text($('#username').val() + " is already taken.").css("color", "#ff3333");
 						focused_element = $('#username');
-						disableDefaultRequired = $('#username');
-						check_username = false;
+						disableDefaultRequired($('#username'));
+						check_iteration = false;
 						$('#next').prop("disabled", false);
+						check_username = false;
 					}
 					else {
-						if($('#username').val() != "")
+						if($('#username').val() != "") {
 							$('small#notusername').text($('#username').val() + " is available.").css("color", "#33cc33");
-						else
-							$('small#notusername').hide();
-						if(check_iteration)
 							setTimeout(function() {
-							$('#next').prop("disabled", false);
-							check_username = true;
-								pagination(1);
+								$('#next').prop("disabled", false);
+								check_username = true;
+								nextPage();
 							}, 1000);
+						}
+						else {
+							$('small#notusername').hide();
+							$('#next').prop("disabled", false);
+						}
 					}
 				}
 			});
-		});
+		}
 
 		function checkLastPage() {
 			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
