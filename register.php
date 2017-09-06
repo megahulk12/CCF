@@ -862,6 +862,22 @@
 								<label for="Language">Language</label>
 								<small class="error" id="Language-required">This field is required.</small>
 							</div>
+							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
+								<div class="input-field col s12">
+									<select id="DgroupType" name="DgroupType" required>
+										<option value="" disabled selected>Choose your option...</option>
+										<option value="Youth">Youth</option>
+										<option value="Singles">Singles</option>
+										<option value="Single Parents">Single Parents</option>
+										<option value="Married">Married</option>
+										<option value="Couples">Couples</option>
+									</select>
+									<label>Type of Dgroup</label>
+									<small class="error" id="DgroupType-required">Please choose one.</small>
+									<small class="error" id="DgroupType-nospouse">You are not legally married. Please pick a different Dgroup Type.</small>
+									<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
+								</div>
+							</div>
 							<h4 class="center">Schedule</h4>
 							<h5 class="center">Option 1</h5>
 							<div class="row" style="margin-bottom: 0px;">
@@ -1243,7 +1259,7 @@
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
 				//$("h4").find(":contains('Spouse')").hide();
@@ -1272,6 +1288,8 @@
 			if(getCurrentPage() == 'page4') {			
 
 				// convert time values to timestamp; TIME VALIDATION
+
+				// REMINDER: ibaliktad mo ang timepicker2's sa timepicker1's (REVERSE VALIDATION ORDER)
 				var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
 				d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
 				//d = "2015-03-25";
@@ -1313,6 +1331,17 @@
 					$("[id$=equal2]").show();
 					focused_element = $("#timepicker2opt1");
 					check_iteration = false;
+				}
+
+				if($('#DgroupType').val() == "Married") {
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-nospouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Youth" || $('#DgroupType').val() == "Singles" || $('#DgroupType').val() == "Single Parents") {
+
 				}
 			}
 
@@ -1358,6 +1387,14 @@
 						}
 					}
 					else if(this.id == "Option2Day") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this).parent();
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if(this.id == "DgroupType") {
 						if($(this).val() == null) {
 							$('small#'+this.id+'-required').show();
 							focused_element = $(this).parent();
@@ -1549,6 +1586,37 @@
 
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
+
+		function filterDgroupTable() {
+			var gender = $('#Gender').val();
+			var dgrouptype = $('#DgroupType').val();
+
+			/*
+
+				##### PSEUDOCODE #####
+
+				1. Loop through all childs of <tr> tags
+				2. Check if loop is currently at 2nd [1] and 3rd [2] column
+				3. If loop is at 2nd column, check if Gender td value is according to Gender form value
+				4. Hide those if not in according to the Gender form value
+				5. If loop is at 3rd column, check if Type of Dgroup td value is according to Type of Dgroup form value
+				6. Hide those if not in according to the Type of Dgorup form value
+				7. All results are now according to the form
+
+				##### CODE MATERIALS #####
+
+				$('tr').find('td').each(function(e) {
+					if(e == 2) {
+						$(this).parent().hide();
+						// hide gender something
+					}
+					else if (e == 3) {
+						// hide dgroup type something
+					}
+				});
+
+			*/
+		}
 	</script>
 	<footer>
 	</footer>
