@@ -1215,16 +1215,16 @@
 			}
 		});
 
-		//----------------check password---------------//
-		// if(confirmpass=="") {
-		// 	$("small#confirmpass-required").show();
-		// 	$("input#confirm-password").focus();
-		// }
+		/*//----------------check password---------------//
+		if(confirmpass=="") {
+			$("small#confirmpass-required").show();
+			$("input#confirm-password").focus();
+		}
 
-		// if(pass=="") {
-		// 	$("small#newpass-required").show();
-		// 	$("input#password").focus();
-		// }
+		if(pass=="") {
+			$("small#newpass-required").show();
+			$("input#password").focus();
+		}
 		var pass = $("#password").val();
 		var confirmpass = $("#confirm-password").val();
 		if(confirmpass!=pass) {
@@ -1232,7 +1232,7 @@
 			$("small#checkpass-required").show();
 			$("input#confirm-password").focus();
 			check_iteration = false;
-		}
+		}*/
 
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
