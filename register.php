@@ -1242,7 +1242,7 @@
 			}
 		});
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		/*//----------------check password---------------//
 		if(confirmpass=="") {
 			$("small#confirmpass-required").show();
@@ -1262,9 +1262,9 @@
 			check_iteration = false;
 		}*/
 
-=======
+//=======
 		var check_iteration = true, check_username = true, focused_element;
->>>>>>> e1855c878e5f13bdf9368405ac482d1412c9765f
+//>>>>>>> e1855c878e5f13bdf9368405ac482d1412c9765f
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
