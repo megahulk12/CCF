@@ -20,7 +20,7 @@
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
-	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
+	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>	
 	<style>
 		::selection {
 			background-color: #16A5B8;

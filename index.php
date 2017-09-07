@@ -447,6 +447,8 @@
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
