@@ -452,6 +452,8 @@
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 			  		<li class="divider"></li>
+		  			<li><a href="manage-accounts.php"><i class="material-icons prefix>">supervisor_account</i>Manage Accounts</a></li>
+			  		<li class="divider"></li>
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
@@ -684,6 +686,22 @@
 
 			// get Notifications using ajax
 			var url = "get_notifs.php";
+			var preloader = ' \
+				<li><h6 class="notifications-header" id="badge">Notifications</h6></li> \
+				<li class="divider"></li> \
+				<div class="preloader-wrapper small active spinner-notif"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+				';
+			$('#notifications').html(preloader);
 			$('.dropdown-content li').addClass('transition');
 			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
 			$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
