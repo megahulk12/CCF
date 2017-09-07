@@ -721,6 +721,8 @@
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		<li class="divider"></li>
+		  			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			  		';
 				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
@@ -744,6 +746,8 @@
 					  		echo '
 				  		<li class="divider"></li>
 					  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
 					  		';
 		  		}
 			  	if($_SESSION["memberType"] == 5)
