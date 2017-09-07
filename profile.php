@@ -776,12 +776,6 @@
 			    <div class="nav-wrapper">
 			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-<<<<<<< HEAD
-			      		<!-- FOR DGROUP MEMBERS
-			        	<li><a href="profile.php">PROFILE</a></li>
-			      	  	<li><a href="dgorup.php">DGROUP</a></li> -->
-=======
->>>>>>> Jasper-Edits
 						<li><a href="events.php">EVENTS</a></li>
 						<li><a href="ministries.php">MINISTRIES</a></li>
 						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
@@ -1457,22 +1451,6 @@
 														die("Connection failed: " . mysqli_connect_error());
 													}
 
-													/*
-													function countDgroups() {
-														$conn = mysqli_connect($servername, $username, $password, $dbname);
-														if (!$conn) {
-															die("Connection failed: " . mysqli_connect_error());
-														}
-
-														$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
-														$result = mysqli_query($conn, $sql);
-														if(mysqli_num_rows($result) > 0){
-															while($row = mysqli_fetch_assoc($result)){
-																$count = $row["numOfDgroup"];
-															}
-														}
-													}*/
-
 													$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
 																	CASE
 																		WHEN gender = '0' THEN 'Male'
@@ -1508,26 +1486,6 @@
 													}
 													echo ' ';
 												?>
-												<!--
-												<tr id="row1" onclick="cellActive('row1')">
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-												</tr>
-												<tr id="row2" onclick="cellActive('row2')">
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-												</tr>
-												<tr id="row3" onclick="cellActive('row3')">
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-												</tr>
-												-->
 											</table>
 										</div>
 									</div>
@@ -1788,79 +1746,7 @@
 				confirmvalidated = false; // re=initialize
 				e.preventDefault();
 			});
-			/*
-			var xhttp, params;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "update_profile.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			if(submit_name=="submit_cpinfo")
-				params = getSubmitCpinfo();
-			else if(submit_name=="submit_coinfo")
-				params = getSubmitCoinfo();
-			else if(submit_name=="submit_cprefer")
-				params = getSubmitCprefer();
-			else if(submit_name=="submit_cpass")
-				params = getSubmitCpass();
-			xhttp.send(submit_name+"=g&"+params);
-			alert(params);
-			*/
-			//return false;
 		}
-
-		/*
-		function getSubmitCpinfo() {
-			var params="", element=document.cpinfo, length=$("#cpinfo input").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-				if(i==length-1)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCoinfo() {
-			var params="", element=document.coinfo, length=$("#coinfo input").length;
-			for(var i = 0; i < length+1; i++) { // replace commas in date inputs because year won't update in database, always current year
-			// length is plus 1 because the maximum is SpouseMobileNumber; ugh hardcoded, please fix
-			// selects are +1
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCprefer() {
-			var params="", element=document.cprefer, length=$("#cprefer input").length + $("#cprefer select").length + $("#cprefer textarea").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-			// selects are +1
-			// textareas are +1
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCpass() {
-			var params="", element=document.cpass, length=$("#cpass input").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-		*/
 	</script>
 	
 	 <!-- this section is for notification approval of requests -->

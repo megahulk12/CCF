@@ -108,7 +108,11 @@
 		mysqli_query($conn, $sql_pass);
 	}
 
-	if(isset($_POST["submit_register"])) {
+	if(isset($_POST["submit_register"]) }
+		if(isset($_GET['id'])) 
+			$count = "dgroupID".$_GET['id'];
+		$dgroupid = $_POST[$count];
+
 		$citizenship = $_POST["Citizenship"];
 		$email = $_POST["Email"];
 
@@ -126,6 +130,7 @@
 		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
 
 		$language = $_POST["Language"];
+		$dateJoined = date("Y-m-d");
 
 		$opt1day = $_POST["Option1Day"];
 		$start1 = $_POST["timepicker1opt1"];
@@ -147,7 +152,7 @@
 		}
 
 		$sql_coinfo = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber', memberType = 1 WHERE memberID = ".$_SESSION['userid'];
-		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES (".$_SESSION['userid'].", 4, 1, '$recchrist', '$attccf', '$regattat', '2017-08-08');";
+		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoined) VALUES (".$_SESSION['userid'].", '$dgroupid', 1, '$recchrist', '$attccf', '$regattat', '$dateJoined');";
 		$sql_company = "INSERT INTO companydetails_tbl(companyContactNum, companyAddress) VALUES('$companycontactnum', '$companyaddress');";
 		$sql_school = "INSERT INTO schooldetails_tbl(schoolContactNum, schoolAddress) VALUES('$schoolcontactnum', '$schooladdress');";
 		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate_ VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
