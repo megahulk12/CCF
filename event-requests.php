@@ -827,11 +827,11 @@
 												<label for="EventHeadName">Event Head</label>
 											</div>
 											<div class="file-field input-field col s12">
-												<div class="btn">
-													<span>Picture</span>
+												<div class="btn col s4">
+													<span>Choose a Picture</span>
 													<input type="file" id="EventPicture" name="EventPicture" accept="image/jpeg, image/jpg, image/png">
 												</div>
-												<div class="file-path-wrapper">
+												<div class="file-path-wrapper col s8">
 													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture">
 												</div>
 												<div class="row event-pic">

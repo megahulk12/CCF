@@ -800,11 +800,11 @@
 												<label for="MinistryDesc">Ministry Description</label>
 											</div>
 											<div class="file-field input-field col s12">
-												<div class="btn">
-													<span>Picture</span>
+												<div class="btn col s4">
+													<span>Choose a Picture</span>
 													<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 												</div>
-												<div class="file-path-wrapper">
+												<div class="file-path-wrapper col s8">
 													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
 												</div>
 												<div class="row ministry-pic">
