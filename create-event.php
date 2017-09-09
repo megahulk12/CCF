@@ -1016,55 +1016,6 @@
 			$(this).blur();
 			var check_iteration = true, focused_element;
 
-			// convert time values to timestamp; TIME VALIDATION
-			var start_time = $("#EventTime1").val(), end_time = $("#EventTime2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if((start_time > end_time) && !($('#EventTime2').val() == "")) {
-				$("[id$=greatertime]").show();
-				focused_element = $("#EventTime1");
-				check_iteration = false;
-			}
-
-			if(($("#EventTime1").val() == $("#EventTime2").val()) && !($('[id^=EventTime]').val() == "")) {
-				$("[id$=equaltime]").show();
-				focused_element = $("#EventTime1");
-				check_iteration = false;
-			}
-
-
-			// convert date values to timestamp; DATE VALIDATION
-			if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
-				var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
-				var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
-				start_date = month + " " + day + "," + year;
-				day = end_date.split(",")[0].split(" ")[0];
-				month = end_date.split(",")[0].split(" ")[1];
-				year = end_date.split(",")[1];
-				end_date = month + " " + day + "," + year;
-				start_date = new Date(start_date);
-				end_date = new Date(end_date);
-				if(start_date > end_date) {
-					$("[id$=greaterdate]").show();
-					focused_element = $("#EventDateStart");
-					check_iteration = false;
-				}
-
-			}
-
-			if(($("#EventDateStart").val() == $("#EventDateEnd").val()) && !($('[id^=EventDate]').val() == "")) {
-				$("[id$=equaldate]").show();
-				focused_element = $("#EventDateStart");
-				check_iteration = false;
-			}
-
-
 			$($(".create-event").find('input, select, textarea').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1073,7 +1024,7 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-					if($(this).is('select')) {
+					else if($(this).is('select')) {
 						if($(this).val() == null) {
 							$("small#"+this.id+"-required").show();
 							focused_element = $('#WeeklyEvent');
@@ -1081,9 +1032,60 @@
 							check_iteration = false;
 						}
 					}
+					else if($(this).is('[id^=EventTime]')) {
+
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#EventTime1").val(), end_time = $("#EventTime2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('#EventTime2').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#EventTime1");
+							check_iteration = false;
+						}
+
+						if(($("#EventTime1").val() == $("#EventTime2").val()) && !($('[id^=EventTime]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#EventTime1");
+							check_iteration = false;
+						}
+					}
+					else if($(this).is('[id^=EventDate]')) {
+
+						// convert date values to timestamp; DATE VALIDATION
+						if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
+							var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
+							var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
+							start_date = month + " " + day + "," + year;
+							day = end_date.split(",")[0].split(" ")[0];
+							month = end_date.split(",")[0].split(" ")[1];
+							year = end_date.split(",")[1];
+							end_date = month + " " + day + "," + year;
+							start_date = new Date(start_date);
+							end_date = new Date(end_date);
+							if(start_date > end_date) {
+								$("[id$=greaterdate]").show();
+								focused_element = $("#EventDateStart");
+								check_iteration = false;
+							}
+
+						}
+
+						if(($("#EventDateStart").val() == $("#EventDateEnd").val()) && !($('[id^=EventDate]').val() == "")) {
+							$("[id$=equaldate]").show();
+							focused_element = $("#EventDateStart");
+							check_iteration = false;
+						}
+
+					}
 				}
 			});
-
 
 			if(!check_iteration)
 				scrollTo(focused_element);

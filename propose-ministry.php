@@ -816,11 +816,13 @@
 		function checkIfWeekly() {
 			if($('#Weekly').prop("checked")) {
 				$('#WeeklyMeeting').show();
+				$('#WeeklyMeeting').prop("required", true);
 				$('#Custom').prop("checked", false);
 				checkIfCustom();
 			}
 			else {
 				$('#WeeklyMeeting').hide();
+				$('#WeeklyMeeting').prop("required", false);
 			}
 		}
 
@@ -1022,7 +1024,7 @@
 				}
 			});
 
-
+			alert(focused_element.id);
 			if(!check_iteration)
 				scrollTo(focused_element);
 			

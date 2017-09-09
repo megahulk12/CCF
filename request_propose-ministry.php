@@ -50,13 +50,17 @@
 			$sql_budget = "INSERT INTO budgetdetails_tbl(budget, dateEntry, budgetType) VALUES('$budget', '$dateEntry', 1)";
 			mysqli_query($conn, $sql_budget);
 
+
 			if($eventschedstatus == "Weekly") {
-			$sql_propose_ministry = "INSERT INTO ministrydetails_tbl() VALUES();";
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1);"
 			}
 			else {
-			$sql_propose_ministry = "";
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$venue', '$starttime', '$endtime', 1);";
 			}
 
+			mysqli_query($conn, $sql_schedule);
+
+			$sql_propose_ministry = "INSERT INTO ministrydetails_tbl(budgetID, ministryHeadID, schedID, ministryPicturePath, ministryName, ministryDescription, remarks) VALUES(".getCurrentBudgetID().", ".$_SESSION['userid'].", ".getSchedID().", '$ministrypicturepath', '$ministryname', '$ministrydesc', '$remarks')";
 			mysqli_query($conn, $sql_propose_ministry);
 
 			$sql_all_admins = "SELECT memberID FROM member_tbl WHERE memberType = 5";
@@ -64,8 +68,8 @@
 			if(mysqli_num_rows($result) > 0) {
 				while($row = mysqli_fetch_assoc($result)) {
 					$memberid = $row["memberID"];
-					$notificationdesc = "You have a new event request - $eventname.";
-					$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType, request) VALUES(".$_SESSION["userid"].", $memberid, ".getCurrentEventID().", '$notificationdesc', 1, 1)";
+					$notificationdesc = "You have a new ministry request - $ministryname.";
+					$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType, request) VALUES(".$_SESSION["userid"].", $memberid, ".getCurrentMinistryID().", '$notificationdesc', 2, 1)";
 					mysqli_query($conn, $sql_notifications);
 				}
 			}

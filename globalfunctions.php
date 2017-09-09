@@ -610,6 +610,7 @@
 	}
 
 	function checkIfD12Leader() {
+		// this function checks if this Dgroup Leader has a member that is already a leader
 		include_once('session.php'); // this function requires a session call because it is external from the session itself
 		$servername = "localhost";
 		$username = "root";
@@ -626,5 +627,27 @@
 		if(mysqli_num_rows($result) > 0)
 			$flag = true;
 		return $flag;
+	}
+
+
+	function getCurrentMinistryID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryID FROM ministrydetails_tbl ORDER BY ministryID DESC LIMIT 1;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryID"];
+			}
+		}
+		return $value;
 	}
 ?>
