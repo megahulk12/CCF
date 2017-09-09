@@ -786,6 +786,7 @@
 					contentType: false,
 					processData: false,
 					success: function(data) {
+						alert(data);
 						$('.fixbutton').text('Propose');
 						$('.fixbutton').prop("disabled", false);
 						swal({
@@ -816,13 +817,13 @@
 		function checkIfWeekly() {
 			if($('#Weekly').prop("checked")) {
 				$('#WeeklyMeeting').show();
-				$('#WeeklyMeeting').prop("required", true);
+				$('#WeeklyDay').prop("required", true);
 				$('#Custom').prop("checked", false);
 				checkIfCustom();
 			}
 			else {
 				$('#WeeklyMeeting').hide();
-				$('#WeeklyMeeting').prop("required", false);
+				$('#WeeklyDay').prop("required", false);
 			}
 		}
 
@@ -981,30 +982,7 @@
 			$('.error, .error-picture').hide();
 			$(this).blur();
 			var check_iteration = true, focused_element;
-
-			// convert time values to timestamp; TIME VALIDATION
-			var start_time = $("#MinistryTime1").val(), end_time = $("#MinistryTime2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if((start_time > end_time) && !($('#MinistryTime2').val() == "")) {
-				$("[id$=greatertime]").show();
-				focused_element = $("#MinistryTime1");
-				check_iteration = false;
-			}
-
-			if(($("#MinistryTime1").val() == $("#MinistryTime2").val()) && !($('[id^=MinistryTime]').val() == "")) {
-				$("[id$=equaltime]").show();
-				focused_element = $("#MinistryTime1");
-				check_iteration = false;
-			}
-
-
+			
 			$($(".propose-ministry").find('input, select, textarea').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1013,7 +991,7 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-					if($(this).is('select')) {
+					else if($(this).is('select')) {
 						if($(this).val() == null) {
 							$("small#"+this.id+"-required").show();
 							focused_element = $('#WeeklyMeeting');
@@ -1021,10 +999,33 @@
 							check_iteration = false;
 						}
 					}
+					else if($(this).is('[id^=MinistryTime]')) {
+
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#MinistryTime1").val(), end_time = $("#MinistryTime2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('#MinistryTime2').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#MinistryTime1");
+							check_iteration = false;
+						}
+
+						if(($("#MinistryTime1").val() == $("#MinistryTime2").val()) && !($('[id^=MinistryTime]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#MinistryTime1");
+							check_iteration = false;
+						}
+					}
 				}
 			});
 
-			alert(focused_element.id);
 			if(!check_iteration)
 				scrollTo(focused_element);
 			

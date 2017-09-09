@@ -32,12 +32,12 @@
 			$ministrydesc = addSlashes($_POST["MinistryDesc"]);
 			$ministrypicturepath = $target_file;
 			$ministryschedstatus = $_POST["MeetingStatus"];
-			$meetingdate = $_POST["MeetingDate"];
+			$meetingdate =  date("Y-m-d", strtotime($_POST["MeetingDate"]));
 			if($ministryschedstatus == "Weekly") 
 				$weekly = $_POST["WeeklyDay"];
-			$starttime = date("H:i:s", strtotime($_POST["MeetingTime1"]));
-			$endtime = date("H:i:s", strtotime($_POST["MeetingTime2"]));
-			$venue = addSlashes($_POST["MeetingVenue"]);
+			$starttime = date("H:i:s", strtotime($_POST["MinistryTime1"]));
+			$endtime = date("H:i:s", strtotime($_POST["MinistryTime2"]));
+			$venue = addSlashes($_POST["MinistryVenue"]);
 			$budget = $_POST["Budget"];
 			$dateEntry = date("Y-m-d"); // for budget details
 			$remarks = addSlashes($_POST["Remarks"]); // put addSlashes to escape apostrophes
@@ -51,8 +51,8 @@
 			mysqli_query($conn, $sql_budget);
 
 
-			if($eventschedstatus == "Weekly") {
-				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1);"
+			if($ministryschedstatus == "Weekly") {
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1);";
 			}
 			else {
 				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$venue', '$starttime', '$endtime', 1);";
@@ -69,7 +69,7 @@
 				while($row = mysqli_fetch_assoc($result)) {
 					$memberid = $row["memberID"];
 					$notificationdesc = "You have a new ministry request - $ministryname.";
-					$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType, request) VALUES(".$_SESSION["userid"].", $memberid, ".getCurrentMinistryID().", '$notificationdesc', 2, 1)";
+					$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, notificationDesc, notificationType, request) VALUES(".$_SESSION["userid"].", $memberid, ".getCurrentMinistryID().", '$notificationdesc', 2, 1);";
 					mysqli_query($conn, $sql_notifications);
 				}
 			}

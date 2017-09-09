@@ -706,7 +706,7 @@
 					</div> \
 				</div> \
 				';
-			$('#notifications').html(preloader);
+			//$('#notifications').html(preloader);
 			$('.dropdown-content li').addClass('transition');
 			$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');
 			$('#notifications div.spinner-layer').addClass('spinner-color-notif-transition');
