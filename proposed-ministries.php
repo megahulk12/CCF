@@ -907,6 +907,13 @@
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
+
+		// preloader section
+		$('button').prop("disabled", true);
+		$('button').click(function() {
+			$('button').blur();
+		});
+
 		function renderImage(input) {
 			if(input.files && input.files[0]) {
 				var reader = new FileReader();

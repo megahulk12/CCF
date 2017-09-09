@@ -608,4 +608,23 @@
 	function countNewLines($string) {
 		return substr_count($string, '\n');
 	}
+
+	function checkIfD12Leader() {
+		include_once('session.php'); // this function requires a session call because it is external from the session itself
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$flag = false;
+		$query ="SELECT member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid']." AND memberType = 2";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0)
+			$flag = true;
+		return $flag;
+	}
 ?>

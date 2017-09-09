@@ -480,6 +480,10 @@
 			border-color: #777;
 		}
 		/* ===== END ===== */
+
+		.error, .error-picture {
+			color: #ff3333;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -619,12 +623,14 @@
 						<h3 class="center">Ministry Proposal</h3>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50">
+								<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50" required>
 								<label for="MinistryName">Ministry Name</label>
+								<small class="error" id="MinistryName-required"></small>
 							</div>
 							<div class="input-field col s12">
-								<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500"></textarea>
+								<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500" required></textarea>
 								<label for="MinistryDesc">Ministry Description</label>
+								<small class="error" id="MinistryDesc-required"></small>
 							</div>
 							<div class="file-field input-field col s12">
 								<div class="btn col s4">
@@ -632,7 +638,8 @@
 									<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 								</div>
 								<div class="file-path-wrapper col s8">
-									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
+									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture" required>
+									<small class="error-picture" id="MinistryPictureName-required"></small>
 								</div>
 								<div class="row ministry-pic">
 								</div>
@@ -651,11 +658,12 @@
 								</div>
 							</p>
 							<div class="input-field col s12" id="Meeting_Date">
-								<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate">
+								<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate" required>
 								<label for="MeetingDate">Meeting Date</label>
+								<small class="error" id="MeetingDate-required"></small>
 							</div>
 								<div class="input-field col s12" id="WeeklyMeeting">
-									<select id="WeeklyDay" name="WeeklyDay">
+									<select id="WeeklyDay" name="WeeklyDay" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
@@ -666,24 +674,33 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
+									<small class="error" id="WeeklyDay-required"></small>
 								</div>
 							<h4 class="center">Time</h4>
 							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1">
+								<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1" required>
 								<label for="MinistryTime1">Start</label>
+								<small class="error" id="MinistryTime1-required"></small>
+								<small class="error" id="MinistryTime1-greatertime"></small>
+								<small class="error" id="MinistryTime1-equaltime"></small>
 							</div>
 							<div class="input-field col s6">
-								<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2">
+								<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2" required>
 								<label for="MinistryTime2">End</label>
+								<small class="error" id="MinistryTime2-required"></small>
+								<small class="error" id="MinistryTime2-greatertime"></small>
+								<small class="error" id="MinistryTime2-equaltime"></small>
 							</div>
 							<h4 class="center">Location</h4>
 							<div class="input-field col s12">
-								<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50">
+								<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50" required>
 								<label for="MinistryVenue">Ministry Venue</label>
+								<small class="error" id="MinistryVenue-required"></small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 								<label for="Budget">Budget</label>
+								<small class="error" id="Budget-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
@@ -737,6 +754,7 @@
 			renderImage(this);
 		});
 
+		var validated = false;
 		$('#propose-ministry').submit(function(e) {
 			/*
 				NOTE:
@@ -744,39 +762,41 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var url = "propose-event.php";
-			var preloader = '\
-				<div class="preloader-wrapper small active"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
+			if(validated) {
+				var url = "request_propose-ministry.php";
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
 						</div> \
 					</div> \
-				</div> \
-			  ';
-			$('.fixbutton').html(preloader);
-			$('.fixbutton').prop("disabled", true);
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: new FormData(this),
-				contentType: false,
-				processData: false,
-				success: function(data) {
-					$('.fixbutton').text('Propose');
-					$('.fixbutton').prop("disabled", false);
-					swal({
-						title: "Success!",
-						text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
-						type: "success",
-						timer: 10000
-					}, function() { window.location.href = "index.php"; });
-				}
-			});
+				  ';
+				$('.fixbutton').html(preloader);
+				$('.fixbutton').prop("disabled", true);
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: new FormData(this),
+					contentType: false,
+					processData: false,
+					success: function(data) {
+						$('.fixbutton').text('Propose');
+						$('.fixbutton').prop("disabled", false);
+						swal({
+							title: "Success!",
+							text: "Request submitted! Please wait for the CCF Administrator to eveluate your request.",
+							type: "success",
+							timer: 10000
+						}, function() { window.location.href = "index.php"; });
+					}
+				});
+			}
 			e.preventDefault();
 		});
 
@@ -924,6 +944,145 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+
+
+
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+		$('.error, .error-picture').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('.error-picture').text('Please choose a picture.');
+			$('[id$=greatertime]').text('Start Time should be before than End Time.');
+			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
+			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		// personal info form validation
+		$("#propose").click(function() {
+			$('.error, .error-picture').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
+
+			// convert time values to timestamp; TIME VALIDATION
+			var start_time = $("#MinistryTime1").val(), end_time = $("#MinistryTime2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if((start_time > end_time) && !($('#MinistryTime2').val() == "")) {
+				$("[id$=greatertime]").show();
+				focused_element = $("#MinistryTime1");
+				check_iteration = false;
+			}
+
+			if(($("#MinistryTime1").val() == $("#MinistryTime2").val()) && !($('[id^=MinistryTime]').val() == "")) {
+				$("[id$=equaltime]").show();
+				focused_element = $("#MinistryTime1");
+				check_iteration = false;
+			}
+
+
+			$($(".propose-ministry").find('input, select, textarea').reverse()).each(function() {
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$("small#"+this.id+"-required").show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $('#WeeklyMeeting');
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+				}
+			});
+
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		// change event handler removes leading
+		$("[id^=MinistryTime]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 	</script>
 
 	<script>
