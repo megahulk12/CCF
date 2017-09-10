@@ -684,31 +684,17 @@
 			});
 		}
 
-		/*
-		window.addEventListener("scroll", function() {
-			if(window.scrollY > 50) {
-				$('nav').slideUp(100);
-			}
-			else {
-				$('nav').slideDown(100);
-			}
-		}, false);
-		*/
-
 		function cellActive(id) { // this function allows you to highlight the table rows you select
-			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
 			var rownumber = id.charAt(3);
 			for(var i = 0; i < num_of_rows; i++) {
-				//document.getElementsByTagName("TR")[i].appendChild(style);
 				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
 				document.getElementsByTagName("TR")[i].style.color = "black"
 			}
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
-			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "profile.php?id="+id.split("_")[1]);
+			$("#dgroupID").val(id.split("_")[1]);
 		}
 	</script>
 
@@ -1467,23 +1453,25 @@
 													if(mysqli_num_rows($result) > 0) {
 														$count = 1;
 														while($row = mysqli_fetch_assoc($result)) {
-															echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
 															$dgroupid = $row["dgroupID"];
+															echo '<tr id="row_'.$dgroupid.'" onclick="cellActive('."'".'row_'.$dgroupid.''."'".')">';
 															$fullname = $row["fullname"];
 															$gender = $row["gender"];
 															$dgrouptype = $row["dgroupType"];
 															$schedday = $row["schedDay"];
 															$schedule = $row["schedule"];
-															echo '<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
-															<td class="choose">'.$fullname.'</td>
-															<td class="choose">'.$gender.'</td>
-															<td class="choose">'.$dgrouptype.'</td>
-															<td class="choose">'.$schedday.'</td>
-															<td class="choose">'.$schedule.'</td>';
+															//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
+															echo '
+																<td class="choose">'.$fullname.'</td>
+																<td class="choose">'.$gender.'</td>
+																<td class="choose">'.$dgrouptype.'</td>
+																<td class="choose">'.$schedday.'</td>
+																<td class="choose">'.$schedule.'</td>';
 															echo '</tr>';
-															$count++;
 														}
 													}
+													//WORK HERE
+
 													echo ' ';
 												?>
 											</table>
@@ -1493,6 +1481,7 @@
 										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
 											<div class="determinate" style="" id="register_progressbar"></div>
 										</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+										<input type="hidden" name="dgroupID" id="dgroupID" value=""/> <!--hidden input for dgid-->
 										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
 										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
 									</div>
@@ -1811,6 +1800,7 @@
 						*/
 				});
 		}
+		
 		
 		var title = "Christ's Commission Fellowship";
 		function seen() { // this function gets rid of the badge every after click event 
