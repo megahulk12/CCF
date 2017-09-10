@@ -508,7 +508,7 @@
 		}
 		/* ===== END ===== */
 
-		.error, .error-picture {
+		.error {
 			color: #ff3333;
 		}
 	</style>
@@ -784,7 +784,7 @@
 							<form method="post" id="ministry-requests" enctype="multipart/form-data">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
@@ -871,7 +871,7 @@
 												<label for="Remarks">Remarks</label>
 											</div>
 											<div class="input-field col s12" id="Ministry_Head">
-												<select id="MinistryHead" name="MinistryHead">
+												<select id="MinistryHead" name="MinistryHead" required>
 													<option value="" disabled selected>Assign a Ministry Head...</option>
 													<?php
 
@@ -894,6 +894,7 @@
 													?>
 												</select>
 												<label>D12 Leaders</label>
+												<small class="error" id="MinistryHead-required"></small>
 											</div>
 										</div>
 									</div>
@@ -990,6 +991,7 @@
 			});
 		});
 
+		var validated = false;
 		$('#ministry-requests').submit(function(e) {
 			/*
 				NOTE:
@@ -997,41 +999,112 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var preloader = '\
-				<div class="preloader-wrapper small active"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
+			if(validated) {
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
 						</div> \
 					</div> \
-				</div> \
-			  ';
-			$('.fixbutton').html(preloader);
-			$('.fixbutton').prop("disabled", true);
-			var url = "request_ministry-requests.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "id="+$('#ministryID').val()+"&approve",
-				success: function(data) {
-					$('.fixbutton').text('Approve');
-					$('.fixbutton').prop("disabled", false);
-					swal({
-						title: "Ministry Approved!",
-						text: "This ministry will now be open for people to join.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					}, function() { window.location.reload(); });
-				}
-			});
+				  ';
+				$('.fixbutton').html(preloader);
+				$('.fixbutton').prop("disabled", true);
+				var url = "request_ministry-requests.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "id="+$('#ministryID').val()+"&MinistryHead="+$('#MinistryHead').val()+"&approve",
+					success: function(data) {
+						$('.fixbutton').text('Approve');
+						$('.fixbutton').prop("disabled", false);
+						swal({
+							title: "Ministry Approved!",
+							text: "This ministry will now be open for people to join.",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.reload(); });
+					}
+				});
+			}
 			e.preventDefault();
 		});
+
+		$('.error').hide();
+
+		$(document).ready(function() {
+			$('.error').text("Please choose one.");
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		$('#approve').click(function() {
+			$('.error').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
+
+			$($("#ministry-requests").find('select').reverse()).each(function() {
+				if($(this).prop("required")) {
+					if($(this).val() == null) {
+						$("small#"+this.id+"-required").show();
+						focused_element = $('#Ministry_Head');
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
 
 		function checkIfCustom() {
 			if($('#Custom').prop("checked")) {

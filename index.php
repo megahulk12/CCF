@@ -717,7 +717,7 @@
 				data: 'view',
 				dataType: 'json',
 				success: function(data) {
-					if(data.count >= 1) {
+					if(data.count > 0) {
 						$('#notifications').html(data.view);
 						$('.dropdown-content li').addClass('transition');
 						$('.dropdown-content li > a, .dropdown-content li > h6').addClass('transition');

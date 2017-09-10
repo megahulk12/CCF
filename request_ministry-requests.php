@@ -18,12 +18,15 @@
 		mysqli_close($conn);
 	}
 	else if(isset($_POST['approve'])) {
-		$sql_ministry_approved = "UPDATE ministrydetails_tbl SET ministryStatus = 1 WHERE ministryID = $id";
+		$ministryHead = $_POST["MinistryHead"];
+		$sql_ministry_approved = "UPDATE ministrydetails_tbl SET ministryHeadID = $ministryHead, ministryStatus = 1 WHERE ministryID = $id";
 		mysqli_query($conn, $sql_ministry_approved);
-		$notificationdesc = getMinistryName($id)." has been approved and is now open for people to view and join.";
+		$sql_promote = "UPDATE member_tbl SET memberType = 4 WHERE memberID = ".getMinistryHeadID($id);
+		mysqli_query($conn, $sql_promote);
+		$notificationdesc = "You are now head of the ministry - ".getMinistryName($id)." and is now open for people to view and join.";
 		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE ministryID = ".$id;
 		mysqli_query($conn, $sql_notifications);
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMinistryHeadID($id).", $id, '$notificationdesc', 1)";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMinistryHeadID($id).", $id, '$notificationdesc', 2)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}

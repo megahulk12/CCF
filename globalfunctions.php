@@ -746,7 +746,7 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$query = "SELECT minsitryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$query = "SELECT ministryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
@@ -767,11 +767,11 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$query = "SELECT minsitryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$query = "SELECT ministryHeadID FROM ministrydetails_tbl WHERE ministryID = $mid;";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
-				$value = $row["ministryName"];
+				$value = $row["ministryHeadID"];
 			}
 		}
 		return $value;
