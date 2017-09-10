@@ -93,7 +93,7 @@
 		}
 
 		/*form*/
-		.proposed-ministries {
+		.ministry-requests {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -432,7 +432,7 @@
 			width: 0 !important;
 		}
 
-		#proposed-ministries {
+		#ministry-requests {
 			margin: 0 auto;
 			height: 700px;
 		}
@@ -575,48 +575,43 @@
 
 
 			// ajax + preloader
-			var url = "request_proposed-ministries.php";
+			var url = "request_ministry-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
+					changeTitleTransition("#form-header", data.name);
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					/*
-					$('#eventID').val(id);
-					$('#form-header').text(data.name);
+					disableForm(false);
+					
+					$('#ministryID').val(id);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 
-					$('#EventName').val(data.name);
-					$('#EventDesc').val(data.description);
-					$('#EventDesc').trigger("autoresize");
+					$('#MinistryName').val(data.name);
+					$('#MinistryDesc').val(data.description);
+					$('#MinistryDesc').trigger("autoresize");
 					if(data.schedstatus == 0) {
-						$('#SingleDay').prop("checked", true);
-						checkIfSingle();
+						$('#Custom').prop("checked", true);
+						checkIfCustom();
 					}
 					else if(data.schedstatus == 1) {
-						$('#MultipleDay').prop("checked", true);
-						checkIfMultiple();
-						$('#EventDateEnd').val(data.endday);
-					}
-					else if(data.schedstatus == 2) {
 						$('#Weekly').prop("checked", true);
 						checkIfWeekly();
 						$('#WeeklyDay').val(data.weekly);
-						$('#EventDateEnd').val(data.endday);
 					}
-					$('#EventDateStart').val(data.startday);
-					$('#EventTime1').val(data.starttime);
-					$('#EventTime2').val(data.endtime);
-					$('#EventVenue').val(data.venue);
+					$('#MeetingDate').val(data.date);
+					$('#MinistryTime1').val(data.starttime);
+					$('#MinistryTime2').val(data.endtime);
+					$('#MinistryVenue').val(data.venue);
 					$('#Budget').val(data.budget);
 					$('#Remarks').val(data.remarks);
 					$('#Remarks').trigger("autoresize");
@@ -625,10 +620,9 @@
 					Materialize.updateTextFields();
 					$('select').material_select();
 
-					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
+					$('.ministry-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#MinistryPictureName').val(data.picturepath.split("/")[2]);
 
-					*/
 				}
 			});
 		}
@@ -647,9 +641,17 @@
 
 		function preload() {
 			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#proposed-ministries').width()/2);
-			$('#preloader').css("top", $('#proposed-ministries').height()/2);
+			$('#preloader').css("left", $('#ministry-requests').width()/2);
+			$('#preloader').css("top", $('#ministry-requests').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 
@@ -778,7 +780,7 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="proposed-ministries" enctype="multipart/form-data">
+							<form method="post" id="ministry-requests" enctype="multipart/form-data">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
@@ -988,7 +990,7 @@
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: "id="+$('#eventID').val()+"&approve",
+				data: "id="+$('#ministryID').val()+"&approve",
 				success: function(data) {
 					$('.fixbutton').text('Approve');
 					$('.fixbutton').prop("disabled", false);
@@ -1021,11 +1023,13 @@
 		function checkIfWeekly() {
 			if($('#Weekly').prop("checked")) {
 				$('#WeeklyMeeting').show();
+				$('#WeeklyDay').prop("required", true);
 				$('#Custom').prop("checked", false);
 				checkIfCustom();
 			}
 			else {
 				$('#WeeklyMeeting').hide();
+				$('#WeeklyDay').prop("required", false);
 			}
 		}
 
