@@ -83,10 +83,10 @@
 
 
 			if($ministryschedstatus == "Weekly") {
-				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedDay = '$weekly', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime' WHERE schedID = ".getMinistrySchedID($id);
+				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedDay = '$weekly', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 1 WHERE schedID = ".getMinistrySchedID($id);
 			}
 			else {
-				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime' WHERE schedID = ".getMinistrySchedID($id);
+				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 0 WHERE schedID = ".getMinistrySchedID($id);
 			}
 
 			mysqli_query($conn, $sql_schedule);

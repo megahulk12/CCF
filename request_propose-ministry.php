@@ -54,10 +54,10 @@
 
 
 			if($ministryschedstatus == "Weekly") {
-				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1);";
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedStatus, schschedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1, 1);";
 			}
 			else {
-				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedPlace, schedStartTime, schedEndtime, schedType) VALUES('$meetingdate', '$venue', '$starttime', '$endtime', 1);";
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedPlace, schedStartTime, schedEndtime, schedStatus, schedType) VALUES('$meetingdate', '$venue', '$starttime', '$endtime', 0, 1);";
 			}
 
 			mysqli_query($conn, $sql_schedule);
