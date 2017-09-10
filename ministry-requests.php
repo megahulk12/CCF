@@ -581,6 +581,9 @@
 			$("#preloader").css("visibility", "visible");
 			$('#form-header').animate({opacity: 0.2}, 400);
 			$("#page1").animate({opacity: 0.2}, 400);
+
+			// for the ministry head
+			$('#MinistryHead').prop("disabled", false);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -590,7 +593,6 @@
 					changeTitleTransition("#form-header", data.name);
 					$("#preloader").css("visibility", "hidden");
 					$('button').prop("disabled", false);
-					disableForm(false);
 					
 					$('#ministryID').val(id);
 					// access echo values data.<key value of array>
@@ -622,7 +624,6 @@
 
 					$('.ministry-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
 					$('#MinistryPictureName').val(data.picturepath.split("/")[2]);
-
 				}
 			});
 		}
@@ -868,6 +869,31 @@
 											<div class="input-field col s12">
 												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
 												<label for="Remarks">Remarks</label>
+											</div>
+											<div class="input-field col s12" id="Ministry_Head">
+												<select id="MinistryHead" name="MinistryHead">
+													<option value="" disabled selected>Assign a Ministry Head...</option>
+													<?php
+
+														$conn = mysqli_connect($servername, $username, $password, $dbname);
+														if (!$conn) {
+															die("Connection failed: " . mysqli_connect_error());
+														}
+														$query = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType = 2";
+														$result = mysqli_query($conn, $query);
+														if(mysqli_num_rows($result) > 0) {
+															while($row = mysqli_fetch_assoc($result)) {
+																$id = $row["dg12Leader"];
+																$fullname = $row["dg12LeaderName"];
+																echo '
+													<option value="'.$id.'">'.$fullname.'</option>
+																';
+															}
+														}
+														mysqli_close($conn);
+													?>
+												</select>
+												<label>D12 Leaders</label>
 											</div>
 										</div>
 									</div>

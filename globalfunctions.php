@@ -734,4 +734,46 @@
 		}
 		return $value;
 	}
+
+	function getMinistryName($mid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT minsitryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryName"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryHeadID($mid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT minsitryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryName"];
+			}
+		}
+		return $value;
+	}
 ?>
