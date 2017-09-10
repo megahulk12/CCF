@@ -757,23 +757,20 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryStatus = 0 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
-												$eventID = $row["eventID"];
-												$eventname = $row["eventName"];
+												$id = $row["ministryID"];
+												$name = $row["ministryName"];
 												echo '
-												<tr class="choose" id="row_'.$eventID.'" onclick="cellActive(this.id)">
-												    <td>'.$eventname.'</td>
+												<tr class="choose" id="row_'.$id.'" onclick="cellActive(this.id)">
+												    <td>'.$name.'</td>
 												</tr>
 												';
 											}
 										}
 									?>
-									<tr class="choose" id="row_1" onclick="cellActive(this.id)">
-										<td>Sample</td>
-									</tr> 
 								</tbody>
 								<tfoot></tfoot>
 							</table>

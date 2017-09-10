@@ -574,7 +574,8 @@
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -582,11 +583,11 @@
 				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					$('#eventPartID').val(id);
 
-					$('#form-header').text(data.fname + ' ' + data.lname);
+					//$('#form-header').text(data.fname + ' ' + data.lname);
+					changeTitleTransition("#form-header", data.fname + ' ' + data.lname);
 					$('#Lastname').val(data.lname);
 					$('#Firstname').val(data.fname);
 					$('#Middlename').val(data.mname);
@@ -651,6 +652,14 @@
 			$('#preloader').css("left", $('#participation-requests').width()/2);
 			$('#preloader').css("top", $('#participation-requests').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 

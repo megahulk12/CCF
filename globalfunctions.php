@@ -714,7 +714,7 @@
 		return $value;
 	}
 
-	function getEventPicturePath($eventID) {
+	function getMinistryPicturePath($ministryID) {
 		$servername = "localhost";
 		$username = "root";
 		$password = "root";
@@ -725,11 +725,11 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$query = "SELECT eventPicturePath FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$query = "SELECT ministryPicturePath FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
-				$value = $row["eventPicturePath"];
+				$value = $row["ministryPicturePath"];
 			}
 		}
 		return $value;

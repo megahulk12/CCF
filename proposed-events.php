@@ -579,7 +579,8 @@
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -587,11 +588,11 @@
 				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					disableForm(false);
 					$('#eventID').val(id);
-					$('#form-header').text(data.name);
+					//$('#form-header').text(data.name);
+					changeTitleTransition("#form-header", data.name);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 
@@ -648,6 +649,14 @@
 			$('#preloader').css("left", $('#proposed-events').width()/2);
 			$('#preloader').css("top", $('#proposed-events').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 

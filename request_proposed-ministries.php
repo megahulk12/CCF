@@ -5,7 +5,9 @@
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
-	$id = $_POST["id"];
+
+	if(isset($_POST["id"]))
+		$id = $_POST["id"];
 
 	if(isset($id)) {
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -36,29 +38,27 @@
 	}
 	else {
 		$confirmUpload = true;
-		$target_dir = "uploads/";
+		$target_dir = "uploads/".$_SESSION['userid'].'/';
+		if(!is_dir($target_dir)) {
+			mkdir($target_dir);
+		}
 		$target_file = $target_dir.basename($_FILES["MinistryPicture"]["name"]);
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-		if(file_exists($target_file)) { // check if image exists
-			echo "File already exists.";
-			$confirmUpload = false;
-		}
+		if(file_exists($target_file)) // check if image exists
+			$target_file = getMinistryPicturePath($_POST["ministryID"]);
+		else
+			$target_file = $target_dir.removeExtension(basename($_FILES["MinistryPicture"]["name"])).uniqid().'.'.$imageFileType;
 
 		if($_FILES["MinistryPicture"]["size"] > 20000000) { // limits the size of image
 			echo "File is too large.";
 			$confirmUpload = false;
 		}
 
-		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-		&& $imageFileType != "gif" ) {
-		    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-			$confirmUpload = false;
-		}
-
 		if($confirmUpload) {
 			move_uploaded_file($_FILES["MinistryPicture"]["tmp_name"], $target_file);
 			// fetch data from form
+			$id = $_POST["ministryID"];
 			$ministryname = addSlashes($_POST["MinistryName"]);
 			$ministrydesc = addSlashes($_POST["MinistryDesc"]);
 			$ministrypicturepath = $target_file;
@@ -91,7 +91,7 @@
 
 			mysqli_query($conn, $sql_schedule);
 
-			$sql_propose_ministry = "UPDATE ministrydetails_tbl ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc', remarks = '$remarks' WHERE ministryID = $id";
+			$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc', remarks = '$remarks' WHERE ministryID = $id";
 			mysqli_query($conn, $sql_propose_ministry);
 
 			mysqli_close($conn);

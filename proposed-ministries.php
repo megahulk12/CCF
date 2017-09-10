@@ -621,7 +621,7 @@
 					$('select').material_select();
 
 					$('.ministry-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#MinistryPictureName').val(data.picturepath.split("/")[1]);
+					$('#MinistryPictureName').val(data.picturepath.split("/")[2]);
 
 				}
 			});
