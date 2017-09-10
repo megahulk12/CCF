@@ -586,38 +586,32 @@
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
+					changeTitleTransition('#row_'+id, "#form-header");
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
 					disableForm(false);
-					/*
-					$('#eventID').val(id);
-					$('#form-header').text(data.name);
+					
+					$('#ministryID').val(id);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 
-					$('#EventName').val(data.name);
-					$('#EventDesc').val(data.description);
-					$('#EventDesc').trigger("autoresize");
+					$('#MinistryName').val(data.name);
+					$('#MinistryDesc').val(data.description);
+					$('#MinistryDesc').trigger("autoresize");
 					if(data.schedstatus == 0) {
-						$('#SingleDay').prop("checked", true);
-						checkIfSingle();
+						$('#Custom').prop("checked", true);
+						checkIfCustom();
 					}
 					else if(data.schedstatus == 1) {
-						$('#MultipleDay').prop("checked", true);
-						checkIfMultiple();
-						$('#EventDateEnd').val(data.endday);
-					}
-					else if(data.schedstatus == 2) {
 						$('#Weekly').prop("checked", true);
 						checkIfWeekly();
 						$('#WeeklyDay').val(data.weekly);
-						$('#EventDateEnd').val(data.endday);
 					}
-					$('#EventDateStart').val(data.startday);
-					$('#EventTime1').val(data.starttime);
-					$('#EventTime2').val(data.endtime);
-					$('#EventVenue').val(data.venue);
+					$('#MeetingDate').val(data.date);
+					$('#MinistryTime1').val(data.starttime);
+					$('#MinistryTime2').val(data.endtime);
+					$('#MinistryVenue').val(data.venue);
 					$('#Budget').val(data.budget);
 					$('#Remarks').val(data.remarks);
 					$('#Remarks').trigger("autoresize");
@@ -626,10 +620,9 @@
 					Materialize.updateTextFields();
 					$('select').material_select();
 
-					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
+					$('.ministry-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#MinistryPictureName').val(data.picturepath.split("/")[1]);
 
-					*/
 				}
 			});
 		}
@@ -651,6 +644,13 @@
 			$('#preloader').css("left", $('#proposed-ministries').width()/2);
 			$('#preloader').css("top", $('#proposed-ministries').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(elem, title_elem) {
+			$(title_elem).animate({opacity: 0}, 400).animate({opacity: 1}, 400);
+			setTimeout(function() {
+				$(title_elem).text($(elem).text());
+			}, 400);
 		}
 	</script>
 
@@ -758,23 +758,20 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = ".$_SESSION['userid']." AND ministryStatus = 0 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
-												$eventID = $row["eventID"];
-												$eventname = $row["eventName"];
+												$id = $row["ministryID"];
+												$name = $row["ministryName"];
 												echo '
-												<tr class="choose" id="row_'.$eventID.'" onclick="cellActive(this.id)">
-												    <td>'.$eventname.'</td>
+												<tr class="choose" id="row_'.$id.'" onclick="cellActive(this.id)">
+												    <td>'.$name.'</td>
 												</tr>
 												';
 											}
 										}
 									?>
-									<tr class="choose" id="row_1" onclick="cellActive(this.id)">
-										<td>Sample</td>
-									</tr> 
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -785,7 +782,7 @@
 							<form method="post" id="proposed-ministries" enctype="multipart/form-data">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
@@ -801,12 +798,14 @@
 									<div id="page1" class="">
 										<div class="row">
 											<div class="input-field col s12">
-												<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50">
+												<input type="text" name="MinistryName" id="MinistryName" data-length="50" maxlength="50" required>
 												<label for="MinistryName">Ministry Name</label>
+												<small class="error" id="MinistryName-required"></small>
 											</div>
 											<div class="input-field col s12">
-												<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500"></textarea>
+												<textarea id="MinistryDesc" class="materialize-textarea" name="MinistryDesc" data-length="500" maxlength="500" required></textarea>
 												<label for="MinistryDesc">Ministry Description</label>
+												<small class="error" id="MinistryDesc-required"></small>
 											</div>
 											<div class="file-field input-field col s12">
 												<div class="btn col s4">
@@ -814,7 +813,8 @@
 													<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 												</div>
 												<div class="file-path-wrapper col s8">
-													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
+													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture" required>
+													<small class="error-picture" id="MinistryPictureName-required"></small>
 												</div>
 												<div class="row ministry-pic">
 												</div>
@@ -833,11 +833,12 @@
 												</div>
 											</p>
 											<div class="input-field col s12" id="Meeting_Date">
-												<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate">
+												<input type="date" class="datepicker" id="MeetingDate" name="MeetingDate" required>
 												<label for="MeetingDate">Meeting Date</label>
+												<small class="error" id="MeetingDate-required"></small>
 											</div>
 												<div class="input-field col s12" id="WeeklyMeeting">
-													<select id="WeeklyDay" name="WeeklyDay">
+													<select id="WeeklyDay" name="WeeklyDay" required>
 														<option value="" disabled selected>Choose your option...</option>
 														<option value="Sunday">Sunday</option>
 														<option value="Monday">Monday</option>
@@ -848,24 +849,33 @@
 														<option value="Saturday">Saturday</option>
 													</select>
 													<label>Day</label>
+													<small class="error" id="WeeklyDay-required"></small>
 												</div>
 											<h4 class="center">Time</h4>
 											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1">
+												<input type="date" class="timepicker" id="MinistryTime1" name="MinistryTime1" required>
 												<label for="MinistryTime1">Start</label>
+												<small class="error" id="MinistryTime1-required"></small>
+												<small class="error" id="MinistryTime1-greatertime"></small>
+												<small class="error" id="MinistryTime1-equaltime"></small>
 											</div>
 											<div class="input-field col s6">
-												<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2">
+												<input type="date" class="timepicker" id="MinistryTime2" name="MinistryTime2" required>
 												<label for="MinistryTime2">End</label>
+												<small class="error" id="MinistryTime2-required"></small>
+												<small class="error" id="MinistryTime2-greatertime"></small>
+												<small class="error" id="MinistryTime2-equaltime"></small>
 											</div>
 											<h4 class="center">Location</h4>
 											<div class="input-field col s12">
-												<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50">
+												<input type="text" name="MinistryVenue" id="MinistryVenue" data-length="50" maxlength="50" required>
 												<label for="MinistryVenue">Ministry Venue</label>
+												<small class="error" id="MinistryVenue-required"></small>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+												<input type="text" name="Budget" id="Budget" data-length="20" maxlength="20" placeholder="ex. 2500-5500" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 												<label for="Budget">Budget</label>
+												<small class="error" id="Budget-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
@@ -875,7 +885,7 @@
 									</div>
 								</div>
 								<div class="row">
-									<input type="hidden" id="eventID" name="eventID">
+									<input type="hidden" id="ministryID" name="ministryID">
 									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="revise" id="revise">Revise</button>
 								</div>
 							</form>
@@ -995,11 +1005,13 @@
 		function checkIfWeekly() {
 			if($('#Weekly').prop("checked")) {
 				$('#WeeklyMeeting').show();
+				$('#WeeklyDay').prop("required", true);
 				$('#Custom').prop("checked", false);
 				checkIfCustom();
 			}
 			else {
 				$('#WeeklyMeeting').hide();
+				$('#WeeklyDay').prop("required", false);
 			}
 		}
 
@@ -1085,6 +1097,7 @@
 					</div> \
 				</div> \
 			  ';
+			$('#preloader').html(preloader);
 			$('title').text(title); // re-initialize the title
 			$.ajax({
 				type: 'POST',
@@ -1126,6 +1139,7 @@
 
 
 
+
 		/* 
 		============================================================
 		============================================================
@@ -1157,7 +1171,7 @@
 			$('.error, .error-picture').hide();
 			$(this).blur();
 			var check_iteration = true, focused_element;
-
+			
 			$($("#proposed-ministries").find('input, select, textarea').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1165,6 +1179,38 @@
 						focused_element = $(this);
 						disableDefaultRequired($(this));
 						check_iteration = false;
+					}
+					else if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $('#WeeklyMeeting');
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if($(this).is('[id^=MinistryTime]')) {
+
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#MinistryTime1").val(), end_time = $("#MinistryTime2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('#MinistryTime2').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#MinistryTime1");
+							check_iteration = false;
+						}
+
+						if(($("#MinistryTime1").val() == $("#MinistryTime2").val()) && !($('[id^=MinistryTime]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#MinistryTime1");
+							check_iteration = false;
+						}
 					}
 				}
 			});
@@ -1184,85 +1230,6 @@
 				$(this).val(removeLeadingZero(time_value));
 			}
 		});
-
-		/*
-		$("#cprefer_next").click(function() {
-			// default states
-			$('.error').hide();
-			$(this).blur(); // no focus in button once clicked
-			var check_iteration = true;
-
-			// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			// convert time values to timestamp
-			start_time = $("#timepicker1opt1").val();
-			end_time = $("#timepicker1opt2").val();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater1").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
-				$("#timepicker1opt1-equal").show();
-				$("#timepicker1opt2-equal").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
-				$("#timepicker2opt1-equal").show();
-				$("#timepicker2opt2-equal").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
-			// [FRONT-END] iterate to show error classes to required fields
-			// [BACK-END] iterate to check blank fields and other factors before going to next pages
-				if($(this).prop('required')) {
-					if($(this).val() == "") {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this);
-						disableDefaultRequired($(this));
-						check_iteration = false;
-					}
-				}
-			});
-
-			if(!check_iteration)
-				scrollTo(focused_element);
-
-			if(check_iteration) {
-				confirmvalidated = true;
-				if(checkLastPage()) {
-					validated = true;
-					confirmvalidated = false;
-				}
-				pagination(1, this.id.split("_")[0]);
-			}
-		});
-		*/
 
 		function removeLeadingZero(time_value) {
 			return time_value.slice(1, time_value.length);

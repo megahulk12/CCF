@@ -621,6 +621,7 @@
 							}
 						}
 						// SAMPLE UI LAYOUT
+						/*
 						echo '
 							<td>
 								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
@@ -634,7 +635,7 @@
 								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
 								Sample 3<br><br>&nbsp;</a>
 							</td>
-							';
+							';*/
 						$result = mysqli_query($conn, $query);
 						if(mysqli_num_rows($result) > 0) {
 							$counter_row = 1;
@@ -880,8 +881,15 @@
 		}
 
 		$('#Ministry').change(function() {
-			$('#Ministry-title').text($(this).val());
+			changeTitleTransition($(this), "#Ministry-title");
 		});
+
+		function changeTitleTransition(elem, title_elem) {
+			$(title_elem).fadeOut(300).fadeIn(300);
+			setTimeout(function() {
+				$(title_elem).text($(elem).val());
+			}, 300);
+		}
 	</script>
 
 	<script>

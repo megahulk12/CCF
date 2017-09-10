@@ -10,15 +10,17 @@
 	//if(isset($_POST['propose'])) {
 		// Image handling
 		$confirmUpload = true;
-		$target_dir = "uploads/";
+		$target_dir = "uploads/".$_SESSION['userid'].'/';
+		if(!is_dir($target_dir)) {
+			mkdir($target_dir);
+		}
 		$target_file = $target_dir.basename($_FILES["MinistryPicture"]["name"]);
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-		$target_file = $target_dir.removeExtension(basename($_FILES["MinistryPicture"]["name"])).uniqid().'.'.$imageFileType;
 
-		if(file_exists($target_file)) { // check if image exists
-			echo "File already exists.";
-			$confirmUpload = false;
-		}
+		if(file_exists($target_file)) // check if image exists
+			$target_file = getMinistryPicturePath($_POST["ministryID"]);
+		else
+			$target_file = $target_dir.removeExtension(basename($_FILES["MinistryPicture"]["name"])).uniqid().'.'.$imageFileType;
 
 		if($_FILES["MinistryPicture"]["size"] > 20000000) { // limits the size of image
 			echo "File is too large.";

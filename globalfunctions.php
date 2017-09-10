@@ -650,4 +650,88 @@
 		}
 		return $value;
 	}
+
+	function getMinistryBudgetID($ministryID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT budgetID FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["budgetID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistrySchedID($ministryID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT schedID FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["schedID"];
+			}
+		}
+		return $value;
+	}
+
+	function getEventPicturePath($eventID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventPicturePath FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventPicturePath"];
+			}
+		}
+		return $value;
+	}
+
+	function getEventPicturePath($eventID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventPicturePath FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventPicturePath"];
+			}
+		}
+		return $value;
+	}
 ?>

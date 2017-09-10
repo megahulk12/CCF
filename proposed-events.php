@@ -626,7 +626,7 @@
 					$('select').material_select();
 
 					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
+					$('#EventPictureName').val(data.picturepath.split("/")[2]);
 				}
 			});
 		}
