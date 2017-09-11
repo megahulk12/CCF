@@ -537,8 +537,8 @@
 						$startday = $row["eventStartDay"];
 						$endday = $row["eventEndDay"];
 						$weekly = $row["eventWeekly"];
-						$starttime = date("h:i a", strtotime($row["eventStartTime"]));
-						$endtime = date("h:i a", strtotime($row["eventEndTime"]));
+						$starttime = date("g:i a", strtotime($row["eventStartTime"]));
+						$endtime = date("g:i a", strtotime($row["eventEndTime"]));
 						$venue = $row["eventVenue"];
 						$schedstatus = $row["eventSchedStatus"];
 						$join_form = '

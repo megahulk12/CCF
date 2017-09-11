@@ -535,6 +535,7 @@
 						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["ministryDescription"]));
 						$path = $row["ministryPicturePath"];
 						$date = $row["schedDate"];
+						$date = date("F j", strtotime($date));
 						$weekly = $row["schedDay"];
 						$starttime = date("g:i a", strtotime($row["schedStartTime"]));
 						$endtime = date("g:i a", strtotime($row["schedEndTime"]));
@@ -543,14 +544,14 @@
 						$join_form = '
 							<form method="post" id="join-ministry">
 								<input type="hidden" id="ministryID" name="ministryID" value="'.$mid.'">
-								<button class="waves-effect waves-light btn col s3 right join-ministry" type="submit" name="join" id="join">JOIN THIS MINISTRY</button>
+								<button class="waves-effect waves-light btn col s4 right join-ministry" type="submit" name="join" id="join">JOIN THIS MINISTRY</button>
 								<br>
 							</form>
 						';
 						$close_form = '
 							<form method="post" id="close-ministry">
 								<input type="hidden" id="ministryID" name="ministryID" value="'.$mid.'">
-								<button class="waves-effect waves-light btn col s3 right close-ministry" type="submit" name="close" id="close">CLOSE THIS MINISTRY</button>
+								<button class="waves-effect waves-light btn col s4 right close-ministry" type="submit" name="close" id="close">CLOSE THIS MINISTRY</button>
 								<br>
 							</form>
 						';
@@ -558,7 +559,6 @@
 						//echo '<script> alert('.$partstat.'); </script>';
 
 						if($schedstatus == 0) {
-							$startday = date("F j", strtotime($startday));
 							if($_SESSION['memberType'] <= 2 && $partstat == "") {
 								echo '
 								<div class="container-ministries">
@@ -663,8 +663,6 @@
 							}
 						}
 						else if($schedstatus == 1) {
-							$startday = date("F j", strtotime($startday));
-							$endday = date("F j", strtotime($endday));
 							if($_SESSION['memberType'] <= 2 && $partstat == "") {
 								echo '
 								<div class="container-ministries">
@@ -757,7 +755,6 @@
 										<div class="col s12 m7">
 											<div class="card card-schedule">
 												<div class="card-content card-content-schedule">
-													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
 													<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
 													<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
 													<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
