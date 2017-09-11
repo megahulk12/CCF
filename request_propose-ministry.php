@@ -34,9 +34,10 @@
 			$ministrydesc = addSlashes($_POST["MinistryDesc"]);
 			$ministrypicturepath = $target_file;
 			$ministryschedstatus = $_POST["MeetingStatus"];
-			$meetingdate =  date("Y-m-d", strtotime($_POST["MeetingDate"]));
 			if($ministryschedstatus == "Weekly") 
 				$weekly = $_POST["WeeklyDay"];
+			else
+				$meetingdate =  date("Y-m-d", strtotime($_POST["MeetingDate"]));
 			$starttime = date("H:i:s", strtotime($_POST["MinistryTime1"]));
 			$endtime = date("H:i:s", strtotime($_POST["MinistryTime2"]));
 			$venue = addSlashes($_POST["MinistryVenue"]);
@@ -54,7 +55,7 @@
 
 
 			if($ministryschedstatus == "Weekly") {
-				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedDay, schedPlace, schedStartTime, schedEndtime, schedStatus, schschedType) VALUES('$meetingdate', '$weekly', '$venue', '$starttime', '$endtime', 1, 1);";
+				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDay, schedPlace, schedStartTime, schedEndtime, schedStatus, schschedType) VALUES('$weekly', '$venue', '$starttime', '$endtime', 1, 1);";
 			}
 			else {
 				$sql_schedule = "INSERT INTO scheduledmeeting_tbl(schedDate, schedPlace, schedStartTime, schedEndtime, schedStatus, schedType) VALUES('$meetingdate', '$venue', '$starttime', '$endtime', 0, 1);";

@@ -993,12 +993,17 @@
 		function checkIfCustom() {
 			if($('#Custom').prop("checked")) {
 				$('#Weekly').prop("checked", false);
+				$('#MeetingDate').prop("required", true);
 				checkIfWeekly();
+				$('#Meeting_Date').show();
+			}
+			else {
+				$('#Meeting_Date').hide();
+				$('#MeetingDate').prop("required", false);
 			}
 		}
 
 		$(document).ready(function() {
-			$('#WeeklyMeeting').hide();
 			$('#Custom').prop("checked", true);
 			checkIfCustom();
 		});

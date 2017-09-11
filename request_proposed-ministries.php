@@ -63,9 +63,10 @@
 			$ministrydesc = addSlashes($_POST["MinistryDesc"]);
 			$ministrypicturepath = $target_file;
 			$ministryschedstatus = $_POST["MeetingStatus"];
-			$meetingdate =  date("Y-m-d", strtotime($_POST["MeetingDate"]));
 			if($ministryschedstatus == "Weekly") 
 				$weekly = $_POST["WeeklyDay"];
+			else
+				$meetingdate =  date("Y-m-d", strtotime($_POST["MeetingDate"]));
 			$starttime = date("H:i:s", strtotime($_POST["MinistryTime1"]));
 			$endtime = date("H:i:s", strtotime($_POST["MinistryTime2"]));
 			$venue = addSlashes($_POST["MinistryVenue"]);
@@ -83,7 +84,7 @@
 
 
 			if($ministryschedstatus == "Weekly") {
-				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedDay = '$weekly', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 1 WHERE schedID = ".getMinistrySchedID($id);
+				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDay = '$weekly', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 1 WHERE schedID = ".getMinistrySchedID($id);
 			}
 			else {
 				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDate = '$meetingdate', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 0 WHERE schedID = ".getMinistrySchedID($id);
