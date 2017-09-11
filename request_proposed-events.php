@@ -5,7 +5,9 @@
 	$username = "root";
 	$password = "root";
 	$dbname = "dbccf";
-	$id = $_POST["id"];
+
+	if(isset($_POST["id"]))
+		$id = $_POST["id"];
 
 	if(isset($id)) {
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -36,35 +38,32 @@
 		}
 	}
 	else {
+			
 		$confirmUpload = true;
-		$target_dir = "uploads/";
+		$target_dir = "uploads/".$_SESSION['userid'].'/';
+		if(!is_dir($target_dir)) {
+			mkdir($target_dir);
+		}
 		$target_file = $target_dir.basename($_FILES["EventPicture"]["name"]);
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-		if(file_exists($target_file)) { // check if image exists
-			echo "File already exists.";
-			$confirmUpload = false;
-		}
+		if(file_exists($target_file)) // check if image exists
+			$target_file = getEventPicturePath($_POST["eventID"]);
+		else
+			$target_file = $target_dir.removeExtension(basename($_FILES["EventPicture"]["name"])).uniqid().'.'.$imageFileType;
 
 		if($_FILES["EventPicture"]["size"] > 20000000) { // limits the size of image
 			echo "File is too large.";
 			$confirmUpload = false;
 		}
 
-		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-		&& $imageFileType != "gif" ) {
-		    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-			$confirmUpload = false;
-		}
-
 		if($confirmUpload) {
-			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
-
 			// fetch data from form
+			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
 			$id = $_POST["eventID"];
 			$eventname = addSlashes($_POST["EventName"]);
 			$eventdesc = addSlashes($_POST["EventDesc"]);
-			$eventpicturepath = $target_dir.$_POST["EventPictureName"];
+			$eventpicturepath = $target_file;
 			$eventschedstatus = $_POST["EventSchedStatus"];
 			if($eventschedstatus == "SingleDay") {
 				$eventschedstatus = 0;
@@ -109,5 +108,9 @@
 			mysqli_query($conn, $sql_propose_event);
 			mysqli_close($conn);
 		}
+	}
+
+	function removeExtension($filename) {
+		return preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
 	}
 ?>

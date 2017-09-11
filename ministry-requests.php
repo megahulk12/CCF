@@ -93,7 +93,7 @@
 		}
 
 		/*form*/
-		.proposed-ministries {
+		.ministry-requests {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -295,8 +295,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -431,7 +432,7 @@
 			width: 0 !important;
 		}
 
-		#proposed-ministries {
+		#ministry-requests {
 			margin: 0 auto;
 			height: 700px;
 		}
@@ -507,7 +508,7 @@
 		}
 		/* ===== END ===== */
 
-		.error, .error-picture {
+		.error {
 			color: #ff3333;
 		}
 	</style>
@@ -574,48 +575,45 @@
 
 
 			// ajax + preloader
-			var url = "request_proposed-ministries.php";
+			var url = "request_ministry-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
+
+			// for the ministry head
+			$('#MinistryHead').prop("disabled", false);
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
+					changeTitleTransition("#form-header", data.name);
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					/*
-					$('#eventID').val(id);
-					$('#form-header').text(data.name);
+					
+					$('#ministryID').val(id);
 					// access echo values data.<key value of array>
 					// ex. alert(data.a);
 
-					$('#EventName').val(data.name);
-					$('#EventDesc').val(data.description);
-					$('#EventDesc').trigger("autoresize");
+					$('#MinistryName').val(data.name);
+					$('#MinistryDesc').val(data.description);
+					$('#MinistryDesc').trigger("autoresize");
 					if(data.schedstatus == 0) {
-						$('#SingleDay').prop("checked", true);
-						checkIfSingle();
+						$('#Custom').prop("checked", true);
+						checkIfCustom();
 					}
 					else if(data.schedstatus == 1) {
-						$('#MultipleDay').prop("checked", true);
-						checkIfMultiple();
-						$('#EventDateEnd').val(data.endday);
-					}
-					else if(data.schedstatus == 2) {
 						$('#Weekly').prop("checked", true);
 						checkIfWeekly();
 						$('#WeeklyDay').val(data.weekly);
-						$('#EventDateEnd').val(data.endday);
 					}
-					$('#EventDateStart').val(data.startday);
-					$('#EventTime1').val(data.starttime);
-					$('#EventTime2').val(data.endtime);
-					$('#EventVenue').val(data.venue);
+					$('#MeetingDate').val(data.date);
+					$('#MinistryTime1').val(data.starttime);
+					$('#MinistryTime2').val(data.endtime);
+					$('#MinistryVenue').val(data.venue);
 					$('#Budget').val(data.budget);
 					$('#Remarks').val(data.remarks);
 					$('#Remarks').trigger("autoresize");
@@ -624,10 +622,8 @@
 					Materialize.updateTextFields();
 					$('select').material_select();
 
-					$('.event-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
-					$('#EventPictureName').val(data.picturepath.split("/")[1]);
-
-					*/
+					$('.ministry-pic').html('<img src="'+data.picturepath+'" id="showImage" style="width: 100%;" />');
+					$('#MinistryPictureName').val(data.picturepath.split("/")[2]);
 				}
 			});
 		}
@@ -646,9 +642,17 @@
 
 		function preload() {
 			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#proposed-ministries').width()/2);
-			$('#preloader').css("top", $('#proposed-ministries').height()/2);
+			$('#preloader').css("left", $('#ministry-requests').width()/2);
+			$('#preloader').css("top", $('#ministry-requests').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 
@@ -657,39 +661,47 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		<li class="divider"></li>
+		  			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			  		';
-				  	if($_SESSION["memberType"] == 2 )
+				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+				  		';
+				  	if($_SESSION["memberType"] == 4)
+					  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
+					  		';
 		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -748,23 +760,20 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryStatus = 0 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
-												$eventID = $row["eventID"];
-												$eventname = $row["eventName"];
+												$id = $row["ministryID"];
+												$name = $row["ministryName"];
 												echo '
-												<tr class="choose" id="row_'.$eventID.'" onclick="cellActive(this.id)">
-												    <td>'.$eventname.'</td>
+												<tr class="choose" id="row_'.$id.'" onclick="cellActive(this.id)">
+												    <td>'.$name.'</td>
 												</tr>
 												';
 											}
 										}
 									?>
-									<tr class="choose" id="row_1" onclick="cellActive(this.id)">
-										<td>Sample</td>
-									</tr> 
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -772,10 +781,10 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="proposed-ministries" enctype="multipart/form-data">
+							<form method="post" id="ministry-requests" enctype="multipart/form-data">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
@@ -860,6 +869,32 @@
 											<div class="input-field col s12">
 												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
 												<label for="Remarks">Remarks</label>
+											</div>
+											<div class="input-field col s12" id="Ministry_Head">
+												<select id="MinistryHead" name="MinistryHead" required>
+													<option value="" disabled selected>Assign a Ministry Head...</option>
+													<?php
+
+														$conn = mysqli_connect($servername, $username, $password, $dbname);
+														if (!$conn) {
+															die("Connection failed: " . mysqli_connect_error());
+														}
+														$query = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType = 2 ORDER BY dg12LeaderName ASC";
+														$result = mysqli_query($conn, $query);
+														if(mysqli_num_rows($result) > 0) {
+															while($row = mysqli_fetch_assoc($result)) {
+																$id = $row["dg12Leader"];
+																$fullname = $row["dg12LeaderName"];
+																echo '
+													<option value="'.$id.'">'.$fullname.'</option>
+																';
+															}
+														}
+														mysqli_close($conn);
+													?>
+												</select>
+												<label>D12 Leaders</label>
+												<small class="error" id="MinistryHead-required"></small>
 											</div>
 										</div>
 									</div>
@@ -956,6 +991,7 @@
 			});
 		});
 
+		var validated = false;
 		$('#ministry-requests').submit(function(e) {
 			/*
 				NOTE:
@@ -963,41 +999,112 @@
 				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
 				it as an object.
 			*/
-			var preloader = '\
-				<div class="preloader-wrapper small active"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
+			if(validated) {
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
 						</div> \
 					</div> \
-				</div> \
-			  ';
-			$('.fixbutton').html(preloader);
-			$('.fixbutton').prop("disabled", true);
-			var url = "request_ministry-requests.php";
-			$.ajax({
-				type: "POST",
-				url: url,
-				data: "id="+$('#eventID').val()+"&approve",
-				success: function(data) {
-					$('.fixbutton').text('Approve');
-					$('.fixbutton').prop("disabled", false);
-					swal({
-						title: "Ministry Approved!",
-						text: "This ministry will now be open for people to join.",
-						type: "success",
-						allowEscapeKey: true,
-						allowOutsideClick: true,
-						timer: 10000
-					}, function() { window.location.reload(); });
-				}
-			});
+				  ';
+				$('.fixbutton').html(preloader);
+				$('.fixbutton').prop("disabled", true);
+				var url = "request_ministry-requests.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "id="+$('#ministryID').val()+"&MinistryHead="+$('#MinistryHead').val()+"&approve",
+					success: function(data) {
+						$('.fixbutton').text('Approve');
+						$('.fixbutton').prop("disabled", false);
+						swal({
+							title: "Ministry Approved!",
+							text: "This ministry will now be open for people to join.",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.reload(); });
+					}
+				});
+			}
 			e.preventDefault();
 		});
+
+		$('.error').hide();
+
+		$(document).ready(function() {
+			$('.error').text("Please choose one.");
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		$('#approve').click(function() {
+			$('.error').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
+
+			$($("#ministry-requests").find('select').reverse()).each(function() {
+				if($(this).prop("required")) {
+					if($(this).val() == null) {
+						$("small#"+this.id+"-required").show();
+						focused_element = $('#Ministry_Head');
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
 
 		function checkIfCustom() {
 			if($('#Custom').prop("checked")) {
@@ -1015,11 +1122,13 @@
 		function checkIfWeekly() {
 			if($('#Weekly').prop("checked")) {
 				$('#WeeklyMeeting').show();
+				$('#WeeklyDay').prop("required", true);
 				$('#Custom').prop("checked", false);
 				checkIfCustom();
 			}
 			else {
 				$('#WeeklyMeeting').hide();
+				$('#WeeklyDay').prop("required", false);
 			}
 		}
 
