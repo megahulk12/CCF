@@ -17,6 +17,17 @@
 
 		$lquery = "SELECT CONCAT_WS(' ', firstName, lastName) AS leader FROM ministrydetails_tbl INNER JOIN member_tbl ON ministryHeadID = memberID WHERE ministryID = $id";
 
+		$ministry_schedule = "SELECT schedDay, schedStartTime, schedEndTime FROM ministrydetails_tbl JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID WHERE ministryID = $id";
+	    $result = mysqli_query($conn, $ministry_schedule);
+	    if(mysqli_num_rows($result) > 0) {
+	    	while($row = mysqli_fetch_assoc($result)) {
+	    		$day = $row["schedDay"];
+	    		$starttime = date("g:i a", strtotime($row["schedStartTime"]));
+	    		$endtime = date("g:i a", strtotime($row["schedEndTime"]));
+	    		$sched = "Every $day @ $starttime - $endtime";
+	    	}
+	    }
+
 		$table .= '
 		<tr> <!-- only 4 table data cells for balanced layout then add another row -->
 		';
@@ -28,7 +39,7 @@
 				$leader = $lrow["leader"];
 				$table .= '
 		<td>
-			<a class="ministry-names"><i class="material-icons prefix-leader ministry-icons">person</i><br>'.$leader.'<br><br><label>LEADER</label></a>
+			<a class="ministry-names"><i class="material-icons prefix-leader ministry-icons">person</i><br>'.$leader.'<br><br><label>HEAD</label></a>
 		</td>
 				';
 			}
@@ -56,7 +67,8 @@
 		</tr>';
 		}
 
-		echo $table;
+		$data = array("sched"=>$sched, "table"=>$table);
+		echo json_encode($data);
 		mysqli_close($conn);
 	}
 ?>

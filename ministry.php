@@ -557,6 +557,8 @@
 			<div id="small-group">
 				<div id="dgroup">
 					<h3 class="center" id="Ministry-title">Ministry</h3>
+					<h6 class="center" id="Ministry-sched"></h6>
+					<br>
 					<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 						<div class="col s4"></div>
 						<div class="input-field col s4">
@@ -568,7 +570,10 @@
 										die("Connection failed: " . mysqli_connect_error());
 									}
 
-									$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = 5";
+									if($_SESSION["memberType"] == 4)
+										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = ".$_SESSION['userid'];
+									else
+										$query = "SELECT ministrydetails_tbl.ministryID, ministryName FROM ministrydetails_tbl JOIN ministryparticipation_tbl ON ministrydetails_tbl.ministryID = ministryparticipation_tbl.ministryID WHERE memberID = ".$_SESSION['userid'];
 									$result = mysqli_query($conn, $query);
 									if(mysqli_num_rows($result) > 0) {
 										while($row = mysqli_fetch_assoc($result)) {
@@ -579,6 +584,7 @@
 											';
 										}
 									}
+									mysqli_close($conn);
 								?>
 							</select>
 							<label>Ministries That You Are In</label>
@@ -813,8 +819,10 @@
 				type: "POST",
 				url: url,
 				data: "id="+$(this).val().split("_")[1],
+				dataType: 'json',
 				success: function(data) {
-					changeDgroupTransition("table.ministry-table-spacing", data);
+					changeMinistryTransition("#Ministry-sched", data.sched);
+					changeMinistryTransition("table.ministry-table-spacing", data.table);
 				}
 			});
 		});
@@ -826,7 +834,7 @@
 			}, 300);
 		}
 
-		function changeDgroupTransition(elem, data) {
+		function changeMinistryTransition(elem, data) {
 			$(elem).fadeOut(300).fadeIn(300);
 			setTimeout(function() {
 				$(elem).html(data);
