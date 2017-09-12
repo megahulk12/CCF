@@ -44,8 +44,11 @@
 				else if($notificationStatus <= 1 && $notificationType == 1 && $request == 0) { // for event notifs
 					$view .= '<li><a href="events.php">'.$notificationDesc.'</a></li>';
 				}
-				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
+				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1 && $_SESSION['memberType'] == 5) { // for ministry request notifs
 					$view .= '<li><a href="ministry-requests.php">'.$notificationDesc.'</a></li>';
+				}
+				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1 && $_SESSION['memberType'] == 4) { // for ministry participation request notifs
+					$view .= '<li><a href="join-requests.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 					$view .= '<li><a href="ministries.php">'.$notificationDesc.'</a></li>';

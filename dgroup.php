@@ -125,17 +125,18 @@
     }
 
     .dropdown-content-list {
-       background-color: #fff;  
-       display: none;
-       min-width: 250px;
-       max-height: 650px;
-       overflow-y: auto;
-       opacity: 0;
-       position: absolute; /*original: absolute*/
-       z-index: 999;
-       will-change: width, height;
-       margin-top: 97px;
-       margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
+        background-color: #fff;  
+        display: none;
+        min-width: 250px;
+		max-height: 350px !important;
+		overflow-y: auto;
+		overflow-x: hidden;
+        opacity: 0;
+        position: absolute; /*original: absolute*/
+        z-index: 999;
+        will-change: width, height;
+        margin-top: 97px;
+        margin-left: -139px; /*shift to the left; alignment of link and dropdown; -139 original */
     }
 
     .dropdown-content-list li {
@@ -548,17 +549,17 @@
 			</div>
 		</ul>
     <nav style="margin-bottom: 50px;">
-      <div class="container">
-          <div class="nav-wrapper">
-              <a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
-              <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="events.php">EVENTS</a></li>
-            <li><a href="ministries.php">MINISTRIES</a></li>
-            <?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-            <li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
-             </ul>
-          </div>
-      </div>
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+            		<li><a href="events.php">EVENTS</a></li>
+            		<li><a href="ministries.php">MINISTRIES</a></li>
+           			 <?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
+            		<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
+            	</ul>
+            </div>
+        </div>
     </nav>
   </header>
 
@@ -566,80 +567,94 @@
     <div id="response"></div>
     <div class="container">
       <?php 
-      if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
-      echo '
-      <form method="post">
-        <button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
-        <input type="hidden" name="seen-request" />
-      </form>';
-      }
+	      if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
+		      echo '
+		      <form method="post">
+		        <button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
+		        <input type="hidden" name="seen-request" />
+		      </form>';
+	      }
       ?>
-      <div id="small-group">
-        <div id="dgroup">
-          <h3>Discipleship Group</h3>
-          <?php
-            // database connection variables
+    <div id="small-group">
+		<div id="dgroup">
+			<h3>Discipleship Group</h3>
+		  <?php
+			    // database connection variables
 
-            $servername = "localhost";
-            $username = "root";
-            $password = "root";
-            $dbname = "dbccf";
-            $conn = mysqli_connect($servername, $username, $password, $dbname);
-            if (!$conn) {
-              die("Connection failed: " . mysqli_connect_error());
-            }
+			    $servername = "localhost";
+			    $username = "root";
+			    $password = "root";
+			    $dbname = "dbccf";
+			    $conn = mysqli_connect($servername, $username, $password, $dbname);
+			    if (!$conn) {
+			      die("Connection failed: " . mysqli_connect_error());
+			    }
 
-            // insert code set notificationStatus = 1 when user clicks notification area
-            $query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
+			    $dgroup_schedule = "SELECT schedDay, schedStartTime, schedEndTime FROM discipleshipgroup_tbl JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID WHERE dgroupID = ".getDgroupID();
+			    $result = mysqli_query($conn, $dgroup_schedule);
+			    if(mysqli_num_rows($result) > 0) {
+			    	while($row = mysqli_fetch_assoc($result)) {
+			    		$day = $row["schedDay"];
+			    		$starttime = date("g:i a", strtotime($row["schedStartTime"]));
+			    		$endtime = date("g:i a", strtotime($row["schedEndTime"]));
+			    		$sched = "Every $day @ $starttime - $endtime";
+			    	}
+			    }
 
-            $lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
+			    // display Schedule
+			    echo '<dd><h6>'.$sched.'</h6></dd>';
 
-            echo '
-          <table class="centered dgroup-table-spacing">
-            <tr> <!-- only 4 table data cells for balanced layout then add another row -->
-            ';
+			    // insert code set notificationStatus = 1 when user clicks notification area
+			    $query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
 
-            $lresult = mysqli_query($conn, $lquery);
-            
-            if(mysqli_num_rows($lresult) > 0) {
-              while($lrow = mysqli_fetch_assoc($lresult)) {
-                $leader = $lrow["leader"];
-                echo '
-            <td>
-              <a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
-              '.$leader.'<br><br><label>LEADER</label></a>
-            </td>
-                ';
-              }
-            }
+			    $lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
 
-            $result = mysqli_query($conn, $query);
-            if(mysqli_num_rows($result) > 0) {
-              $counter_row = 1;
-              while($row = mysqli_fetch_assoc($result)) {
-                $fullname = $row["fullname"];
-                echo '
-              <td>
-                <a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-                '.$fullname.'<br><br>&nbsp;</a>
-              </td>
-                ';
-                $counter_row++;
-                if($counter_row == 4) {
-                  echo'
-            </tr>
-            <tr>
-                  ';
-                  $counter_row = 0;
-                }
-              }
-              echo '
-            </tr>';
-            }
-          ?>
-          </table>
-        </div>
-      </div>
+			    echo '
+			  <table class="centered dgroup-table-spacing">
+			    <tr> <!-- only 4 table data cells for balanced layout then add another row -->
+			    ';
+
+			    $lresult = mysqli_query($conn, $lquery);
+			    
+			    if(mysqli_num_rows($lresult) > 0) {
+			      while($lrow = mysqli_fetch_assoc($lresult)) {
+			        $leader = $lrow["leader"];
+			        echo '
+			    <td>
+			      <a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
+			      '.$leader.'<br><br><label>LEADER</label></a>
+			    </td>
+			        ';
+			      }
+			    }
+
+			    $result = mysqli_query($conn, $query);
+			    if(mysqli_num_rows($result) > 0) {
+			      $counter_row = 1;
+			      while($row = mysqli_fetch_assoc($result)) {
+			        $fullname = $row["fullname"];
+			        echo '
+			      <td>
+			        <a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
+			        '.$fullname.'<br><br>&nbsp;</a>
+			      </td>
+			        ';
+			        $counter_row++;
+			        if($counter_row == 4) {
+			          echo'
+			    </tr>
+			    <tr>
+			          ';
+			          $counter_row = 0;
+			        }
+			      }
+			      echo '
+			    </tr>';
+			    }
+			?>
+		  </table>
+		</div>
+    </div>
       <!-----------------code ni paolo------------------>
       <?php
 

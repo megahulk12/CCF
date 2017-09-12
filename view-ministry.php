@@ -284,6 +284,12 @@
 			font-size: 20px;
 		}
 
+		.leader {
+			font-size: 13px;
+			text-transform: uppercase;
+			color: #292929 !important;
+		}
+
 		.card .card-image img {
 			display: block;
 			border-radius: 2px 2px 0 0;
@@ -536,12 +542,13 @@
 						}
 					}
 
-					$sql_ministries = "SELECT ministryName, ministryHeadID, ministryDescription, ministryPicturePath, schedDate, schedDay, schedStartTime, schedEndTime, schedPlace, schedStatus FROM ministrydetails_tbl LEFT OUTER JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID WHERE ministryStatus = 1 AND ministryID = $mid ORDER BY schedDate DESC";
+					$sql_ministries = "SELECT ministryName, ministryHeadID, CONCAT_WS(' ', firstName, lastName) AS fullname, ministryDescription, ministryPicturePath, schedDate, schedDay, schedStartTime, schedEndTime, schedPlace, schedStatus FROM ministrydetails_tbl LEFT OUTER JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID LEFT OUTER JOIN member_tbl ON ministryHeadID = memberID WHERE ministryStatus = 1 AND ministryID = $mid ORDER BY schedDate DESC";
 					$result = mysqli_query($conn, $sql_ministries);
 					if(mysqli_num_rows($result) > 0) {
 						while($row = mysqli_fetch_assoc($result)) {
 							$name = $row["ministryName"];
 							$head = $row["ministryHeadID"];
+							$leader = $row["fullname"];
 							$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["ministryDescription"]));
 							$path = $row["ministryPicturePath"];
 							$date = $row["schedDate"];
@@ -580,6 +587,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>
@@ -615,6 +623,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>
@@ -650,6 +659,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>
@@ -684,6 +694,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>
@@ -719,6 +730,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>
@@ -754,6 +766,7 @@
 													</div>
 													<div class="card-content">
 														<a class="card-title">'.$name.'</a>
+														<a class="leader">Head: '.$leader.'</a>
 														<p>
 															'.$description.'
 														</p>

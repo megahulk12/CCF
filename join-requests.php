@@ -93,7 +93,7 @@
 		}
 
 		/*form*/
-		.participation-requests {
+		.join-requests {
 			width:600px;
 		}
 		/*=======END=======*/
@@ -433,7 +433,7 @@
 			width: 0 !important;
 		}
 
-		#participation-requests {
+		#join-requests {
 			margin: 0 auto;
 			height: 400px;
 		}
@@ -570,11 +570,12 @@
 
 
 			// ajax + preloader
-			var url = "request_participation-requests.php";
+			var url = "request_join-requests.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -582,11 +583,10 @@
 				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					$('#eventPartID').val(id);
+					$('#ministryPartID').val(id);
 
-					$('#form-header').text(data.fname + ' ' + data.lname);
+					changeTitleTransition("#form-header", data.fname + ' ' + data.lname);
 					$('#Lastname').val(data.lname);
 					$('#Firstname').val(data.fname);
 					$('#Middlename').val(data.mname);
@@ -648,9 +648,17 @@
 
 		function preload() {
 			$("#preloader").css("visibility", "hidden");
-			$('#preloader').css("left", $('#participation-requests').width()/2);
-			$('#preloader').css("top", $('#participation-requests').height()/2);
+			$('#preloader').css("left", $('#join-requests').width()/2);
+			$('#preloader').css("top", $('#join-requests').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 
@@ -766,15 +774,15 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventParticipationID, eventparticipation_tbl.eventID AS eid, eventName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM eventparticipation_tbl LEFT OUTER JOIN eventdetails_tbl ON eventparticipation_tbl.eventID = eventdetails_tbl.eventID LEFT OUTER JOIN member_tbl ON eventparticipation_tbl.memberID = member_tbl.memberID WHERE eventPartStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT ministryParticipationID, ministryparticipation_tbl.ministryID AS mid, ministryName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM ministryparticipation_tbl LEFT OUTER JOIN ministrydetails_tbl ON ministryparticipation_tbl.ministryID = ministrydetails_tbl.ministryID LEFT OUTER JOIN member_tbl ON ministryparticipation_tbl.memberID = member_tbl.memberID WHERE ministryPartStatus = 0 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
-												$epartid = $row["eventParticipationID"];
-												$name = $row["eventName"];
+												$mpartid = $row["ministryParticipationID"];
+												$name = $row["ministryName"];
 												$fullname = $row["fullname"];
 												echo '
-												<tr id="row_'.$epartid.'" onclick="cellActive(this.id)">
+												<tr id="row_'.$mpartid.'" onclick="cellActive(this.id)">
 												    <td>'.$fullname.'</td>
 												    <td>'.$name.'</td>
 												</tr>
@@ -789,7 +797,7 @@
 					</div>
 					<div class="col s7" id="form">
 						<div class="container">
-							<form method="post" id="participation-requests">
+							<form method="post" id="join-requests">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
@@ -913,7 +921,7 @@
 									</div>
 								</div>
 								<div class="row">
-									<input type="hidden" id="eventPartID" name="eventPartID">
+									<input type="hidden" id="ministryPartID" name="ministryPartID">
 									<button class="waves-effect waves-light btn col s3 right fixbutton" type="submit" name="approve" id="approve">Approve</button>
 									<button class="waves-effect waves-light btn col s3 right" type="button" name="notify" id="notify" style="margin-right: 10px;">Notify</button>
 								</div>
@@ -1122,11 +1130,11 @@
 					swal.showInputError("Oops! It seems that you haven't typed anything.");
 					return false;
 				}
-				var url = "request_participation-requests.php";
+				var url = "request_join-requests.php";
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: "notify=g&id="+$('#eventPartID').val()+"&notifvalue="+value,
+					data: "notify=g&id="+$('#ministryPartID').val()+"&notifvalue="+value,
 					success: function(data) {
 						swal({
 							title: "Success!",
@@ -1138,7 +1146,7 @@
 			});
 		});
 
-		$('#participation-requests').submit(function(e) {
+		$('#join-requests').submit(function(e) {
 			/*
 				NOTE:
 				contentType and processData doesn't coincide with string queries in passing data to server
@@ -1160,11 +1168,11 @@
 			  ';
 			$('.fixbutton').html(preloader);
 			$('.fixbutton').prop("disabled", true);
-			var url = "request_participation-requests.php";
+			var url = "request_join-requests.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: "id="+$('#eventPartID').val()+"&approve",
+				data: "id="+$('#ministryPartID').val()+"&approve",
 				success: function(data) {
 					$('.fixbutton').text('Approve');
 					$('.fixbutton').prop("disabled", false);

@@ -1683,67 +1683,71 @@
 			}
 		}
 
-		var validated = true, cpass = false;
+		var validated = false, cpass = false;
 		function submit_form(submit_id, submit_name) {
-			$('#'+submit_id).submit(function(e) {
-				if(validated) {
-					var preloader = '\
-						<div class="preloader-wrapper small active"> \
-							<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
-								<div class="circle-clipper left"> \
-									<div class="circle"></div> \
-								</div><div class="gap-patch"> \
-									<div class="circle"></div> \
-								</div><div class="circle-clipper right"> \
-									<div class="circle"></div> \
+			if(submit_name == "submit_register")
+				$('#'+submit_id).trigger("submit");
+			else {
+				$('#'+submit_id).submit(function(e) {
+					if(validated) {
+						var preloader = '\
+							<div class="preloader-wrapper small active"> \
+								<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+									<div class="circle-clipper left"> \
+										<div class="circle"></div> \
+									</div><div class="gap-patch"> \
+										<div class="circle"></div> \
+									</div><div class="circle-clipper right"> \
+										<div class="circle"></div> \
+									</div> \
 								</div> \
 							</div> \
-						</div> \
-					  ';
-					$('.profile-next-or-submit-button').html(preloader);
-					$('.profile-next-or-submit-button').prop("disabled", true);
-					var url="update_profile.php";
-					$.ajax({
-						type: "POST",
-						url: url,
-						data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
-						success: function(data) {
-							swal({
-								title: "Success!",
-								text: "Profile Updated!",
-								type: "success",
-								allowEscapeKey: true,
-								allowOutsideClick: true,
-								timer: 10000
-							}, function() {
-								animateBodyScrollTop();
-							});
-							if(cpass) { // if true, every success of data val from cpass form, it clears the form
-								$('div#cpass input').val("");
+						  ';
+						$('.profile-next-or-submit-button').html(preloader);
+						$('.profile-next-or-submit-button').prop("disabled", true);
+						var url="update_profile.php";
+						$.ajax({
+							type: "POST",
+							url: url,
+							data: submit_name+'=g&'+$('#'+submit_id).serialize(), 
+							success: function(data) {
+								swal({
+									title: "Success!",
+									text: "Profile Updated!",
+									type: "success",
+									allowEscapeKey: true,
+									allowOutsideClick: true,
+									timer: 10000
+								}, function() {
+									animateBodyScrollTop();
+								});
+								if(cpass) { // if true, every success of data val from cpass form, it clears the form
+									$('div#cpass input').val("");
+								}
+								$('.profile-next-or-submit-button').text('Submit');
+								$('.profile-next-or-submit-button').prop("disabled", false);
+							},
+							error: function(data) {
+								swal({
+									title: "Error!",
+									text: "Cannot reach server. Please try again.",
+									type: "error",
+									allowEscapeKey: true,
+									allowOutsideClick: true,
+									timer: 10000
+								}, function() {
+									animateBodyScrollTop();
+								});
+								$('.profile-next-or-submit-button').text('Submit');
+								$('.profile-next-or-submit-button').prop("disabled", false);
 							}
-							$('.profile-next-or-submit-button').text('Submit');
-							$('.profile-next-or-submit-button').prop("disabled", false);
-						},
-						error: function(data) {
-							swal({
-								title: "Error!",
-								text: "Cannot reach server. Please try again.",
-								type: "error",
-								allowEscapeKey: true,
-								allowOutsideClick: true,
-								timer: 10000
-							}, function() {
-								animateBodyScrollTop();
-							});
-							$('.profile-next-or-submit-button').text('Submit');
-							$('.profile-next-or-submit-button').prop("disabled", false);
-						}
-					});
-				}
-				validated = false; // re-initialize validated variable
-				confirmvalidated = false; // re=initialize
-				e.preventDefault();
-			});
+						});
+					}
+					validated = false; // re-initialize validated variable
+					confirmvalidated = false; // re=initialize
+					e.preventDefault();
+				});
+			}
 		}
 	</script>
 	

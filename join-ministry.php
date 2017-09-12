@@ -13,7 +13,7 @@
 		mysqli_query($conn, $sql_ministry_participation);
 		$fullname = $_SESSION['firstName']." ".$_SESSION['lastName'];
 		$notificationdesc = $fullname." wishes to join ".getMinistryName($id);
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, ministryParticipationID, notificationDesc, notificationType, request) VALUES(".$_SESSION['userid'].", ".getMinistryHeadID($id).", $id, ".getCurrentMinistryParticipationID().", '$notificationdesc', 1, 1)";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, ministryParticipationID, notificationDesc, notificationType, request) VALUES(".$_SESSION['userid'].", ".getMinistryHeadID($id).", $id, ".getCurrentMinistryParticipationID().", '$notificationdesc', 2, 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}

@@ -757,6 +757,7 @@
 							<table class="centered">
 								<thead>
 									<tr>
+										<th>Proponent's Name</th>
 										<th>Ministry Name(s)</th>
 									</tr>
 								</thead>
@@ -767,14 +768,16 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryStatus = 0 ORDER BY ministryName ASC;";
+										$query = "SELECT ministryID, ministryName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM ministrydetails_tbl LEFT OUTER JOIN member_tbl ON ministryHeadID = memberID WHERE ministryStatus = 0 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
 												$id = $row["ministryID"];
 												$name = $row["ministryName"];
+												$proponent = $row["fullname"];
 												echo '
 												<tr class="choose" id="row_'.$id.'" onclick="cellActive(this.id)">
+													<td>'.$proponent.'</td>
 												    <td>'.$name.'</td>
 												</tr>
 												';
