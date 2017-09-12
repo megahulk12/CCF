@@ -176,8 +176,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -574,27 +575,40 @@
 			document.getElementById(id).setAttribute("class", "active");
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "endorsements.php?id="+id.split("_")[1]);
+			id = id.split("_")[1];
+			//history.pushState(null, null, "proposed-events.php?id="+id);
 
 
 			// ajax + preloader
-
 			var url = "request_endorsements.php";
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
+			disableForm(true);
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
+					$('#endorsementID').val(id);
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					// access echo values data.<key value of array>
-					// ex. alert(data.a);
+					$('#form-header').text(data.name);
+					$('#BaptismalDate').val(data.bpdate);
+					$('#BaptismalPlace').val(data.bpplace);
+					$('#DgroupType').val(data.dgtype);
+					$('#AgeBracket').val(data.agebracket);
+					$('#MeetingDay').val(data.meetday);
+					$('#timepicker1opt1').val(data.starttime);
+					$('#timepicker1opt2').val(data.endtime);
+					$('#MeetingPlace').val(data.meetplace);
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+					$('select').material_select();
 				}
 			});
 		}
@@ -618,39 +632,54 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		<li class="divider"></li>
+		  			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			  		';
-				  	if($_SESSION["memberType"] == 2 )
+				  	if($_SESSION["memberType"] >= 2 ) {
 				  		echo '
 			  		<li class="divider"></li>
-				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
-				  	<li class="divider"></li>
-				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
+				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>';
+					  	if(checkIfD12Leader())
+					  		echo '
+					  	<li class="divider"></li>
+					  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-ministries.php"><i class="material-icons prefix>">library_books</i>Proposed Ministries</a></li>
+					  		';
+				  	}
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 				  		';
+				  	if($_SESSION["memberType"] == 4)
+					  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
+					  		';
 		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
+			  		<li class="divider"></li>
+		  			<li><a href="manage-accounts.php"><i class="material-icons prefix>">supervisor_account</i>Manage Accounts</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -703,15 +732,26 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="row_1" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_2" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
-									<tr id="row_3" onclick="cellActive(this.id)">
-										<td> Sample </td>
-									</tr>
+									<?php
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT CONCAT_WS(' ', firstName, lastName) AS fullname, endorsementID, dgmemberID FROM member_tbl LEFT OUTER JOIN discipleshipgroupmembers_tbl ON member_tbl.memberID = discipleshipgroupmembers_tbl.memberID LEFT OUTER JOIN endorsement_tbl ON discipleshipgroupmembers_tbl.dgroupmemberID = endorsement_tbl.dgmemberID LEFT OUTER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID	WHERE endorsementStatus = 0 AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'].";";
+
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$endorsementID = $row["endorsementID"];
+												$fullname = $row["fullname"];
+												echo '
+												<tr id="row_'.$endorsementID.'" onclick="cellActive(this.id)">
+												    <td>'.$fullname.'</td>
+												</tr>
+												';
+											}
+										}
+									?>
 								</tbody>
 								<tfoot></tfoot>
 							</table>
@@ -792,6 +832,7 @@
 									</div>
 								</div>
 								<div class="row">
+									<input type="hidden" id="endorsementID" name="endorsementID">
 									<button class="waves-effect waves-light btn col s3 fixbutton right" type="submit" id="approve" name="approve">Approve</button>
 									<button class="modal-action modal-close waves-effect waves-light btn col s3 right" type="button" id="notify" name="notify" data-target="!" style="margin-right: 10px;">Notify</button>
 								</div>
@@ -1001,19 +1042,75 @@
 			$('button').blur();
 		});
 
+		$('#notify').click(function() {
+			swal({
+				title: "Remarks",
+				type: "input",
+				showCancelButton: true,
+				closeOnConfirm: false,
+				showLoaderOnConfirm: true,
+				inputPlaceholder: "Say something about this endorsement"
+			}, function(value) {
+				if(value === false) return false
+				if(value === "") {
+					swal.showInputError("Oops! It seems that you haven't typed anything.");
+					return false;
+				}
+				var url = "request_endorsements.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: "notify=g&id="+$('#endorsementID').val()+"&notifvalue="+value,
+					success: function(data) {
+						swal({
+							title: "Success!",
+							type: "success",
+							text: "Remarks successfully sent!"
+						});
+					}
+				});
+			});
+		});
+
 		// APPROVE SECTION
 		$('#Eform').submit(function(e) {
+			var url = "request_endorsements.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			$('.fixbutton').html(preloader);
+			$('.fixbutton').prop("disabled", true);
 			var url = "request_endorsements.php";
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: "approve",
+				data: "id="+$('#endorsementID').val()+"&approve",
 				success: function(data) {
-					
+					$('.fixbutton').text('Approve');
+					$('.fixbutton').prop("disabled", false);
+					swal({
+						title: "Endorsement Approved!",
+						text: "You have approved this endorsement.",
+						type: "success",
+						allowEscapeKey: true,
+						allowOutsideClick: true,
+						timer: 10000
+					}, function() { window.location.reload(); });
 				}
 			});
 			e.preventDefault();
 		});
+
 	</script>
 
 	<script>

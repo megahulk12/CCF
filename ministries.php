@@ -35,7 +35,7 @@
 			width: 80%;
 		}
 
-		.container-events {
+		.container-ministries {
 			margin: 0 auto;
 			position: relative;
 			max-width: 1080px;
@@ -96,7 +96,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute !important; /*original: absolute*/
 		 	 z-index: 999;
@@ -310,7 +312,7 @@
 			line-height: 1.5rem;
 		}
 
-		a.events {
+		a.ministries {
 		    font-family: proxima-nova;
 		    font-size: 21px;
 		    color: #292929 !important;
@@ -318,11 +320,11 @@
 
 		}
 
-		a.events:hover {
+		a.ministries:hover {
 		    color: #16A5B8 !important;
 		}
 
-		a.events:focus {
+		a.ministries:focus {
 			color: #1bcde4 !important;
 		}
 
@@ -335,28 +337,6 @@
 			height: 50px !important;
 			margin-bottom: 20px !important;
 			padding-top: 15px;
-		}
-
-		.schedule-multiple {
-			background-color: #e4e4e4;
-			font-size: 14px !important;
-			font-weight: bolder;
-			color: #424242 !important;
-			text-align: center !important;
-			height: 70px !important;
-			margin-bottom: 20px !important;
-			padding: 10px;
-		}
-
-		.schedule-weekly {
-			background-color: #e4e4e4;
-			font-size: 14px !important;
-			font-weight: bolder;
-			color: #424242 !important;
-			text-align: center !important;
-			height: 90px !important;
-			margin-bottom: 20px !important;
-			padding: 10px;
 		}
 		/* ===============END=============== */
 
@@ -392,8 +372,8 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
-				event.stopPropagation(); // this event stops closing the notification page when clicked upon
+			$('.dropdown-button + .dropdown-content-notification').on('click', function(ministry) {
+				ministry.stopPropagation(); // this ministry stops closing the notification page when clicked upon
 			});
 		});
 
@@ -420,43 +400,52 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		<li class="divider"></li>
+		  			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			  		';
-				  	if($_SESSION["memberType"] == 2 )
+				  	if($_SESSION["memberType"] >= 2 ) {
 				  		echo '
 			  		<li class="divider"></li>
-				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
-				  	<li class="divider"></li>
-				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-ministries.php"><i class="material-icons prefix>">library_books</i>Proposed Ministries</a></li>
+				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>';
+					  	if(checkIfD12Leader())
+					  		echo '
+					  	<li class="divider"></li>
+					  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-ministries.php"><i class="material-icons prefix>">library_books</i>Proposed Ministries</a></li>
+					  		';
+				  	}
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 				  		';
+				  	if($_SESSION["memberType"] == 4)
+					  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
+					  		';
 		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
+			  		<li class="divider"></li>
+		  			<li><a href="manage-accounts.php"><i class="material-icons prefix>">supervisor_account</i>Manage Accounts</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
@@ -497,42 +486,41 @@
 	<body>
 		<div id="response"></div>
 		<h3 class="center">Ministries</h3>
-		<div class="container-events">
+		<div class="container-ministries">
 			<?php
-			/*
+			
 				$conn = mysqli_connect($servername, $username, $password, $dbname);
 				if (!$conn) {
 					die("Connection failed: " . mysqli_connect_error());
 				}
 
-				$sql_events = "SELECT eventID, eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 ORDER BY eventStartDay DESC";
-				$result = mysqli_query($conn, $sql_events);
+				$sql_ministries = "SELECT ministryID, ministryName, ministryDescription, ministryPicturePath, schedDate, schedDay, schedStartTime, schedEndTime, schedStatus FROM ministrydetails_tbl LEFT OUTER JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID WHERE ministryStatus = 1 ORDER BY schedDate DESC";
+				$result = mysqli_query($conn, $sql_ministries);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
-						$id = $row["eventID"];
-						$name = $row["eventName"];
-						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["eventDescription"]));
-						$path = $row["eventPicturePath"];
-						$startday = $row["eventStartDay"];
-						$endday = $row["eventEndDay"];
-						$weekly = $row["eventWeekly"];
-						$starttime = date("h:i a", strtotime($row["eventStartTime"]));
-						$endtime = date("h:i a", strtotime($row["eventEndTime"]));
-						$schedstatus = $row["eventSchedStatus"];
+						$id = $row["ministryID"];
+						$name = $row["ministryName"];
+						$description = trim(preg_replace('/\s\s+/', '</p><p>', $row["ministryDescription"]));
+						$path = $row["ministryPicturePath"];
+						$date = $row["schedDate"];
+						$date = date("F j", strtotime($date));
+						$weekly = $row["schedDay"];
+						$starttime = date("g:i a", strtotime($row["schedStartTime"]));
+						$endtime = date("g:i a", strtotime($row["schedEndTime"]));
+						$schedstatus = $row["schedStatus"];
 
 						if($schedstatus == 0) {
-							$startday = date("F j", strtotime($startday));
 							echo '
 							<div class="row">
 								<div class="col s12 m7">
 									<div class="card hoverable">
 										<div class="card-image">
-											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
+											<a href="view-ministry.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
 										</div>
 										<div class="card-content">
-											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
+											<a href="view-ministry.php?id='.$id.'" class="card-title ministries">'.$name.'</a>
 											<p class="schedule">
-												'.$startday.' @ '.$starttime.' - '.$endtime.'
+												'.$date.' @ '.$starttime.' - '.$endtime.'
 											</p>
 											<p>
 												'.$description.'
@@ -543,42 +531,17 @@
 							</div>';
 						}
 						else if($schedstatus == 1) {
-							$startday = date("F j", strtotime($startday));
-							$endday = date("F j", strtotime($endday));
 							echo '
 							<div class="row">
 								<div class="col s12 m7">
 									<div class="card hoverable">
 										<div class="card-image">
-											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
+											<a href="view-ministry.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
 										</div>
 										<div class="card-content">
-											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
-											<p class="schedule-multiple">
-												'.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
-											</p>
-											<p>
-												'.$description.'
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>';
-						}
-						else if($schedstatus == 2) {
-							$startday = date("F j", strtotime($startday));
-							$endday = date("F j", strtotime($endday));
-							echo '
-							<div class="row">
-								<div class="col s12 m7">
-									<div class="card hoverable">
-										<div class="card-image">
-											<a href="view-event.php?id='.$id.'"><img src="'.$path.'" class="stretch"></a>
-										</div>
-										<div class="card-content">
-											<a href="view-event.php?id='.$id.'" class="card-title events">'.$name.'</a>
-											<p class="schedule-weekly">
-												Every '.$weekly.' <br> '.$startday.' - '.$endday.' <br> @ '.$starttime.' - '.$endtime.'
+											<a href="view-ministry.php?id='.$id.'" class="card-title ministries">'.$name.'</a>
+											<p class="schedule">
+												Every '.$weekly.' '.$starttime.' - '.$endtime.'
 											</p>
 											<p>
 												'.$description.'
@@ -589,32 +552,8 @@
 							</div>';
 						}
 					}
-				}
-				*/
+				}	
 			?>
-			<!--<div class="row">
-				<div class="col s12 m7">
-					<div class="card hoverable">
-						<div class="card-image">
-							<img src="resources/Elevate Unite.jpg" class="stretch">
-						</div>
-						<div class="card-content">
-							<a class="card-title events">ELEVATE UNITE</a>
-							<p class="schedule">
-								July 15 @ 1:00 pm - 5:30 pm
-							</p>
-							<p>
-								YOU ARE MEANT TO LIVE FOR SOMETHING GREATER!
-								YOU ARE MEANT TO MOVE TO GREATER HEIGHTS!
-
-								The time to act is NOW!
-
-								Join us as we tackle God's purpose for you in your own campus! Gear up for the upcoming school year with Elevate Davao's annual event UNITE! Meet students from different campuses who are called to move JUST LIKE YOU! Admission is FREE so bring your friends, classmates, block mates, and maybe even your teachers!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>-->
 		</div>
 	</body>
 
@@ -639,7 +578,7 @@
 
 	<script>
 	// initialize
-	var $container = jQuery('.container-events');
+	var $container = jQuery('.container-ministries');
 	$container.isotope({
 		// options
 		itemSelector: '.row',
@@ -649,8 +588,8 @@
 		}
 	});
 
-	$(window).resize(function() { // in every event of zoom in/out, isotope re-initializes
-		var $container = jQuery('.container-events');
+	$(window).resize(function() { // in every ministry of zoom in/out, isotope re-initializes
+		var $container = jQuery('.container-ministries');
 		setTimeout(function() {
 			$container.isotope({
 				// options
@@ -665,7 +604,7 @@
 
 	// re-initialize
 	jQuery(function() { // allows to load the image first before layout isotope executes
-		var $container = jQuery('.container-events');
+		var $container = jQuery('.container-ministries');
 		$container.imagesLoaded(function() {
 			$container.isotope({
 				// options
@@ -742,7 +681,7 @@
 		}
 		
 		var title = "Christ's Commission Fellowship";
-		function seen() { // this function gets rid of the badge every after click event 
+		function seen() { // this function gets rid of the badge every after click ministry 
 			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
 			document.getElementById('badge').innerHTML = "Notifications";
 			setSeenRequest(); // records in the database that user has seen or read the notifications

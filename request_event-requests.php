@@ -28,11 +28,6 @@
 		mysqli_close($conn);
 	}
 	else if(isset($id)) {
-		/* for new event notif purposes
-		// set to seen the pending events that have recently been added
-		setSeenEventRequest($id);
-		*/
-
 		$query = "SELECT budget, CONCAT_WS(' ', firstName, lastName) AS fullname, eventPicturePath, eventName, eventDescription, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, remarks, eventSchedStatus FROM eventdetails_tbl LEFT OUTER JOIN budgetdetails_tbl ON eventdetails_tbl.budgetID = budgetdetails_tbl.budgetID LEFT OUTER JOIN member_tbl ON eventHeadID = memberID WHERE eventID = $id";
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {

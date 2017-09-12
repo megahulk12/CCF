@@ -96,8 +96,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -684,31 +685,17 @@
 			});
 		}
 
-		/*
-		window.addEventListener("scroll", function() {
-			if(window.scrollY > 50) {
-				$('nav').slideUp(100);
-			}
-			else {
-				$('nav').slideDown(100);
-			}
-		}, false);
-		*/
-
 		function cellActive(id) { // this function allows you to highlight the table rows you select
-			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
 			var rownumber = id.charAt(3);
 			for(var i = 0; i < num_of_rows; i++) {
-				//document.getElementsByTagName("TR")[i].appendChild(style);
 				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
 				document.getElementsByTagName("TR")[i].style.color = "black"
 			}
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
-			//document.getElementById("table").setAttribute("class", "highlight centered");
 
-			history.pushState(null, null, "profile.php?id="+id.split("_")[1]);
+			$("#dgroupID").val(id.split("_")[1]);
 		}
 	</script>
 
@@ -717,39 +704,47 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
+		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
 		  			echo '
 			  		<li class="divider"></li>
 		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
+			  		<li class="divider"></li>
+		  			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			  		';
-				  	if($_SESSION["memberType"] == 2 )
+				  	if($_SESSION["memberType"] >= 2 )
 				  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
 				  	<li class="divider"></li>
 				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
 				  		';
+				  	if($_SESSION["memberType"] == 3)
+				  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+				  		';
+				  	if($_SESSION["memberType"] == 4)
+					  		echo '
+				  		<li class="divider"></li>
+					  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
+				  		<li class="divider"></li>
+					  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
+					  		';
 		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
 			  	if($_SESSION["memberType"] == 5)
 			  		echo '
 			  		<li class="divider"></li>
 				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			  		<li class="divider"></li>
 				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+			  		<li class="divider"></li>
+				  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			  		';
 		  	?>
 		  	<li class="divider"></li>
@@ -1451,22 +1446,6 @@
 														die("Connection failed: " . mysqli_connect_error());
 													}
 
-													/*
-													function countDgroups() {
-														$conn = mysqli_connect($servername, $username, $password, $dbname);
-														if (!$conn) {
-															die("Connection failed: " . mysqli_connect_error());
-														}
-
-														$sql = "SELECT count(dgroupID) AS numOfDgroup FROM discipleshipgroup_tbl;";
-														$result = mysqli_query($conn, $sql);
-														if(mysqli_num_rows($result) > 0){
-															while($row = mysqli_fetch_assoc($result)){
-																$count = $row["numOfDgroup"];
-															}
-														}
-													}*/
-
 													$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
 																	CASE
 																		WHEN gender = '0' THEN 'Male'
@@ -1483,45 +1462,27 @@
 													if(mysqli_num_rows($result) > 0) {
 														$count = 1;
 														while($row = mysqli_fetch_assoc($result)) {
-															echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
 															$dgroupid = $row["dgroupID"];
+															echo '<tr id="row_'.$dgroupid.'" onclick="cellActive('."'".'row_'.$dgroupid.''."'".')">';
 															$fullname = $row["fullname"];
 															$gender = $row["gender"];
 															$dgrouptype = $row["dgroupType"];
 															$schedday = $row["schedDay"];
 															$schedule = $row["schedule"];
-															echo '<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
-															<td class="choose">'.$fullname.'</td>
-															<td class="choose">'.$gender.'</td>
-															<td class="choose">'.$dgrouptype.'</td>
-															<td class="choose">'.$schedday.'</td>
-															<td class="choose">'.$schedule.'</td>';
+															//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
+															echo '
+																<td class="choose">'.$fullname.'</td>
+																<td class="choose">'.$gender.'</td>
+																<td class="choose">'.$dgrouptype.'</td>
+																<td class="choose">'.$schedday.'</td>
+																<td class="choose">'.$schedule.'</td>';
 															echo '</tr>';
-															$count++;
 														}
 													}
+													//WORK HERE
+
 													echo ' ';
 												?>
-												<!--
-												<tr id="row1" onclick="cellActive('row1')">
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-													<td>Sample 1</td>
-												</tr>
-												<tr id="row2" onclick="cellActive('row2')">
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-													<td>Sample 2</td>
-												</tr>
-												<tr id="row3" onclick="cellActive('row3')">
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-													<td>Sample 3</td>
-												</tr>
-												-->
 											</table>
 										</div>
 									</div>
@@ -1529,6 +1490,7 @@
 										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
 											<div class="determinate" style="" id="register_progressbar"></div>
 										</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+										<input type="hidden" name="dgroupID" id="dgroupID" value=""/> <!--hidden input for dgid-->
 										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
 										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
 									</div>
@@ -1721,7 +1683,7 @@
 			}
 		}
 
-		var validated = false, cpass = false;
+		var validated = true, cpass = false;
 		function submit_form(submit_id, submit_name) {
 			$('#'+submit_id).submit(function(e) {
 				if(validated) {
@@ -1782,101 +1744,8 @@
 				confirmvalidated = false; // re=initialize
 				e.preventDefault();
 			});
-			/*
-			var xhttp, params;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "update_profile.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			if(submit_name=="submit_cpinfo")
-				params = getSubmitCpinfo();
-			else if(submit_name=="submit_coinfo")
-				params = getSubmitCoinfo();
-			else if(submit_name=="submit_cprefer")
-				params = getSubmitCprefer();
-			else if(submit_name=="submit_cpass")
-				params = getSubmitCpass();
-			xhttp.send(submit_name+"=g&"+params);
-			alert(params);
-			*/
-			//return false;
 		}
-
-		/*
-		function getSubmitCpinfo() {
-			var params="", element=document.cpinfo, length=$("#cpinfo input").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-				if(i==length-1)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCoinfo() {
-			var params="", element=document.coinfo, length=$("#coinfo input").length;
-			for(var i = 0; i < length+1; i++) { // replace commas in date inputs because year won't update in database, always current year
-			// length is plus 1 because the maximum is SpouseMobileNumber; ugh hardcoded, please fix
-			// selects are +1
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCprefer() {
-			var params="", element=document.cprefer, length=$("#cprefer input").length + $("#cprefer select").length + $("#cprefer textarea").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-			// selects are +1
-			// textareas are +1
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-
-		function getSubmitCpass() {
-			var params="", element=document.cpass, length=$("#cpass input").length;
-			for(var i = 0; i < length; i++) { // replace commas in date inputs because year won't update in database, always current year
-				if(i==length)
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "");
-				else
-					params += element[i].getAttribute("name") + "=" + element[i].value.replace(",", "") + "&";
-			}
-			return params;
-		}
-		*/
 	</script>
-	<?php
-		/*
-		if(isset($_POST["submit_cpinfo"])||isset($_POST["submit_coinfo"])||isset($_POST["submit_cprefer"])||isset($_POST["submit_cpass"])) { // pop up for updates
-			echo '
-				<script>
-				// profile update success
-				setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Profile Updated!",
-						type: "success",
-						allowEscapeKey: true,
-						timer: 10000
-					},
-					function() { window.location = "profile.php"; }
-					), 1000);
-				</script>
-			';
-		}
-		*/
-	?>
 	
 	 <!-- this section is for notification approval of requests -->
 	<script>
@@ -1940,6 +1809,7 @@
 						*/
 				});
 		}
+		
 		
 		var title = "Christ's Commission Fellowship";
 		function seen() { // this function gets rid of the badge every after click event 
@@ -2301,6 +2171,11 @@
 					return false;
 				}
 			});
+		});
+
+		$('#fregister').submit(function(e) {
+			// put ajax here
+			window.location.href = "dgroup.php";
 		});
 
 		/*

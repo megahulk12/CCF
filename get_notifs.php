@@ -45,10 +45,10 @@
 					$view .= '<li><a href="events.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 1) { // for ministry request notifs
-
+					$view .= '<li><a href="ministry-requests.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
-
+					$view .= '<li><a href="ministries.php">'.$notificationDesc.'</a></li>';
 				}
 				$view .= '<li class="divider"></li>';
 			}
