@@ -284,11 +284,11 @@
 			color: #999;
 		}
 
-		.dgroup-icons {
+		.ministry-icons {
 			font-size: 200px;
 		}
 
-		.dgroup-names {
+		.ministry-names {
 			font-family: proxima-nova;
 			color: #424242;
 			font-size: 13px;
@@ -297,19 +297,10 @@
 			cursor: default;
 		}
 
-		.dgroup-table-spacing {
+		.ministry-table-spacing {
 			margin-bottom: 100px;
 		}
 
-		.dgroup-view-profile {
-			animation-name: view-profile;
-			animation-duration: 2s;
-			animation-timing-function: ease;
-		}
-
-		@keyframes view-profile {
-			
-		}
 		/*CUSTOM DATEPICKER*/
 		.picker__weekday-display {
 		 	background-color: #138fa0; /* darker color of #16A5B8 by 5% */
@@ -407,7 +398,7 @@
 		td {
 		  	padding: 15px 5px;
 		  	display: table-cell;
-		  	text-align: left;
+		  	text-align: center;
 		  	vertical-align: middle;
 		  	border-radius: 0px; /* complete horizontal hightlight bar*/
 		}
@@ -469,10 +460,6 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 		}); 
-
-		function view(id) {
-			history.pushState(null, null, "dgroup.php?id="+id);
-		}
 	</script>
 
 	<header class="top-nav">
@@ -575,89 +562,30 @@
 						<div class="input-field col s4">
 							<select id="Ministry" name="Ministry" required>
 								<option value="" disabled selected>Choose a ministry...</option>
-								<option value="Sample 1">Sample 1</option>
-								<option value="Sample 2">Sample 2</option>
-								<option value="Sample 3">Sample 3</option>
+								<?php
+									$conn = mysqli_connect($servername, $username, $password, $dbname);
+									if (!$conn) {
+										die("Connection failed: " . mysqli_connect_error());
+									}
+
+									$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = 5";
+									$result = mysqli_query($conn, $query);
+									if(mysqli_num_rows($result) > 0) {
+										while($row = mysqli_fetch_assoc($result)) {
+											$id = $row["ministryID"];
+											$name = $row["ministryName"];
+											echo '
+									<option value="'.$name.'_'.$id.'">'.$name.'</option>
+											';
+										}
+									}
+								?>
 							</select>
 							<label>Ministries That You Are In</label>
 						</div>
 						<div class="col s4"></div>
 					</div>
-					<?php
-						// database connection variables
-
-						$servername = "localhost";
-						$username = "root";
-						$password = "root";
-						$dbname = "dbccf";
-						$conn = mysqli_connect($servername, $username, $password, $dbname);
-						if (!$conn) {
-							die("Connection failed: " . mysqli_connect_error());
-						}
-
-						// insert code set notificationStatus = 1 when user clicks notification area
-						$query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE discipleshipgroupmembers_tbl.dgroupID = ".getDgroupID()." AND dgroupmemberID != ".getDgroupMemberID($_SESSION['userid']);
-
-						$lquery = "SELECT CONCAT(firstName, ' ', lastName) AS leader FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgleader = ".getDgroupLeaderID($_SESSION['userid']);
-
-						echo '
-					<table class="centered dgroup-table-spacing">
-						<tr> <!-- only 4 table data cells for balanced layout then add another row -->
-						';
-
-						$lresult = mysqli_query($conn, $lquery);
-						
-						if(mysqli_num_rows($lresult) > 0) {
-							while($lrow = mysqli_fetch_assoc($lresult)) {
-								$leader = $lrow["leader"];
-								echo '
-						<td>
-							<a class="dgroup-names"><i class="material-icons prefix-leader dgroup-icons">person</i><br>
-							'.$leader.'<br><br><label>LEADER</label></a>
-						</td>
-								';
-							}
-						}
-						// SAMPLE UI LAYOUT
-						/*
-						echo '
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Sample 1<br><br>&nbsp;</a>
-							</td>
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Sample 2<br><br>&nbsp;</a>
-							</td>
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								Sample 3<br><br>&nbsp;</a>
-							</td>
-							';*/
-						$result = mysqli_query($conn, $query);
-						if(mysqli_num_rows($result) > 0) {
-							$counter_row = 1;
-							while($row = mysqli_fetch_assoc($result)) {
-								$fullname = $row["fullname"];
-								echo '
-							<td>
-								<a class="dgroup-names"><i class="material-icons prefix dgroup-icons">person</i><br>
-								'.$fullname.'<br><br>&nbsp;</a>
-							</td>
-								';
-								$counter_row++;
-								if($counter_row == 4) {
-									echo'
-						</tr>
-						<tr>
-									';
-									$counter_row = 0;
-								}
-							}
-							echo '
-						</tr>';
-						}
-					?>
+					<table class="centered ministry-table-spacing">
 					</table>
 				</div>
 			</div>
@@ -880,12 +808,28 @@
 
 		$('#Ministry').change(function() {
 			changeTitleTransition($(this), "#Ministry-title");
+			var url = "request_ministry.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: "id="+$(this).val().split("_")[1],
+				success: function(data) {
+					changeDgroupTransition("table.ministry-table-spacing", data);
+				}
+			});
 		});
 
 		function changeTitleTransition(elem, title_elem) {
 			$(title_elem).fadeOut(300).fadeIn(300);
 			setTimeout(function() {
-				$(title_elem).text($(elem).val());
+				$(title_elem).text($(elem).val().split("_")[0]);
+			}, 300);
+		}
+
+		function changeDgroupTransition(elem, data) {
+			$(elem).fadeOut(300).fadeIn(300);
+			setTimeout(function() {
+				$(elem).html(data);
 			}, 300);
 		}
 	</script>

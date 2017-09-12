@@ -24,7 +24,7 @@
 		$dateJoined = date("Y-m-d");
 		$sql_ministry_participation_approved = "UPDATE ministryparticipation_tbl SET dateParticipation = '$dateJoined', ministryPartStatus = 1 WHERE ministryParticipationID = $id";
 		mysqli_query($conn, $sql_ministry_participation_approved);
-		$notificationdesc = "You have joined the event ".getMinistryName(getMinistryIDFromMinistryPart($id)).". We hope to see you there and God bless!";
+		$notificationdesc = "You have joined the ministry ".getMinistryName(getMinistryIDFromMinistryPart($id)).".";
 		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE ministryParticipationID = ".$id;
 		mysqli_query($conn, $sql_notifications);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, ministryParticipationID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromMinistryPart($id).", ".getMinistryIDFromMinistryPart($id).", $id, '$notificationdesc', 1)";

@@ -552,7 +552,7 @@
 			document.getElementById(id).setAttribute("class", "active");
 
 			id = id.split("_")[1];
-			$('#generate').attr("href", "request_event-summary-reports.php?id="+id);
+			$('#generate').attr("href", "request_ministry-summary-reports.php?id="+id);
 		}
 	</script>
 
@@ -666,18 +666,18 @@
 									die("Connection failed: " . mysqli_connect_error());
 								}
 
-								if($_SESSION["memberType"] == 3)
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+								if($_SESSION["memberType"] == 4)
+									$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = ".$_SESSION['userid']." AND ministryStatus = 1 ORDER BY ministryName ASC;";
 								else
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 2 ORDER BY eventName ASC;";
+									$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryStatus = 1 ORDER BY ministryName ASC;";
 								$result = mysqli_query($conn, $query);
 								if(mysqli_num_rows($result) > 0) {
 									while($row = mysqli_fetch_assoc($result)) {
-										$eventID = $row["eventID"];
-										$eventname = $row["eventName"];
+										$ministryID = $row["ministryID"];
+										$ministryname = $row["ministryName"];
 										echo '
-										<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
-										    <td>'.$eventname.'</td>
+										<tr id="row_'.$ministryID.'" onclick="cellActive(this.id)">
+										    <td>'.$ministryname.'</td>
 										</tr>
 										';
 									}
@@ -686,7 +686,7 @@
 						</tbody>
 						<tfoot></tfoot>
 					</table>
-					<a class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;" href="request_event-summary-reports.php">Generate Report</a>
+					<a class="waves-effect waves-light btn fixbutton col s12" id="generate" name="generate" style="margin-top: 20px;" href="request_ministry-summary-reports.php">Generate Report</a>
 				</div>
 				<div class="col s3">
 					
@@ -837,8 +837,8 @@
 			xhttp.send("seen");
 		}
 
-		$('#generate-event-report').submit(function(e) {
-			var url = "request_event-summary-reports.php";
+		$('#generate-ministry-report').submit(function(e) {
+			var url = "request_ministry-summary-reports.php";
 			$.ajax({
 				type: 'POST',
 				url: url,
