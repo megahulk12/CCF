@@ -876,6 +876,7 @@
 									<small class="error" id="DgroupType-required">Please choose one.</small>
 									<small class="error" id="DgroupType-nospouse">You are not legally married. Please pick a different Dgroup Type.</small>
 									<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
+									<small class="error" id="DgroupType-single">You are single. You cannot pick the Couples Dgroup Type.</small>
 								</div>
 							</div>
 							<h4 class="center">Schedule</h4>
@@ -1143,6 +1144,7 @@
 	<!-- scripts -->
 
 	<script>
+		//filterDgroupTable();
 		//algo for displaying forms per page
 		var currentpage = 1, no_of_pages=7, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 
@@ -1242,7 +1244,6 @@
 			}
 		});
 
-//<<<<<<< HEAD
 		/*//----------------check password---------------//
 		if(confirmpass=="") {
 			$("small#confirmpass-required").show();
@@ -1262,9 +1263,7 @@
 			check_iteration = false;
 		}*/
 
-//=======
 		var check_iteration = true, check_username = true, focused_element;
-//>>>>>>> e1855c878e5f13bdf9368405ac482d1412c9765f
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
@@ -1278,6 +1277,8 @@
 			//var checkpass = true, checknewpass = true, checkoldpass = true;
 			$(this).blur();
 			check_iteration = true;
+
+
 
 			/* ===== SPOUSE VALIDATION ===== */
 			var civilstatusid = "#CivilStatus"
@@ -1294,7 +1295,7 @@
 				company.hide();
 				$(".company input").prop("required", false);
 			}
-			else if($(professionid).val().toLowerCase() == "unemployed"){
+			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
 				school.hide();
@@ -1362,8 +1363,33 @@
 						check_iteration = false;
 					}
 				}
-				else if($('#DgroupType').val() == "Youth" || $('#DgroupType').val() == "Singles" || $('#DgroupType').val() == "Single Parents") {
-
+				else if($('#DgroupType').val() == "Single") {
+					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Youth") {
+					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Couples"){
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent"){
+						$('#DgroupType-single').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Single Parents"){
+					if($(civilstatusid).val() == "Married"){
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
 				}
 			}
 
@@ -1608,9 +1634,23 @@
 
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
+		var gender = "";
+		var dgrouptype = "";
+
+		$('[id^=Gender]').click(function() {
+			if($('#Gender_Male').prop("checked"))
+				gender = $('#Gender_Male').val();
+			else
+				gender = $('#Gender_Female').val();
+			filterDgroupTable();
+		});
+
+		$('#DgroupType').change(function(){
+			dgrouptype = $(this).val();
+			filterDgroupTable();
+		})
 
 		function filterDgroupTable() {
-			var gender = $('#Gender').val();
 			var dgrouptype = $('#DgroupType').val();
 
 			/*
@@ -1636,8 +1676,44 @@
 						// hide dgroup type something
 					}
 				});
-
 			*/
+
+			//alert(dgrouptype);
+		
+			$('#table').find('tr').each(function(d){
+				//alert($(this).text());
+
+				/*if(Fgender){
+					if($(this).text() == "Male"){
+						$(this).parent().hide();
+					}
+				}
+				else{
+					if($(this).text() == "Female"){
+						$(this).parent().hide();
+					}
+				}*/
+				$(this).children().each(function(e){
+					if(d == 0) { }
+					else if(e == 2) {
+						if($(this).text() != gender){
+							//alert(gender);
+							//$(this).parent().hide();
+							//alert($(this).text());
+							$(this).parent().hide();
+						}else{
+							$(this).parent().show(); //(caution logic)
+						}
+					}
+					else if(e == 3){
+						if($(this).text() != dgrouptype){
+							$(this).parent().hide();
+						}/*else{
+							$(this).parent().show(); //(caution logic)
+						}*/
+					}
+				});
+			});			
 		}
 	</script>
 	<footer>

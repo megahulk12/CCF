@@ -526,7 +526,7 @@
 									<label for="Gender_Female">Female</label><br>
 									<small class="error" id="Gender-required" style="margin-left: 11; position: relative; top: 10px;">Please select one.</small>
 								</div>
-							</p>>
+							</p>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
 									<select id="CivilStatus" name="CivilStatus" required>
@@ -732,7 +732,8 @@
 			var check_iteration = true;
 			var focused_element;
 
-			$($('form#registration #'+getCurrentPage()).find('input','select').reverse()).each(function() {
+			alert("hi");
+			$($('form#registration #'+getCurrentPage()).find('input,select').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
 						$("small#"+this.id+"-required").show();
