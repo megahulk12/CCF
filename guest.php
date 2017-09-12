@@ -628,84 +628,84 @@
 	<!-- scripts -->
 
 	<script>
-	var currentpage = 1, no_of_pages=4, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		var currentpage = 1, no_of_pages=4, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 
-	// initialization of profress bar controls
-	document.getElementById('page').innerHTML = document.getElementById('page').innerHTML + "Page "+currentpage+" of "+no_of_pages;
-	document.getElementById('progressbar').style.width = currentprogress+"%";
-	function labelpage() {
-		document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-	}
-	function pagination(direction) {
-		if(direction == 0) {
-			if(currentpage == 2) {
-				document.getElementById('back').style.display = "none";
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage--;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress-=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').href = "#page"+currentpage;
-				document.getElementById('back').blur();
-			}
-			else {
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage--;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress-=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').href = "#page"+currentpage;
-				document.getElementById('back').blur();
-			}
-			// removes color of submit button attached to this button ~bug
-			document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right");
-			document.getElementById('next').innerHTML = "NEXT";
+		// initialization of profress bar controls
+		document.getElementById('page').innerHTML = document.getElementById('page').innerHTML + "Page "+currentpage+" of "+no_of_pages;
+		document.getElementById('progressbar').style.width = currentprogress+"%";
+		function labelpage() {
+			document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
 		}
-		else {
-			if(currentpage == no_of_pages) {
-				document.getElementById('page'+currentpage).style.display = "none";
-				document.getElementById('page'+currentpage).style.display = "inline";
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').style.display = "inline";
-				document.getElementById('next').href = "#page"+currentpage;
-
-				//document.getElementById('next').type = "submit";
-				document.getElementById('next').onclick = submitOnClick();
-				//document.getElementById('next').onclick = document.getElementById('next').value = "Submit";
-				//document.getElementById('next').onclick = document.getElementById('next').setAttribute("type", "submit");
+		function pagination(direction) {
+			if(direction == 0) {
+				if(currentpage == 2) {
+					document.getElementById('back').style.display = "none";
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage--;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress-=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').href = "#page"+currentpage;
+					document.getElementById('back').blur();
+				}
+				else {
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage--;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress-=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').href = "#page"+currentpage;
+					document.getElementById('back').blur();
+				}
+				// removes color of submit button attached to this button ~bug
+				document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right");
+				document.getElementById('next').innerHTML = "NEXT";
 			}
 			else {
-				document.getElementById('page'+currentpage).style.display = "none";
-				currentpage++;
-				document.getElementById('page'+currentpage).style.display = "inline";
-				currentprogress+=percentage;
-				document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
-				document.getElementById('progressbar').style.width = currentprogress+"%";
-				document.getElementById('back').style.display = "inline";
-				document.getElementById('next').href = "#page"+currentpage;
-				document.getElementById('next').blur();
-				if(currentpage == no_of_pages) { /*at last page, button changes from next to submit*/
-					// fixbutton puts the color of submit button
-					document.getElementById('next').innerHTML = "SUBMIT";
-					document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right fixbutton");
+				if(currentpage == no_of_pages) {
+					document.getElementById('page'+currentpage).style.display = "none";
+					document.getElementById('page'+currentpage).style.display = "inline";
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').style.display = "inline";
+					document.getElementById('next').href = "#page"+currentpage;
+
+					//document.getElementById('next').type = "submit";
+					document.getElementById('next').onclick = submitOnClick();
+					//document.getElementById('next').onclick = document.getElementById('next').value = "Submit";
+					//document.getElementById('next').onclick = document.getElementById('next').setAttribute("type", "submit");
+				}
+				else {
+					document.getElementById('page'+currentpage).style.display = "none";
+					currentpage++;
+					document.getElementById('page'+currentpage).style.display = "inline";
+					currentprogress+=percentage;
+					document.getElementById('page').innerHTML = "Page "+currentpage+" of "+no_of_pages;
+					document.getElementById('progressbar').style.width = currentprogress+"%";
+					document.getElementById('back').style.display = "inline";
+					document.getElementById('next').href = "#page"+currentpage;
+					document.getElementById('next').blur();
+					if(currentpage == no_of_pages) { /*at last page, button changes from next to submit*/
+						// fixbutton puts the color of submit button
+						document.getElementById('next').innerHTML = "SUBMIT";
+						document.getElementById('next').setAttribute("class", "waves-effect waves-light btn col s2 right fixbutton");
+					}
 				}
 			}
 		}
-	}
 
-	function submitOnClick() {
-		document.getElementById('next').setAttribute("type", "submit");
-		//document.myForm.submit();
-		/*
-		$["#next"].click(function() {
-			$("button[name='submit_next']").prop("type", "submit"); //jquery-3
-		});
-		*/
-	}
-		/*code ni paolo*/
+		function submitOnClick() {
+			document.getElementById('next').setAttribute("type", "submit");
+			//document.myForm.submit();
+			/*
+			$["#next"].click(function() {
+				$("button[name='submit_next']").prop("type", "submit"); //jquery-3
+			});
+			*/
+		}
+		/*----------------------code ni paolo---------------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
 		function disableDefaultRequired(elem) {
@@ -729,9 +729,11 @@
 		$("#next").click(function(){
 			$('.error').hide();
 			$(this).blur();
-			var check_iteration = true, focused_element;
+			var check_iteration = true;
+			var focused_element;
 
-			$($('form#registration #'+getCurrentPage()).find('input').reverse()).each(function() {
+			alert("hi");
+			$($('form#registration #'+getCurrentPage()).find('input,select').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
 						$("small#"+this.id+"-required").show();
@@ -739,6 +741,32 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
+				}
+				else if(this.id.split("_")[0] == "Gender"){
+						if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
+							$('#Gender-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+				else if(this.id == 'username') {
+					var url = "check-username.php";
+					$.ajax({
+						type: 'POST',
+						url: url,
+						async: false,
+						data: 'username='+$(this).val(),
+						success: function(data){
+							// async should be true if there is bad user experience
+							if(data == 1){
+								$('small#notusername').show();
+								focused_element = $(this);
+								disableDefaultRequired($(this));
+								check_iteration = false;
+							}
+						}
+					});
 				}
 			});
 
@@ -762,7 +790,7 @@
 			else return true;
 		}
 
-		function removeLeadingZero(time_value) {
+		/*function removeLeadingZero(time_value) {
 			return time_value.slice(1, time_value.length);
 		}
 
@@ -827,7 +855,7 @@
 		}
 
 		/* ===== END ===== */
-	/*end code ni paolo*/
+		/*--------------------------end code ni paolo--------------------------------------------------*/
 	</script>
 	<footer>
 	</footer>
