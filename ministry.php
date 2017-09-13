@@ -591,6 +591,7 @@
 						</div>
 						<div class="col s4"></div>
 					</div>
+					<p class="center" id="loading"></p>
 					<table class="centered ministry-table-spacing">
 					</table>
 				</div>
@@ -813,7 +814,7 @@
 		}
 
 		$('#Ministry').change(function() {
-			changeMinistryTransition(".ministry-table-spacing", '<p class="center">Please wait for a moment...</p>');
+			loadingTransition("#loading", "Please wait for a moment...");
 			var url = "request_ministry.php";
 			$.ajax({
 				type: "POST",
@@ -821,6 +822,7 @@
 				data: "id="+$(this).val().split("_")[1],
 				dataType: 'json',
 				success: function(data) {
+					loadingTransition("#loading", "");
 					changeTitleTransition("#Ministry", "#Ministry-title");
 					changeMinistryTransition("#Ministry-sched", data.sched);
 					changeMinistryTransition("table.ministry-table-spacing", data.table);
@@ -839,6 +841,13 @@
 			$(elem).fadeOut(300).fadeIn(300);
 			setTimeout(function() {
 				$(elem).html(data);
+			}, 300);
+		}
+
+		function loadingTransition(elem, data) {
+			$(elem).fadeOut(300).fadeIn(300);
+			setTimeout(function() {
+				$(elem).text(data);
 			}, 300);
 		}
 	</script>
