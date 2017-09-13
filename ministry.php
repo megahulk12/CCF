@@ -753,6 +753,19 @@
 		}
 		
 		var title = "Christ's Commission Fellowship";
+		var preloader = '\
+			<div class="preloader-wrapper small active spinner-notif"> \
+				<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+					<div class="circle-clipper left"> \
+						<div class="circle"></div> \
+					</div><div class="gap-patch"> \
+						<div class="circle"></div> \
+					</div><div class="circle-clipper right"> \
+						<div class="circle"></div> \
+					</div> \
+				</div> \
+			</div> \
+		  ';
 		function seen() { // this function gets rid of the badge every after click event 
 			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
 			document.getElementById('badge').innerHTML = "Notifications";
@@ -760,19 +773,6 @@
 
 			// get Notifications using ajax
 			var url = "get_notifs.php";
-			var preloader = '\
-				<div class="preloader-wrapper small active spinner-notif"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
-						</div> \
-					</div> \
-				</div> \
-			  ';
 			$('title').text(title); // re-initialize the title
 			$.ajax({
 				type: 'POST',
@@ -813,7 +813,7 @@
 		}
 
 		$('#Ministry').change(function() {
-			changeTitleTransition($(this), "#Ministry-title");
+			changeMinistryTransition(".ministry-table-spacing", '<p class="center">Please wait for a moment...</p>');
 			var url = "request_ministry.php";
 			$.ajax({
 				type: "POST",
@@ -821,6 +821,7 @@
 				data: "id="+$(this).val().split("_")[1],
 				dataType: 'json',
 				success: function(data) {
+					changeTitleTransition("#Ministry", "#Ministry-title");
 					changeMinistryTransition("#Ministry-sched", data.sched);
 					changeMinistryTransition("table.ministry-table-spacing", data.table);
 				}

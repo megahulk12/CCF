@@ -17,14 +17,19 @@
 
 		$lquery = "SELECT CONCAT_WS(' ', firstName, lastName) AS leader FROM ministrydetails_tbl INNER JOIN member_tbl ON ministryHeadID = memberID WHERE ministryID = $id";
 
-		$ministry_schedule = "SELECT schedDay, schedStartTime, schedEndTime FROM ministrydetails_tbl JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID WHERE ministryID = $id";
+		$ministry_schedule = "SELECT schedDay, schedDate, schedStartTime, schedEndTime, schedStatus FROM ministrydetails_tbl JOIN scheduledmeeting_tbl ON ministrydetails_tbl.schedID = scheduledmeeting_tbl.schedID WHERE ministryID = $id";
 	    $result = mysqli_query($conn, $ministry_schedule);
 	    if(mysqli_num_rows($result) > 0) {
 	    	while($row = mysqli_fetch_assoc($result)) {
 	    		$day = $row["schedDay"];
+	    		$date = date("F j", strtotime($row["schedDate"]));
 	    		$starttime = date("g:i a", strtotime($row["schedStartTime"]));
 	    		$endtime = date("g:i a", strtotime($row["schedEndTime"]));
-	    		$sched = "Every $day @ $starttime - $endtime";
+	    		$schedstatus = $row["schedStatus"];
+	    		if($schedstatus == 0)
+	    			$sched = "$date @ $starttime - $endtime";
+	    		else
+	    			$sched = "Every $day @ $starttime - $endtime";
 	    	}
 	    }
 
