@@ -923,11 +923,10 @@
 		============================================================
 		============================================================
 		*/
-		$('.error, .error-picture').hide(); // by default, hide all error classes
+		$('.error').hide(); // by default, hide all error classes
 		
 		$(document).ready(function() {
 			$('.error').text('This field is required.');
-			$('.error-picture').text('Please choose a picture.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
 			$('[id$=greaterdate]').text('Start Date should be before than End Date.');

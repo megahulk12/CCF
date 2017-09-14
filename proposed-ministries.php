@@ -773,8 +773,7 @@
 													<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 												</div>
 												<div class="file-path-wrapper col s8">
-													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture" required>
-													<small class="error-picture" id="MinistryPictureName-required"></small>
+													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
 												</div>
 												<div class="row ministry-pic">
 												</div>
@@ -1112,11 +1111,10 @@
 		============================================================
 		============================================================
 		*/
-		$('.error, .error-picture').hide(); // by default, hide all error classes
+		$('.error').hide(); // by default, hide all error classes
 		
 		$(document).ready(function() {
 			$('.error').text('This field is required.');
-			$('.error-picture').text('Please choose a picture.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
 			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
