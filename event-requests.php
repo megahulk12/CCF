@@ -404,8 +404,8 @@
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 50%;
-			padding: 1px 3px;
+			border-radius: 100%;
+			padding: 1 4 1 4;
 			position: relative;
 			top: 19px;
 			left: 13px
