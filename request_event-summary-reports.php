@@ -39,11 +39,20 @@
 				$startday = date("F j, Y", strtotime($row["eventStartDay"]));
 				$endday = date("F j, Y", strtotime($row["eventEndDay"]));
 				$weekly = $row["eventWeekly"];
-				$starttime = $row["eventStartTime"];
-				$endtime = $row["eventEndTime"];
+				$starttime = date("g:i A", strtotime($row["eventStartTime"]));
+				$endtime = date("g:i A", strtotime($row["eventEndTime"]));
 				$venue = $row["eventVenue"];
 				$remarks = $row["remarks"];
 				$schedstatus = $row["eventSchedStatus"];
+
+				if($schedstatus == 0) {
+					$schedstatus = "Single Day Event";
+					$endday = "";
+				}
+				else if($schedstatus == 1)
+					$schedstatus = "Multiple Day Event";
+				else
+					$schedstatus = "Weekly Event";
 
 				// stores max length of string of each value per column
 				if(strlen($name) > $strlen[0]) $strlen[0] = strlen($name);
