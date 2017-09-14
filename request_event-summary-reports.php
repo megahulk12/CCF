@@ -135,6 +135,9 @@
 				$spcontactnum = $row["spouseContactNum"];
 				$spbirthdate = date("F j, Y", strtotime($row["spouseBirthdate"]));
 
+				if(isset($spbirthdate))
+					$spbirthdate = "";
+
 				// stores max length of string of each value per column
 				if(strlen($fullname) > $strlen[0]) $strlen[0] = strlen($fullname);
 				if(strlen($nname) > $strlen[1]) $strlen[1] = strlen($nname);
