@@ -10,7 +10,7 @@
 	  	if($_SESSION["memberType"] >= 2 ) {
 	  		echo '
 			<li class="divider"></li>
-	  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>';
+	  		<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>';
 		  	if(checkIfD12Leader())
 		  		echo '
 		  	<li class="divider"></li>
@@ -33,7 +33,7 @@
 	  	if($_SESSION["memberType"] == 4)
 		  		echo '
 	  		<li class="divider"></li>
-		  	<li><a href="proposed-ministries.php"><i class="material-icons prefix>">library_books</i>Approved Ministries</a></li>
+		  	<li><a href="approved-ministries.php"><i class="material-icons prefix>">library_books</i>Approved Ministries</a></li>
 	  		<li class="divider"></li>
 		  	<li><a href="join-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Join Requests</a></li>
 	  		<li class="divider"></li>
@@ -45,11 +45,11 @@
 			<li class="divider"></li>
 			<li><a href="manage-accounts.php"><i class="material-icons prefix>">supervisor_account</i>Manage Accounts</a></li>
 			<li class="divider"></li>
-	  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+	  		<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
 			<li class="divider"></li>
-	  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
+	  		<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			<li class="divider"></li>
-	  	<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
+	  		<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			';
 	}
 ?>

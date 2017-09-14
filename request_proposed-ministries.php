@@ -74,13 +74,19 @@
 			$dateEntry = date("Y-m-d"); // for budget details
 			$remarks = addSlashes($_POST["Remarks"]); // put addSlashes to escape apostrophes
 
+			$approved_update = false;
+			if(isset($budget) && isset($remarks))
+				$approved_update = true;
+
 			$conn = mysqli_connect($servername, $username, $password, $dbname);
 			if (!$conn) {
 				die("Connection failed: " . mysqli_connect_error());
 			}
 
-			$sql_budget = "UPDATE budgetdetails_tbl SET budget = '$budget', dateEntry = '$dateEntry', budgetType = 1 WHERE budgetID = ".getMinistryBudgetID($id);
-			mysqli_query($conn, $sql_budget);
+			if(!$approved_update) {
+				$sql_budget = "UPDATE budgetdetails_tbl SET budget = '$budget', dateEntry = '$dateEntry', budgetType = 1 WHERE budgetID = ".getMinistryBudgetID($id);
+				mysqli_query($conn, $sql_budget);
+			}
 
 
 			if($ministryschedstatus == "Weekly") {
@@ -92,7 +98,11 @@
 
 			mysqli_query($conn, $sql_schedule);
 
-			$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc', remarks = '$remarks' WHERE ministryID = $id";
+			if(!$approved_update)
+				$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc', remarks = '$remarks' WHERE ministryID = $id";
+			else
+				$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc' WHERE ministryID = $id";
+
 			mysqli_query($conn, $sql_propose_ministry);
 
 			mysqli_close($conn);

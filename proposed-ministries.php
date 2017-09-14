@@ -1171,7 +1171,7 @@
 							check_iteration = false;
 						}
 
-						if(($("#MinistryTime1").val() == $("#MinistryTime2").val()) && !($('[id^=MinistryTime]').val() == "")) {
+						if((start_time == end_time) && !($('[id^=MinistryTime]').val() == "")) {
 							$("[id$=equaltime]").show();
 							focused_element = $("#MinistryTime1");
 							check_iteration = false;

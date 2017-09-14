@@ -1208,7 +1208,7 @@
 							check_iteration = false;
 						}
 
-						if(($("#EventTime1").val() == $("#EventTime2").val()) && !($('[id^=EventTime]').val() == "")) {
+						if((start_time == end_time) && !($('[id^=EventTime]').val() == "")) {
 							$("[id$=equaltime]").show();
 							focused_element = $("#EventTime1");
 							check_iteration = false;
