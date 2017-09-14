@@ -19,7 +19,6 @@
 		$result = mysqli_query($conn, $query);
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
-				$budget = $row["budget"];
 				$headID = $row["ministryHeadID"];
 				$picturepath = $row["ministryPicturePath"];
 				$name = $row["ministryName"];
@@ -29,9 +28,8 @@
 				$starttime = date("h:i A", strtotime($row["schedStartTime"]));;
 				$endtime = date("h:i A", strtotime($row["schedEndTime"]));
 				$venue = $row["schedPlace"];
-				$remarks = $row["remarks"];
 				$schedstatus = $row["schedStatus"];
-				$array = array("budget"=>$budget, "headID"=>$headID, "picturepath"=>$picturepath, "name"=>$name, "description"=>$description, "date"=>$date, "weekly"=>$weekly, "starttime"=>$starttime, "endtime"=>$endtime, "venue"=>$venue, "remarks"=>$remarks, "schedstatus"=>$schedstatus);
+				$array = array("headID"=>$headID, "picturepath"=>$picturepath, "name"=>$name, "description"=>$description, "date"=>$date, "weekly"=>$weekly, "starttime"=>$starttime, "endtime"=>$endtime, "venue"=>$venue, "schedstatus"=>$schedstatus);
 				echo json_encode($array);
 			}
 		}
@@ -70,18 +68,12 @@
 			$starttime = date("H:i:s", strtotime($_POST["MinistryTime1"]));
 			$endtime = date("H:i:s", strtotime($_POST["MinistryTime2"]));
 			$venue = addSlashes($_POST["MinistryVenue"]);
-			$budget = $_POST["Budget"];
 			$dateEntry = date("Y-m-d"); // for budget details
-			$remarks = addSlashes($_POST["Remarks"]); // put addSlashes to escape apostrophes
 
 			$conn = mysqli_connect($servername, $username, $password, $dbname);
 			if (!$conn) {
 				die("Connection failed: " . mysqli_connect_error());
 			}
-
-			$sql_budget = "UPDATE budgetdetails_tbl SET budget = '$budget', dateEntry = '$dateEntry', budgetType = 1 WHERE budgetID = ".getMinistryBudgetID($id);
-			mysqli_query($conn, $sql_budget);
-
 
 			if($ministryschedstatus == "Weekly") {
 				$sql_schedule = "UPDATE scheduledmeeting_tbl SET schedDay = '$weekly', schedPlace = '$venue', schedStartTime = '$starttime', schedEndtime = '$endtime', schedStatus = 1 WHERE schedID = ".getMinistrySchedID($id);
@@ -92,7 +84,7 @@
 
 			mysqli_query($conn, $sql_schedule);
 
-			$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc', remarks = '$remarks' WHERE ministryID = $id";
+			$sql_propose_ministry = "UPDATE ministrydetails_tbl SET ministryPicturePath = '$ministrypicturepath', ministryName = '$ministryname', ministryDescription = '$ministrydesc' WHERE ministryID = $id";
 			mysqli_query($conn, $sql_propose_ministry);
 
 			mysqli_close($conn);

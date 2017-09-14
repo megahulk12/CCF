@@ -597,8 +597,8 @@
 									<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 								</div>
 								<div class="file-path-wrapper col s8">
-									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture" required>
-									<small class="error-picture" id="MinistryPictureName-required"></small>
+									<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
+									<!-- <small class="error-picture" id="MinistryPictureName-required"></small> -->
 								</div>
 								<div class="row ministry-pic">
 								</div>
@@ -944,7 +944,8 @@
 
 		// personal info form validation
 		$("#propose").click(function() {
-			$('.error, .error-picture').hide();
+			// picture is not required
+			$('.error').hide();
 			$(this).blur();
 			var check_iteration = true, focused_element;
 			

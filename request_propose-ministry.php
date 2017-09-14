@@ -10,6 +10,10 @@
 	//if(isset($_POST['propose'])) {
 		// Image handling
 		$confirmUpload = true;
+		/*
+			if no file found, make a copy of CCF Logos5.png in every folder of session user id
+			and 
+		*/
 		$target_dir = "uploads/".$_SESSION['userid'].'/';
 		if(!is_dir($target_dir)) {
 			mkdir($target_dir);
