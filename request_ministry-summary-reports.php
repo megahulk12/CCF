@@ -44,6 +44,12 @@
 				$remarks = $row["remarks"];
 				$schedstatus = $row["schedStatus"];
 
+
+				if($schedstatus == 0)
+					$schedstatus = "Custom Meeting";
+				else if($schedstatus == 1)
+					$schedstatus = "Weekly Meeting";
+
 				// stores max length of string of each value per column
 				if(strlen($name) > $strlen[0]) $strlen[0] = strlen($name);
 				//if(strlen($description) > $strlen[1]) $strlen[1] = strlen($description);
