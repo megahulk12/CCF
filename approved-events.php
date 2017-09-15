@@ -618,9 +618,6 @@
 					$('#EventTime1').val(data.starttime);
 					$('#EventTime2').val(data.endtime);
 					$('#EventVenue').val(data.venue);
-					$('#Budget').val(data.budget);
-					$('#Remarks').val(data.remarks);
-					$('#Remarks').trigger("autoresize");
 
 					// re-initialize to update input fields
 					Materialize.updateTextFields();
@@ -723,7 +720,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 1 ORDER BY eventName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
@@ -778,8 +775,7 @@
 													<input type="file" id="EventPicture" name="EventPicture" accept="image/*">
 												</div>
 												<div class="file-path-wrapper col s8">
-													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture" required tabindex="-1">
-													<small class="error-picture" id="EventPictureName-required"></small>
+													<input class="file-path" type="text" id="EventPictureName" name="EventPictureName" placeholder="Event Picture" tabindex="-1">
 												</div>
 												<div class="row event-pic">
 												</div>

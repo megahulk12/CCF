@@ -470,6 +470,7 @@
 	<body>
 		<div id="response"></div>
 			<?php
+				error_reporting(0); // not sure to put this in viewing
 				if(isset($_GET['id'])) {
 					$eid = $_GET['id'];
 
