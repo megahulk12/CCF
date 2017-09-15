@@ -14,21 +14,30 @@
 		if(!is_dir($target_dir)) {
 			mkdir($target_dir);
 		}
-		$target_file = $target_dir.basename($_FILES["EventPicture"]["name"]);
-		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+		$default_pic = "CCF Logos5.png";
+		copy("resources/CCF Logos5.png", $target_dir.$default_pic);
+		$picture_flag = $_FILES["EventPicture"]["name"] == "";
+		$picturepath_flag = $_POST["EventPictureName"] == "";
+		$flag = false;
+		if($picture_flag && $picturepath_flag) {
+			$target_file = $target_dir.$default_pic;
+			$flag = true;
+		}
+		else {
+			$target_file = $target_dir.basename($_FILES["EventPicture"]["name"]);
+			$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-		if(file_exists($target_file)) // check if image exists
-			$target_file = getEventPicturePath($_POST["eventID"]);
-		else
 			$target_file = $target_dir.removeExtension(basename($_FILES["EventPicture"]["name"])).uniqid().'.'.$imageFileType;
 
-		if($_FILES["EventPicture"]["size"] > 20000000) { // limits the size of image
-			echo "File is too large.";
-			$confirmUpload = false;
+			if($_FILES["EventPicture"]["size"] > 20000000) { // limits the size of image
+				echo "File is too large.";
+				$confirmUpload = false;
+			}
 		}
 
 		if($confirmUpload) {
-			move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
+			if(!$flag)
+				move_uploaded_file($_FILES["EventPicture"]["tmp_name"], $target_file);
 			// fetch data from form
 			$id = $_POST["eventID"];
 			$eventname = addSlashes($_POST["EventName"]);

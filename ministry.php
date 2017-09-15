@@ -523,9 +523,9 @@
 									}
 
 									if($_SESSION["memberType"] == 4)
-										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryHeadID = ".$_SESSION['userid'];
+										$query = "SELECT ministryID, ministryName FROM ministrydetails_tbl WHERE ministryStatus = 1 AND ministryHeadID = ".$_SESSION['userid'];
 									else
-										$query = "SELECT ministrydetails_tbl.ministryID, ministryName FROM ministrydetails_tbl JOIN ministryparticipation_tbl ON ministrydetails_tbl.ministryID = ministryparticipation_tbl.ministryID WHERE memberID = ".$_SESSION['userid'];
+										$query = "SELECT ministrydetails_tbl.ministryID, ministryName FROM ministrydetails_tbl JOIN ministryparticipation_tbl ON ministrydetails_tbl.ministryID = ministryparticipation_tbl.ministryID WHERE ministryStatus = 1 AND memberID = ".$_SESSION['userid'];
 									$result = mysqli_query($conn, $query);
 									if(mysqli_num_rows($result) > 0) {
 										while($row = mysqli_fetch_assoc($result)) {

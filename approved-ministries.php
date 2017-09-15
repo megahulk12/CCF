@@ -770,8 +770,7 @@
 													<input type="file" id="MinistryPicture" name="MinistryPicture" accept="image/*">
 												</div>
 												<div class="file-path-wrapper col s8">
-													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture" required>
-													<small class="error-picture" id="MinistryPictureName-required"></small>
+													<input class="file-path" type="text" id="MinistryPictureName" name="MinistryPictureName" placeholder="Ministry Picture">
 												</div>
 												<div class="row ministry-pic">
 												</div>
