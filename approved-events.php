@@ -701,12 +701,12 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<h2 class="center">Event Proposals</h2>
+			<h2 class="center">Approved Events</h2>
 			<div class="row">
 				<div class="col s12 z-depth-4 card-panel">
 					<div class="col s5">
 						<div class="col s12">
-							<h3 class="center">Proposed Events</h3>
+							<h3 class="center">Events in Charge</h3>
 							<table class="centered">
 								<thead>
 									<tr>
