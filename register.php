@@ -688,6 +688,8 @@
 			
 		});
 
+		var cellTag = true;
+
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -695,13 +697,14 @@
 			for(var i = 0; i < num_of_rows; i++) {
 				//document.getElementsByTagName("TR")[i].appendChild(style);
 				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
-				document.getElementsByTagName("TR")[i].style.color = "black"
+				document.getElementsByTagName("TR")[i].style.color = "black";
 			}
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
+			cellTag = false;
 		}
 	</script>
 
@@ -1243,26 +1246,7 @@
 				$(this).val(removeLeadingZero(time_value));
 			}
 		});
-
-		/*//----------------check password---------------//
-		if(confirmpass=="") {
-			$("small#confirmpass-required").show();
-			$("input#confirm-password").focus();
-		}
-
-		if(pass=="") {
-			$("small#newpass-required").show();
-			$("input#password").focus();
-		}
-		var pass = $("#password").val();
-		var confirmpass = $("#confirm-password").val();
-		if(confirmpass!=pass) {
-			$("small#confirmpass-required").hide();
-			$("small#checkpass-required").show();
-			$("input#confirm-password").focus();
-			check_iteration = false;
-		}*/
-
+		
 		var check_iteration = true, check_username = true, focused_element;
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
@@ -1393,6 +1377,13 @@
 				}
 			}
 
+			if(getCurrentPage() == 'page7'){
+				if(cellTag){
+					alert("You have not picked a Dgroup leader");
+					//check_iteration = false;
+				}
+			}
+
 			$($('form#registration #'+getCurrentPage()).find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1472,10 +1463,13 @@
 		});
 
 		function nextPage() {
+			if(getCurrentPage == 'page6'){
+				filterDgroupTable();
+			}
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
-			if(check_iteration && check_username) {
+			if(check_iteration && check_username && cellTag) {
 				confirmvalidated = true;
 				if(checkLastPage()) {
 					confirmvalidated = false;
@@ -1651,55 +1645,15 @@
 		})
 
 		function filterDgroupTable() {
-			var dgrouptype = $('#DgroupType').val();
+			//var dgrouptype = $('#DgroupType').val();
 
-			/*
-
-				##### PSEUDOCODE #####
-
-				1. Loop through all childs of <tr> tags
-				2. Check if loop is currently at 2nd [1] and 3rd [2] column
-				3. If loop is at 2nd column, check if Gender td value is according to Gender form value
-				4. Hide those if not in according to the Gender form value
-				5. If loop is at 3rd column, check if Type of Dgroup td value is according to Type of Dgroup form value
-				6. Hide those if not in according to the Type of Dgorup form value
-				7. All results are now according to the form
-
-				##### CODE MATERIALS #####
-
-				$('tr').find('td').each(function(e) {
-					if(e == 2) {
-						$(this).parent().hide();
-						// hide gender something
-					}
-					else if (e == 3) {
-						// hide dgroup type something
-					}
-				});
-			*/
-
-			//alert(dgrouptype);
-		
+			//alert(gender)
 			$('#table').find('tr').each(function(d){
-				//alert($(this).text());
-
-				/*if(Fgender){
-					if($(this).text() == "Male"){
-						$(this).parent().hide();
-					}
-				}
-				else{
-					if($(this).text() == "Female"){
-						$(this).parent().hide();
-					}
-				}*/
+				
 				$(this).children().each(function(e){
-					if(d == 0) { }
+					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
 						if($(this).text() != gender){
-							//alert(gender);
-							//$(this).parent().hide();
-							//alert($(this).text());
 							$(this).parent().hide();
 						}else{
 							$(this).parent().show(); //(caution logic)
@@ -1708,9 +1662,9 @@
 					else if(e == 3){
 						if($(this).text() != dgrouptype){
 							$(this).parent().hide();
-						}/*else{
+						}else{
 							$(this).parent().show(); //(caution logic)
-						}*/
+						}
 					}
 				});
 			});			

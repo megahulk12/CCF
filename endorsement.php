@@ -425,6 +425,19 @@
 		.spinner-color-notif {
 			border-color: #777;
 		}
+
+		.input-field div.error {
+			font-size: 0.8rem;
+			color: #16A5B8;
+		}
+		.error-with-icon {
+			color: #ff3333;
+			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
+		}
 		/* ===== END ===== */
 	</style>
 
@@ -569,17 +582,19 @@
 						<h4 class="center">BAPTISMAL</h4>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
+								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" required>
 								<label for="BaptismalDate" class>When were you baptized?</label>
+								<small class="error" id="BaptismalDate-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
+								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" required>
 								<label for="BaptismalPlace">Where were you baptized?</label>
+								<small class="error" id="BaptismalPlace-required">This field is required.</small>
 							</div>
 							<h4 class="center">DGROUP</h4>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
+									<select id="DgroupType" name="DgroupType" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Youth">Youth</option>
 										<option value="Singles">Singles</option>
@@ -588,16 +603,18 @@
 										<option value="Couples">Couples</option>
 									</select>
 									<label>Type of Dgroup</label>
+									<small class="error" id="DgroupType-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 								<label for="AgeBracket">Age Bracket</label>
+								<small class="error" id="AgeBracket-required">This field is required.</small>
 							</div>
 							<h4 class="center">MEETING</h4>
 							<div class="row" style="margin-bottom: 0px;">
 								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
+									<select id="MeetingDay" name="MeetingDay" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Sunday">Sunnday</option>
 										<option value="Monday">Monday</option>
@@ -608,6 +625,7 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
+									<small class="error" id="MeetingDay-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s6">
@@ -619,8 +637,9 @@
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
+								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
 								<label for="MeetingPlace">Place</label>
+								<small class="error" id="MeetingPlace-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -788,6 +807,98 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		//--------------------------hello, code to ni pogi hehe----------------------------//
+
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('div#page1 .error').text("This field is required.");
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
+		var check_iteration = true, check_username = true, focused_element;
+		$("#request").click(function(){
+			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+
+			$($('form#Eform').find('input, select').reverse()).each(function(){
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					confirmvalidated = false;
+				}
+				pagination(1);
+			}
+		});
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
+
+		$("[id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				animateBodyScrollTop();
+				confirmvalidated = false;
+			}
+		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 	</script>
 
 	<script>

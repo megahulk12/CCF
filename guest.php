@@ -707,6 +707,7 @@
 		}
 		/*----------------------code ni paolo---------------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('div#page1 .error').text("This field is required.");
 
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
@@ -727,46 +728,46 @@
 		}*/
 
 		$("#next").click(function(){
-			$('.error').hide();
+			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			$(this).blur();
 			var check_iteration = true;
 			var focused_element;
 
-			alert("hi");
+			//alert("hi");
 			$($('form#registration #'+getCurrentPage()).find('input,select').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
-						$("small#"+this.id+"-required").show();
+						$('small#'+this.id+'-required').show();
 						focused_element = $(this);
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-				}
-				else if(this.id.split("_")[0] == "Gender"){
-						if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
-							$('#Gender-required').show();
-							focused_element = $(this);
-							disableDefaultRequired($(this));
-							check_iteration = false;
-						}
-					}
-				else if(this.id == 'username') {
-					var url = "check-username.php";
-					$.ajax({
-						type: 'POST',
-						url: url,
-						async: false,
-						data: 'username='+$(this).val(),
-						success: function(data){
-							// async should be true if there is bad user experience
-							if(data == 1){
-								$('small#notusername').show();
+					else if(this.id.split("_")[0] == "Gender"){
+							if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
+								$('#Gender-required').show();
 								focused_element = $(this);
 								disableDefaultRequired($(this));
 								check_iteration = false;
 							}
 						}
-					});
+					else if(this.id == 'username') {
+						var url = "check-username.php";
+						$.ajax({
+							type: 'POST',
+							url: url,
+							async: false,
+							data: 'username='+$(this).val(),
+							success: function(data){
+								// async should be true if there is bad user experience
+								if(data == 1){
+									$('small#notusername').show();
+									focused_element = $(this);
+									disableDefaultRequired($(this));
+									check_iteration = false;
+								}
+							}
+						});
+					}
 				}
 			});
 
