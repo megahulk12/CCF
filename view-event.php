@@ -522,7 +522,7 @@
 
 							if($schedstatus == 0) {
 								$startday = date("F j", strtotime($startday));
-								if($_SESSION['memberType'] <= 2 && $partstat == "") {
+								if($_SESSION['memberType'] <= 4 && $_SESSION != 3 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -628,7 +628,7 @@
 							else if($schedstatus == 1) {
 								$startday = date("F j", strtotime($startday));
 								$endday = date("F j", strtotime($endday));
-								if($_SESSION['memberType'] <= 2 && $partstat == "") {
+								if($_SESSION['memberType'] <= 4 && $_SESSION != 3 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">

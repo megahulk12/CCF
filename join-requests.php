@@ -726,7 +726,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT ministryParticipationID, ministryparticipation_tbl.ministryID AS mid, ministryName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM ministryparticipation_tbl LEFT OUTER JOIN ministrydetails_tbl ON ministryparticipation_tbl.ministryID = ministrydetails_tbl.ministryID LEFT OUTER JOIN member_tbl ON ministryparticipation_tbl.memberID = member_tbl.memberID WHERE ministryPartStatus = 0 ORDER BY ministryName ASC;";
+										$query = "SELECT ministryParticipationID, ministryparticipation_tbl.ministryID AS mid, ministryName, CONCAT_WS(' ', firstName, lastName) AS fullname FROM ministryparticipation_tbl LEFT OUTER JOIN ministrydetails_tbl ON ministryparticipation_tbl.ministryID = ministrydetails_tbl.ministryID LEFT OUTER JOIN member_tbl ON ministryparticipation_tbl.memberID = member_tbl.memberID WHERE ministryPartStatus = 0 AND ministryStatus = 1 ORDER BY ministryName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
