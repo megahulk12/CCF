@@ -608,4 +608,235 @@
 	function countNewLines($string) {
 		return substr_count($string, '\n');
 	}
+
+	function checkIfD12Leader() {
+		// this function checks if this Dgroup Leader has a member that is already a leader
+		include_once('session.php'); // this function requires a session call because it is external from the session itself
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$flag = false;
+		$query ="SELECT member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid']." AND memberType = 2";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0)
+			$flag = true;
+		return $flag;
+	}
+
+
+	function getCurrentMinistryID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryID FROM ministrydetails_tbl ORDER BY ministryID DESC LIMIT 1;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryBudgetID($ministryID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT budgetID FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["budgetID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistrySchedID($ministryID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT schedID FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["schedID"];
+			}
+		}
+		return $value;
+	}
+
+	function getEventPicturePath($eventID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT eventPicturePath FROM eventdetails_tbl WHERE eventID = $eventID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["eventPicturePath"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryPicturePath($ministryID) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryPicturePath FROM ministrydetails_tbl WHERE ministryID = $ministryID;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryPicturePath"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryName($mid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryName FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryName"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryHeadID($mid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryHeadID FROM ministrydetails_tbl WHERE ministryID = $mid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryHeadID"];
+			}
+		}
+		return $value;
+	}
+
+	function getCurrentMinistryParticipationID() {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryParticipationID FROM ministryparticipation_tbl ORDER BY ministryParticipationID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryParticipationID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMemberIDFromMinistryPart($mpartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT memberID FROM ministryparticipation_tbl WHERE ministryParticipationID = $mpartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["memberID"];
+			}
+		}
+		return $value;
+	}
+
+	function getMinistryIDFromMinistryPart($mpartid) {
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "SELECT ministryID FROM ministryparticipation_tbl WHERE ministryParticipationID = $mpartid;";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["ministryID"];
+			}
+		}
+		return $value;
+	}
 ?>

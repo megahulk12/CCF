@@ -45,7 +45,9 @@
 
 		img#loginlogo {
 			height: 150px;
-			width: 300px;
+			width: 315px;
+			position: relative;
+			right: 15;
 		}
 		/*=======END=======*/
 

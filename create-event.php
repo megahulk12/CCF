@@ -295,8 +295,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -403,8 +404,8 @@
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 50%;
-			padding: 1px 3px;
+			border-radius: 100%;
+			padding: 1 4 1 4;
 			position: relative;
 			top: 19px;
 			left: 13px
@@ -536,40 +537,7 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
-		  			echo '
-			  		<li class="divider"></li>
-		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-			  		';
-				  	if($_SESSION["memberType"] == 2 )
-				  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
-				  	<li class="divider"></li>
-				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-				  		';
-		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
-			  	if($_SESSION["memberType"] == 5)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
-			  		';
+		  		include_once("user_options.php");
 		  	?>
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -1007,55 +975,6 @@
 			$(this).blur();
 			var check_iteration = true, focused_element;
 
-			// convert time values to timestamp; TIME VALIDATION
-			var start_time = $("#EventTime1").val(), end_time = $("#EventTime2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if((start_time > end_time) && !($('#EventTime2').val() == "")) {
-				$("[id$=greatertime]").show();
-				focused_element = $("#EventTime1");
-				check_iteration = false;
-			}
-
-			if(($("#EventTime1").val() == $("#EventTime2").val()) && !($('[id^=EventTime]').val() == "")) {
-				$("[id$=equaltime]").show();
-				focused_element = $("#EventTime1");
-				check_iteration = false;
-			}
-
-
-			// convert date values to timestamp; DATE VALIDATION
-			if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
-				var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
-				var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
-				start_date = month + " " + day + "," + year;
-				day = end_date.split(",")[0].split(" ")[0];
-				month = end_date.split(",")[0].split(" ")[1];
-				year = end_date.split(",")[1];
-				end_date = month + " " + day + "," + year;
-				start_date = new Date(start_date);
-				end_date = new Date(end_date);
-				if(start_date > end_date) {
-					$("[id$=greaterdate]").show();
-					focused_element = $("#EventDateStart");
-					check_iteration = false;
-				}
-
-			}
-
-			if(($("#EventDateStart").val() == $("#EventDateEnd").val()) && !($('[id^=EventDate]').val() == "")) {
-				$("[id$=equaldate]").show();
-				focused_element = $("#EventDateStart");
-				check_iteration = false;
-			}
-
-
 			$($(".create-event").find('input, select, textarea').reverse()).each(function() {
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1064,7 +983,7 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-					if($(this).is('select')) {
+					else if($(this).is('select')) {
 						if($(this).val() == null) {
 							$("small#"+this.id+"-required").show();
 							focused_element = $('#WeeklyEvent');
@@ -1072,9 +991,60 @@
 							check_iteration = false;
 						}
 					}
+					else if($(this).is('[id^=EventTime]')) {
+
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#EventTime1").val(), end_time = $("#EventTime2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('#EventTime2').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#EventTime1");
+							check_iteration = false;
+						}
+
+						if((start_time == end_time) && !($('[id^=EventTime]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#EventTime1");
+							check_iteration = false;
+						}
+					}
+					else if($(this).is('[id^=EventDate]')) {
+
+						// convert date values to timestamp; DATE VALIDATION
+						if($('#MultipleDay').prop("checked") || $('#Weekly').prop('checked')) {
+							var start_date = $('#EventDateStart').val(), end_date = $('#EventDateEnd').val();
+							var day = start_date.split(",")[0].split(" ")[0], month = start_date.split(",")[0].split(" ")[1], year = start_date.split(",")[1];
+							start_date = month + " " + day + "," + year;
+							day = end_date.split(",")[0].split(" ")[0];
+							month = end_date.split(",")[0].split(" ")[1];
+							year = end_date.split(",")[1];
+							end_date = month + " " + day + "," + year;
+							start_date = new Date(start_date);
+							end_date = new Date(end_date);
+							if(start_date > end_date) {
+								$("[id$=greaterdate]").show();
+								focused_element = $("#EventDateStart");
+								check_iteration = false;
+							}
+
+						}
+
+						if(($("#EventDateStart").val() == $("#EventDateEnd").val()) && !($('[id^=EventDate]').val() == "")) {
+							$("[id$=equaldate]").show();
+							focused_element = $("#EventDateStart");
+							check_iteration = false;
+						}
+
+					}
 				}
 			});
-
 
 			if(!check_iteration)
 				scrollTo(focused_element);
@@ -1091,85 +1061,6 @@
 				$(this).val(removeLeadingZero(time_value));
 			}
 		});
-
-		/*
-		$("#cprefer_next").click(function() {
-			// default states
-			$('.error').hide();
-			$(this).blur(); // no focus in button once clicked
-			var check_iteration = true;
-
-			// convert time values to timestamp
-			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater2").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			// convert time values to timestamp
-			start_time = $("#timepicker1opt1").val();
-			end_time = $("#timepicker1opt2").val();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater1").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
-				$("#timepicker1opt1-equal").show();
-				$("#timepicker1opt2-equal").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
-				$("#timepicker2opt1-equal").show();
-				$("#timepicker2opt2-equal").show();
-				focused_element = $("#timepicker2opt1");
-				check_iteration = false;
-			}
-
-			$($('form#fcprefer #'+getCurrentPage()).find('input').reverse()).each(function() {
-			// [FRONT-END] iterate to show error classes to required fields
-			// [BACK-END] iterate to check blank fields and other factors before going to next pages
-				if($(this).prop('required')) {
-					if($(this).val() == "") {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this);
-						disableDefaultRequired($(this));
-						check_iteration = false;
-					}
-				}
-			});
-
-			if(!check_iteration)
-				scrollTo(focused_element);
-
-			if(check_iteration) {
-				confirmvalidated = true;
-				if(checkLastPage()) {
-					validated = true;
-					confirmvalidated = false;
-				}
-				pagination(1, this.id.split("_")[0]);
-			}
-		});
-		*/
 
 		function removeLeadingZero(time_value) {
 			return time_value.slice(1, time_value.length);

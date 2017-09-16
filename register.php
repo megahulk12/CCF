@@ -1,4 +1,3 @@
-
 <?php
 	/*
 		REMINDERS:
@@ -1642,17 +1641,17 @@
 		$('#DgroupType').change(function(){
 			dgrouptype = $(this).val();
 			filterDgroupTable();
-		})
+		});
 
-		function filterDgroupTable() {
-			//var dgrouptype = $('#DgroupType').val();
-
-			//alert(gender)
+		function filterDgroupTable(){
+			//alert(gender);
 			$('#table').find('tr').each(function(d){
 				
 				$(this).children().each(function(e){
+
 					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
+						//alert($(this).text());
 						if($(this).text() != gender){
 							$(this).parent().hide();
 						}else{
@@ -1667,7 +1666,7 @@
 						}
 					}
 				});
-			});			
+			});	
 		}
 	</script>
 	<footer>

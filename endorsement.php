@@ -295,8 +295,9 @@
 		 	 background-color: #fff;	
 		 	 display: none;
 		 	 min-width: 250px;
-			 max-height: 650px;
+		 	 max-height: 350px !important;
 			 overflow-y: auto;
+			 overflow-x: hidden;
 		 	 opacity: 0;
 		 	 position: absolute; /*original: absolute*/
 		 	 z-index: 999;
@@ -403,8 +404,8 @@
 		.notification-badge {
 			background-color: #16A5B8;
 			color: #fff;
-			border-radius: 50%;
-			padding: 1px 3px;
+			border-radius: 100%;
+			padding: 1 4 1 4;
 			position: relative;
 			top: 19px;
 			left: 13px
@@ -438,6 +439,13 @@
 		.error {
 			color: #ff3333;
 		}
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
 		/* ===== END ===== */
 	</style>
 
@@ -445,6 +453,17 @@
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
+			});
+			$('.timepicker').pickatime({
+				default: 'now', // Set default time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker
 			});
 		}); 
 	</script>
@@ -502,40 +521,7 @@
 		<ul id="account" class="dropdown-content dropdown-content-list">
 		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
-		  		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 2) {
-		  			echo '
-			  		<li class="divider"></li>
-		  			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
-			  		';
-				  	if($_SESSION["memberType"] == 2 )
-				  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="endorsements.php"><i class="material-icons prefix>">library_books</i>Endorsement Forms</a></li>
-				  	<li class="divider"></li>
-				  	<li><a href="propose-ministry.php"><i class="material-icons prefix>">group_add</i>Propose Ministry</a></li> <!-- for dgroup leaders view -->
-				  		';
-		  		}
-			  	if($_SESSION["memberType"] == 3)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="create-event.php"><i class="material-icons prefix>">library_add</i>Propose Event</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="proposed-events.php"><i class="material-icons prefix>">library_books</i>Proposed Events</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="participation-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Participation Requests</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
-			  		';
-			  	if($_SESSION["memberType"] == 4)
-			  		echo '
-			  		';
-			  	if($_SESSION["memberType"] == 5)
-			  		echo '
-			  		<li class="divider"></li>
-				  	<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
-			  		<li class="divider"></li>
-				  	<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
-			  		';
+		  		include_once("user_options.php");
 		  	?>
 		  	<li class="divider"></li>
 		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
@@ -631,10 +617,16 @@
 							<div class="input-field col s6">
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+								<small class="error" id="timepicker1opt1-required">This field is required.</small>
+								<small class="error" id="timepicker1opt1-equal2">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt1-greater2">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+								<small class="error" id="timepicker1opt2-required">This field is required.</small>
+								<small class="error" id="timepicker1opt2-equal2">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
@@ -685,8 +677,8 @@
 				allowEscapeKey: true
 			});
 		}
-			 <!-- this section is for notification approval of requests -->
-	
+			 //this section is for notification approval of requests
+			 	
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -832,12 +824,23 @@
 		var check_iteration = true, check_username = true, focused_element;
 		$("#request").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+			$(this).blur();
+			check_iteration = true;
+
 
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
 						$('small#'+this.id+'-required').show();
 						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+				else if(this.id == "DgroupType") {
+					if($(this).val() == null) {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this).parent();
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}

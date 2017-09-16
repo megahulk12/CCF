@@ -150,8 +150,10 @@
 	$excel->setActiveSheetIndex(2);
 
 	// Add some data; generate columns
-	$columns = array("D12 Leader", "Dgroup Leader");
-	$column_excel = array("A", "B");
+	//$columns = array("D12 Leader", "Dgroup Leader");
+	$columns = array("D12 Leaders");
+	//$column_excel = array("A", "B");
+	$column_excel = array("A");
 	for($i = 0; $i < count($columns); $i++) {
 		$d12Leaders
 	            ->setCellValue($column_excel[$i].'1', $columns[$i]);
@@ -160,21 +162,24 @@
     	$excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 	}	
 
-	$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2) ORDER BY dg12Leader ASC";
+	//$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2) ORDER BY dg12Leader ASC";
+	$sql_d12Leaders = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType = 2 ORDER BY dg12Leader ASC";
 	$result = mysqli_query($conn, $sql_d12Leaders);
 
 	if(mysqli_num_rows($result) > 0) {
 		$y = 2;
-		$strlen = array(strlen($columns[0]), strlen($columns[1]));
+		//$strlen = array(strlen($columns[0]), strlen($columns[1]));
+		$strlen = array(strlen($columns[0]));
 		while($row = mysqli_fetch_assoc($result)) {
 			$d12leadername = $row["dg12LeaderName"];
-			$dgleadername = $row["dgLeaderName"];
+			//$dgleadername = $row["dgLeaderName"];
 
 			// stores max length of string of each value per column
 			if(strlen($d12leadername) > $strlen[0]) $strlen[0] = strlen($d12leadername);
-			if(strlen($dgleadername) > $strlen[1]) $strlen[1] = strlen($dgleadername);
+			//if(strlen($dgleadername) > $strlen[1]) $strlen[1] = strlen($dgleadername);
 
-			$data = array($d12leadername, $dgleadername);
+			//$data = array($d12leadername, $dgleadername);
+			$data = array($d12leadername);
 			for($i = 0; $i < count($data); $i++) {
 				$d12Leaders
 			          ->setCellValue($column_excel[$i].($y), $data[$i]);

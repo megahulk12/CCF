@@ -8,7 +8,8 @@
 		die("Connection failed: " . mysqli_connect_error());
 	}
 	if(isset($_POST['join'])) {
-		$sql_event_participation = "INSERT INTO eventparticipation_tbl(eventID, memberID) VALUES($id, ".$_SESSION['userid'].")";
+		$date = date("Y-m-d");
+		$sql_event_participation = "INSERT INTO eventparticipation_tbl(eventID, memberID, timeParticipation, dateParticipation) VALUES($id, ".$_SESSION['userid'].", NOW(), '$date')";
 		mysqli_query($conn, $sql_event_participation);
 		$fullname = $_SESSION['firstName']." ".$_SESSION['lastName'];
 		$notificationdesc = $fullname." wishes to join ".getEventName($id);
