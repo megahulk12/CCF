@@ -619,9 +619,9 @@
 								}
 
 								if($_SESSION["memberType"] == 3)
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 2 ORDER BY eventName ASC;";
+									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus >= 2 ORDER BY eventName ASC;";
 								else
-									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 2 ORDER BY eventName ASC;";
+									$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus >= 2 ORDER BY eventName ASC;";
 								$result = mysqli_query($conn, $query);
 								if(mysqli_num_rows($result) > 0) {
 									while($row = mysqli_fetch_assoc($result)) {

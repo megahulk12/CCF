@@ -18,8 +18,13 @@
 		mysqli_close($conn);
 	}
 	if(isset($_POST['close'])) {
-		$sql_close_event = "UPDATE eventdetails_tbl SET eventStatus = 2 WHERE eventID = $id";
+		$sql_close_event = "UPDATE eventdetails_tbl SET eventStatus = 3 WHERE eventID = $id";
 		mysqli_query($conn, $sql_close_event);
+		mysqli_close($conn);
+	}
+	if(isset($_POST['end'])) {
+		$sql_end_event = "UPDATE eventdetails_tbl SET eventStatus = 2 WHERE eventID = $id";
+		mysqli_query($conn, $sql_end_event);
 		mysqli_close($conn);
 	}
 ?>

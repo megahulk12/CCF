@@ -489,7 +489,16 @@
 						}
 					}
 
-					$sql_events = "SELECT eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus = 1 AND eventID = $eid ORDER BY eventStartDay DESC";
+					$query = "SELECT feedbackStatus FROM feedbackdetails_tbl WHERE eventID = $eid AND memberID = ".$_SESSION['userid'];
+					$result = mysqli_query($conn, $query);
+					$feedbackstat = "";
+					if(mysqli_num_rows($result) > 0) {
+						while($row = mysqli_fetch_assoc($result)) {
+							$feedbackstat = $row["feedbackStatus"];
+						}
+					}
+
+					$sql_events = "SELECT eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventVenue, eventSchedStatus, eventStatus FROM eventdetails_tbl WHERE eventStatus >= 1 AND eventStatus <= 2 AND eventID = $eid ORDER BY eventStartDay DESC";
 					$result = mysqli_query($conn, $sql_events);
 					if(mysqli_num_rows($result) > 0) {
 						while($row = mysqli_fetch_assoc($result)) {
@@ -503,10 +512,18 @@
 							$endtime = date("g:i a", strtotime($row["eventEndTime"]));
 							$venue = $row["eventVenue"];
 							$schedstatus = $row["eventSchedStatus"];
+							$status = $row["eventStatus"];
 							$join_form = '
 								<form method="post" id="join-event">
 									<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
 									<button class="waves-effect waves-light btn col s3 right join-event" type="submit" name="join" id="join">JOIN THIS EVENT</button>
+									<br>
+								</form>
+							';
+							$end_registration = '
+								<form method="post" id="end-registration">
+									<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
+									<button class="waves-effect waves-light btn col s4 right end-registration" type="submit" name="end" id="end">CLOSE REGISTRATION</button>
 									<br>
 								</form>
 							';
@@ -517,12 +534,19 @@
 									<br>
 								</form>
 							';
+							$feedback_form = '
+								<form method="post" id="feedback-event">
+									<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
+									<button class="waves-effect waves-light btn col s3 right feedback-event" type="submit" name="feedback" id="feedback">MAKE A FEEDBACK</button>
+									<br>
+								</form>
+							';
 
 							//echo '<script> alert('.$partstat.'); </script>';
 
 							if($schedstatus == 0) {
 								$startday = date("F j", strtotime($startday));
-								if($_SESSION['memberType'] <= 4 && $_SESSION != 3 && $partstat == "") {
+								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -557,7 +581,112 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3) {
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p style="text-align: center">
+															'.$name.' registrations are now closed.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $feedbackstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$feedback_form.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 1) {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$end_registration.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -628,7 +757,7 @@
 							else if($schedstatus == 1) {
 								$startday = date("F j", strtotime($startday));
 								$endday = date("F j", strtotime($endday));
-								if($_SESSION['memberType'] <= 4 && $_SESSION != 3 && $partstat == "") {
+								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -663,7 +792,112 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3) {
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p style="text-align: center">
+															'.$name.' registrations are now closed.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $feedbackstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$feedback_form.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 1) {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$end_registration.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -712,6 +946,9 @@
 														<p>
 															'.$description.'
 														</p>
+														<p style="text-align: center">
+															'.$name.' registrations are now closed.
+														</p>
 													</div>
 												</div>
 											</div>
@@ -734,7 +971,7 @@
 							else if($schedstatus == 2) {
 								$startday = date("F j", strtotime($startday));
 								$endday = date("F j", strtotime($endday));
-								if($_SESSION['memberType'] <= 2 && $partstat == "") {
+								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -770,7 +1007,115 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3) {
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p style="text-align: center">
+															'.$name.' registrations are now closed.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$feedback_form.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 1) {
+									echo '
+									<div class="container-events">
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card">
+													<div class="card-image">
+														<img src="'.$path.'" class="stretch">
+													</div>
+													<div class="card-content">
+														<a class="card-title">'.$name.'</a>
+														<p>
+															'.$description.'
+														</p>
+														<p>
+															'.$end_registration.'
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s12 m7">
+												<div class="card card-schedule">
+													<div class="card-content card-content-schedule">
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DATE <dd>'.$startday.' - '.$endday.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">date_range</i>  <span style="vertical-align: 7px;">DAY <dd>Every '.$weekly.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">schedule</i>  <span style="vertical-align: 7px;">TIME<dd>'.$starttime.' - '.$endtime.'</dd> </span></a>
+														<a class="card-title card-title-schedule"><i class="material-icons prefix small">location_on</i>  <span style="vertical-align: 7px;">LOCATION<dd>'.$venue.'</dd> </span></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									';
+								}
+								else if($_SESSION['memberType'] == 3 && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1007,6 +1352,56 @@
 					$('body').removeClass('stop-scrolling');
 					$('.close-event').html('CLOSE THIS EVENT');
 					$('.close-event').prop("disabled", false);
+				}
+			});
+			e.preventDefault();
+		});
+
+		$('#end-registration').submit(function(e) {
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div>';
+			$('.end-registration').html(preloader);
+			$('.end-registration').prop("disabled", true);
+			var url="join-event.php";
+				$.ajax({
+				type: "POST",
+				url: url,
+				data: "end=g&"+$(this).serialize(),
+				success: function() {
+					swal({
+						title: "Registrations Closed!",
+						text: "The registrations for this event has been closed.",
+						type: "success",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.href = "events.php"; });
+					$('body').removeClass('stop-scrolling');
+					$('.end-registration').html('CLOSE REGISTRATION');
+					$('.end-registration').prop("disabled", false);
+				},
+				error: function() {
+					swal({
+						title: "Error!",
+						text: "Please try again later!",
+						type: "error",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.href = "events.php"; });
+					$('body').removeClass('stop-scrolling');
+					$('.end-registration').html('CLOSE REGISTRATION');
+					$('.end-registration').prop("disabled", false);
 				}
 			});
 			e.preventDefault();
