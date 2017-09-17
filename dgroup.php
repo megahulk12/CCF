@@ -618,14 +618,28 @@
         if (!$conn) {
           die("Connection failed: " . mysqli_connect_error());
         }
+
+        $dgroup_schedule = "SELECT schedDay, schedStartTime, schedEndTime FROM discipleshipgroup_tbl JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID WHERE dgleader = ".$_SESSION['userid'];
+        $result = mysqli_query($conn, $dgroup_schedule);
+        if(mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            $day = $row["schedDay"];
+            $starttime = date("g:i a", strtotime($row["schedStartTime"]));
+            $endtime = date("g:i a", strtotime($row["schedEndTime"]));
+            $sched = "Every $day @ $starttime - $endtime";
+          }
+        }
+
         // insert code set notificationStatus = 1 when user clicks notification area
         $query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
 
         $result = mysqli_query($conn, $query);
         if(mysqli_num_rows($result) > 0) {
+
           echo '
       <div id="own-dgroup">
         <h3>My Discipleship Group</h3>
+        <dd><h6>'.$sched.'</h6></dd>
         <table id="own-dgroup" class="centered dgroup-table-spacing">
           <tr>';
           $counter_row = 0;

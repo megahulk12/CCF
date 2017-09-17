@@ -406,6 +406,32 @@
 			border-color: #777;
 		}
 		/* ===== END ===== */
+
+		/* ===== SLIDERS ===== */
+		input[type=range] + .thumb {
+			background-color: #16A5B8;
+		}
+
+		input[type=range] + .thumb .value {
+			color:  #16A5B8;
+		}
+
+		input[type=range]::-webkit-slider-thumb {
+			background-color: #16A5B8;
+		}
+		/* ===== END ===== */
+
+		/* ===== INPUT CUSTOM COLORS ===== */
+		/*Text inputs*/
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -413,18 +439,8 @@
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
+			$('.modal').modal();
 		});
-
-		/*
-		window.addEventListener("scroll", function() {
-			if(window.scrollY > 150) {
-				$('nav').slideUp("fast");
-			}
-			else {
-				$('nav').slideDown("fast");
-			}
-		}, false);
-		*/
 	</script>
 
 	<header class="top-nav">
@@ -537,7 +553,7 @@
 							$feedback_form = '
 								<form method="post" id="feedback-event">
 									<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
-									<button class="waves-effect waves-light btn col s3 right feedback-event" type="submit" name="feedback" id="feedback">MAKE A FEEDBACK</button>
+									<button class="waves-effect waves-light btn col s3 right feedback-event" name="feedback" id="feedback" data-target="feedback-form-modal">MAKE A FEEDBACK</button>
 									<br>
 								</form>
 							';
@@ -1189,6 +1205,51 @@
 					}
 				}
 			?>
+		<!-- Modal Structure -->
+		<div id="feedback-form-modal" class="modal modal-fixed-footer">
+			<div class="modal-content">
+				<h4><?php echo $name; ?> Feedback Form</h4>
+				<form method="post" id="feedback-form">
+					<div class="row">
+						<br>
+						<h5>Theme</h5>
+						<p class="range-field col s12">
+							<label>Theme</label>
+							<input type="range" id="themeRate" name="themeRate" min="0" max="10">
+						</p>
+						<div class="input-field col s12">
+							<textarea class="materialize-textarea" id="themeRemarks" name="themeRemarks"></textarea>
+							<label for="themeRemarks">Comments and Suggestions</label>
+						</div>
+						&nbsp;
+						<br>
+						<h5>Food</h5>
+						<p class="range-field col s12">
+							<label>Food</label>
+							<input type="range" id="foodRate" name="foodRate" min="0" max="10">
+						</p>
+						<div class="input-field col s12">
+							<textarea class="materialize-textarea" id="foodRemarks" name="foodRemarks"></textarea>
+							<label for="foodRemarks">Comments and Suggestions</label>
+						</div>
+						&nbsp;
+						<br>
+						<h5>Venue</h5>
+						<p class="range-field col s12">
+							<label>Venue</label>
+							<input type="range" id="venueRate" name="venueRate" min="0" max="10">
+						</p>
+						<div class="input-field col s12">
+							<textarea class="materialize-textarea" id="venueRemarks" name="venueRemarks"></textarea>
+							<label for="venueRemarks">Comments and Suggestions</label>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="modal-action modal-close waves-effect btn-flat" type="submit" name="submit-feedback" id="submit-feedback">Submit Feedback</button>
+			</div>
+		</div>
 	</body>
 
 	<main>
