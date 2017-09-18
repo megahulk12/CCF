@@ -552,7 +552,6 @@
 							';
 							$feedback_form = '
 								<form method="post" id="feedback-event">
-									<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">
 									<button class="waves-effect waves-light btn col s3 right feedback-event" name="feedback" id="feedback" data-target="feedback-form-modal">MAKE A FEEDBACK</button>
 									<br>
 								</form>
@@ -667,7 +666,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 1) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 1) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -702,7 +701,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 2) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -878,7 +877,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 1) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 1) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -913,7 +912,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 2) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1095,7 +1094,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 1) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 1) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1131,7 +1130,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] == 3 && $status == 2) {
+								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1205,16 +1204,73 @@
 					}
 				}
 			?>
+			<?php
+				if(isset($_GET['id'])) {
+					$eid = $_GET['id'];
+					if(($_SESSION['userid'] == getEventHeadID($eid))) {
+						echo '
+		<div class="container-events">
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card">
+						<div class="card-content">
+							<a class="card-title">FEEDBACKS</a>
+							<table class="centered">
+								<thead>
+									<tr>
+										<th style="width: 80%;">Name of Participant</th>
+										<th style="width: 10%;"></th>
+										<th style="width: 10%;"></th>
+									</tr>
+								</thead>
+								<tbody>
+						';
+
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$sql_feedbacks = "SELECT feedbackID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM feedbackdetails_tbl LEFT OUTER JOIN member_tbl ON feedbackdetails_tbl.memberID = member_tbl.memberID WHERE eventID = $eid";
+						$result = mysqli_query($conn, $sql_feedbacks);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$id = $row["feedbackID"];
+								$name = $row["fullname"];
+								echo'
+											<tr id="row_'.$id.'">
+												<td id="name_'.$id.'">'.$name.'</td>
+												<td>
+													<button class="waves-effect waves-light btn col s12 right view-feedback tooltipped" id="view-feedback_'.$id.'" data-tooltip="View Feedback" data-position="top" data-target="feedback-form-modal"><i class="material-icons prefix">view_list</i></button>
+												</td>
+												<td>
+													<button class="waves-effect waves-light btn col s12 right archive-feedback tooltipped" id="archive-feedback_'.$id.'" data-tooltip="Archive" data-position="top"><i class="material-icons prefix">archive</i></button>
+												</td>
+											</tr>
+								';
+							}
+						}
+						echo '
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+						';
+					}
+				}
+			?>
 		<!-- Modal Structure -->
 		<div id="feedback-form-modal" class="modal modal-fixed-footer">
 			<div class="modal-content">
-				<h4><?php echo $name; ?> Feedback Form</h4>
+				<h4 id="feedback-form-header"><?php echo $name; ?> Feedback Form</h4>
 				<form method="post" id="feedback-form">
 					<div class="row">
 						<br>
 						<h5>Theme</h5>
 						<p class="range-field col s12">
-							<label>Theme</label>
+							<label id="theme-label">Theme</label>
 							<input type="range" id="themeRate" name="themeRate" min="0" max="10">
 						</p>
 						<div class="input-field col s12">
@@ -1225,7 +1281,7 @@
 						<br>
 						<h5>Food</h5>
 						<p class="range-field col s12">
-							<label>Food</label>
+							<label id="food-label">Food</label>
 							<input type="range" id="foodRate" name="foodRate" min="0" max="10">
 						</p>
 						<div class="input-field col s12">
@@ -1236,7 +1292,7 @@
 						<br>
 						<h5>Venue</h5>
 						<p class="range-field col s12">
-							<label>Venue</label>
+							<label id="venue-label">Venue</label>
 							<input type="range" id="venueRate" name="venueRate" min="0" max="10">
 						</p>
 						<div class="input-field col s12">
@@ -1244,10 +1300,19 @@
 							<label for="venueRemarks">Comments and Suggestions</label>
 						</div>
 					</div>
-				</form>
 			</div>
 			<div class="modal-footer">
-				<button class="modal-action modal-close waves-effect btn-flat" type="submit" name="submit-feedback" id="submit-feedback">Submit Feedback</button>
+				<?php 
+					if(isset($_GET['id'])) {
+						$eid = $_GET['id'];
+						echo '<input type="hidden" id="eventID" name="eventID" value="'.$eid.'">';
+					}
+					if(!($_SESSION['userid'] == getEventHeadID($eid)))
+						echo '
+						<button class="modal-action waves-effect btn-flat" type="submit" name="submit-feedback" id="submit-feedback">Submit Feedback</button>
+						';
+				?>
+				</form>
 			</div>
 		</div>
 	</body>
@@ -1467,6 +1532,95 @@
 			});
 			e.preventDefault();
 		});
+
+		$('#feedback-form').submit(function(e) {
+			var preloader = '\
+				<div class="preloader-wrapper small active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div>';
+			$('#submit-feedback').html(preloader);
+			$('#submit-feedback').prop("disabled", true);
+			var url="feedback.php";
+				$.ajax({
+				type: "POST",
+				url: url,
+				data: "feedback=g&"+$(this).serialize(),
+				success: function() {
+					swal({
+						title: "Feedback Submitted!",
+						text: "Thank you for your feedback and God bless!.",
+						type: "success",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.reload(); });
+					$('body').removeClass('stop-scrolling');
+					$('#submit-feedback').html('SUBMIT FEEDBACK');
+					$('#submit-feedback').prop("disabled", false);
+				},
+				error: function() {
+					swal({
+						title: "Error!",
+						text: "Please try again later!",
+						type: "error",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.reload(); });
+					$('body').removeClass('stop-scrolling');
+					$('#submit-feedback').html('SUBMIT FEEDBACK');
+					$('#submit-feedback').prop("disabled", false);
+				}
+			});
+			e.preventDefault();
+		});
+
+		$('[id^=view-feedback]').click(function() {
+			var id = this.id.split("_")[1];
+			var name = $('#name_'+id).text();
+			$('#feedback-form-header').text(name+"'s Feedback Form");
+			disableForm(true);
+			$('#feedback-form').animate({opacity: 0.1}, 300);
+			var url = "feedback.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: "get-feedback=g&id="+id,
+				dataType: 'json',
+				success: function(data) {
+					$('#feedback-form').animate({opacity: 1}, 300);
+					$('#themeRate').val(data.themerate);
+					$('#theme-label').text("Theme - "+data.themerate);
+					$('#themeRemarks').val(data.themeremarks);
+					$('#themeRemarks').trigger("autoresize");
+					$('#foodRate').val(data.foodrate);
+					$('#food-label').text("Food - "+data.foodrate);
+					$('#foodRemarks').val(data.foodremarks);
+					$('#foodRemarks').trigger("autoresize");
+					$('#venueRate').val(data.venuerate);
+					$('#venue-label').text("Venue - "+data.venuerate);
+					$('#venueRemarks').val(data.venueremarks);
+					$('#venueRemarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+				}
+			});
+		});
+
+		function disableForm(flag) {
+			$('#feedback-form').children().find('input, textarea').each(function() {
+				$(this).prop("disabled", flag);
+			});
+		}
 	</script>
 
 	 <!-- this section is for notification approval of requests -->
