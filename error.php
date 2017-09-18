@@ -1,24 +1,20 @@
-<?php
-	include('session.php'); 
-	include('globalfunctions.php');
-?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="resources/CCF.ico">
-	<link href="materialize/css/materialize.css" rel="stylesheet">
-	<script src="jquery-3.2.1.min.js"></script>
-	<script src="materialize/js/materialize.js"></script>
-	<script src="universal.js"></script>
-	<link href="universal.css" rel="stylesheet">
+	<link href="../materialize/css/materialize.css" rel="stylesheet">
+	<script src="../jquery-3.2.1.min.js"></script>
+	<script src="../materialize/js/materialize.js"></script>
+	<script src="../universal.js"></script>
+	<link href="../universal.css" rel="stylesheet">
 
 	<!-- for alerts -->
-	<script src="alerts/dist/sweetalert-dev.js"></script>
-	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
+	<script src="../alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="../alerts/dist/sweetalert.css">
 
-	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
+	<title>Christ's Commission Fellowship</title>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -70,7 +66,7 @@
 		}
 		@font-face {
 			font-family: proxima-nova;
-			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
+			src: url(../ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
 			font-weight: bold;
 		}
 
@@ -462,40 +458,13 @@
 	</script>
 
 	<header class="top-nav">
-	<!-- Dropdown Structure Account--> 
-		<ul id="account" class="dropdown-content dropdown-content-list">
-		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
-		  	<?php
-		  		include_once("user_options.php");
-		  	?>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
-		</ul>
-	<!-- Dropdown Structure Notifications-->
-		<ul id="notifications" class="dropdown-content dropdown-content-notification">
-			<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
-			<li class="divider"></li>
-			<div class="preloader-wrapper small active spinner-notif">
-				<div class="spinner-layer spinner-blue-only spinner-color-notif">
-					<div class="circle-clipper left">
-						<div class="circle"></div>
-					</div><div class="gap-patch">
-						<div class="circle"></div>
-					</div><div class="circle-clipper right">
-						<div class="circle"></div>
-					</div>
-				</div>
-			</div>
-		</ul>
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
 			    <div class="nav-wrapper">
-			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
+			      	<a href="../index.php" class="brand-logo"><img src="../resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<li><a href="events.php">EVENTS</a></li>
-						<li><a href="ministries.php">MINISTRIES</a></li>
-						<?php if($_SESSION['active']) echo '<li><a class="dropdown-button" data-activates="account">'.strtoupper($_SESSION['user']).'<i class="material-icons right" style="margin-top: 14px;">arrow_drop_down</i></a></li>'; ?>
-						<li><a class="dropdown-button notifications" data-activates="notifications" onclick="seen()" id="bell"><i class="material-icons material-icon-notification">notifications</i><?php if (notifCount() >= 1 && getNotificationStatus() == 0) echo '<sup class="notification-badge">'.notifCount().'</sup>'; ?></a></li>
+						<li><a href="../events.php">EVENTS</a></li>
+						<li><a href="../ministries.php">MINISTRIES</a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -504,6 +473,7 @@
 
 	<body>
 		<div id="response"></div>
+		<h1 class="center">PAGE NOT FOUND</h1>
 	</body>
 
 	<main>
@@ -513,7 +483,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col 16 s8">
-					<img src="resources/CCF Logos7.png" />
+					<img src="../resources/CCF Logos7.png" />
 				</div>
 				<div class="col 14 offset-12 s4">
 					<p class="footer-cpyrght">
@@ -524,199 +494,4 @@
 			</div>
 		</div>
 	</footer>
-
-	<?php
-		if(isset($_POST['seen-request'])) {
-			// script also prevents to confirm form resubmission para there are no duplicates in the data
-			/*
-			echo '
-			<script>
-			setTimeout( 
-				swal({
-						title: "Success!",
-						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-						type: "success",
-						allowEscapeKey: true
-					},
-					function() { window.location = "dgroup.php"; }
-					), 1000);
-			</script>';
-			//echo '<script> alert("'.$_SESSION['endorsementStatus'].'"); </script>';
-			*/
-			setRequestSeen();
-		}
-
-		function getRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-
-			$sql = "SELECT request FROM endorsement_tbl WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			$result = mysqli_query($conn, $sql);
-			$request = "";
-			if(mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_assoc($result)) {
-					$request = $row["request"];
-				}
-			}
-			return $request;
-		}
-
-		function setRequestSeen() {
-			// database connection variables
-			$servername = "localhost";
-			$username = "root";
-			$password = "root";
-			$dbname = "dbccf";
-			$conn = mysqli_connect($servername, $username, $password, $dbname);
-			if (!$conn) {
-				die("Connection failed: " . mysqli_connect_error());
-			}
-			$sql = "UPDATE endorsement_tbl SET request = 1 WHERE dgmemberID = ".$_SESSION['dgroupmemberID'];
-			mysqli_query($conn, $sql);
-		}
-	?>
-	
-	 <!-- this section is for notification approval of requests -->
-	 
-	<script>
-		function approval() {
-			 $('.dropdown-button').dropdown('close');
-			swal({
-				  title: "Do you approve?",
-				  type: "info",
-				  showCancelButton: true,
-				  confirmButtonColor: "#66ff66",
-				  confirmButtonText: "Yes",
-				  cancelButtonText: "No",
-				  allowEscapeKey: false,
-				  closeOnConfirm: false,
-				  closeOnCancel: false
-				},
-				function(isConfirm){
-					if(isConfirm) {
-						var xhttp;
-						xhttp = new XMLHttpRequest();
-							xhttp.onreadystatechange = function() {
-								if (this.readyState == 4 && this.status == 200) {
-								document.getElementById("response").innerHTML = this.responseText;
-							}
-						};
-						xhttp.open("GET", "request.php?apr=y", true);
-						xhttp.send();
-						swal({
-								title: "Approved!",
-								text: "You have approved this request.",
-								type: "success",
-								allowOutsideClick: true
-							});
-					}
-					else {
-						var xhttp;
-						xhttp = new XMLHttpRequest();
-							xhttp.onreadystatechange = function() {
-								if (this.readyState == 4 && this.status == 200) {
-								document.getElementById("response").innerHTML = this.responseText;
-							}
-						};
-						xhttp.open("GET", "request.php?apr=n", true);
-						xhttp.send();
-						swal({
-								title: "Disapproved!",
-								text: "You have disapproved this request.",
-								type: "error",
-								allowOutsideClick: true
-							});
-					}
-				}
-			);
-		}
-		
-		var title = "Christ's Commission Fellowship";
-		function seen() { // this function gets rid of the badge every after click event 
-			document.getElementById('bell').innerHTML = '<i class="material-icons material-icon-notification">notifications</i>';
-			document.getElementById('badge').innerHTML = "Notifications";
-			setSeenRequest(); // records in the database that user has seen or read the notifications
-
-			// get Notifications using ajax
-			var url = "get_notifs.php";
-			var preloader = '\
-				<div class="preloader-wrapper small active spinner-notif"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
-						</div> \
-					</div> \
-				</div> \
-			  ';
-			$('title').text(title); // re-initialize the title
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: 'view',
-				dataType: 'json',
-				success: function(data) {
-					if(data.count >= 1) {
-						$('#notifications').html(data.view);
-					}
-					else {
-						$('#notifications').html('\
-						<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
-						<li class="divider"></li>\
-						<li><a class="center">No new notifications</a></li>');
-					}
-				},
-				error: function(data) {
-					$('#notifications').html('\
-					<li><h6 class="notifications-header" id="badge">Notifications</h6></li>\
-					<li class="divider"></li>\
-					<li><a>Failed to load. Please check your connection and try again.</a></li>');
-				}
-			});
-		}
-		
-		function setSeenRequest() {
-			var xhttp;
-			xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("response").innerHTML = this.responseText;
-				}
-			};
-			xhttp.open("POST", "globalfunctions.php", true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("seen");
-		}
-	</script>
-
-	<script>
-		// real time update notification
-		// SSE - Server-Sent Events
-
-		if(typeof(EventSource) !== "undefined") {
-			var source = new EventSource("push_notifs.php");
-			source.onmessage = function(e) {
-				if(e.data >= 1) {
-					// data should always be the attribute
-					$('#bell').html('<i class="material-icons material-icon-notification">notifications</i>\
-									 <sup class="notification-badge">'+e.data+'</sup>');
-					$('title').text("("+e.data+") "+title);
-				}
-			};
-		}
-		else {
-			// pass
-		}
-
-	</script>
 </html>
