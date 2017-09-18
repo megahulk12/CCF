@@ -1,8 +1,9 @@
 <?php
-	$id = $_GET['id'];
-	if(isset($id)) {
+	if(isset($_GET['id'])) {
 		include("session.php");
 		include("globalfunctions.php");
+
+		$id = $_GET['id'];
 
 		/** Include PHPExcel */
 		require_once dirname(__FILE__) . '/Classes/PHPExcel.php';
@@ -272,7 +273,67 @@
 		// Rename worksheet
 		$returnees->setTitle("Returnees");
 
+		$feedbacks = $excel->createSheet(3);
+		$excel->setActiveSheetIndex(3);
+
+
+		// Add some data; generate columns
+		$columns = array("Participant's Name", "Rate of Theme", "Theme Remarks", "Rate of Food", "Food Remarks", "Rate of Venue", "Venue Remarks");
+		$column_excel = array("A", "B", "C", "D", "E", "F", "G");
+		for($i = 0; $i < count($columns); $i++) {
+			$feedbacks
+		            ->setCellValue($column_excel[$i].'1', $columns[$i]);
+		    // bold all column headers and align them to center
+		    $excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getFont()->setBold(true);
+	    	$excel->getActiveSheet()->getStyle($column_excel[$i].'1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		}
+
+		// feedbacks
+		$sql_feedbacks = "SELECT CONCAT_WS(' ', firstName, lastName) AS fullname, themeRate, themeRemarks, foodRate, foodRemarks, venueRate, venueRemarks FROM feedbackdetails_tbl LEFT OUTER JOIN member_tbl ON feedbackdetails_tbl.memberID = member_tbl.memberID WHERE eventID = $id";
+		$result = mysqli_query($conn, $sql_feedbacks);
+		if(mysqli_num_rows($result) > 0) {
+			$y = 2;
+			$strlen = array(strlen($columns[0]), strlen($columns[1]), strlen($columns[2]), strlen($columns[3]), strlen($columns[4]), strlen($columns[5]), strlen($columns[6]));
+			while($row = mysqli_fetch_assoc($result)) {
+				$fullname = $row["fullname"];
+				$themerate = $row["themeRate"];
+				$themeremarks = $row["themeRemarks"];
+				$foodrate = $row["foodRate"];
+				$foodremarks = $row["foodRemarks"];
+				$venuerate = $row["venueRate"];
+				$venueremarks = $row["venueRemarks"];
+
+				// stores max length of string of each value per column
+				if(strlen($fullname) > $strlen[0]) $strlen[0] = strlen($fullname);
+				if(strlen($themerate) > $strlen[1]) $strlen[1] = strlen($themerate);
+				//if(strlen($themeremarks) > $strlen[2]) $strlen[2] = strlen($themeremarks);
+				if(strlen($foodrate) > $strlen[3]) $strlen[3] = strlen($foodrate);
+				//if(strlen($weekly) > $strlen[4]) $strlen[4] = strlen($foodremarks);
+				if(strlen($venuerate) > $strlen[5]) $strlen[5] = strlen($venuerate);
+				//if(strlen($venueremarks) > $strlen[6]) $strlen[6] = strlen($venueremarks);
+
+				$data = array($fullname, $themerate, $themeremarks, $foodrate, $foodremarks, $venuerate, $venueremarks);
+				for($i = 0; $i < count($data); $i++) {
+					$excel->getActiveSheet()
+				          ->setCellValue($column_excel[$i].($y), $data[$i]);
+				}
+				$y++;
+			}
+
+			// set width per column based on the maximum length among each of its values
+			for($col = 'A', $i = 0; $col <= $column_excel[count($column_excel) - 1]; $col++, $i++) {
+				$excel->getActiveSheet()->getColumnDimension($col)->setAutoSize(false);
+				$excel->getActiveSheet()->getColumnDimension($col)->setWidth($strlen[$i] + 5);
+				if($col == 'C' || $col == 'E' || $col == 'G') {
+					$excel->getActiveSheet()->getStyle($col)->getAlignment()->setWrapText(true);
+				}
+			}
+		}
+
 		mysqli_close($conn);
+
+		// Rename worksheet
+		$excel->getActiveSheet()->setTitle("Feedbacks");
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$excel->setActiveSheetIndex(0);
