@@ -426,6 +426,26 @@
 		.spinner-color-notif {
 			border-color: #777;
 		}
+
+		.input-field div.error {
+			font-size: 0.8rem;
+			color: #16A5B8;
+		}
+		.error-with-icon {
+			color: #ff3333;
+			margin-left: 43;
+		}
+
+		.error {
+			color: #ff3333;
+		}
+		/*timepicker*/
+		.clockpicker-span-am-pm {
+		 	 display: inline-block;
+		 	 font-size: 30px;
+		 	 line-height: 82px;
+		 	 color: #b2dfdb;
+		}
 		/* ===== END ===== */
 	</style>
 
@@ -433,6 +453,17 @@
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
+			});
+			$('.timepicker').pickatime({
+				default: 'now', // Set default time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker
 			});
 		}); 
 	</script>
@@ -537,17 +568,19 @@
 						<h4 class="center">BAPTISMAL</h4>
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate">
+								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" required>
 								<label for="BaptismalDate" class>When were you baptized?</label>
+								<small class="error" id="BaptismalDate-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50">
+								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" required>
 								<label for="BaptismalPlace">Where were you baptized?</label>
+								<small class="error" id="BaptismalPlace-required">This field is required.</small>
 							</div>
 							<h4 class="center">DGROUP</h4>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
-									<select id="DgroupType" name="DgroupType">
+									<select id="DgroupType" name="DgroupType" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Youth">Youth</option>
 										<option value="Singles">Singles</option>
@@ -556,16 +589,18 @@
 										<option value="Couples">Couples</option>
 									</select>
 									<label>Type of Dgroup</label>
+									<small class="error" id="DgroupType-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress'>
+								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 								<label for="AgeBracket">Age Bracket</label>
+								<small class="error" id="AgeBracket-required">This field is required.</small>
 							</div>
 							<h4 class="center">MEETING</h4>
 							<div class="row" style="margin-bottom: 0px;">
 								<div class="input-field col s12">
-									<select id="MeetingDay" name="MeetingDay">
+									<select id="MeetingDay" name="MeetingDay" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Sunday">Sunnday</option>
 										<option value="Monday">Monday</option>
@@ -576,19 +611,27 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
+									<small class="error" id="MeetingDay-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+								<small class="error" id="timepicker1opt1-required">This field is required.</small>
+								<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+								<small class="error" id="timepicker1opt2-required">This field is required.</small>
+								<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50">
+								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
 								<label for="MeetingPlace">Place</label>
+								<small class="error" id="MeetingPlace-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -756,6 +799,155 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		//--------------------------hello, code to ni pogi hehe----------------------------//
+
+		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('div#page1 .error').text("This field is required.");
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+
+		var check_iteration = true, check_username = true, focused_element;
+		$("#request").click(function(){
+			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+			$(this).blur();
+			check_iteration = true;
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			$($('form#Eform').find('input, select').reverse()).each(function(){
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+				else if(this.id == "DgroupType") {
+					if($(this).val() == null) {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this).parent();
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					confirmvalidated = false;
+				}
+				pagination(1);
+			}
+		});
+
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		$("[id$=back]").click(function() {
+			confirmvalidated = true;
+		});
+
+		$("[id$=next], [id$=back]").click(function() {
+			if(confirmvalidated) {
+				animateBodyScrollTop();
+				confirmvalidated = false;
+			}
+		});
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 	</script>
 
 	<script>

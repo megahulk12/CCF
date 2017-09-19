@@ -687,6 +687,8 @@
 			
 		});
 
+		var cellTag = true;
+
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -694,13 +696,14 @@
 			for(var i = 0; i < num_of_rows; i++) {
 				//document.getElementsByTagName("TR")[i].appendChild(style);
 				document.getElementsByTagName("TR")[i].style.backgroundColor = "#fff"; // default color of rows = #f2f2f2
-				document.getElementsByTagName("TR")[i].style.color = "black"
+				document.getElementsByTagName("TR")[i].style.color = "black";
 			}
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
+			cellTag = false;
 		}
 	</script>
 
@@ -1242,26 +1245,7 @@
 				$(this).val(removeLeadingZero(time_value));
 			}
 		});
-
-		/*//----------------check password---------------//
-		if(confirmpass=="") {
-			$("small#confirmpass-required").show();
-			$("input#confirm-password").focus();
-		}
-
-		if(pass=="") {
-			$("small#newpass-required").show();
-			$("input#password").focus();
-		}
-		var pass = $("#password").val();
-		var confirmpass = $("#confirm-password").val();
-		if(confirmpass!=pass) {
-			$("small#confirmpass-required").hide();
-			$("small#checkpass-required").show();
-			$("input#confirm-password").focus();
-			check_iteration = false;
-		}*/
-
+		
 		var check_iteration = true, check_username = true, focused_element;
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
@@ -1392,6 +1376,13 @@
 				}
 			}
 
+			if(getCurrentPage() == 'page7'){
+				if(cellTag){
+					alert("You have not picked a Dgroup leader");
+					//check_iteration = false;
+				}
+			}
+
 			$($('form#registration #'+getCurrentPage()).find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1471,10 +1462,13 @@
 		});
 
 		function nextPage() {
+			if(getCurrentPage == 'page6'){
+				filterDgroupTable();
+			}
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
-			if(check_iteration && check_username) {
+			if(check_iteration && check_username && cellTag) {
 				confirmvalidated = true;
 				if(checkLastPage()) {
 					confirmvalidated = false;
@@ -1633,7 +1627,6 @@
 
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
-<<<<<<< HEAD
 		var gender = "";
 		var dgrouptype = "";
 
@@ -1648,211 +1641,18 @@
 		$('#DgroupType').change(function(){
 			dgrouptype = $(this).val();
 			filterDgroupTable();
-		})
-=======
-<<<<<<< HEAD
-	</script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-=======
->>>>>>> Jasper-Edits
->>>>>>> 1bc3fab4e5fd6d500e4acc3e5f9212d8fb60edf4
+		});
 
-		function filterDgroupTable() {
-			var dgrouptype = $('#DgroupType').val();
-
-<<<<<<< HEAD
->>>>>>> Jasper-Edits
-	<script type="text/javascript">
-	$('.timepicker').pickatime({
-		//default: 'now', // Set default time; do not set default time in viewing of time
-		fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-		twelvehour: true, // Use AM/PM or 24-hour format
-		donetext: 'DONE', // text for done-button
-		cleartext: 'Clear', // text for clear-button
-		canceltext: 'Cancel', // Text for cancel-button
-		autoclose: false, // automatic close timepicker
-		ampmclickable: false, // make AM PM clickable
-		aftershow: function(){} //Function for after opening timepicker  
-	});
-	/*
-		// jquery form validation
-		// source: https://jqueryvalidation.org/
-		$("#registration").validate({
-		rules: {
-			Firstname: {
-			required: true,
-			minlength: 3
-		},
-			Middlename: {
-			required: true
-		},
-			Lastname: {
-			required: true
-		},
-			Nickname: {
-			required: true
-		},
-			Birthdate: {
-			required: true
-		},
-			Gender:"required",
-			Citizenship: {
-			required: true
-		},
-			CivilStatus: "required",
-			MobileNumber: {
-			required: true
-		},
-			Email: {
-			required: true,
-			email: true
-		},
-			Profession: {
-			required: true
-		},
-			HomeAddress: {
-			required: true
-		},
-			HomePhoneNumber: {
-			required: true
-		},
-			CompanyName: {
-			required: true
-		},
-			CompanyContactNum: {
-			required: true
-		},
-			CompanyAddress: {
-			required: true
-		},
-			SchoolName: {
-			required: true
-		},
-			SchoolContactNum: {
-			required: true
-		},
-			SchoolAddress: {
-			required: true
-		},
-			SpouseName: {
-			required: true
-		},
-			SpouseMobileNumber: {
-			required: true
-		},
-			SpouseBirthdate: {
-			required: true
-		},
-			Language: {
-			required: true
-		},
-			Option1Day: "required",
-			timepicker1opt1: {
-			required: true
-		},
-			timepicker1opt2: {
-			required: true
-		},
-			Option1Venue: {
-			required: true
-		},
-			Option2Day: "required",
-			timepicker2opt1: {
-			required: true
-		},
-			timepicker2opt2: {
-			required: true
-		},
-			Option2Venue: {
-			required: true
-		},
-			username: {
-			required: true,
-			minlength: 5
-		},
-			password: {
-			required: true,
-			minlength: 5
-		},
-			cpassword: {
-			required: true,
-			minlength: 5,
-			equalTo: "#password"
-		}
-		},
-		//For custom messages
-		messages: {
-			username: {
-				required: "Enter a username",
-				minlength: "Enter at least 5 characters"
-			},
-			password: {
-				required: "Enter a password",
-				minlength: "Enter at least 5 characters"
-			}
-		  },
-        errorElement : 'div',
-        errorPlacement: function(error, element) {
-          var placement = $(element).data('error');
-          if (placement) {
-            $(placement).append(error)
-          } else {
-            error.insertAfter(element);
-          }
-        }
-     });
-     */
-=======
-			/*
-
-				##### PSEUDOCODE #####
-
-				1. Loop through all childs of <tr> tags
-				2. Check if loop is currently at 2nd [1] and 3rd [2] column
-				3. If loop is at 2nd column, check if Gender td value is according to Gender form value
-				4. Hide those if not in according to the Gender form value
-				5. If loop is at 3rd column, check if Type of Dgroup td value is according to Type of Dgroup form value
-				6. Hide those if not in according to the Type of Dgorup form value
-				7. All results are now according to the form
-
-				##### CODE MATERIALS #####
-
-				$('tr').find('td').each(function(e) {
-					if(e == 2) {
-						$(this).parent().hide();
-						// hide gender something
-					}
-					else if (e == 3) {
-						// hide dgroup type something
-					}
-				});
-			*/
-
-			//alert(dgrouptype);
-		
+		function filterDgroupTable(){
+			//alert(gender);
 			$('#table').find('tr').each(function(d){
-				//alert($(this).text());
-
-				/*if(Fgender){
-					if($(this).text() == "Male"){
-						$(this).parent().hide();
-					}
-				}
-				else{
-					if($(this).text() == "Female"){
-						$(this).parent().hide();
-					}
-				}*/
+				
 				$(this).children().each(function(e){
-					if(d == 0) { }
+
+					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
+						//alert($(this).text());
 						if($(this).text() != gender){
-							//alert(gender);
-							//$(this).parent().hide();
-							//alert($(this).text());
 							$(this).parent().hide();
 						}else{
 							$(this).parent().show(); //(caution logic)
@@ -1861,19 +1661,14 @@
 					else if(e == 3){
 						if($(this).text() != dgrouptype){
 							$(this).parent().hide();
-						}/*else{
+						}else{
 							$(this).parent().show(); //(caution logic)
-						}*/
+						}
 					}
 				});
-			});			
+			});	
 		}
->>>>>>> Jasper-Edits
 	</script>
-<<<<<<< HEAD
->>>>>>> Paolo-Edits
-=======
->>>>>>> Jasper-Edits
 	<footer>
 	</footer>
 </html>
