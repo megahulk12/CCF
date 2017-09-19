@@ -564,7 +564,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $partstat == "") {
+								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 4 && $partstat == "") {
 									echo '
 									<div class="container-ministries">
 										<div class="row">
@@ -671,7 +671,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $partstat == "") {
+								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 4 && $partstat == "") {
 									echo '
 									<div class="container-ministries">
 										<div class="row">

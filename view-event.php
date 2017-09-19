@@ -631,7 +631,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $feedbackstat == "") {
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -842,7 +842,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $feedbackstat == "") {
+								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -960,9 +960,6 @@
 														<a class="card-title">'.$name.'</a>
 														<p>
 															'.$description.'
-														</p>
-														<p style="text-align: center">
-															'.$name.' registrations are now closed.
 														</p>
 													</div>
 												</div>
@@ -1231,6 +1228,64 @@
 							die("Connection failed: " . mysqli_connect_error());
 						}
 						$sql_feedbacks = "SELECT feedbackID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM feedbackdetails_tbl LEFT OUTER JOIN member_tbl ON feedbackdetails_tbl.memberID = member_tbl.memberID WHERE eventID = $eid";
+						$result = mysqli_query($conn, $sql_feedbacks);
+						if(mysqli_num_rows($result) > 0) {
+							while($row = mysqli_fetch_assoc($result)) {
+								$id = $row["feedbackID"];
+								$name = $row["fullname"];
+								echo'
+											<tr id="row_'.$id.'">
+												<td id="name_'.$id.'">'.$name.'</td>
+												<td>
+													<button class="waves-effect waves-light btn col s12 right view-feedback tooltipped" id="view-feedback_'.$id.'" data-tooltip="View Feedback" data-position="top" data-target="feedback-form-modal"><i class="material-icons prefix">view_list</i></button>
+												</td>
+												<td>
+													<button class="waves-effect waves-light btn col s12 right archive-feedback tooltipped" id="archive-feedback_'.$id.'" data-tooltip="Archive" data-position="top"><i class="material-icons prefix">archive</i></button>
+												</td>
+											</tr>
+								';
+							}
+						}
+						echo '
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+						';
+					}
+				}
+			?>
+
+			<?php
+				if(isset($_GET['id'])) {
+					$eid = $_GET['id'];
+					if(($_SESSION['userid'] == getEventHeadID($eid))) {
+						echo '
+		<div class="container-events">
+			<div class="row">
+				<div class="col s12 m7">
+					<div class="card">
+						<div class="card-content">
+							<a class="card-title">ARCHIVED FEEDBACKS</a>
+							<table class="centered">
+								<thead>
+									<tr>
+										<th style="width: 80%;">Name of Participant</th>
+										<th style="width: 10%;"></th>
+										<th style="width: 10%;"></th>
+									</tr>
+								</thead>
+								<tbody>
+						';
+
+						$conn = mysqli_connect($servername, $username, $password, $dbname);
+						if (!$conn) {
+							die("Connection failed: " . mysqli_connect_error());
+						}
+						$sql_feedbacks = "SELECT archFeedbackID, CONCAT_WS(' ', firstName, lastName) AS fullname FROM archivedfeedbacks_tbl LEFT OUTER JOIN member_tbl ON archivedfeedbacks_tbl.memberID = member_tbl.memberID WHERE eventID = $eid";
 						$result = mysqli_query($conn, $sql_feedbacks);
 						if(mysqli_num_rows($result) > 0) {
 							while($row = mysqli_fetch_assoc($result)) {
