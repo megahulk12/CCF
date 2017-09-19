@@ -13,7 +13,7 @@
 		}
 
 		// insert code set notificationStatus = 1 when user clicks notification area
-		$query = "SELECT notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
+		$query = "SELECT eventID, notificationDesc, notificationStatus, notificationType, request FROM notifications_tbl WHERE notificationStatus <= 1 AND (receivermemberID = ".$_SESSION['userid'].") ORDER BY notificationID DESC;";
 		$result = mysqli_query($conn, $query);
 		$view = '
 		<li><h6 class="notifications-header" id="badge">Notifications</h6></li>
@@ -22,6 +22,7 @@
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
 				//$receivermemberID = $row['receivermemberID']; testing muna ito
+				$eid = $row["eventID"];
 				$notificationDesc = $row['notificationDesc'];
 				$notificationStatus = $row['notificationStatus'];
 				$notificationType = $row['notificationType'];
@@ -52,6 +53,9 @@
 				}
 				else if($notificationStatus <= 1 && $notificationType == 2 && $request == 0) { // for ministry request notifs
 					$view .= '<li><a href="ministries.php">'.$notificationDesc.'</a></li>';
+				}
+				else if($notificationStatus <= 1 && $notificationType == 3 && $request == 0) { // for ministry request notifs
+					$view .= '<li><a href="view-event.php?id='.$eid.'">'.$notificationDesc.'</a></li>';
 				}
 				$view .= '<li class="divider"></li>';
 			}

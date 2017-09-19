@@ -1668,6 +1668,39 @@
 			});
 		});
 
+		$('[id^=view-archived-feedback]').click(function() {
+			var id = this.id.split("_")[1];
+			var name = $('#archivedname_'+id).text();
+			$('#feedback-form-header').text(name+"'s Feedback Form");
+			disableForm(true);
+			$('#feedback-form').animate({opacity: 0.1}, 300);
+			var url = "feedback.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: "get-archivedfeedback=g&id="+id,
+				dataType: 'json',
+				success: function(data) {
+					$('#feedback-form').animate({opacity: 1}, 300);
+					$('#themeRate').val(data.themerate);
+					$('#theme-label').text("Theme - "+data.themerate);
+					$('#themeRemarks').val(data.themeremarks);
+					$('#themeRemarks').trigger("autoresize");
+					$('#foodRate').val(data.foodrate);
+					$('#food-label').text("Food - "+data.foodrate);
+					$('#foodRemarks').val(data.foodremarks);
+					$('#foodRemarks').trigger("autoresize");
+					$('#venueRate').val(data.venuerate);
+					$('#venue-label').text("Venue - "+data.venuerate);
+					$('#venueRemarks').val(data.venueremarks);
+					$('#venueRemarks').trigger("autoresize");
+
+					// re-initialize to update input fields
+					Materialize.updateTextFields();
+				}
+			});
+		});
+
 		function disableForm(flag) {
 			$('#feedback-form').children().find('input, textarea').each(function() {
 				$(this).prop("disabled", flag);
@@ -1677,6 +1710,24 @@
 		$('[id^=archive-feedback]').click(function() {
 			var id = this.id.split("_")[1];
 			var url = "feedback.php";
+			$('view-archived-feedback_'+id).prop("disabled", true);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: "archive=g&id="+id,
+				success: function(data) {
+					swal({
+						title: "Feedback Archived!",
+						text: "Feedback has now been archived.",
+						type: "success",
+						allowEscapeKey: false,
+						allowOutsideClick: false,
+						timer: 10000
+					}, function() { window.location.reload(); });
+					$('body').removeClass('stop-scrolling');
+					$('view-archived-feedback_'+id).prop("disabled", false);
+				}
+			});
 		});
 	</script>
 
