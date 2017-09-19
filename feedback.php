@@ -44,4 +44,17 @@
 		}
 		mysqli_close($conn);
 	}
+	if(isset($_POST["archive"])) {
+		$id = $_POST["id"];
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$query = "INSERT INTO archivedfeedbacks_tbl (SELECT themeRate, themeRemarks, foodRate, foodRemarks, venueRate, venueRemarks FROM feedbackdetails_tbl WHERE feedbackID = $id)";
+		$result = mysqli_query($conn, $query);
+		$query = "DELETE FROM feedbackdetails_tbl WHERE feedbackID = $id";
+		$result = mysqli_query($conn, $query);
+		mysqli_close($conn);
+	}
 ?>

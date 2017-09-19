@@ -489,16 +489,11 @@
 		}
 		/* ===== END ===== */
 	</style>
-
 	<script type="text/javascript">
-		$(document).ready(function(){
+	$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
-		}); 
-	</script>
-	<script>
-	$(document).ready(function(){
 			$('.datepicker').pickadate({
 				selectMonths: true, // Creates a dropdown to control month
 				selectYears: 50, // Creates a dropdown of 15 years to control year
@@ -540,6 +535,7 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
+			$('#generate').attr("disabled", "");
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -553,6 +549,7 @@
 
 			id = id.split("_")[1];
 			$('#generate').attr("href", "request_ministry-summary-reports.php?id="+id);
+			$('#generate').removeAttr("disabled", "");
 		}
 	</script>
 

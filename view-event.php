@@ -1289,16 +1289,13 @@
 						$result = mysqli_query($conn, $sql_feedbacks);
 						if(mysqli_num_rows($result) > 0) {
 							while($row = mysqli_fetch_assoc($result)) {
-								$id = $row["feedbackID"];
+								$id = $row["archFeedbackID"];
 								$name = $row["fullname"];
 								echo'
-											<tr id="row_'.$id.'">
-												<td id="name_'.$id.'">'.$name.'</td>
+											<tr id="archivedrow_'.$id.'">
+												<td id="archivedname_'.$id.'">'.$name.'</td>
 												<td>
-													<button class="waves-effect waves-light btn col s12 right view-feedback tooltipped" id="view-feedback_'.$id.'" data-tooltip="View Feedback" data-position="top" data-target="feedback-form-modal"><i class="material-icons prefix">view_list</i></button>
-												</td>
-												<td>
-													<button class="waves-effect waves-light btn col s12 right archive-feedback tooltipped" id="archive-feedback_'.$id.'" data-tooltip="Archive" data-position="top"><i class="material-icons prefix">archive</i></button>
+													<button class="waves-effect waves-light btn col s12 right view-archived-feedback tooltipped" id="view-archived-feedback_'.$id.'" data-tooltip="View Archived Feedback" data-position="top" data-target="feedback-form-modal"><i class="material-icons prefix">view_list</i></button>
 												</td>
 											</tr>
 								';
@@ -1676,6 +1673,11 @@
 				$(this).prop("disabled", flag);
 			});
 		}
+
+		$('[id^=archive-feedback]').click(function() {
+			var id = this.id.split("_")[1];
+			var url = "feedback.php";
+		});
 	</script>
 
 	 <!-- this section is for notification approval of requests -->

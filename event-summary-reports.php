@@ -540,6 +540,7 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker  
 			});
+			$('#generate').attr("disabled", "");
 		});
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
@@ -553,6 +554,7 @@
 
 			id = id.split("_")[1];
 			$('#generate').attr("href", "request_event-summary-reports.php?id="+id);
+			$('#generate').removeAttr("disabled", "");
 		}
 	</script>
 
