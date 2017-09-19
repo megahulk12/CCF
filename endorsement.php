@@ -618,14 +618,14 @@
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
 								<small class="error" id="timepicker1opt1-required">This field is required.</small>
-								<small class="error" id="timepicker1opt1-equal2">Both should not be equal.</small>
-								<small class="error" id="timepicker1opt1-greater2">Start Time should be before than End Time.</small>
+								<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
 								<small class="error" id="timepicker1opt2-required">This field is required.</small>
-								<small class="error" id="timepicker1opt2-equal2">Both should not be equal.</small>
+								<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>
 								<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
 							</div>
 							<div class="input-field col s12">
@@ -827,6 +827,30 @@
 			$(this).blur();
 			check_iteration = true;
 
+			// convert time values to timestamp
+			var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
 
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
@@ -858,6 +882,28 @@
 				pagination(1);
 			}
 		});
+
+		function checkLastPage() {
+			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
+			pagenumber++; // page that is after the previous
+			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
+			if($('#'+lastpage).length > 0) return false;
+			else return true;
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+
 
 		/*
 		 *		INFORMATION ABOUT WILDCARDS
