@@ -584,7 +584,8 @@
 			preload();
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
-			$("#page1").css("opacity", 0.2);
+			$('#form-header').animate({opacity: 0.2}, 400);
+			$("#page1").animate({opacity: 0.2}, 400);
 			$('#endorsementID').val(id);
 			disableForm(true);
 			$.ajax({
@@ -594,9 +595,8 @@
 				dataType: 'json',
 				success: function(data) {
 					$("#preloader").css("visibility", "hidden");
-					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
-					$('#form-header').text(data.name);
+					changeTitleTransition("#form-header", $('#name_'+id).text());
 					$('#BaptismalDate').val(data.bpdate);
 					$('#BaptismalPlace').val(data.bpplace);
 					$('#DgroupType').val(data.dgtype);
@@ -624,6 +624,14 @@
 			$('#preloader').css("left", $('#Eform').width()/2);
 			$('#preloader').css("top", $('#Eform').height()/2);
 			disableForm(true);
+		}
+
+		function changeTitleTransition(title_elem, val) {
+			setTimeout(function() {
+				$(title_elem).text(val);
+				$(title_elem).animate({opacity: 1});
+				$("#page1").animate({opacity: 1});
+			}, 400);
 		}
 	</script>
 
@@ -698,7 +706,7 @@
 												$fullname = $row["fullname"];
 												echo '
 												<tr id="row_'.$endorsementID.'" onclick="cellActive(this.id)">
-												    <td>'.$fullname.'</td>
+												    <td id="name_'.$endorsementID.'">'.$fullname.'</td>
 												</tr>
 												';
 											}
@@ -712,7 +720,7 @@
 					<div class="col s7" id="form">
 						<div class="container">
 							<form method="post" id="Eform">
-								<h3 class="center">Sample's Form</h3>
+								<h3 class="center" id="form-header"></h3>
 								<div class="row">
 									<div id="preloader">
 										<div class="preloader-wrapper small active">
