@@ -1662,11 +1662,8 @@
 					}
 					else if(e == 3){
 						if($(this).text() != dgrouptype || $('#gender_'+i).text() != gender){
-							alert(i);
-							alert($('#gender_'+i).text() + "asdasd");
 							$(this).parent().hide();
 						}else{
-							alert($('#gender_'+i).text() + "asdasd");
 							$(this).parent().show(); //(caution logic)
 						}
 						i++;
