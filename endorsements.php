@@ -585,6 +585,7 @@
 			$('button').prop("disabled", true);
 			$("#preloader").css("visibility", "visible");
 			$("#page1").css("opacity", 0.2);
+			$('#endorsementID').val(id);
 			disableForm(true);
 			$.ajax({
 				type: "POST",
@@ -592,7 +593,6 @@
 				data: "id="+id,
 				dataType: 'json',
 				success: function(data) {
-					$('#endorsementID').val(id);
 					$("#preloader").css("visibility", "hidden");
 					$("#page1").css("opacity", 1);
 					$('button').prop("disabled", false);
@@ -1014,6 +1014,7 @@
 					url: url,
 					data: "notify=g&id="+$('#endorsementID').val()+"&notifvalue="+value,
 					success: function(data) {
+						alert(data);
 						swal({
 							title: "Success!",
 							type: "success",

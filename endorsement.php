@@ -570,16 +570,16 @@
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" required>
 								<label for="BaptismalDate" class>When were you baptized?</label>
-								<small class="error" id="BaptismalDate-required">This field is required.</small>
+								<small class="error" id="BaptismalDate-required"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" required>
 								<label for="BaptismalPlace">Where were you baptized?</label>
-								<small class="error" id="BaptismalPlace-required">This field is required.</small>
+								<small class="error" id="BaptismalPlace-required"></small>
 							</div>
 							<h4 class="center">DGROUP</h4>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
-								<div class="input-field col s12">
+								<div class="input-field col s12" id="Dgroup">
 									<select id="DgroupType" name="DgroupType" required>
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Youth">Youth</option>
@@ -589,16 +589,16 @@
 										<option value="Couples">Couples</option>
 									</select>
 									<label>Type of Dgroup</label>
-									<small class="error" id="DgroupType-required">This field is required.</small>
+									<small class="error" id="DgroupType-required"></small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
 								<label for="AgeBracket">Age Bracket</label>
-								<small class="error" id="AgeBracket-required">This field is required.</small>
+								<small class="error" id="AgeBracket-required"></small>
 							</div>
 							<h4 class="center">MEETING</h4>
-							<div class="row" style="margin-bottom: 0px;">
+							<div class="row" style="margin-bottom: 0px;" id="Meeting">
 								<div class="input-field col s12">
 									<select id="MeetingDay" name="MeetingDay" required>
 										<option value="" disabled selected>Choose your option...</option>
@@ -611,61 +611,58 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="MeetingDay-required">This field is required.</small>
+									<small class="error" id="MeetingDay-required"></small>
 								</div>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt1">Start Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-								<small class="error" id="timepicker1opt1-required">This field is required.</small>
-								<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
-								<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
+								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
+								<small class="error" id="timepicker1opt1-required"></small>
+								<small class="error" id="timepicker1opt1-equal"></small>
+								<small class="error" id="timepicker1opt1-greater"></small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
-								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-								<small class="error" id="timepicker1opt2-required">This field is required.</small>
-								<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>
-								<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
+								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
+								<small class="error" id="timepicker1opt2-required"></small>
+								<small class="error" id="timepicker1opt2-equal"></small>
+								<small class="error" id="timepicker1opt2-greater"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
 								<label for="MeetingPlace">Place</label>
-								<small class="error" id="MeetingPlace-required">This field is required.</small>
+								<small class="error" id="MeetingPlace-required"></small>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" onclick="requestLeader()" type="submit" name="request" id="request">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="request" id="request">SUBMIT</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</body>
 	<script>
-		function requestLeader() {
-			$('#Eform').submit(function(e) {
-				var url="request.php";
-				$.ajax({
-					type: "POST",
-					url: url,
-					data: 'request=g&'+$('#Eform').serialize(), 
-					success: function(data) {
-						alert(data);
-						swal({
-							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-							type: "success",
-							allowEscapeKey: true
-						},
-							function() { window.location.href = "index.php"; }
-						);
-					}
-				});
-				e.preventDefault();
+		$('#Eform').submit(function(e) {
+			var url="request.php";
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: 'request=g&'+$('#Eform').serialize(), 
+				success: function(data) {
+					alert(data);
+					swal({
+						title: "Success!",
+						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+						type: "success",
+						allowEscapeKey: true
+					},
+						function() { window.location.href = "index.php"; }
+					);
+				}
 			});
-			
-		}
+			e.preventDefault();
+		});
 	</script>
 
 	<script>
@@ -803,7 +800,9 @@
 		//--------------------------hello, code to ni pogi hehe----------------------------//
 
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
-		$('div#page1 .error').text("This field is required.");
+		$('[id$=required]').text("This field is required.");
+		$('[id$=greater]').text('Start Time should be before than End Time.');
+		$('[id$=equal], [id$=equaldate]').text('Both should not be equal.');
 
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
@@ -831,8 +830,6 @@
 			var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
 			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
 			//d = "2015-03-25";
-			start_time = $("#timepicker1opt1").val();
-			end_time = $("#timepicker1opt2").val();
 			start_time = spaceAMPM(start_time);
 			end_time = spaceAMPM(end_time);
 			start_time = new Date(d + " " + start_time);
@@ -840,12 +837,12 @@
 			start_time = start_time.getTime();
 			end_time = end_time.getTime();
 			if(start_time > end_time) {
-				$(".greater1").show();
+				$("[id$=greater]").show();
 				focused_element = $("#timepicker1opt1");
 				check_iteration = false;
 			}
 
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+			if(start_time == end_time && !($('[id^=timepicker1]').val() == "")) {
 				$("#timepicker1opt1-equal").show();
 				$("#timepicker1opt2-equal").show();
 				focused_element = $("#timepicker1opt1");
@@ -860,13 +857,21 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-				}
-				else if(this.id == "DgroupType") {
-					if($(this).val() == null) {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this).parent();
-						disableDefaultRequired($(this));
-						check_iteration = false;
+					else if(this.id == "DgroupType") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $('#Dgroup');
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if(this.id == "MeetingDay") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $('#Meeting');
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
 				}
 			});

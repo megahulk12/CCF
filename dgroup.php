@@ -519,7 +519,7 @@
     <div id="response"></div>
     <div class="container">
       <?php 
-	      if($_SESSION['memberType'] == 1 && getRequestSeen() == "") { //checks if dgroup member and if endorsement has not been made
+	      if(getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == "") { //checks if dgroup member and if endorsement has not been made
 		      echo '
 		      <form method="post">
 		        <button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
@@ -634,7 +634,7 @@
         $query = "SELECT CONCAT(firstName, ' ', lastName) AS fullname, member_tbl.memberID AS memberID FROM discipleshipgroupmembers_tbl INNER JOIN discipleshipgroup_tbl ON discipleshipgroupmembers_tbl.dgroupID = discipleshipgroup_tbl.dgroupID INNER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE dgroupmemberID != ".getDgroupMemberID($_SESSION['userid'])." AND discipleshipgroup_tbl.dgleader = ".$_SESSION['userid'];
 
         $result = mysqli_query($conn, $query);
-        if(mysqli_num_rows($result) > 0) {
+        if(mysqli_num_rows($result) >= 0) {
 
           echo '
       <div id="own-dgroup">

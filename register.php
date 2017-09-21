@@ -1096,7 +1096,7 @@
 											$schedule = "$start_time - $end_time";
 											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
-											<td>'.$gender.'</td>
+											<td id="gender_'.$count.'">'.$gender.'</td>
 											<td>'.$dgrouptype.'</td>
 											<td>'.$schedday.'</td>
 											<td>'.$schedule.'</td>';
@@ -1462,9 +1462,11 @@
 		});
 
 		function nextPage() {
+			/*
 			if(getCurrentPage == 'page6'){
 				filterDgroupTable();
 			}
+			*/
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
@@ -1645,8 +1647,8 @@
 
 		function filterDgroupTable(){
 			//alert(gender);
+			var i = 1;
 			$('#table').find('tr').each(function(d){
-				
 				$(this).children().each(function(e){
 
 					if(d == 0) { $(this).parent().show(); }
@@ -1659,14 +1661,19 @@
 						}
 					}
 					else if(e == 3){
-						if($(this).text() != dgrouptype){
+						if($(this).text() != dgrouptype || $('#gender_'+i).text() != gender){
+							alert(i);
+							alert($('#gender_'+i).text() + "asdasd");
 							$(this).parent().hide();
 						}else{
+							alert($('#gender_'+i).text() + "asdasd");
 							$(this).parent().show(); //(caution logic)
 						}
+						i++;
 					}
 				});
-			});	
+			});
+			i = 0;
 		}
 	</script>
 	<footer>

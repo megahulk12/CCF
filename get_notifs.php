@@ -28,12 +28,12 @@
 				$notificationType = $row['notificationType'];
 				$request = $row['request'];
 				if($notificationStatus <= 1 && $notificationType == 0 && $request == 1) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
-					$view .= '<li><a onclick="approval()">'.$notificationDesc.'</a></li>';
+					$view .= '<li><a href="endorsements.php">'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 1) { // for result notifs of request approve
-					$view .= '<li><a href="endorsement.php">'.$notificationDesc.'</a></li>';
+					$view .= '<li><a href="dgroup.php">'.$notificationDesc.'</a></li>';
 				}
-				else if($notificationStatus <= 1 && $notificationType == 0 && getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == 3) { // for result notifs of request reject/reconsideration
+				else if($notificationStatus <= 1 && $notificationType == 0 && $request == 0) { // loads notifications if both seen or not seen and endorsement request type; this is also for heads
 					$view .= '<li><a>'.$notificationDesc.'</a></li>';
 				}
 				else if($notificationStatus <= 1 && $notificationType == 1 && $request == 1 && $_SESSION['memberType'] == 5) { // for event request notifs

@@ -47,6 +47,28 @@
 		return $dgmemberID;
 	}
 
+	function getDgroupMemberIDFromEndorsement($eid) {
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT dgmemberID FROM endorsement_tbl WHERE endorsementID = $eid";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$value = $row["dgmemberID"];
+			}
+		}
+		return $value;
+	}
+
 	function getDgroupLeaderID($memberID) {
 		// database connection variables
 
@@ -173,6 +195,7 @@
 
 		$sql_endorsement = "SELECT endorsementStatus FROM endorsement_tbl WHERE dgmemberID = $dgmemberID";
 		$result = mysqli_query($conn, $sql_endorsement);
+		$endorsementStatus = "";
 		if(mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {
 				$endorsementStatus = $row["endorsementStatus"];
