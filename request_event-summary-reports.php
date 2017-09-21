@@ -177,8 +177,8 @@
 			}
 
 			// counts per male and female
-			$first_timers->setCellValue('A'.($y), "Number of Males: ".$first_timer_males);
-			$first_timers->setCellValue('A'.($y+1), "Number of Females: ".$first_timer_females);
+			$first_timers->setCellValue('A'.($y+1), "Number of Males: ".$first_timer_males);
+			$first_timers->setCellValue('A'.($y+2), "Number of Females: ".$first_timer_females);
 
 			// set width per column based on the maximum length among each of its values
 			for($col = 'A', $i = 0; $col <= $column_excel[count($column_excel) - 1]; $col++, $i++) {
@@ -276,8 +276,8 @@
 			}
 
 			// counts per male and female
-			$returnees->setCellValue('A'.($y), "Number of Males: ".$returnees_males);
-			$returnees->setCellValue('A'.($y+1), "Number of Females: ".$returnees_females);
+			$returnees->setCellValue('A'.($y+1), "Number of Males: ".$returnees_males);
+			$returnees->setCellValue('A'.($y+2), "Number of Females: ".$returnees_females);
 
 			// set width per column based on the maximum length among each of its values
 			for($col = 'A', $i = 0; $col <= $column_excel[count($column_excel) - 1]; $col++, $i++) {
