@@ -1014,7 +1014,6 @@
 					url: url,
 					data: "notify=g&id="+$('#endorsementID').val()+"&notifvalue="+value,
 					success: function(data) {
-						alert(data);
 						swal({
 							title: "Success!",
 							type: "success",

@@ -519,7 +519,7 @@
     <div id="response"></div>
     <div class="container">
       <?php 
-	      if(getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == "") { //checks if dgroup member and if endorsement has not been made
+	      if(getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == "" && $_SESSION["memberType"] == 1) { //checks if dgroup member and if endorsement has not been made
 		      echo '
 		      <form method="post">
 		        <button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
@@ -635,38 +635,39 @@
 
         $result = mysqli_query($conn, $query);
         if(mysqli_num_rows($result) >= 0) {
-
-          echo '
-      <div id="own-dgroup">
-        <h3>My Discipleship Group</h3>
-        <dd><h6>'.$sched.'</h6></dd>
-        <table id="own-dgroup" class="centered dgroup-table-spacing">
-          <tr>';
-          $counter_row = 0;
-          while($row = mysqli_fetch_assoc($result)) {
-            $fullname = $row["fullname"];
-            $memberID = $row["memberID"];
-            if($_SESSION['memberType'] >= 2 ){
-              echo '
-                <td>
-                  <a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
-                    '.$fullname.'<br><br>&nbsp;</a>
-                </td>
+          if($_SESSION["memberType"] >= 2) {
+            echo '
+        <div id="own-dgroup">
+          <h3>My Discipleship Group</h3>
+          <dd><h6>'.$sched.'</h6></dd>
+          <table id="own-dgroup" class="centered dgroup-table-spacing">
+            <tr>';
+            $counter_row = 0;
+            while($row = mysqli_fetch_assoc($result)) {
+              $fullname = $row["fullname"];
+              $memberID = $row["memberID"];
+              if($_SESSION['memberType'] >= 2 ){
+                echo '
+                  <td>
+                    <a class="dgroup-names" href="dgroup-memberView.php?id='.$memberID.'"><i class="material-icons prefix dgroup-icons">person</i><br>
+                      '.$fullname.'<br><br>&nbsp;</a>
+                  </td>
+                  ';
+                $counter_row++;
+                if($counter_row == 4) {
+                echo'
+            </tr>
+            <tr>
                 ';
-              $counter_row++;
-              if($counter_row == 4) {
-              echo'
-          </tr>
-          <tr>
-              ';
-              $counter_row = 0;
+                $counter_row = 0;
+                }
               }
             }
+            echo '
+            </tr>
+          </table>
+        </div>';
           }
-          echo '
-          </tr>
-        </table>
-      </div>';
         }
       ?>
     </div>
