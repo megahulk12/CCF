@@ -71,6 +71,12 @@
 			transition: color 0.3s;
 		}
 
+		h1, h2, h3, h4, h5, h6 {
+			color: #292929;
+			font-family: proxima-nova;
+			text-transform: uppercase;
+		}
+
 		/* ===== FONTS =====*/
 		@font-face {
 			font-family: proxima-nova;
@@ -409,6 +415,10 @@
 	    	right: 35;
 	    	bottom: 50;
 	    }
+
+		.error, .password-length {
+			color: #ff3333;
+		}
 		/* ===== END ===== */
 	</style>
 
@@ -416,8 +426,8 @@
 		$(document).ready(function(){
 			$('.dropdown-button + .dropdown-content-notification').on('click', function(event) {
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
-				$('.modal').modal();
 			});
+			$('.modal').modal();
 		});
 	</script>
 
@@ -465,18 +475,31 @@
 	<body>
 		<div id="response"></div>
 		<div class="container">
-			<table class="centered table-spacing">
-				<tbody>
-					<tr>
-						<td>
-							<a class="label">
-								<i class="prefix material-icons add">person_add</i><br>
-								<span style="position: relative; left: 50; font-size: 17px;">Add Admin Account</span>
-							</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="row">
+				<div class="col s4"></div>
+				<div class="col s4">
+					<h4 id="form-header" class="center">ADMIN ACCOUNT</h4>
+					<form method="post" id="admin-form">
+						<div class="row">
+							<div class="input-field col s12">
+								<input type="text" id="username" name="username" maxlength="16" required>
+								<label for="username">Username</label>
+								<small class="error" id="username-required"></small>
+							</div>
+							<div class="input-field col s12">
+								<input type="password" id="password" name="password" required>
+								<label for="password">Password</label>
+								<small class="error" id="password-required"></small>
+								<small class="error" id="password-length"></small>
+							</div>
+						</div>
+						<div class="row">
+							<button class="waves-effect waves-light fixbutton btn col s12" type="submit" id="add-admin" name="add-admin">Add This Account</button>
+						</div>
+					</form>
+				</div>
+				<div class="col s4"></div>
+			</div>
 		</div>
 	</body>
 
@@ -626,6 +649,145 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+
+		/* 
+		============================================================
+		============================================================
+		====================FORM VALIDATION=========================
+		============================================================
+		============================================================
+		*/
+
+		var validated = false;
+		$('#admin-form').submit(function(e) {
+			/*
+				NOTE:
+				contentType and processData doesn't coincide with string queries in passing data to server
+				so instead of using .serialize() -- which encodes formdata as string -- use FormData to encode
+				it as an object.
+			*/
+			if(validated) {
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
+						</div> \
+					</div> \
+				  ';
+				$('#add-admin').html(preloader);
+				$('#add-admin').prop("disabled", true);
+				var url = "request_manage-accounts.php";
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: new FormData(this),
+					contentType: false,
+					processData: false,
+					success: function(data) {
+						$('#add-admin').text('Add This Account');
+						$('#add-admin').prop("disabled", false);
+						swal({
+							title: "Success!",
+							text: "Admin account successfully added!",
+							type: "success",
+							allowEscapeKey: true,
+							allowOutsideClick: true,
+							timer: 10000
+						}, function() { window.location.reload(); });
+					}
+				});
+			}
+			e.preventDefault();
+		});
+
+		$('.error').hide(); // by default, hide all error classes
+		
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('#password-length').text('Password should at least have 8 characters.');
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		// personal info form validation
+		$("#add-admin").click(function() {
+			$('.error').hide();
+			$(this).blur();
+			var check_iteration = true, focused_element;
+
+			$($("#admin-form").find('input').reverse()).each(function() {
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$("small#"+this.id+"-required").show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					else if(this.id == "password") {
+						if($(this).val().length < 8) {
+							$("small#"+this.id+"-length").show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}	
+					}
+				}
+			});
+
+			if(!check_iteration)
+				scrollTo(focused_element);
+			
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		function animateBodyScrollTop() {
+			$("body").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$("body").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 	</script>
 
 	<script>
