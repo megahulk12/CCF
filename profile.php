@@ -754,12 +754,9 @@
 								<?php
 								if($_SESSION["memberType"] > 0) echo '
 									<li class="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
-									<li class="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-									<li class="li-sidenav" style="display: none"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+									<li class="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>';
 								else if($_SESSION["memberType"] == 0) echo '
-									<li classs="li-sidenav" style="display: none"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
-									<li class="li-sidenav" style="display: none"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
-									<li class="li-sidenav"><a id="sidenav5" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(5);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+									<li class="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 4); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								?>
 							</ul>
 					</div>
@@ -1247,214 +1244,220 @@
 									</div>
 								</div>
 							</form>
-							<form method="post" id="fregister">
-								<div id="register" style="display: none;">
-									<div class="row">
-										<div id="register_page1">
-											<h3 class="center">Other Information</h3>
-											<div class="input-field col s12">
-												<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
-												<label for="Citizenship">Citizenship</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
-												<label for="Email" data-error="Invalid email address">Email Address</label>
-											</div>
-											<h4 class="center">Home</h4>
-											<div class="input-field col s12">
-												<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
-												<label for="HomeAddress" style=" font-size:14px;">Address</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
-												<label for="HomePhoneNumber">Home Phone Number</label>
-											</div>
-											<h4 class="center">Company</h4>
-											<div class="input-field col s12">
-												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
-												<label for="CompanyContactNum">Company Contact Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
-												<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
-											</div>
-											<h4 class="center">School</h4>
-											<div class="input-field col s12">
-												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
-												<label for="SchoolContactNum">School Contact Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
-												<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
-											</div>
-											<h4 class="center">Spouse</h4>
-											<div class="input-field col s12">
-												<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
-												<label for="SpouseName">Spouse Name</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
-												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
-												<label for="SpouseBirthdate">Birthdate</label>
-											</div>
-										</div>
+							<?php
+								if($_SESSION["memberType"] == 0) {
+									echo '
+										<form method="post" id="fregister">
+											<div id="register" style="display: none;">
+												<div class="row">
+													<div id="register_page1">
+														<h3 class="center">Other Information</h3>
+														<div class="input-field col s12">
+															<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+															<label for="Citizenship">Citizenship</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+															<label for="Email" data-error="Invalid email address">Email Address</label>
+														</div>
+														<h4 class="center">Home</h4>
+														<div class="input-field col s12">
+															<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+															<label for="HomeAddress" style=" font-size:14px;">Address</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+															<label for="HomePhoneNumber">Home Phone Number</label>
+														</div>
+														<h4 class="center">Company</h4>
+														<div class="input-field col s12">
+															<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+															<label for="CompanyContactNum">Company Contact Number</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+															<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
+														</div>
+														<h4 class="center">School</h4>
+														<div class="input-field col s12">
+															<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+															<label for="SchoolContactNum">School Contact Number</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+															<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
+														</div>
+														<h4 class="center">Spouse</h4>
+														<div class="input-field col s12">
+															<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+															<label for="SpouseName">Spouse Name</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+															<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+														</div>
+														<div class="input-field col s12">
+															<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+															<label for="SpouseBirthdate">Birthdate</label>
+														</div>
+													</div>
 
-										<div id="register_page2" style="display: none;">
-											<h3 class="center">Preferences</h3>
-											<div class="input-field col s12">
-												<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
-												<label for="Language">Language</label>
-											</div>
-											<h4 class="center">Schedule</h4>
-											<h5 class="center">Option 1</h5>
-											<div class="row" style="margin: 0;">
-												<div class="input-field col s12">
-													<select id="Option1Day" name="Option1Day">
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunday</option>
-														<option value="Monday">Monday</option>
-														<option value="Tuesday">Tuesday</option>
-														<option value="Wednesday">Wednesday</option>
-														<option value="Thursday">Thursday</option>
-														<option value="Friday">Friday</option>
-														<option value="Saturday">Saturday</option>
-													</select>
-													<label>Day</label>
+													<div id="register_page2" style="display: none;">
+														<h3 class="center">Preferences</h3>
+														<div class="input-field col s12">
+															<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
+															<label for="Language">Language</label>
+														</div>
+														<h4 class="center">Schedule</h4>
+														<h5 class="center">Option 1</h5>
+														<div class="row" style="margin: 0;">
+															<div class="input-field col s12">
+																<select id="Option1Day" name="Option1Day">
+																	<option value="" disabled selected>Choose your option...</option>
+																	<option value="Sunday">Sunday</option>
+																	<option value="Monday">Monday</option>
+																	<option value="Tuesday">Tuesday</option>
+																	<option value="Wednesday">Wednesday</option>
+																	<option value="Thursday">Thursday</option>
+																	<option value="Friday">Friday</option>
+																	<option value="Saturday">Saturday</option>
+																</select>
+																<label>Day</label>
+															</div>
+														</div>
+															<div class="input-field col s6">
+																<label for="timepicker1opt1">Start Time</label>
+																<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+															</div>
+															<div class="input-field col s6 right">
+																<label for="timepicker2opt1">End Time</label>
+																<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+															</div>
+														<div class="input-field col s12">
+															<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
+															<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+														</div>
+														<h5 class="center">Option 2</h5>
+														<div class="row" style="margin: 0;">
+															<div class="input-field col s12">
+																<select id="Option2Day" name="Option2Day">
+																	<option value="" disabled selected>Choose your option...</option>
+																	<option value="Sunday">Sunday</option>
+																	<option value="Monday">Monday</option>
+																	<option value="Tuesday">Tuesday</option>
+																	<option value="Wednesday">Wednesday</option>
+																	<option value="Thursday">Thursday</option>
+																	<option value="Friday">Friday</option>
+																	<option value="Saturday">Saturday</option>
+																</select>
+																<label>Day</label>
+															</div>
+														</div>
+															<div class="input-field col s6">
+																<label for="timepicker1opt2">Start Time</label>
+																<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+															</div>
+															<div class="input-field col s6">
+																<label for="timepicker2opt2">End Time</label>
+																<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+															</div>
+														<div class="input-field col s12">
+															<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
+															<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+														</div>
+													</div>
+
+													<div id="register_page3" style="display: none;">
+														<div class="input-field col s12">
+															<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
+															<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
+														</div>
+														<div class="input-field col s12">
+															<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
+															<label for="attendCCF">How long you have been attending CCF?</label>
+														</div>
+														<div class="input-field col s12">
+															<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
+															<label for="regularlyAttendsAt">Where do you regularly attend?</label>
+														</div>
+													</div>
+													<div id="register_page4" style="display: none;">
+														<h3 class="center">Choose a Dgroup Leader</h3>
+														<table class="cursor centered" id="table" style="margin-bottom: 20px;">
+															<thead>
+																<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
+																<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
+																<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
+																<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
+																<th style="width: <?php echo widthRow(5); ?>%">Day</th>
+																<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
+															</thead>
+															';
+															// end
+																// database connection variables
+
+																$servername = "localhost";
+																$username = "root";
+																$password = "root";
+																$dbname = "dbccf";
+
+																$conn = mysqli_connect($servername, $username, $password, $dbname);
+																if (!$conn) {
+																	die("Connection failed: " . mysqli_connect_error());
+																}
+
+																$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
+																				CASE
+																					WHEN gender = '0' THEN 'Male'
+																					ELSE 'Female'
+																				END) AS gender,
+																				(SELECT CASE
+																					WHEN dgroupType = '0' THEN 'Youth'
+																					WHEN dgroupType = '1' THEN 'Singles'
+																					WHEN dgroupType = '2' THEN 'Single Parents'
+																					WHEN dgroupType = '3' THEN 'Married'
+																					WHEN dgroupType = '4' THEN 'Couples'
+																				END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+																$result = mysqli_query($conn, $sql_dgroups);
+																if(mysqli_num_rows($result) > 0) {
+																	$count = 1;
+																	while($row = mysqli_fetch_assoc($result)) {
+																		$dgroupid = $row["dgroupID"];
+																		echo '<tr id="row_'.$dgroupid.'" onclick="cellActive('."'".'row_'.$dgroupid.''."'".')">';
+																		$fullname = $row["fullname"];
+																		$gender = $row["gender"];
+																		$dgrouptype = $row["dgroupType"];
+																		$schedday = $row["schedDay"];
+																		$schedule = $row["schedule"];
+																		//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
+																		echo '
+																			<td class="choose">'.$fullname.'</td>
+																			<td class="choose">'.$gender.'</td>
+																			<td class="choose">'.$dgrouptype.'</td>
+																			<td class="choose">'.$schedday.'</td>
+																			<td class="choose">'.$schedule.'</td>';
+																		echo '</tr>';
+																	}
+																}
+																//WORK HERE
+
+																echo '
+														</table>
+													</div>
+												</div>
+												<div class="row">
+													<div class="progress col s6 left" style=" margin-left: 0.8rem;">
+														<div class="determinate" style="" id="register_progressbar"></div>
+													</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
+													<input type="hidden" name="dgroupID" id="dgroupID" value=""/> <!--hidden input for dgid-->
+													<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, '."'".'register'."'".')">NEXT</button>
+													<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, '."'".'register'."'".')" style="margin-right: 10px; display: none;">BACK</button>
 												</div>
 											</div>
-												<div class="input-field col s6">
-													<label for="timepicker1opt1">Start Time</label>
-													<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-												</div>
-												<div class="input-field col s6 right">
-													<label for="timepicker2opt1">End Time</label>
-													<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
-												</div>
-											<div class="input-field col s12">
-												<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
-												<label for="Option1Venue" style=" font-size:14px;">Venue</label>
-											</div>
-											<h5 class="center">Option 2</h5>
-											<div class="row" style="margin: 0;">
-												<div class="input-field col s12">
-													<select id="Option2Day" name="Option2Day">
-														<option value="" disabled selected>Choose your option...</option>
-														<option value="Sunday">Sunday</option>
-														<option value="Monday">Monday</option>
-														<option value="Tuesday">Tuesday</option>
-														<option value="Wednesday">Wednesday</option>
-														<option value="Thursday">Thursday</option>
-														<option value="Friday">Friday</option>
-														<option value="Saturday">Saturday</option>
-													</select>
-													<label>Day</label>
-												</div>
-											</div>
-												<div class="input-field col s6">
-													<label for="timepicker1opt2">Start Time</label>
-													<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-												</div>
-												<div class="input-field col s6">
-													<label for="timepicker2opt2">End Time</label>
-													<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
-												</div>
-											<div class="input-field col s12">
-												<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
-												<label for="Option2Venue" style=" font-size:14px;">Venue</label>
-											</div>
-										</div>
-
-										<div id="register_page3" style="display: none;">
-											<div class="input-field col s12">
-												<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
-												<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="attendCCF" class="materialize-textarea" name="attendCCF" data-length="300" maxlength="300"></textarea>
-												<label for="attendCCF">How long you have been attending CCF?</label>
-											</div>
-											<div class="input-field col s12">
-												<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
-												<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-											</div>
-										</div>
-										<div id="register_page4" style="display: none;">
-											<h3 class="center">Choose a Dgroup Leader</h3>
-											<table class="cursor centered" id="table" style="margin-bottom: 20px;">
-												<thead>
-													<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
-													<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
-													<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
-													<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
-													<th style="width: <?php echo widthRow(5); ?>%">Day</th>
-													<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
-												</thead>
-												<?php
-													// database connection variables
-
-													$servername = "localhost";
-													$username = "root";
-													$password = "root";
-													$dbname = "dbccf";
-
-													$conn = mysqli_connect($servername, $username, $password, $dbname);
-													if (!$conn) {
-														die("Connection failed: " . mysqli_connect_error());
-													}
-
-													$sql_dgroups = "SELECT discipleshipgroup_tbl.dgroupID, CONCAT(firstName, ' ', lastName) AS fullname, (SELECT
-																	CASE
-																		WHEN gender = '0' THEN 'Male'
-																		ELSE 'Female'
-																	END) AS gender,
-																	(SELECT CASE
-																		WHEN dgroupType = '0' THEN 'Youth'
-																		WHEN dgroupType = '1' THEN 'Singles'
-																		WHEN dgroupType = '2' THEN 'Single Parents'
-																		WHEN dgroupType = '3' THEN 'Married'
-																		WHEN dgroupType = '4' THEN 'Couples'
-																	END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
-													$result = mysqli_query($conn, $sql_dgroups);
-													if(mysqli_num_rows($result) > 0) {
-														$count = 1;
-														while($row = mysqli_fetch_assoc($result)) {
-															$dgroupid = $row["dgroupID"];
-															echo '<tr id="row_'.$dgroupid.'" onclick="cellActive('."'".'row_'.$dgroupid.''."'".')">';
-															$fullname = $row["fullname"];
-															$gender = $row["gender"];
-															$dgrouptype = $row["dgroupType"];
-															$schedday = $row["schedDay"];
-															$schedule = $row["schedule"];
-															//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
-															echo '
-																<td class="choose">'.$fullname.'</td>
-																<td class="choose">'.$gender.'</td>
-																<td class="choose">'.$dgrouptype.'</td>
-																<td class="choose">'.$schedday.'</td>
-																<td class="choose">'.$schedule.'</td>';
-															echo '</tr>';
-														}
-													}
-													//WORK HERE
-
-													echo ' ';
-												?>
-											</table>
-										</div>
-									</div>
-									<div class="row">
-										<div class="progress col s6 left" style=" margin-left: 0.8rem;">
-											<div class="determinate" style="" id="register_progressbar"></div>
-										</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
-										<input type="hidden" name="dgroupID" id="dgroupID" value=""/> <!--hidden input for dgid-->
-										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next" onclick="pagination(1, 'register')">NEXT</button>
-										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, 'register')" style="margin-right: 10px; display: none;">BACK</button>
-									</div>
-								</div>
-							</form>
+										</form>
+									';
+								}
+							?>
 						</div>
 					</div>
 				</div>
@@ -1606,39 +1609,70 @@
 		function navigationForms(page) {
 			if(page == 1) {
 				//$('.content form > div').hide();
-				document.getElementById('cpinfo').style.display = "inline";
-				document.getElementById('coinfo').style.display = "none";
-				document.getElementById('cprefer').style.display = "none";
-				document.getElementById('cpass').style.display = "none";
-				document.getElementById('register').style.display = "none";
+				<?php
+					if($_SESSION["memberType"] > 0) {
+						echo '
+							$("#cpinfo").show();
+							$("#coinfo").hide();
+							$("#cprefer").hide();
+							$("#cpass").hide();
+						';
+					}
+					else
+						echo '
+							$("#cpinfo").show();
+							$("#coinfo").hide();
+							$("#register").hide();
+						';
+				?>
 			}
 			else if (page == 2) {
-				document.getElementById('cpinfo').style.display = "none";
-				document.getElementById('coinfo').style.display = "inline";
-				document.getElementById('cprefer').style.display = "none";
-				document.getElementById('cpass').style.display = "none";
-				document.getElementById('register').style.display = "none";
+				<?php
+					if($_SESSION["memberType"] > 0) {
+						echo '
+							$("#cpinfo").hide();
+							$("#coinfo").show();
+							$("#cprefer").hide();
+							$("#cpass").hide();
+						';
+					}
+					else
+						echo '
+							$("#cpinfo").hide();
+							$("#coinfo").show();
+							$("#register").hide();
+						';
+				?>
 			}
 			else if (page == 3) {
-				document.getElementById('cpinfo').style.display = "none";
-				document.getElementById('coinfo').style.display = "none";
-				document.getElementById('cprefer').style.display = "inline";
-				document.getElementById('cpass').style.display = "none";
-				document.getElementById('register').style.display = "none";
+				<?php
+					if($_SESSION["memberType"] > 0) {
+						echo '
+							$("#cpinfo").hide();
+							$("#coinfo").hide();
+							$("#cprefer").show();
+							$("#cpass").hide();
+						';
+					}
+					else
+						echo '
+							$("#cpinfo").hide();
+							$("#coinfo").hide();
+							$("#register").show();
+						';
+				?>
 			}
 			else if (page == 4) {
-				document.getElementById('cpinfo').style.display = "none";
-				document.getElementById('coinfo').style.display = "none";
-				document.getElementById('cprefer').style.display = "none";
-				document.getElementById('cpass').style.display = "inline";
-				document.getElementById('register').style.display = "none";
-			}
-			else if (page == 5) {
-				document.getElementById('cpinfo').style.display = "none";
-				document.getElementById('coinfo').style.display = "none";
-				document.getElementById('cprefer').style.display = "none";
-				document.getElementById('cpass').style.display = "none";
-				document.getElementById('register').style.display = "inline";
+				<?php
+					if($_SESSION["memberType"] > 0) {
+						echo '
+							$("#cpinfo").hide();
+							$("#coinfo").hide();
+							$("#cprefer").hide();
+							$("#cpass").show();
+						';
+					}
+				?>
 			}
 		}
 

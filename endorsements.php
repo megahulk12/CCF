@@ -722,7 +722,7 @@
 							<form method="post" id="Eform">
 								<h3 class="center" id="form-header"></h3>
 								<div class="row">
-									<div id="preloader">
+									<div id="preloader" style="visibility: hidden;">
 										<div class="preloader-wrapper small active">
 											<div class="spinner-layer spinner-blue-only spinner-color-theme">
 												<div class="circle-clipper left">
