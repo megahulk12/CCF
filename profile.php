@@ -1241,7 +1241,7 @@
 										</div>
 										'; // originally having a value of own password
 										?>
-									</div>
+									</div> 
 									<div class="row">
 										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
 									</div>
@@ -1251,56 +1251,93 @@
 								<div id="register" style="display: none;">
 									<div class="row">
 										<div id="register_page1">
+										<?php
+										// database connection variables
+
+										$servername = "localhost";
+										$username = "root";
+										$password = "root";
+										$dbname = "dbccf";
+										$conn = mysqli_connect($servername, $username, $password, $dbname);
+										if (!$conn) {
+											die("Connection failed: " . mysqli_connect_error());
+										}
+										$query = "SELECT (SELECT CASE
+														  WHEN gender = '0' THEN 'Male'
+														  ELSE 'Female'
+														  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, CompanyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+										$result = mysqli_query($conn, $query);
+										if(mysqli_num_rows($result) > 0) {
+											while($row = mysqli_fetch_assoc($result)) {
+												$emailad = $row["emailAd"];
+												$homeaddress = $row["homeAddress"];
+												$homephonenumber = $row["homePhoneNumber"];
+												$companyname = $row["companyName"];
+												$companycontactnum = $row["companyContactNum"];
+												$companyaddress = $row["CompanyAddress"];
+												$schoolname = $row["schoolName"];
+												$schoolcontactnum = $row["schoolContactNum"];
+												$schooladdress = $row["schoolAddress"];
+												$spousename = $row["spouseName"];
+												$spousecontactnum = $row["spouseContactNum"];
+												$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+												if(is_null($row["spouseBirthdate"]))
+													$spousebirthdate = "";
+											}
+										}
+										echo '
 											<h3 class="center">Other Information</h3>
 											<div class="input-field col s12">
 												<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
 												<label for="Citizenship">Citizenship</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="email" name="Email" id="Email" data-length="30" maxlength="30"> <!-- increase size of email address -->
+												<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
 												<label for="Email" data-error="Invalid email address">Email Address</label>
 											</div>
 											<h4 class="center">Home</h4>
 											<div class="input-field col s12">
-												<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50">
+												<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
 												<label for="HomeAddress" style=" font-size:14px;">Address</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18">
+												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
 												<label for="HomePhoneNumber">Home Phone Number</label>
 											</div>
 											<h4 class="center">Company</h4>
 											<div class="input-field col s12">
-												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18">
+												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
 												<label for="CompanyContactNum">Company Contact Number</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
 												<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
 											</div>
 											<h4 class="center">School</h4>
 											<div class="input-field col s12">
-												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
 												<label for="SchoolContactNum">School Contact Number</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
 												<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
 											</div>
 											<h4 class="center">Spouse</h4>
 											<div class="input-field col s12">
-												<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30">
+												<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
 												<label for="SpouseName">Spouse Name</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
 												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
 											</div>
 											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+												<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'">
 												<label for="SpouseBirthdate">Birthdate</label>
 											</div>
 										</div>
+										';
+										?>
 
 										<div id="register_page2" style="display: none;">
 											<h3 class="center">Preferences</h3>
@@ -2035,6 +2072,23 @@
 				}
 				pagination(1, this.id.split("_")[0]);
 			}
+		});
+
+		var gender = "";
+
+		$('[id^=Gender]').click(function() {
+			if($('#Gender_Male').prop("checked"))
+				gender = $('#Gender_Male').val();
+			else
+				gender = $('#Gender_Female').val();
+		});
+
+		$('register_next').click(function(){
+			// default states
+			$('.error').hide();
+			$(this).blur(); // no focus in button once clicked
+			var check_iteration = true;
+			
 		});
 		
 		function checkLastPage() {
