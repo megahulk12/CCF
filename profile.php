@@ -1392,8 +1392,8 @@
 																<th style="width: <?php echo widthRow(5); ?>%">Day</th>
 																<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
 															</thead>
-															';
-															// end
+									';
+									// end
 																// database connection variables
 
 																$servername = "localhost";
