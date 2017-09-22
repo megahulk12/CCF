@@ -617,16 +617,16 @@
 							<div class="input-field col s6">
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
-								<small class="error" id="timepicker1opt1-required">This field is required.</small>
-								<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>
-								<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
+								<small class="error" id="timepicker1opt1-required"></small>
+								<small class="error" id="timepicker1opt1-greatertime"></small>
+								<small class="error" id="timepicker1opt1-equaltime"></small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
-								<small class="error" id="timepicker1opt2-required">This field is required.</small>
-								<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>
-								<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
+								<small class="error" id="timepicker1opt2-required"></small>
+								<small class="error" id="timepicker1opt2-greatertime"></small>
+								<small class="error" id="timepicker1opt2-equaltime"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
@@ -805,6 +805,14 @@
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 		$('div#page1 .error').text("This field is required.");
 
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('.error-picture').text('Please choose a picture.');
+			$('[id$=greatertime]').text('Start Time should be before than End Time.');
+			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
+			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
+		});
+
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
 			document.addEventListener('invalid', (function () {
@@ -827,31 +835,6 @@
 			$(this).blur();
 			check_iteration = true;
 
-			// convert time values to timestamp
-			var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = $("#timepicker1opt1").val();
-			end_time = $("#timepicker1opt2").val();
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$(".greater1").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
-				$("#timepicker1opt1-equal").show();
-				$("#timepicker1opt2-equal").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -861,6 +844,14 @@
 						check_iteration = false;
 					}
 				}
+				else if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+				}
 				else if(this.id == "DgroupType") {
 					if($(this).val() == null) {
 						$('small#'+this.id+'-required').show();
@@ -869,6 +860,30 @@
 						check_iteration = false;
 					}
 				}
+				else if($(this).is('[id^=timepicker]')) {
+
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('#timepicker1opt2').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
+
+						if((start_time == end_time) && !($('[id^=timepicker]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
+					}
 			});
 
 			if(!check_iteration) // checks if there is mali in form
