@@ -804,6 +804,14 @@
 		$('[id$=greater]').text('Start Time should be before than End Time.');
 		$('[id$=equal], [id$=equaldate]').text('Both should not be equal.');
 
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('.error-picture').text('Please choose a picture.');
+			$('[id$=greatertime]').text('Start Time should be before than End Time.');
+			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
+			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
+		});
+
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
 			document.addEventListener('invalid', (function () {
@@ -848,7 +856,6 @@
 				focused_element = $("#timepicker1opt1");
 				check_iteration = false;
 			}
-
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -872,6 +879,37 @@
 							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
+				}
+					else if($(this).is('select')) {
+							if($(this).val() == null) {
+								$("small#"+this.id+"-required").show();
+								focused_element = $(this);
+								disableDefaultRequired($(this));
+								check_iteration = false;
+							}
+					}
+				}
+				else if($(this).is('[id^=timepicker]')) {
+					// convert time values to timestamp; TIME VALIDATION
+					var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+					d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+					//d = "2015-03-25";
+					start_time = spaceAMPM(start_time);
+					end_time = spaceAMPM(end_time);
+					start_time = new Date(d + " " + start_time);
+					end_time = new Date(d + " " + end_time);
+					start_time = start_time.getTime();
+					end_time = end_time.getTime();
+					if((start_time > end_time) && !($('#timepicker1opt2').val() == "")) {
+						$("[id$=greatertime]").show();
+						focused_element = $("#timepicker1opt1");
+						check_iteration = false;
+					}
+
+					if((start_time == end_time) && !($('[id^=timepicker]').val() == "")) {
+						$("[id$=equaltime]").show();
+						focused_element = $("#timepicker1opt1");
+						check_iteration = false;
 					}
 				}
 			});

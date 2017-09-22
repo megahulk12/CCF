@@ -743,13 +743,21 @@
 						check_iteration = false;
 					}
 					else if(this.id.split("_")[0] == "Gender"){
-							if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
-								$('#Gender-required').show();
-								focused_element = $(this);
-								disableDefaultRequired($(this));
-								check_iteration = false;
-							}
+						if(!($('#'+this.id.split("_")[0]+'_Male').prop("checked") || $('#'+this.id.split("_")[0]+'_Female').prop("checked"))) {
+							$('#Gender-required').show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
 						}
+					}
+					else if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
 					else if(this.id == 'username') {
 						var url = "check-username.php";
 						$.ajax({
