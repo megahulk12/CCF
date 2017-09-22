@@ -1,5 +1,9 @@
 <?php
 	if(isset($_SESSION['userid'])) {
+		if($_SESSION["memberType"] == 5)
+			echo '<li><a href="profile-admin.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>';
+		else
+			echo '<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>';
 		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 5) {
 			echo '
 			<li class="divider"></li>
@@ -53,5 +57,10 @@
 			<li class="divider"></li>
 	  		<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
 			';
+		
+		echo '
+		  	<li class="divider"></li>
+		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
+		';
 	}
 ?>
