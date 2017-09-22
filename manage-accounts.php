@@ -494,7 +494,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<button class="waves-effect waves-light fixbutton btn col s12" type="submit" id="add-admin" name="add-admin">Add This Account</button>
+							<button class="waves-effect waves-light fixbutton btn col s12" type="submit" id="add-admin" name="add-admin">Add Account</button>
 						</div>
 					</form>
 				</div>
@@ -691,7 +691,7 @@
 					contentType: false,
 					processData: false,
 					success: function(data) {
-						$('#add-admin').text('Add This Account');
+						$('#add-admin').text('Add Account');
 						$('#add-admin').prop("disabled", false);
 						swal({
 							title: "Success!",

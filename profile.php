@@ -2016,6 +2016,13 @@
 				check_iteration = false;
 			}
 
+			if(start_time == end_time && !($('[id^=timepicker1]').val() == "")) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
 			// convert time values to timestamp
 			start_time = $("#timepicker1opt1").val();
 			end_time = $("#timepicker1opt2").val();
@@ -2031,17 +2038,10 @@
 				check_iteration = false;
 			}
 
-			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+			if(start_time == end_time && !($('[id^=timepicker2]').val() == "")) {
 				$("#timepicker1opt1-equal").show();
 				$("#timepicker1opt2-equal").show();
 				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
-				$("#timepicker2opt1-equal").show();
-				$("#timepicker2opt2-equal").show();
-				focused_element = $("#timepicker2opt1");
 				check_iteration = false;
 			}
 

@@ -635,7 +635,7 @@
 
         $result = mysqli_query($conn, $query);
         if(mysqli_num_rows($result) >= 0) {
-          if($_SESSION["memberType"] >= 2) {
+          if($_SESSION["memberType"] >= 2) { // assuming all high positions are already a Dgroup Leader
             echo '
         <div id="own-dgroup">
           <h3>My Discipleship Group</h3>

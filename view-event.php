@@ -561,7 +561,7 @@
 
 							if($schedstatus == 0) {
 								$startday = date("F j", strtotime($startday));
-								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
+								if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -596,7 +596,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -631,7 +631,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -772,7 +772,7 @@
 							else if($schedstatus == 1) {
 								$startday = date("F j", strtotime($startday));
 								$endday = date("F j", strtotime($endday));
-								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
+								if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -807,7 +807,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -842,7 +842,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -983,7 +983,7 @@
 							else if($schedstatus == 2) {
 								$startday = date("F j", strtotime($startday));
 								$endday = date("F j", strtotime($endday));
-								if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
+								if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 1 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1019,7 +1019,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $partstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1055,7 +1055,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] <= 4 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
+								else if($_SESSION['memberType'] <= 5 && $_SESSION['memberType'] != 3 && $status == 2 && $feedbackstat == "") {
 									echo '
 									<div class="container-events">
 										<div class="row">

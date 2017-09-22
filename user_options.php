@@ -1,6 +1,6 @@
 <?php
 	if(isset($_SESSION['userid'])) {
-		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
+		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 5) {
 			echo '
 			<li class="divider"></li>
 			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>
