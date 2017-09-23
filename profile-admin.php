@@ -463,7 +463,7 @@
 		}
 
 		.forms {
-			margin-top: 20px;
+			margin-top: 50px;
 			margin-bottom: 50px;
 		}
 
@@ -746,13 +746,13 @@
 				<div class="row" style="width: 1002px; margin: 0;">
 					<div class="col s3 fixed" style="padding: 0; margin-top: 70px;">
 							<ul class="sidenav">
-								<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>
+								<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Change Password</a></li>
 							</ul>
 					</div>
 					<div class="col s9 content">
 						<div class="container">
-							<form method="post" id="fcpass">
-								<div id="cpass" style="display: none;">
+							<form method="post" class="forms" id="fcpass">
+								<div id="cpass">
 									<div class="row">
 										<?php
 											// database connection variables
