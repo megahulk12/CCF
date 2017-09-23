@@ -2181,7 +2181,7 @@
 					validated = true;
 					confirmvalidated = false;
 				}
-				pagination(1);
+				pagination(1, this.id.split("_")[0]);
 			}
 		});
 		
