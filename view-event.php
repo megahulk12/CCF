@@ -446,12 +446,9 @@
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
-		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
 		  		include_once("user_options.php");
 		  	?>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
@@ -701,7 +698,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
+								else if(($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) || $_SESSION["memberType"] == 5) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -912,7 +909,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
+								else if(($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) || $_SESSION["memberType"] == 5) {
 									echo '
 									<div class="container-events">
 										<div class="row">
@@ -1127,7 +1124,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) {
+								else if(($_SESSION["userid"] == getEventHeadID($eid) && $status == 2) || $_SESSION["memberType"] == 5) {
 									echo '
 									<div class="container-events">
 										<div class="row">
