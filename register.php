@@ -684,10 +684,7 @@
 				ampmclickable: false, // make AM PM clickable
 				aftershow: function(){} //Function for after opening timepicker
 			});
-			
 		});
-
-		var cellTag = true;
 
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
@@ -703,7 +700,10 @@
 			//document.getElementById("table").setAttribute("class", "highlight centered");
 
 			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
-			cellTag = false;
+			id = id.split("_")[1];
+			$('#next').attr("href", "home.php?id="+id);
+			$('#next').removeAttr("disabled", "");
+			
 		}
 	</script>
 
@@ -1376,13 +1376,6 @@
 				}
 			}
 
-			if(getCurrentPage() == 'page7'){
-				if(cellTag){
-					alert("You have not picked a Dgroup leader");
-					//check_iteration = false;
-				}
-			}
-
 			$($('form#registration #'+getCurrentPage()).find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -1467,15 +1460,19 @@
 				filterDgroupTable();
 			}
 			*/
+
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
-			if(check_iteration && check_username && cellTag) {
+			if(check_iteration && check_username) {
 				confirmvalidated = true;
 				if(checkLastPage()) {
 					confirmvalidated = false;
 				}
 				pagination(1);
+				if(getCurrentPage() == 'page7'){
+					$('#next').prop("disabled", true);
+				}
 			}
 		}
 

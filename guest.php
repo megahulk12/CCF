@@ -539,13 +539,19 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
-									<small class="error" id="Civilstatus-required">This field is required.</small>
+									<small class="error" id="CivilStatus-required">This field is required.</small>
 								</div>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" required>
 								<label for="MobileNumber">Mobile Number</label>
 								<small class="error" id="MobileNumber-required">This field is required.</small>
+							</div>
+							<div class="input-field col s12">
+								<input type="email" name="EmailAd" id="EmailAd" data-length="30" maxlength="30" required> <!-- increase size of email address -->
+								<label for="EmailAd" data-error="Invalid email address">Email Address</label>
+								<small class="error" id="EmailAd-required">This field is required.</small>
+								<small class="error" id="Invalid-Email">Invalid Email Address</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="Profession" id="Profession" data-length="30" maxlength="30" required>
@@ -556,18 +562,58 @@
 					</div>
 					<div id="page3" style="display: none;">
 						<h3 class="center">Other Information</h3>
+						<h4 class="center">Home</h4>
 						<div class="row" style="margin-top: 0px;">
-							<h4 class="center">Company</h4>
 							<div class="input-field col s12">
+								<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" required>
+								<label for="HomeAddress" style=" font-size:14px;">Address</label>
+								<small class="error" id="HomeAddress-required">This field is required.</small>
+							</div>
+							<div class="input-field col s12">
+								<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
+								<label for="HomePhoneNumber">Home Phone Number</label>
+							</div>
+							<h4 class="center company">Company</h4>
+							<div class="input-field col s12 company">
 								<input type="text" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" required>
 								<label for="CompanyName">Company Name</label>
 								<small class="error" id="CompanyName-required">This field is required.</small>
 							</div>
-							<h4 class="center">School</h4>
-							<div class="input-field col s12">
+							<div class="input-field col s12 company">
+								<input type="text" name="CompanyContactNum" id="CompanyContactNum" onkeypress='return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress' data-length="18" maxlength="18">
+								<label for="CompanyContactNum">Company Contact Number</label>
+							</div>
+							<div class="input-field col s12 company">
+								<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50">
+								<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
+							</div>
+							<h4 class="center school">School</h4>
+							<div class="input-field col s12 school">
 								<input type="text" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" required>
 								<label for="SchoolName">School Name</label>
 								<small class="error" id="SchoolName-required">This field is required.</small>
+							</div>
+							<div class="input-field col s12 school">
+								<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18">
+								<label for="SchoolContactNum">School Contact Number</label>
+							</div>
+							<div class="input-field col s12 school">
+								<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50">
+								<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
+							</div>
+							<h4 class="center spouse">Spouse</h4>
+							<div class="input-field col s12 spouse">
+								<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" required>
+								<label for="SpouseName">Spouse Name</label>
+								<small class="error" id="SpouseName-required">This field is required.</small>
+							</div>
+							<div class="input-field col s12 spouse">
+								<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18">
+								<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+							</div>
+							<div class="input-field col s12 spouse">
+								<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate">
+								<label for="SpouseBirthdate">Birthdate</label>
 							</div>
 						</div>
 					</div>
@@ -616,7 +662,7 @@
 							<div class="determinate" style="" id="progressbar"></div>
 						</div>&nbsp; &nbsp; <label id="page" onload="labelpage()"></label> <!-- Change when page number adjusts -->
 						<span id="submitbuttons">
-							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_next" id="next" onclick="pagination(1)">NEXT</button>
+							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_next" id="next">NEXT</button>
 							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="back" onclick="pagination(0)" style="margin-right: 10px; display: none;">BACK</button>
 						</span>
 					</div>
@@ -707,7 +753,6 @@
 		}
 		/*----------------------code ni paolo---------------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
-		$('div#page1 .error').text("This field is required.");
 
 		function disableDefaultRequired(elem) {
 			// disable default required tooltips
@@ -727,11 +772,46 @@
 			check_iteration = false;
 		}*/
 
+		var check_iteration = true, check_username = true, focused_element;
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+			company.show();
+			school.show();
+			spouse.show();
+			$("#CompanyName").prop("required", true);
+			$("#SchoolName").prop("required", true);
+			$("#SpouseName").prop("required", true);
+
+			//var checkpass = true, checknewpass = true, checkoldpass = true;
 			$(this).blur();
-			var check_iteration = true;
-			var focused_element;
+			check_iteration = true;
+
+			/* ===== SPOUSE VALIDATION ===== */
+			var civilstatusid = "#CivilStatus"
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
+				spouse.hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
+
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */ //nandito na din kung unemployed ka
+			var professionid = "#Profession";
+			if($(professionid).val().toLowerCase() == "student") {
+				company.hide();
+				$(".company input").prop("required", false);
+			}
+			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
+				company.hide();
+				$(".company input").prop("required", false);
+				school.hide();
+				$(".school input").prop("required", false);
+			}
+			else {
+				school.hide();
+				$(".school input").prop("required", false);
+			}
 
 			//alert("hi");
 			$($('form#registration #'+getCurrentPage()).find('input,select').reverse()).each(function() {
@@ -758,23 +838,9 @@
 							check_iteration = false;
 						}
 					}
-					else if(this.id == 'username') {
-						var url = "check-username.php";
-						$.ajax({
-							type: 'POST',
-							url: url,
-							async: false,
-							data: 'username='+$(this).val(),
-							success: function(data){
-								// async should be true if there is bad user experience
-								if(data == 1){
-									$('small#notusername').show();
-									focused_element = $(this);
-									disableDefaultRequired($(this));
-									check_iteration = false;
-								}
-							}
-						});
+					else if(this.id == "username") {
+						checkUsername();
+						check_username = false;
 					}
 				}
 			});
@@ -791,6 +857,58 @@
 			}
 		});
 
+		function checkUsername() {
+			// when username error appears, it will be display:none if next is clicked
+			$('#username-required').hide();
+			$('small#notusername').show();
+			var preloader = '\
+				<div class="preloader-wrapper small-username active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+					  ';
+			var url = "check-username.php";
+			$('#next').prop("disabled", true);
+			$('small#notusername').html(preloader);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'username='+$('#username').val(),
+				success: function(data){
+					// async should be true if there is bad user experience
+					if(data == 1) {
+						$('small#notusername').text($('#username').val() + " is already taken.").css("color", "#ff3333");
+						focused_element = $('#username');
+						disableDefaultRequired($('#username'));
+						check_iteration = false;
+						$('#next').prop("disabled", false);
+						check_username = false;
+					}
+					else {
+						if($('#username').val() != "") {
+							$('small#notusername').text($('#username').val() + " is available.").css("color", "#33cc33");
+							setTimeout(function() {
+								$('#next').prop("disabled", false);
+								check_username = true;
+								//nextPage();
+							}, 1000);
+						}
+						else {
+							$('small#notusername').hide();
+							$('#next').prop("disabled", false);
+						}
+					}
+				}
+			});
+		}
+
 		function checkLastPage() {
 			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
 			pagenumber++; // page that is after the previous
@@ -798,23 +916,6 @@
 			if($('#'+lastpage).length > 0) return false;
 			else return true;
 		}
-
-		/*function removeLeadingZero(time_value) {
-			return time_value.slice(1, time_value.length);
-		}
-
-		function spaceAMPM(time_value) {
-			// puts a space before AM or PM for formatting purposes
-			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
-			time_value = time_value.replace("AM", " AM");
-			time_value = time_value.replace("PM", " PM");
-			return time_value;
-		}
-
-		/*function isValidEmailAddress(emailAddress) { // this function checks if the email is valid or not
-			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-			return pattern.test(emailAddress);
-		};*/
 
 		function getCurrentPage() {
 			var cp = "page"+currentpage;

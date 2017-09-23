@@ -1270,6 +1270,7 @@
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
 												$emailad = $row["emailAd"];
+												$citizenship = $row["citizenship"];
 												$homeaddress = $row["homeAddress"];
 												$homephonenumber = $row["homePhoneNumber"];
 												$companyname = $row["companyName"];
@@ -1288,52 +1289,14 @@
 										echo '
 											<h3 class="center">Other Information</h3>
 											<div class="input-field col s12">
-												<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20">
+												<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
 												<label for="Citizenship">Citizenship</label>
+												<small class="error" id="Citizenship-required"></small>
 											</div>
 											<div class="input-field col s12">
-												<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'"> <!-- increase size of email address -->
+												<input type="email" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
 												<label for="Email" data-error="Invalid email address">Email Address</label>
-											</div>
-											<h4 class="center">Home</h4>
-											<div class="input-field col s12">
-												<input type="text" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'">
-												<label for="HomeAddress" style=" font-size:14px;">Address</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
-												<label for="HomePhoneNumber">Home Phone Number</label>
-											</div>
-											<h4 class="center">Company</h4>
-											<div class="input-field col s12">
-												<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
-												<label for="CompanyContactNum">Company Contact Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
-												<label for="CompanyAddress" style=" font-size:14px;">Company Address</label>
-											</div>
-											<h4 class="center">School</h4>
-											<div class="input-field col s12">
-												<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
-												<label for="SchoolContactNum">School Contact Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
-												<label for="SchoolAddress" style=" font-size:14px;">School Address</label>
-											</div>
-											<h4 class="center">Spouse</h4>
-											<div class="input-field col s12">
-												<input type="text" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'">
-												<label for="SpouseName">Spouse Name</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
-												<label for="SpouseMobileNumber">Spouse Mobile Number</label>
-											</div>
-											<div class="input-field col s12">
-												<input type="date" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'">
-												<label for="SpouseBirthdate">Birthdate</label>
+												<small class="error" id="Email-required"></small>
 											</div>
 										</div>
 										';
@@ -1342,8 +1305,9 @@
 										<div id="register_page2" style="display: none;">
 											<h3 class="center">Preferences</h3>
 											<div class="input-field col s12">
-												<input type="text" name="Language" id="Language" data-length="50" maxlength="50">
+												<input type="text" name="Language" id="Language" data-length="50" maxlength="50" required>
 												<label for="Language">Language</label>
+												<small class="error" id="Language-required"></small>
 											</div>
 											<h4 class="center">Schedule</h4>
 											<h5 class="center">Option 1</h5>
@@ -1360,19 +1324,25 @@
 														<option value="Saturday">Saturday</option>
 													</select>
 													<label>Day</label>
+												<small class="error" id="Option1Day-required"></small>
 												</div>
 											</div>
 												<div class="input-field col s6">
 													<label for="timepicker1opt1">Start Time</label>
 													<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1">
+													<small class="error" id="timepicker1opt1-equal">Both should not be equal.</small>	
+													<small class="error greater1">Start Time should be before than End Time.</small>
 												</div>
 												<div class="input-field col s6 right">
 													<label for="timepicker2opt1">End Time</label>
 													<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1">
+													<small class="error" id="timepicker2opt1-equal">Both should not be equal.</small>	
+													<small class="error greater1">Start Time should be before than End Time.</small>
 												</div>
 											<div class="input-field col s12">
 												<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50">
 												<label for="Option1Venue" style=" font-size:14px;">Venue</label>
+												<small class="error" id="Option1Venue-required"></small>
 											</div>
 											<h5 class="center">Option 2</h5>
 											<div class="row" style="margin: 0;">
@@ -1388,19 +1358,25 @@
 														<option value="Saturday">Saturday</option>
 													</select>
 													<label>Day</label>
+												<small class="error" id="Option2Day-required"></small>
 												</div>
 											</div>
 												<div class="input-field col s6">
 													<label for="timepicker1opt2">Start Time</label>
 													<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2">
+													<small class="error" id="timepicker1opt2-equal">Both should not be equal.</small>	
+													<small class="error greater1">Start Time should be before than End Time.</small>
 												</div>
 												<div class="input-field col s6">
 													<label for="timepicker2opt2">End Time</label>
 													<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2">
+													<small class="error" id="timepicker2opt2-equal">Both should not be equal.</small>	
+													<small class="error greater1">Start Time should be before than End Time.</small>
 												</div>
 											<div class="input-field col s12">
 												<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50">
 												<label for="Option2Venue" style=" font-size:14px;">Venue</label>
+												<small class="error" id="Option2Venue-required"></small>
 											</div>
 										</div>
 
@@ -2086,9 +2062,101 @@
 		$('register_next').click(function(){
 			// default states
 			$('.error').hide();
+			var focused_element;
 			$(this).blur(); // no focus in button once clicked
 			var check_iteration = true;
-			
+
+			// convert time values to timestamp
+			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
+			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+			//d = "2015-03-25";
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater2").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			// convert time values to timestamp
+			start_time = $("#timepicker1opt1").val();
+			end_time = $("#timepicker1opt2").val();
+			start_time = spaceAMPM(start_time);
+			end_time = spaceAMPM(end_time);
+			start_time = new Date(d + " " + start_time);
+			end_time = new Date(d + " " + end_time);
+			start_time = start_time.getTime();
+			end_time = end_time.getTime();
+			if(start_time > end_time) {
+				$(".greater1").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker1opt1").val() == $("#timepicker1opt2").val()) {
+				$("#timepicker1opt1-equal").show();
+				$("#timepicker1opt2-equal").show();
+				focused_element = $("#timepicker1opt1");
+				check_iteration = false;
+			}
+
+			if($("#timepicker2opt1").val() == $("#timepicker2opt2").val()) {
+				$("#timepicker2opt1-equal").show();
+				$("#timepicker2opt2-equal").show();
+				focused_element = $("#timepicker2opt1");
+				check_iteration = false;
+			}
+
+			$($('form#fregister #'+getCurrentPage()).find('input, select').reverse()).each(function() {
+				if($(this).prop('required')) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+				else if(this.id == "Email") {
+					if(!isValidEmailAddress($(this).val())) {
+						$('#Invalid-Email').show();
+						//$('#'+this.id).focus();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+				else if(this.id == "Option1Day") {
+					if($(this).val() == null) {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this).parent();
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+				else if(this.id == "Option2Day") {
+					if($(this).val() == null) {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this).parent();
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+				}
+			});
+			if(!check_iteration)
+				scrollTo(focused_element);
+
+			if(check_iteration) {
+				confirmvalidated = true;
+				if(checkLastPage()) {
+					validated = true;
+					confirmvalidated = false;
+				}
+				pagination(1);
+			}
 		});
 		
 		function checkLastPage() {
