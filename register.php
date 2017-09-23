@@ -1625,6 +1625,22 @@
 			elem.focus();
 		}
 
+		// computes age every change of value of date
+		var age;
+		$('#Birthdate').change(function() {
+			var birthdate = $(this).val();
+			var day = birthdate.split(",")[0].split(" ")[0], month = birthdate.split(",")[0].split(" ")[1], year = birthdate.split(",")[1];
+			birthdate = month + " " + day + "," + year;
+			birthdate = new Date(birthdate);
+			var birthyear = birthdate.getYear();
+			age = (new Date()).getYear() - birthyear;
+			alert(age);
+		});
+
+		function removeLeadingSpace(value) {
+			return value.slice(1, value.length);
+		}
+
 		/* ===== END ===== */
 		/*----------------------------------end code ni paolo----------------------------------------*/
 		var gender = "";

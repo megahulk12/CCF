@@ -819,8 +819,6 @@
 			elem.focus();
 		}
 
-
-
 		function checkUsername() {
 			// when username error appears, it will be display:none if next is clicked
 			$('#username-required').hide();
