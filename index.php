@@ -414,12 +414,9 @@
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
-		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
 		  		include_once("user_options.php");
 		  	?>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">

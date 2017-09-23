@@ -519,12 +519,9 @@
 	<header class="top-nav">
 	<!-- Dropdown Structure Account--> 
 		<ul id="account" class="dropdown-content dropdown-content-list">
-		  	<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>
 		  	<?php
 		  		include_once("user_options.php");
 		  	?>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
@@ -645,12 +642,28 @@
 	<script>
 		$('#Eform').submit(function(e) {
 			var url="request.php";
+			var preloader = '\
+				<div class="preloader-wrapper small active spinner-notif"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+			  ';
+			  $('#request').html(preloader);
+			  $('#request').prop("disabled", true);
 			$.ajax({
 				type: "POST",
 				url: url,
 				data: 'request=g&'+$('#Eform').serialize(), 
 				success: function(data) {
-					alert(data);
+				  $('#request').html("SUBMIT");
+				  $('#request').prop("disabled", false);
 					swal({
 						title: "Success!",
 						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",

@@ -1445,7 +1445,8 @@
 			if(confirmpass!=pass) {
 				if(confirmpass!="") {
 					$("small#checkpass-required").show();
-					$("input#confirm-password").focus();
+					focused_element = $('#confirm-password');
+					disableDefaultRequired($('#confirm-password'));
 					check_iteration = false;
 				}
 			}
