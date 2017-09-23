@@ -364,6 +364,11 @@
 			height: 24px;
 		}
 
+		.preloader-wrapper.small-username {
+			width: 15px;
+			height: 15px;
+		}
+
 		.spinner-color-theme {
 			border-color: rgba(0, 0, 0, 0.4);
 		}
@@ -418,6 +423,7 @@
 
 		.error, .password-length {
 			color: #ff3333;
+			margin-left: 43;
 		}
 		/* ===== END ===== */
 	</style>
@@ -479,15 +485,25 @@
 					<form method="post" id="admin-form">
 						<div class="row">
 							<div class="input-field col s12">
+								<i class="material-icons prefix">account_circle</i>
 								<input type="text" id="username" name="username" maxlength="16" required>
 								<label for="username">Username</label>
 								<small class="error" id="username-required"></small>
+								<small class="error" id="notusername"></small>
 							</div>
 							<div class="input-field col s12">
+								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 								<input type="password" id="password" name="password" required>
 								<label for="password">Password</label>
 								<small class="error" id="password-required"></small>
 								<small class="error" id="password-length"></small>
+							</div>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+								<input type="password" name="confirm-password" id="confirm-password" required>
+								<label for="confirm-password">Confirm New Password</label>
+								<small class="error" id="confirm-password-required"></small>
+								<small class="error" id="checkpass-required"></small>
 							</div>
 						</div>
 						<div class="row">
@@ -684,9 +700,7 @@
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: new FormData(this),
-					contentType: false,
-					processData: false,
+					data: "add=g&"+$(this).serialize(),
 					success: function(data) {
 						$('#add-admin').text('Add Account');
 						$('#add-admin').prop("disabled", false);
@@ -709,6 +723,8 @@
 		$(document).ready(function() {
 			$('.error').text('This field is required.');
 			$('#password-length').text('Password should at least have 8 characters.');
+			$('#notusername').text('This username is already taken.');
+			$('#checkpass-required').text('Passwords do not match.');
 		});
 
 		function disableDefaultRequired(elem) {
@@ -721,10 +737,14 @@
 		}
 
 		// personal info form validation
+		var check_iteration = true, check_username = true, focused_element;
 		$("#add-admin").click(function() {
-			$('.error').hide();
-			$(this).blur();
-			var check_iteration = true, focused_element;
+		$('.error').hide();
+		$(this).blur();
+		check_iteration = true;
+
+		var pass = $("#password").val();
+		var confirmpass = $("#confirm-password").val();
 
 			$($("#admin-form").find('input').reverse()).each(function() {
 				if($(this).prop('required')) {
@@ -742,16 +762,31 @@
 							check_iteration = false;
 						}	
 					}
+					else if(confirmpass!=pass) {
+						$("small#checkpass-required").show();
+						focused_element = $('#confirm-password');
+						disableDefaultRequired($('#confirm-password'));
+						check_iteration = false;
+					}
+					else if(this.id == "username") {
+						checkUsername();
+						check_username = false;
+					}
 				}
 			});
 
+			if(check_username) 
+				validatedForm();
+		});
+
+		function validatedForm() {
 			if(!check_iteration)
 				scrollTo(focused_element);
 			
 			if(check_iteration) {
 				validated = true;
 			}
-		});
+		}
 
 		/*
 		 *		INFORMATION ABOUT WILDCARDS
@@ -782,6 +817,61 @@
 				scrollTop: positionscrolltop
 			}, 300, "swing");
 			elem.focus();
+		}
+
+
+
+		function checkUsername() {
+			// when username error appears, it will be display:none if next is clicked
+			$('#username-required').hide();
+			$('small#notusername').show();
+			var preloader = '\
+				<div class="preloader-wrapper small-username active"> \
+					<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+						<div class="circle-clipper left"> \
+							<div class="circle"></div> \
+						</div><div class="gap-patch"> \
+							<div class="circle"></div> \
+						</div><div class="circle-clipper right"> \
+							<div class="circle"></div> \
+						</div> \
+					</div> \
+				</div> \
+					  ';
+			var url = "check-username.php";
+			$('#add-admin').prop("disabled", true);
+			$('small#notusername').html(preloader);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'username='+$('#username').val(),
+				success: function(data){
+					// async should be true if there is bad user experience
+					if(data == 1) {
+						$('small#notusername').text($('#username').val() + " is already taken.").css("color", "#ff3333");
+						focused_element = $('#username');
+						disableDefaultRequired($('#username'));
+						check_iteration = false;
+						$('#add-admin').prop("disabled", false);
+						check_username = false;
+					}
+					else {
+						if($('#username').val() != "") {
+							$('small#notusername').text($('#username').val() + " is available.").css("color", "#33cc33");
+							setTimeout(function() {
+								$('#add-admin').prop("disabled", false);
+								check_username = true;
+								validatedForm();
+								$('#admin-form').trigger("submit");
+							}, 300);
+						}
+						else {
+							$('small#notusername').hide();
+							$('#add-admin').prop("disabled", false);
+						}
+					}
+				}
+			});
 		}
 
 		/* ===== END ===== */

@@ -4,7 +4,7 @@
 			echo '<li><a href="profile-admin.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>';
 		else
 			echo '<li><a href="profile.php"><i class="material-icons prefix>">mode_edit</i>Edit Profile</a></li>';
-		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 5) {
+		if($_SESSION["memberType"] > 0 && $_SESSION["memberType"] <= 4) {
 			echo '
 			<li class="divider"></li>
 			<li><a href="dgroup.php"><i class="material-icons prefix>">group</i>Dgroup</a></li>

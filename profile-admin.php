@@ -705,8 +705,6 @@
 		  	<?php
 		  		include_once("user_options.php");
 		  	?>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.php"><i class="material-icons prefix>">exit_to_app</i>Logout</a></li>
 		</ul>
 	<!-- Dropdown Structure Notifications-->
 		<ul id="notifications" class="dropdown-content dropdown-content-notification">
@@ -777,22 +775,22 @@
 											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 											<input type="password" name="old-password" id="old-password" data-length="16" maxlength="16">
 											<label for="old-password">Old Password</label>
-											<small class="error-with-icon" id="oldpass">This field is required.</small>
-											<small class="error-with-icon" id="notpass">This is not your password.</small>
+											<small class="error-with-icon" id="oldpass"></small>
+											<small class="error-with-icon" id="notpass"></small>
 										</div>
 										<div class="input-field col s12">
 											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 											<input type="password" name="new-password" id="new-password" data-length="16" maxlength="16">
 											<label for="new-password">New Password</label>
-											<small class="error-with-icon" id="newpass">This field is required.</small>
-											<small class="error-with-icon" id="checkoldnew">Cannot use old password.</small>
+											<small class="error-with-icon" id="newpass"></small>
+											<small class="error-with-icon" id="checkoldnew"></small>
 										</div>
 										<div class="input-field col s12">
 											<i class="material-icons prefix">lock</i> <!-- lock_outline -->
 											<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16">
 											<label for="confirm-password">Confirm New Password</label>
-											<small class="error-with-icon" id="confirmpass">This field is required.</small>
-											<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
+											<small class="error-with-icon" id="confirmpass"></small>
+											<small class="error-with-icon" id="checkpass"></small>
 										</div>
 										'; // originally having a value of own password
 										?>
@@ -1162,10 +1160,13 @@
 		============================================================
 		============================================================
 		*/
-		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('.error-with-icon').hide(); // by default, hide all error classes
 		
 		$(document).ready(function() {
-			$('div#cpinfo small').text('This field is required.');
+			$('.error-with-icon').text('This field is required.');
+			$('#notpass').text('This is not your password.');
+			$('#checkoldnew').text('Cannot use old password.');
+			$('#checkpass').text('Passwords do not match.')
 		});
 
 		function disableDefaultRequired(elem) {

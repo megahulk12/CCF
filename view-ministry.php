@@ -525,7 +525,7 @@
 							//echo '<script> alert('.$partstat.'); </script>';
 
 							if($schedstatus == 0) {
-								if($_SESSION['memberType'] == 4 && $head == $_SESSION["userid"]) {
+								if(($_SESSION['memberType'] == 4 && $head == $_SESSION["userid"]) || $_SESSION["memberType"] == 5) {
 									echo '
 									<div class="container-ministries">
 										<div class="row">
@@ -561,7 +561,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 5 && $partstat == "") {
+								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 4 && $partstat == "") {
 									echo '
 									<div class="container-ministries">
 										<div class="row">
@@ -632,7 +632,7 @@
 								}
 							}
 							else if($schedstatus == 1) {
-								if($_SESSION['memberType'] == 4 && $head == $_SESSION["userid"]) {
+								if(($_SESSION['memberType'] == 4 && $head == $_SESSION["userid"]) || $_SESSION["memberType"] == 5) {
 									echo '
 									<div class="container-ministries">
 										<div class="row">
@@ -668,7 +668,7 @@
 									</div>
 									';
 								}
-								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 5 && $partstat == "") {
+								else if($_SESSION['memberType'] >= 1 && $_SESSION['memberType'] <= 4 && $partstat == "") {
 									echo '
 									<div class="container-ministries">
 										<div class="row">
