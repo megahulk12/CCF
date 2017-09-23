@@ -868,9 +868,9 @@
 										echo '
 											<p style="margin-top: 40px;">
 												<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
-												<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.'/>
+												<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.' disabled />
 												<label for="Gender_Male">Male</label>
-												<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.'/>
+												<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.' disabled />
 												<label for="Gender_Female">Female</label>
 											</p>
 											<div class="input-field col s12">
