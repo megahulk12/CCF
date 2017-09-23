@@ -2101,7 +2101,7 @@
 				check_iteration = false;
 			}
 
-			if($('#DgroupType').val() == "Married") {
+			/*if($('#DgroupType').val() == "Married") {
 				if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
 					$('#DgroupType-nospouse').show();
 					focused_element = $('#DgroupType');
@@ -2135,7 +2135,7 @@
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
-			}
+			}*/
 
 			$($('form#fregister #'+getCurrentPage()).find('input, select').reverse()).each(function() {
 				if($(this).prop('required')) {
