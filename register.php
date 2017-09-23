@@ -1100,7 +1100,7 @@
 											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
 											<td>'.$fullname.'</td>
 											<td id="gender_'.$count.'">'.$gender.'</td>
-											<td>'.$dgrouptype.'</td>
+											<td id="dgrouptype_'.$count.'">'.$dgrouptype.'</td>
 											<td>'.$agebracket.'</td>
 											<td>'.$schedday.'</td>
 											<td>'.$schedule.'</td>';
@@ -1460,11 +1460,9 @@
 		});
 
 		function nextPage() {
-			/*
-			if(getCurrentPage == 'page6'){
+			if(getCurrentPage() == 'page6'){
 				filterDgroupTable();
 			}
-			*/
 
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
@@ -1666,26 +1664,50 @@
 
 		function filterDgroupTable(){
 			//alert(gender);
-			var i = 1;
+			var gd = 1, a = 1, start_age, end_age;
 			$('#table').find('tr').each(function(d){
 				$(this).children().each(function(e){
 
 					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
 						//alert($(this).text());
-						if($(this).text() != gender){
+						if($(this).text() != gender) {
 							$(this).parent().hide();
-						}else{
+						}
+						else {
 							$(this).parent().show(); //(caution logic)
 						}
 					}
 					else if(e == 3){
-						if($(this).text() != dgrouptype || $('#gender_'+i).text() != gender){
+						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+							/*
+							var try1 = $('#gender_'+gd).text() != gender;
+							var try2 = $('#dgrouptype_'+gd).text() != dgrouptype;
+							alert(try1 + " " + try2);
+							*/
 							$(this).parent().hide();
-						}else{
+						}
+						else {
 							$(this).parent().show(); //(caution logic)
 						}
-						i++;
+						gd++;
+					}
+					else if(e == 4) {
+						start_age = parseInt($(this).text().split("-")[0]);
+						end_age = parseInt($(this).text().split("-")[1]);
+						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+							/*
+							var try1 = $('#gender_'+a).text() != gender;
+							var try2 = $('#dgrouptype_'+a).text() != dgrouptype;
+							alert(try1 + " " + try2 + " " + (age < start_age) + " " + (age > end_age));
+							alert(start_age + " " + end_age + "hide");
+							*/
+							$(this).parent().hide();
+						}
+						else {
+							$(this).parent().show(); //(caution logic)
+						}
+						a++;
 					}
 				});
 			});
