@@ -395,7 +395,7 @@
 
 		/*form*/
 		.register {
-			width:600px;
+			width: 650px;
 		}
 		/*=======END=======*/
 
@@ -686,6 +686,7 @@
 			});
 		});
 
+		var isCellActive = false;
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			// ==========PLEASE FIX HIGHLIGHT EFFECT========== 
 			var num_of_rows = document.getElementsByTagName("TR").length;
@@ -701,9 +702,9 @@
 
 			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
 			id = id.split("_")[1];
-			$('#next').attr("href", "home.php?id="+id);
+			//$('#next').attr("href", "home.php?id="+id);
 			$('#next').removeAttr("disabled", "");
-			
+			isCellActive = true;
 		}
 	</script>
 
@@ -1036,7 +1037,8 @@
 									<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
 									<th style="width: <?php echo widthRow(8); ?>%">Gender</th>
 									<th style="width: <?php echo widthRow(8); ?>%">Type of Dgroup</th>
-									<th style="width: <?php echo widthRow(6); ?>%">Day</th>
+									<th style="width: <?php echo widthRow(10); ?>%">Age Bracket</th>
+									<th style="width: <?php echo widthRow(8); ?>%">Day</th>
 									<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
 								</thead>
 								<?php
@@ -1080,7 +1082,7 @@
 														WHEN dgroupType = '3' THEN 'Married'
 														WHEN dgroupType = '4' THEN 'Couples'
 														WHEN dgroupType = '5' THEN 'All'
-													END) AS dgroupType, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+													END) AS dgroupType, ageBracket, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 									$result = mysqli_query($conn, $sql_dgroups);
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
@@ -1090,6 +1092,7 @@
 											$fullname = $row["fullname"];
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
+											$agebracket = $row["ageBracket"];
 											$schedday = $row["schedDay"];
 											$start_time = date("g:i A", strtotime($row["start_time"]));
 											$end_time = date("g:i A", strtotime($row["end_time"]));
@@ -1098,6 +1101,7 @@
 											<td>'.$fullname.'</td>
 											<td id="gender_'.$count.'">'.$gender.'</td>
 											<td>'.$dgrouptype.'</td>
+											<td>'.$agebracket.'</td>
 											<td>'.$schedday.'</td>
 											<td>'.$schedule.'</td>';
 											echo '</tr>';
@@ -1471,7 +1475,8 @@
 					confirmvalidated = false;
 				}
 				pagination(1);
-				if(getCurrentPage() == 'page7'){
+
+				if(getCurrentPage() == 'page7' && !isCellActive){
 					$('#next').prop("disabled", true);
 				}
 			}
@@ -1594,6 +1599,7 @@
 			confirmvalidated = true;
 			check_iteration = true;
 			check_username = true;
+			$('#next').prop("disabled", false);
 		});
 
 		$("[id$=next], [id$=back]").click(function() {
@@ -1634,7 +1640,6 @@
 			birthdate = new Date(birthdate);
 			var birthyear = birthdate.getYear();
 			age = (new Date()).getYear() - birthyear;
-			alert(age);
 		});
 
 		function removeLeadingSpace(value) {
