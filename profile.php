@@ -1248,14 +1248,13 @@
 										<form method="post" id="fregister">
 											<div id="register" style="display: none;">
 												<div class="row">
-													<div id="register_page1" style="display: none;">
+													<div id="register_page1">
 														<h3 class="center">Preferences</h3>
 														<div class="input-field col s12">
 															<input type="text" name="Language" id="Language" data-length="50" maxlength="50" required>
 															<label for="Language">Language</label>
 															<small class="error" id="Language-required">This field is required.</small>
 														</div>
-															<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 																<div class="input-field col s12">
 																	<select id="DgroupType" name="DgroupType" required>
 																		<option value="" disabled selected>Choose your option...</option>
@@ -1271,10 +1270,10 @@
 																	<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
 																	<small class="error" id="DgroupType-single">You are single. You cannot pick the Couples Dgroup Type.</small>
 																</div>
-															</div><h5 class="center">Option 1</h5>
+															<h5 class="center">Option 1</h5>
 															<div class="row" style="margin: 0;">
 																<div class="input-field col s12">
-																	<select id="Option2Day" name="Option2Day" required>
+																	<select id="Option1Day" name="Option1Day" required>
 																		<option value="" disabled selected>Choose your option...</option>
 																		<option value="Sunday">Sunday</option>
 																		<option value="Monday">Monday</option>
@@ -1285,7 +1284,7 @@
 																		<option value="Saturday">Saturday</option>
 																	</select>
 																	<label>Day</label>
-																	<small class="error" id="Option2Day-required">This field is required.</small>
+																	<small class="error" id="Option1Day-required">This field is required.</small>
 																</div>
 															</div>
 															<div class="input-field col s6">
@@ -1893,6 +1892,7 @@
 			}
 		});
 
+		var civilstatusid = "#CivilStatus";
 		$("#coinfo_next").click(function() {
 			var focused_element;
 			// default and initialization states
@@ -1908,7 +1908,6 @@
 			var check_iteration = true;
 			
 			/* ===== SPOUSE VALIDATION ===== */
-			var civilstatusid = "#CivilStatus"
 			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
@@ -2100,42 +2099,44 @@
 				focused_element = $("#timepicker1opt1");
 				check_iteration = false;
 			}
-
-			/*if($('#DgroupType').val() == "Married") {
-				if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
-					$('#DgroupType-nospouse').show();
-					focused_element = $('#DgroupType');
-					check_iteration = false;
+			
+			if(getCurrentPage().split("_")[1] == 'page1') {
+				if($('#DgroupType').val() == "Married") {
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-nospouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Single") {
+					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Youth") {
+					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Couples"){
+					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent"){
+						$('#DgroupType-single').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Single Parents"){
+					if($(civilstatusid).val() == "Married"){
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
 				}
 			}
-			else if($('#DgroupType').val() == "Single") {
-				if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
-					$('#DgroupType-spouse').show();
-					focused_element = $('#DgroupType');
-					check_iteration = false;
-				}
-			}
-			else if($('#DgroupType').val() == "Youth") {
-				if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
-					$('#DgroupType-spouse').show();
-					focused_element = $('#DgroupType');
-					check_iteration = false;
-				}
-			}
-			else if($('#DgroupType').val() == "Couples"){
-				if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent"){
-					$('#DgroupType-single').show();
-					focused_element = $('#DgroupType');
-					check_iteration = false;
-				}
-			}
-			else if($('#DgroupType').val() == "Single Parents"){
-				if($(civilstatusid).val() == "Married"){
-					$('#DgroupType-spouse').show();
-					focused_element = $('#DgroupType');
-					check_iteration = false;
-				}
-			}*/
 
 			$($('form#fregister #'+getCurrentPage()).find('input, select').reverse()).each(function() {
 				if($(this).prop('required')) {
@@ -2145,29 +2146,29 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
-				}
-				else if(this.id == "Option1Day") {
-					if($(this).val() == null) {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this).parent();
-						disableDefaultRequired($(this));
-						check_iteration = false;
+					else if(this.id == "Option1Day") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this).parent();
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
-				}
-				else if(this.id == "Option2Day") {
-					if($(this).val() == null) {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this).parent();
-						disableDefaultRequired($(this));
-						check_iteration = false;
+					else if(this.id == "Option2Day") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this).parent();
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
-				}
-				else if(this.id == "DgroupType") {
-					if($(this).val() == null) {
-						$('small#'+this.id+'-required').show();
-						focused_element = $(this).parent();
-						disableDefaultRequired($(this));
-						check_iteration = false;
+					else if(this.id == "DgroupType") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
+							focused_element = $(this).parent();
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
 				}
 			});
