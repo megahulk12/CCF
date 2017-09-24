@@ -52,9 +52,7 @@
 		$email = $_POST["EmailAd"];
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
-		if(isset($_GET['id'])) 
-			$count = "dgroupID".$_GET['id'];
-		$dgroupid = $_POST[$count];
+		$dgroupid = $_POST["dgroupID"];
 		$receivedChrist = $_POST["receivedChrist"];
 		$attendCCF = $_POST["attendCCF"];
 		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
@@ -698,10 +696,9 @@
 			}
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
-			//document.getElementById("table").setAttribute("class", "highlight centered");
-
-			history.pushState(null, null, "register.php?id="+id.split("_")[1]);
+			//document.getElementById("table").setAttribute("class", "highlight centered
 			id = id.split("_")[1];
+			$('#dgroupID').val(id);
 			//$('#next').attr("href", "home.php?id="+id);
 			$('#next').removeAttr("disabled", "");
 			isCellActive = true;
@@ -1087,8 +1084,8 @@
 									if(mysqli_num_rows($result) > 0) {
 										$count = 1;
 										while($row = mysqli_fetch_assoc($result)) {
-											echo '<tr id="row_'.$count.'" onclick="cellActive('."'".'row_'.$count.''."'".')">';
 											$dgroupid = $row["dgroupID"];
+											echo '<tr id="row_'.$dgroupid.'" onclick="cellActive('."'".'row_'.$dgroupid.''."'".')">';
 											$fullname = $row["fullname"];
 											$gender = $row["gender"];
 											$dgrouptype = $row["dgroupType"];
@@ -1097,7 +1094,7 @@
 											$start_time = date("g:i A", strtotime($row["start_time"]));
 											$end_time = date("g:i A", strtotime($row["end_time"]));
 											$schedule = "$start_time - $end_time";
-											echo '<td style="display: none;"><input type="hidden" name="dgroupID'.$count.'" value="'.$dgroupid.'" />
+											echo '<td style="display: none;"></td>
 											<td>'.$fullname.'</td>
 											<td id="gender_'.$count.'">'.$gender.'</td>
 											<td id="dgrouptype_'.$count.'">'.$dgrouptype.'</td>
@@ -1110,26 +1107,6 @@
 									}
 									echo ' ';
 								?>
-								<!--
-								<tr id="row1" onclick="cellActive('row1')">
-									<td>Sample 1</td>
-									<td>Sample 1</td>
-									<td>Sample 1</td>
-									<td>Sample 1</td>
-								</tr>
-								<tr id="row2" onclick="cellActive('row2')">
-									<td>Sample 2</td>
-									<td>Sample 2</td>
-									<td>Sample 2</td>
-									<td>Sample 2</td>
-								</tr>
-								<tr id="row3" onclick="cellActive('row3')">
-									<td>Sample 3</td>
-									<td>Sample 3</td>
-									<td>Sample 3</td>
-									<td>Sample 3</td>
-								</tr>
-								-->
 							</table>
 						</div>
 					</div>
@@ -1138,6 +1115,7 @@
 							<div class="determinate" style="" id="progressbar"></div>
 						</div>&nbsp; &nbsp; <label id="page" onload="labelpage()"></label> <!-- Change when page number adjusts -->
 						<span id="submitbuttons">
+							<input type="hidden" id="dgroupID" name="dgroupID">
 							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_next" id="next">NEXT</button>
 							<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="back" onclick="pagination(0)" style="margin-right: 10px; display: none;">BACK</button>
 						</span>

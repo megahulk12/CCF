@@ -1013,12 +1013,15 @@
 									</div>
 								</div>
 							</form>
+							<?php
+							if($_SESSION["memberType"] > 0) {
+							echo '
 							<form method="post" class="forms" id="fcprefer">
 								<div id="cprefer" style="display: none;">
 									<div class="row">
 										<!-- page 1 -->
 										<div id="cprefer_page1">
-										<?php
+										';
 										// database connection variables
 
 										$servername = "localhost";
@@ -1135,12 +1138,11 @@
 												<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" value="'.$prefvenue2.'">
 												<label for="Option2Venue" style=" font-size:14px;">Venue</label>
 											</div>';
-											?>
+										echo '
 										</div>
 
 										<!-- page 2 -->
-										<div id="cprefer_page2" style="display: none;">
-										<?php
+										<div id="cprefer_page2" style="display: none;">';
 											// database connection variables
 
 											$servername = "localhost";
@@ -1177,8 +1179,7 @@
 											<div class="input-field col s12">
 												<textarea id="regularlyAttendsAt" class="materialize-textarea" name="regularlyAttendsAt" data-length="300" maxlength="300"></textarea>
 												<label for="regularlyAttendsAt">Where do you regularly attend?</label>
-											</div>';
-										?>
+											</div>
 										</div>
 									</div>
 									<!-- progressbar & buttons -->
@@ -1187,10 +1188,12 @@
 											<div class="determinate" style="" id="cprefer_progressbar"></div>
 										</div>&nbsp; &nbsp;<label id="cprefer_page"></label> <!-- Change when page number adjusts -->
 										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_cprefer" id="cprefer_next">NEXT</button>
-										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, 'cprefer')" style="margin-right: 10px; display: none;">BACK</button>
+										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="cprefer_back" onclick="pagination(0, '."'".'cprefer'."'".')" style="margin-right: 10px; display: none;">BACK</button>
 									</div>
 								</div>
-							</form>
+							</form>';
+							}
+										?>
 							<form method="post" id="fcpass">
 								<div id="cpass" style="display: none;">
 									<div class="row">
@@ -1292,14 +1295,14 @@
 																<input type="time" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
 																<small class="error" id="timepicker1opt1-required">This field is required.</small>
 																<small class="error" id="timepicker1opt1-equal1">Both should not be equal.</small>	
-																<small class="error" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
+																<small class="error greater1" id="timepicker1opt1-greater1">Start Time should be before than End Time.</small>
 															</div>
 															<div class="input-field col s6 right">
-																<label for="timepicker2opt1">End Time</label>
-																<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" required>
-																<small class="error" id="timepicker2opt1-required">This field is required.</small>
-																<small class="error" id="timepicker2opt1-equal1">Both should not be equal.</small>	
-																<small class="error" id="timepicker2opt1-greater1">Start Time should be before than End Time.</small>
+																<label for="timepicker1opt2">End Time</label>
+																<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
+																<small class="error" id="timepicker1opt2-required">This field is required.</small>
+																<small class="error" id="timepicker1opt2-equal1">Both should not be equal.</small>	
+																<small class="error greater1" id="timepicker1opt2-greater1">Start Time should be before than End Time.</small>
 															</div>
 														<div class="input-field col s12">
 															<input type="text" name="Option1Venue" id="Option1Venue" data-length="50" maxlength="50" required>
@@ -1324,18 +1327,18 @@
 															</div>
 														</div>
 															<div class="input-field col s6">
-																<label for="timepicker1opt2">Start Time</label>
-																<input type="time" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
-																<small class="error" id="timepicker1opt2-required">This field is required.</small>
-																<small class="error" id="timepicker1opt2-equal2">Both should not be equal.</small>	
-																<small class="error" id="timepicker1opt2-greater2">Start Time should be before than End Time.</small>
+																<label for="timepicker2opt1">Start Time</label>
+																<input type="time" class="timepicker" name="timepicker2opt1" id="timepicker2opt1" required>
+																<small class="error" id="timepicker2opt1-required">This field is required.</small>
+																<small class="error" id="timepicker2opt1-equal2">Both should not be equal.</small>	
+																<small class="error greater2" id="timepicker2opt1-greater2">Start Time should be before than End Time.</small>
 															</div>
 															<div class="input-field col s6">
 																<label for="timepicker2opt2">End Time</label>
 																<input type="time" class="timepicker" name="timepicker2opt2" id="timepicker2opt2" required>
 																<small class="error" id="timepicker2opt2-required">This field is required.</small>
 																<small class="error" id="timepicker2opt2-equal2">Both should not be equal.</small>	
-																<small class="error" id="timepicker2opt2-greater2">Start Time should be before than End Time.</small>
+																<small class="error greater2" id="timepicker2opt2-greater2">Start Time should be before than End Time.</small>
 															</div>
 														<div class="input-field col s12">
 															<input type="text" name="Option2Venue" id="Option2Venue" data-length="50" maxlength="50" required>
