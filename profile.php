@@ -684,7 +684,7 @@
 				$('#regularlyAttendsAt').trigger('autoresize');
 			});
 		}
-
+		var isCellActive = false;
 		function cellActive(id) { // this function allows you to highlight the table rows you select
 			var num_of_rows = document.getElementsByTagName("TR").length;
 			var rownumber = id.charAt(3);
@@ -696,6 +696,10 @@
 			document.getElementById(id).style.color = "#fff";
 
 			$("#dgroupID").val(id.split("_")[1]);
+			$('#dgroupID').val(id);
+			//$('#next').attr("href", "home.php?id="+id);
+			$('#next').removeAttr("disabled", "");
+			isCellActive = true;
 		}
 	</script>
 
@@ -1369,10 +1373,11 @@
 															<thead>
 																<th style="width: <?php echo widthRow(4); ?>%; display: none;">Dgroup ID</th>
 																<th style="width: <?php echo widthRow(5); ?>%">Dgroup Leader</th>
-																<th style="width: <?php echo widthRow(5); ?>%">Gender</th>
-																<th style="width: <?php echo widthRow(5); ?>%">Type of Dgroup</th>
-																<th style="width: <?php echo widthRow(5); ?>%">Day</th>
-																<th style="width: <?php echo widthRow(5); ?>%">Schedule</th>
+																<th style="width: <?php echo widthRow(8); ?>%">Gender</th>
+																<th style="width: <?php echo widthRow(8); ?>%">Type of Dgroup</th>
+																<th style="width: <?php echo widthRow(10); ?>%">Age Bracket</th>
+																<th style="width: <?php echo widthRow(8); ?>%">Day</th>
+																<th style="width: <?php echo widthRow(8); ?>%">Schedule</th>
 															</thead>
 									';
 									// end
@@ -1399,7 +1404,7 @@
 																					WHEN dgroupType = '2' THEN 'Single Parents'
 																					WHEN dgroupType = '3' THEN 'Married'
 																					WHEN dgroupType = '4' THEN 'Couples'
-																				END) AS dgroupType, schedDay, CONCAT(schedStartTime, ' - ', schedEndTime) AS schedule FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
+																				END) AS dgroupType, ageBracket, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 																$result = mysqli_query($conn, $sql_dgroups);
 																if(mysqli_num_rows($result) > 0) {
 																	$count = 1;
@@ -1409,13 +1414,18 @@
 																		$fullname = $row["fullname"];
 																		$gender = $row["gender"];
 																		$dgrouptype = $row["dgroupType"];
+																		$agebracket = $row["ageBracket"];
 																		$schedday = $row["schedDay"];
-																		$schedule = $row["schedule"];
+																		$start_time = date("g:i A", strtotime($row["start_time"]));
+																		$end_time = date("g:i A", strtotime($row["end_time"]));
+																		$schedule = "$start_time - $end_time";
 																		//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
 																		echo '
+																			<td class="choose" style="display: none;"></td>
 																			<td class="choose">'.$fullname.'</td>
 																			<td class="choose">'.$gender.'</td>
 																			<td class="choose">'.$dgrouptype.'</td>
+																			<td class="choose">'.$agebracket.'</td>
 																			<td class="choose">'.$schedday.'</td>
 																			<td class="choose">'.$schedule.'</td>';
 																		echo '</tr>';
@@ -2188,8 +2198,101 @@
 					confirmvalidated = false;
 				}
 				pagination(1, this.id.split("_")[0]);
+
+				if(getCurrentPage() == 'page3' && !isCellActive){
+					$('#next').prop("disabled", true);
+				}
 			}
+		});	
+
+		var gender = "";
+		var dgrouptype = "";
+		// computes age every change of value of date
+		var age;
+
+		/*$('[id^=Gender]').click(function() {
+			if($('#Gender_Male').prop("checked"))
+				gender = $('#Gender_Male').val();
+			else
+				gender = $('#Gender_Female').val();
+			filterDgroupTable();
+		});*/
+
+		$('#DgroupType').change(function(){
+			dgrouptype = $(this).val();
+
+			if($('#Gender_Male').prop("checked"))
+				gender = $('#Gender_Male').val();
+			else
+				gender = $('#Gender_Female').val();
+
+
+			var birthdate = $('#Birthdate').val();
+			var day = birthdate.split(",")[0].split(" ")[0], month = birthdate.split(",")[0].split(" ")[1], year = birthdate.split(",")[1];
+			birthdate = month + " " + day + "," + year;
+			birthdate = new Date(birthdate);
+			var birthyear = birthdate.getYear();
+			age = (new Date()).getYear() - birthyear;
+
+			/*alert(age);
+			alert(dgrouptype);
+			alert(gender);*/
+			filterDgroupTable();
 		});
+
+		function filterDgroupTable(){
+			//alert(gender);
+			var gd = 1, a = 1, start_age, end_age;
+			$('#table').find('tr').each(function(d){
+				$(this).children().each(function(e){
+
+					if(d == 0) { $(this).parent().show(); }
+					else if(e == 2) {
+						//alert($(this).text());
+						if($(this).text() != gender) {
+							$(this).parent().hide();
+						}
+						else {
+							$(this).parent().show(); //(caution logic)
+						}
+					}
+					else if(e == 3){
+						//alert($(this).text());
+						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+							
+							var try1 = $('#gender_'+gd).text() != gender;
+							var try2 = $('#dgrouptype_'+gd).text() != dgrouptype;
+							//alert(try1 + " " + try2);
+							
+							$(this).parent().hide();
+						}
+						else {
+							$(this).parent().show(); //(caution logic)
+						}
+						gd++;
+					}
+					else if(e == 4) {
+						//alert($(this).text());
+						start_age = parseInt($(this).text().split("-")[0]);
+						end_age = parseInt($(this).text().split("-")[1]);
+						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+							/*
+							var try1 = $('#gender_'+a).text() != gender;
+							var try2 = $('#dgrouptype_'+a).text() != dgrouptype;
+							alert(try1 + " " + try2 + " " + (age < start_age) + " " + (age > end_age));
+							alert(start_age + " " + end_age + "hide");
+							*/
+							$(this).parent().hide();
+						}
+						else {
+							$(this).parent().show(); //(caution logic)
+						}
+						a++;
+					}
+				});
+			});
+			i = 0;
+		}
 		
 		function checkLastPage() {
 			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
@@ -2215,6 +2318,10 @@
 			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 			return pattern.test(emailAddress);
 		};
+
+		
+		/*$('#Birthdate').change(function() {
+		});*/
 
 
 		// change password form validation
