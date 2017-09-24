@@ -1194,10 +1194,12 @@
 							</form>';
 							}
 										?>
+							<?php
+							if($_SESSION["memberType"] > 0) {
+							echo '
 							<form method="post" id="fcpass">
 								<div id="cpass" style="display: none;">
-									<div class="row">
-										<?php
+									<div class="row">';
 											// database connection variables
 
 											$servername = "localhost";
@@ -1237,14 +1239,14 @@
 											<small class="error-with-icon" id="confirmpass">This field is required.</small>
 											<small class="error-with-icon" id="checkpass">Passwords do not match.</small>
 										</div>
-										'; // originally having a value of own password
-										?>
 									</div> 
 									<div class="row">
-										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('fcpass', this.id)">SUBMIT</button>
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpass" id="submit_cpass" onclick="submit_form('."'".'fcpass'."'".', this.id)">SUBMIT</button>
 									</div>
 								</div>
-							</form>
+							</form>';
+							} // originally having a value of own password
+								?>
 							<?php
 								if($_SESSION["memberType"] == 0) {
 									echo '
