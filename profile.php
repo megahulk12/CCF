@@ -2270,7 +2270,7 @@
 						gd++;
 					}
 					else if(e == 4) {
-						//alert($(this).text());	
+						//alert($(this).text());
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
 						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
