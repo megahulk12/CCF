@@ -1407,6 +1407,7 @@
 																					WHEN dgroupType = '2' THEN 'Single Parents'
 																					WHEN dgroupType = '3' THEN 'Married'
 																					WHEN dgroupType = '4' THEN 'Couples'
+																					WHEN dgroupType = '5' THEN 'All'
 																				END) AS dgroupType, ageBracket, schedDay, schedStartTime AS start_time, schedEndTime AS end_time FROM member_tbl INNER JOIN discipleshipgroup_tbl ON member_tbl.memberID = discipleshipgroup_tbl.dgleader INNER JOIN scheduledmeeting_tbl ON discipleshipgroup_tbl.schedID = scheduledmeeting_tbl.schedID;";
 																$result = mysqli_query($conn, $sql_dgroups);
 																if(mysqli_num_rows($result) > 0) {
