@@ -2412,7 +2412,16 @@
 
 		$('#fregister').submit(function(e) {
 			// put ajax here
-			window.location.href = "dgroup.php";
+			var url =" update_profile.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'submit_cpinfo=g&submit_coinfo=g&submit_register=g&'+$('#fcpinfo').serialize()+'&'+$('#fcoinfo').serialize()+'&'+$('#fregister').serialize(),
+				success: function(data) {
+					window.location.href = "dgroup.php";
+				}
+			});
+			e.preventDefault();
 		});
 
 		/*
