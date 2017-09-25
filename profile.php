@@ -1418,13 +1418,13 @@
 																		$end_time = date("g:i A", strtotime($row["end_time"]));
 																		$schedule = "$start_time - $end_time";
 																		//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
-																		echo '<td style="display: none;"></td>
-																			<td>'.$fullname.'</td>
-																			<td id="gender_'.$count.'">'.$gender.'</td>
-																			<td id="dgrouptype_'.$count.'">'.$dgrouptype.'</td>
-																			<td>'.$agebracket.'</td>
-																			<td>'.$schedday.'</td>
-																			<td>'.$schedule.'</td>';
+																		echo '<td class="choose" style="display: none;"></td>
+																			<td class="choose">'.$fullname.'</td>
+																			<td class="choose" id="gender_'.$count.'">'.$gender.'</td>
+																			<td class="choose" id="dgrouptype_'.$count.'">'.$dgrouptype.'</td>
+																			<td class="choose">'.$agebracket.'</td>
+																			<td class="choose">'.$schedday.'</td>
+																			<td class="choose">'.$schedule.'</td>';
 																			echo '</tr>';
 																			$count++;
 																	}
@@ -1933,6 +1933,12 @@
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+			}
+			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
+				company.hide();
+				$(".company input").prop("required", false);
+				school.hide();
+				$(".school input").prop("required", false);
 			}
 			else {
 				school.hide();
