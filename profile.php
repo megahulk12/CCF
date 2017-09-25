@@ -2254,7 +2254,7 @@
 						if($(this).text() != gender) {
 							$(this).parent().hide();
 						}
-						else {;
+						else {
 							$(this).parent().show(); //(caution logic)
 						}
 					}
