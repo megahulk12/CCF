@@ -27,13 +27,6 @@
 	}
 
 	if(isset($_POST["submit_coinfo"])) {
-		$gender = $_POST["Gender"];
-		if ($gender == "Male") {
-			$gender = 0;
-		}
-		else {
-			$gender = 1;
-		}
 		$civilstatus = $_POST["CivilStatus"];
 		$citizenship = $_POST["Citizenship"];
 		$mobilenumber = $_POST["MobileNumber"];
@@ -136,9 +129,11 @@
 		$sql_prefs = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefDay1 = '$opt1day', prefDay2 = '$opt2day', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$start1', prefEndTime1 = '$end1', prefStartTime2 = '$start2', prefEndTime2 = '$end2' WHERE prefID = ".getPrefID($id);
 		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES($id, $dgroupid, '$recchrist', '$attccf', '$regattat', '$dateJoined');";
 		mysqli_query($conn, $sql_member);
-		mysqli_query($conn, $sql_dgmem);
 		mysqli_query($conn, $sql_prefs);
+		mysqli_query($conn, $sql_dgmem);
 		mysqli_close($conn);
 	}
+	echo 1;
 ?>
+
 	

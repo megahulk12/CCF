@@ -697,7 +697,7 @@
 			document.getElementById(id).style.backgroundColor = "#16A5B8";
 			document.getElementById(id).style.color = "#fff";
 
-			$("#dgroupID").val(id.split("_")[1]);
+			id = id.split("_")[1];
 			$('#dgroupID').val(id);
 			//$('#next').attr("href", "home.php?id="+id);
 			$('#next').removeAttr("disabled", "");
@@ -1445,7 +1445,7 @@
 													<div class="progress col s6 left" style=" margin-left: 0.8rem;">
 														<div class="determinate" style="" id="register_progressbar"></div>
 													</div>&nbsp; &nbsp;<label id="register_page"></label> <!-- Change when page number adjusts -->
-													<input type="hidden" name="dgroupID" id="dgroupID" value=""/> <!--hidden input for dgid-->
+													<input type="hidden" name="dgroupID" id="dgroupID"/> <!--hidden input for dgid-->
 													<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_register" id="register_next"	>NEXT</button>
 													<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="register_back" onclick="pagination(0, '."'".'register'."'".')" style="margin-right: 10px; display: none;">BACK</button>
 												</div>
@@ -2209,31 +2209,20 @@
 			}
 		});	
 
-		$(document).ready(function(){
-			if($('#Gender_Male').prop("checked"))
-				gender = $('#Gender_Male').val();
-			else
-				gender = $('#Gender_Female').val();
-
-			$('#Birthdate').trigger("change");
-			$('#DgroupType').trigger("change");
-
-		});
-
 		var gender = "";
 		var dgrouptype = "";
 		// computes age every change of value of date
 		var age;
 
-		/*$('[id^=Gender]').click(function() {
+		$(document).ready(function(){
 			if($('#Gender_Male').prop("checked"))
 				gender = $('#Gender_Male').val();
 			else
 				gender = $('#Gender_Female').val();
 			filterDgroupTable();
-		});*/
-		
-		
+			$('#Birthdate').trigger("change");
+			$('#DgroupType').trigger("change");
+		});
 
 
 		$('#Birthdate').change(function() {
@@ -2243,6 +2232,7 @@
 			birthdate = new Date(birthdate);
 			var birthyear = birthdate.getYear();
 			age = (new Date()).getYear() - birthyear;
+			filterDgroupTable();
 		});
 
 
@@ -2432,6 +2422,7 @@
 				url: url,
 				data: 'submit_cpinfo=g&submit_coinfo=g&submit_register=g&'+$('#fcpinfo').serialize()+'&'+$('#fcoinfo').serialize()+'&'+$('#fregister').serialize(),
 				success: function(data) {
+					alert(data);
 					window.location.href = "dgroup.php";
 				}
 			});
