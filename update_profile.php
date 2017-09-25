@@ -1,18 +1,12 @@
 <?php
 	include("session.php");
 	include("globalfunctions.php");
-?>
-<?php
 	/*
 		REMINDERS:
 		1. set data-length maxlength to length of sql fields dynamically
 
 	*/
 	// database connection variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "dbccf";
 
 	// ====================UPDATING DATA====================
 	if(isset($_POST["submit_cpinfo"])) {
@@ -115,36 +109,21 @@
 	if(isset($_POST["submit_register"])) {
 		$id = $_SESSION["userid"];
 		$dgroupid = $_POST["dgroupID"];
-		$citizenship = $_POST["Citizenship"];
-		$email = $_POST["Email"];
-
-		$homeaddress = $_POST["HomeAddress"];
-		$homephonenumber = $_POST["HomePhoneNumber"];
-
-		$companyaddress = $_POST["CompanyAddress"];
-		$companycontactnum = $_POST["CompanyContactNum"];
-
-		$schooladdress = $_POST["SchoolAddress"];
-		$schoolcontactnum = $_POST["SchoolContactNum"];
-
-		$spousename = $_POST["SpouseName"];
-		$spousemobilenumber = $_POST["SpouseMobileNumber"];
-		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
 
 		$language = $_POST["Language"];
 		$dateJoined = date("Y-m-d");
 
 		$opt1day = $_POST["Option1Day"];
 		$start1 = $_POST["timepicker1opt1"];
-		$end1 = $_POST["timepicker2opt1"];
+		$end1 = $_POST["timepicker1opt2"];
 		$venue1 = $_POST["Option1Venue"];
 
 		$opt2day = $_POST["Option2Day"];
-		$start2 = $_POST["timepicker1opt2"];
+		$start2 = $_POST["timepicker2opt1"];
 		$end2 = $_POST["timepicker2opt2"];
 		$venue2 = $_POST["Option2Venue"];
 
-		$recchrist = $opt1day = $_POST["receivedChrist"];
+		$recchrist = $_POST["receivedChrist"];
 		$attccf = $_POST["attendCCF"];
 		$regattat = $_POST["regularlyAttendsAt"];
 
@@ -153,17 +132,11 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_coinfol = "UPDATE member_tbl SET citizenship = '$citizenship', emailAd = '$email', homeAddress = '$homeaddress', homePhoneNumber = '$homephonenumber', memberType = 1 WHERE memberID = ".$_SESSION['userid'];
-		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, dgroupmemberStatus, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES('$id', '$dgroupid', 1, '$recchrist', '$attccf', '$regattat', '$dateJoined');";
-		$sql_company = "INSERT INTO companydetails_tbl(companyContactNum, companyAddress) VALUES('$companycontactnum', '$companyaddress');";
-		$sql_school = "INSERT INTO schooldetails_tbl(schoolContactNum, schoolAddress) VALUES('$schoolcontactnum', '$schooladdress');";
-		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
-		$sql_prefs = "INSERT INTO preferencedetails_tbl(prefLanguage, prefDay1, prefDay2, prefVenue1, prefVenue2, prefStartTime1 , prefEndTime1, prefStartTime2, prefEndTime2) VALUES('$language', '$op1day', '$op2day', '$venue1', '$venue2', '$start1', '$end1', '$start2' '$end2');";
-		mysqli_query($conn, $sql_coinfol);
+		$sql_member = "UPDATE member_tbl SET memberType = 1 WHERE memberID = ".$_SESSION['userid'];
+		$sql_prefs = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefDay1 = '$opt1day', prefDay2 = '$opt2day', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$start1', prefEndTime1 = '$end1', prefStartTime2 = '$start2', prefEndTime2 = '$end2' WHERE prefID = ".getPrefID($id);
+		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES($id, $dgroupid, '$recchrist', '$attccf', '$regattat', '$dateJoined');";
+		mysqli_query($conn, $sql_member);
 		mysqli_query($conn, $sql_dgmem);
-		mysqli_query($conn, $sql_company);
-		mysqli_query($conn, $sql_school);
-		mysqli_query($conn, $sql_spouse);	
 		mysqli_query($conn, $sql_prefs);
 		mysqli_close($conn);
 	}
