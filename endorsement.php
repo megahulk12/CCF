@@ -22,6 +22,10 @@
 	
 	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 
+	<head>
+		<!--nouislider-->
+		<link href="nouislider.css" rel="stylesheet" media="screen,projection">
+	</head>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -658,8 +662,22 @@
 				</form>
 			</div>
 		</div>
+
 	</body>
+	<script src="nouislider.js">
+	</script>
 	<script>
+		var slider = document.getElementById('test-slider');
+		noUiSlider.create(slider, {
+			start: [20, 80],
+			connect: true,
+			step: 1,
+			orientation: 'horizontal', // 'horizontal' or 'vertical'
+			range: {
+			 'min': 0,
+			 'max': 100
+			}
+		});
 		$('#Eform').submit(function(e) {
 			var url="request.php";
 			var preloader = '\

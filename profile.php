@@ -16,6 +16,8 @@
 	<script src="universal.js"></script>
 	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
 	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
+	<link href="nouislider.css" rel="stylesheet" media="screen,projection">
+	<script src="nouislider.js"></script>
 
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
@@ -2234,10 +2236,10 @@
 		});
 
 
-	$('#DgroupType').change(function(){
-		dgrouptype = $(this).val();
-		filterDgroupTable();
-	});
+		$('#DgroupType').change(function(){
+			dgrouptype = $(this).val();
+			filterDgroupTable();
+		});
 
 		function filterDgroupTable(){
 			//alert(gender);
