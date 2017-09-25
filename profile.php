@@ -700,7 +700,7 @@
 			id = id.split("_")[1];
 			$('#dgroupID').val(id);
 			//$('#next').attr("href", "home.php?id="+id);
-			$('#next').removeAttr("disabled", "");
+			$('#register_next').removeAttr("disabled", "");
 			isCellActive = true;
 		}
 	</script>
@@ -2203,8 +2203,9 @@
 				}
 				pagination(1, this.id.split("_")[0]);
 
-				if(getCurrentPage() == 'page3' && !isCellActive){
-					$('#next').prop("disabled", true);
+				if(getCurrentPage().split("_")[1] == 'page3' && !isCellActive){
+					//alert("hi");
+					$('#register_next').prop("disabled", true);
 				}
 			}
 		});	
@@ -2242,7 +2243,6 @@
 		});
 
 		function filterDgroupTable(){
-			//alert(gender);
 			var gd = 1, a = 1, start_age, end_age, all = false;
 			if(dgrouptype == "All")
 				all = true;
@@ -2251,20 +2251,14 @@
 
 					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
-						/*alert($(this).text());
-						alert(gender);*/
 						if($(this).text() != gender) {
-							//alert("true");
 							$(this).parent().hide();
 						}
-						else {
-							//alert("false");
+						else {;
 							$(this).parent().show(); //(caution logic)
 						}
 					}
 					else if(e == 3){
-						/*alert($(this).text());
-						alert(dgrouptype);*/
 						if(all) {
 							if($('#gender_'+gd).text() != gender){
 								$(this).parent().hide();
@@ -2284,8 +2278,6 @@
 						gd++;
 					}
 					else if(e == 4) {
-						/*alert($(this).text());
-						alert(age);*/
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
 						if(all) {
@@ -2335,10 +2327,6 @@
 			var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 			return pattern.test(emailAddress);
 		};
-
-		
-		/*$('#Birthdate').change(function() {
-		});*/
 
 
 		// change password form validation
@@ -2440,6 +2428,8 @@
 
 		$("[id$=back]").click(function() {
 			confirmvalidated = true;
+			check_iteration = true;
+			$('#register_next').prop("disabled", false);
 		});
 
 		$("[id$=next], [id$=back]").click(function() {
