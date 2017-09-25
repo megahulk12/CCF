@@ -1274,6 +1274,7 @@
 																		<option value="Single Parents">Single Parents</option>
 																		<option value="Married">Married</option>
 																		<option value="Couples">Couples</option>
+																		<option value="All">All (Men/Women)</option>
 																	</select>
 																	<label>Type of Dgroup</label>
 																	<small class="error" id="DgroupType-required">Please choose one.</small>
@@ -1938,12 +1939,6 @@
 				company.hide();
 				$(".company input").prop("required", false);
 			}
-			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
-				company.hide();
-				$(".company input").prop("required", false);
-				school.hide();
-				$(".school input").prop("required", false);
-			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
@@ -2213,6 +2208,17 @@
 			}
 		});	
 
+		$(document).ready(function(){
+			if($('#Gender_Male').prop("checked"))
+				gender = $('#Gender_Male').val();
+			else
+				gender = $('#Gender_Female').val();
+
+			$('#Birthdate').trigger("change");
+			$('#DgroupType').trigger("change");
+
+		});
+
 		var gender = "";
 		var dgrouptype = "";
 		// computes age every change of value of date
@@ -2226,10 +2232,7 @@
 			filterDgroupTable();
 		});*/
 		
-		if($('#Gender_Male').prop("checked"))
-				gender = $('#Gender_Male').val();
-		else
-			gender = $('#Gender_Female').val();
+		
 
 
 		$('#Birthdate').change(function() {
@@ -2249,7 +2252,9 @@
 
 		function filterDgroupTable(){
 			//alert(gender);
-			var gd = 1, a = 1, start_age, end_age;
+			var gd = 1, a = 1, start_age, end_age, all = false;
+			if(dgrouptype == "All")
+				all = true;
 			$('#table').find('tr').each(function(d){
 				$(this).children().each(function(e){
 
@@ -2269,17 +2274,21 @@
 					else if(e == 3){
 						/*alert($(this).text());
 						alert(dgrouptype);*/
-						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
-							
-							/*var try1 = $('#gender_'+gd).text() != gender;
-							var try2 = $('#dgrouptype_'+gd).text() != dgrouptype;
-							alert(try1 + " " + try2);*/
-							//alert("true");
-							$(this).parent().hide();
+						if(all) {
+							if($('#gender_'+gd).text() != gender){
+								$(this).parent().hide();
+							}
+							else {
+								$(this).parent().show();
+							}
 						}
 						else {
-							//alert("false");
-							$(this).parent().show(); //(caution logic)
+							if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+								$(this).parent().hide();
+							}
+							else {
+								$(this).parent().show();
+							}
 						}
 						gd++;
 					}
@@ -2288,17 +2297,21 @@
 						alert(age);*/
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
-						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
-							/*
-							var try1 = $('#gender_'+a).text() != gender;
-							var try2 = $('#dgrouptype_'+a).text() != dgrouptype;
-							alert(try1 + " " + try2 + " " + (age < start_age) + " " + (age > end_age));
-							alert(start_age + " " + end_age + "hide");
-							*/
-							$(this).parent().hide();
+						if(all) {
+							if($('#gender_'+a).text() != gender || (age < start_age || age > end_age)) {
+								$(this).parent().hide();
+							}
+							else {
+								$(this).parent().show();
+							}
 						}
 						else {
-							$(this).parent().show(); //(caution logic)
+							if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+								$(this).parent().hide();
+							}
+							else {
+								$(this).parent().show();
+							}
 						}
 						a++;
 					}
