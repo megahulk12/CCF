@@ -447,6 +447,20 @@
 		 	 color: #b2dfdb;
 		}
 		/* ===== END ===== */
+
+		/* ===== SLIDERS ===== */
+		input[type=range] + .thumb {
+			background-color: #16A5B8;
+		}
+
+		input[type=range] + .thumb .value {
+			color:  #16A5B8;
+		}
+
+		input[type=range]::-webkit-slider-thumb {
+			background-color: #16A5B8;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -584,16 +598,22 @@
 										<option value="Single_Parents">Single Parents</option>
 										<option value="Married">Married</option>
 										<option value="Couples">Couples</option>
+										<option value="All">All (Men/Women)</option>
 									</select>
 									<label>Type of Dgroup</label>
 									<small class="error" id="DgroupType-required"></small>
 								</div>
 							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
-								<label for="AgeBracket">Age Bracket</label>
-								<small class="error" id="AgeBracket-required"></small>
-							</div>
+							<p class="range-field col s6">
+								<label id="AgeBracket1-label">Starting Age Bracket</label>
+								<input type="range" id="AgeBracket1" name="AgeBracket1" min="0" max="100">
+							</p>
+							<small class="error" id="AgeBracket2-equal"></small>
+							<p class="range-field col s6">
+								<label id="AgeBracket2-label">Ending Age Bracket</label>
+								<input type="range" id="AgeBracket2" name="AgeBracket2" min="0" max="100">
+							</p>
+							<small class="error" id="AgeBracket1-equal"></small>
 							<h4 class="center">MEETING</h4>
 							<div class="row" style="margin-bottom: 0px;" id="Meeting">
 								<div class="input-field col s12">

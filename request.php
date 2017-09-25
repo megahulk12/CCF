@@ -65,6 +65,7 @@
 		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
 		else if($dgrouptype=="Married") $dgrouptype = 3;
 		else if($dgrouptype=="Couples") $dgrouptype = 4;
+		else if($dgrouptype=="All") $dgrouptype = 5;
 		$agebracket = $_POST["AgeBracket"];
 		$meetingday = $_POST["MeetingDay"];
 		$meetingplace = $_POST["MeetingPlace"];

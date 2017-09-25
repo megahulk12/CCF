@@ -1582,6 +1582,7 @@
 			e.preventDefault();
 		});
 
+		var validated = false;
 		$('#feedback-form').submit(function(e) {
 			var preloader = '\
 				<div class="preloader-wrapper small active"> \
@@ -1850,6 +1851,8 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+
 	</script>
 
 	<script>
