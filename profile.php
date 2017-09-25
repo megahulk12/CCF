@@ -1420,15 +1420,15 @@
 																		$end_time = date("g:i A", strtotime($row["end_time"]));
 																		$schedule = "$start_time - $end_time";
 																		//<td class="choose" style="display: none;"><input type="hidden" name="dgroupID'.$dgroupid.'" value="'.$dgroupid.'" /></td>
-																		echo '
-																			<td class="choose" style="display: none;"></td>
-																			<td class="choose">'.$fullname.'</td>
-																			<td class="choose">'.$gender.'</td>
-																			<td class="choose">'.$dgrouptype.'</td>
-																			<td class="choose">'.$agebracket.'</td>
-																			<td class="choose">'.$schedday.'</td>
-																			<td class="choose">'.$schedule.'</td>';
-																		echo '</tr>';
+																		echo '<td style="display: none;"></td>
+																			<td>'.$fullname.'</td>
+																			<td id="gender_'.$count.'">'.$gender.'</td>
+																			<td id="dgrouptype_'.$count.'">'.$dgrouptype.'</td>
+																			<td>'.$agebracket.'</td>
+																			<td>'.$schedday.'</td>
+																			<td>'.$schedule.'</td>';
+																			echo '</tr>';
+																			$count++;
 																	}
 																}
 																//WORK HERE
@@ -2217,28 +2217,27 @@
 				gender = $('#Gender_Female').val();
 			filterDgroupTable();
 		});*/
-
-		$('#DgroupType').change(function(){
-			dgrouptype = $(this).val();
-
-			if($('#Gender_Male').prop("checked"))
+		
+		if($('#Gender_Male').prop("checked"))
 				gender = $('#Gender_Male').val();
-			else
-				gender = $('#Gender_Female').val();
+		else
+			gender = $('#Gender_Female').val();
 
 
-			var birthdate = $('#Birthdate').val();
+		$('#Birthdate').change(function() {
+			var birthdate = $(this).val();
 			var day = birthdate.split(",")[0].split(" ")[0], month = birthdate.split(",")[0].split(" ")[1], year = birthdate.split(",")[1];
 			birthdate = month + " " + day + "," + year;
 			birthdate = new Date(birthdate);
 			var birthyear = birthdate.getYear();
 			age = (new Date()).getYear() - birthyear;
-
-			/*alert(age);
-			alert(dgrouptype);
-			alert(gender);*/
-			filterDgroupTable();
 		});
+
+
+	$('#DgroupType').change(function(){
+		dgrouptype = $(this).val();
+		filterDgroupTable();
+	});
 
 		function filterDgroupTable(){
 			//alert(gender);
@@ -2248,31 +2247,37 @@
 
 					if(d == 0) { $(this).parent().show(); }
 					else if(e == 2) {
-						//alert($(this).text());
+						/*alert($(this).text());
+						alert(gender);*/
 						if($(this).text() != gender) {
+							//alert("true");
 							$(this).parent().hide();
 						}
 						else {
+							//alert("false");
 							$(this).parent().show(); //(caution logic)
 						}
 					}
 					else if(e == 3){
-						//alert($(this).text());
+						/*alert($(this).text());
+						alert(dgrouptype);*/
 						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
 							
-							var try1 = $('#gender_'+gd).text() != gender;
+							/*var try1 = $('#gender_'+gd).text() != gender;
 							var try2 = $('#dgrouptype_'+gd).text() != dgrouptype;
-							//alert(try1 + " " + try2);
-							
+							alert(try1 + " " + try2);*/
+							//alert("true");
 							$(this).parent().hide();
 						}
 						else {
+							//alert("false");
 							$(this).parent().show(); //(caution logic)
 						}
 						gd++;
 					}
 					else if(e == 4) {
-						//alert($(this).text());
+						/*alert($(this).text());
+						alert(age);*/
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
 						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
