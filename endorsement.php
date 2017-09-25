@@ -22,6 +22,10 @@
 	
 	<title><?php if(notifCount() >= 1) echo '('.notifCount().')' ?> Christ's Commission Fellowship</title>
 
+	<head>
+		<!--nouislider-->
+		<link href="nouislider.css" rel="stylesheet" media="screen,projection">
+	</head>
 	<style>
 		::selection {
 			background-color: #16A5B8;
@@ -447,6 +451,20 @@
 		 	 color: #b2dfdb;
 		}
 		/* ===== END ===== */
+
+		/* ===== SLIDERS ===== */
+		input[type=range] + .thumb {
+			background-color: #16A5B8;
+		}
+
+		input[type=range] + .thumb .value {
+			color:  #16A5B8;
+		}
+
+		input[type=range]::-webkit-slider-thumb {
+			background-color: #16A5B8;
+		}
+		/* ===== END ===== */
 	</style>
 
 	<script type="text/javascript">
@@ -584,16 +602,22 @@
 										<option value="Single_Parents">Single Parents</option>
 										<option value="Married">Married</option>
 										<option value="Couples">Couples</option>
+										<option value="All">All (Men/Women)</option>
 									</select>
 									<label>Type of Dgroup</label>
 									<small class="error" id="DgroupType-required"></small>
 								</div>
 							</div>
-							<div class="input-field col s12">
-								<input type="text" name="AgeBracket" id="AgeBracket" data-length="5" maxlength="5" placeholder="ex. 13-25" onkeypress='return event.charCode == 45 || ( event.charCode >= 48 && event.charCode <= 57 )//only numbers on keypress' required>
-								<label for="AgeBracket">Age Bracket</label>
-								<small class="error" id="AgeBracket-required"></small>
-							</div>
+							<p class="range-field col s6">
+								<label id="AgeBracket1-label">Starting Age Bracket</label>
+								<input type="range" id="AgeBracket1" name="AgeBracket1" min="0" max="100">
+							</p>
+							<small class="error" id="AgeBracket2-equal"></small>
+							<p class="range-field col s6">
+								<label id="AgeBracket2-label">Ending Age Bracket</label>
+								<input type="range" id="AgeBracket2" name="AgeBracket2" min="0" max="100">
+							</p>
+							<small class="error" id="AgeBracket1-equal"></small>
 							<h4 class="center">MEETING</h4>
 							<div class="row" style="margin-bottom: 0px;" id="Meeting">
 								<div class="input-field col s12">
@@ -638,8 +662,22 @@
 				</form>
 			</div>
 		</div>
+
 	</body>
+	<script src="nouislider.js">
+	</script>
 	<script>
+		var slider = document.getElementById('test-slider');
+		noUiSlider.create(slider, {
+			start: [20, 80],
+			connect: true,
+			step: 1,
+			orientation: 'horizontal', // 'horizontal' or 'vertical'
+			range: {
+			 'min': 0,
+			 'max': 100
+			}
+		});
 		$('#Eform').submit(function(e) {
 			var url="request.php";
 			var preloader = '\
