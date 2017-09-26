@@ -652,12 +652,16 @@
 		}
 
 		// functions for side nav
+		var prev_active_page;
 		function defaultActive() {
 			document.getElementById('sidenav1').setAttribute("class", "waves-effect waves-light btn btn-side-nav side-nav-active");
+			setNavPage('register', 6);
 		}
+
 		function setActive(element) {
 			removeActives();
 			document.getElementById(element.id).setAttribute("class", "waves-effect waves-light btn btn-side-nav side-nav-active");
+			//active_page = element.id[element.id.length - 1];
 		}
 
 		function removeActives() {
@@ -750,26 +754,28 @@
 				<div class="row" style="width: 1002px; margin: 0;">
 					<div class="col s3 fixed" style="padding: 0; margin-top: 70px;">
 							<ul class="sidenav">
-								<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
-								<li class="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('coinfo', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 
 								<!---Code ni Mark ito-->
 								<?php
 
 								if($_SESSION["memberType"] > 0) echo '
+									<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav" onclick="setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Personal Information</a></li>
+									<li class="li-sidenav"><a id="sidenav2" class="waves-effect waves-light btn btn-side-nav" onclick="setNavPage('."'".'coinfo'."'".', 2); setActive(this); navigationForms(2);" onfocus="disableFocus(this)">Other Information</a></li>
 									<li class="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'cprefer'."'".', 2); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Preferences</a></li>
 									<li class="li-sidenav"><a id="sidenav4" class="waves-effect waves-light btn btn-side-nav"  onclick="setActive(this); navigationForms(4);" onfocus="disableFocus(this)">Change Password</a></li>';
 								else if($_SESSION["memberType"] == 0) echo '
-									<li class="li-sidenav"><a id="sidenav3" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 3); setActive(this); navigationForms(3);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
+									<li class="li-sidenav"><a id="sidenav1" class="waves-effect waves-light btn btn-side-nav"  onclick="setNavPage('."'".'register'."'".', 6); setActive(this); navigationForms(1);" onfocus="disableFocus(this)">Be a Dgroup Member</a></li>';
 								?>
 							</ul>
 					</div>
 					<div class="col s9 content">
 						<div class="container">
+							<?php
+							if($_SESSION["memberType"] > 0) {
+							echo '
 							<form method="post" class="forms" id="fcpinfo">
 								<div id="cpinfo">
-									<div class="row">
-										<?php
+									<div class="row">';
 											// database connection variables
 
 											$servername = "localhost";
@@ -798,42 +804,46 @@
 											<div class="input-field col s12">
 												<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'" required>
 												<label for="Lastname">Last Name</label>
-												<small class="error" id="lastname-required"></small>
+												<small class="error" id="Lastname-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'" required>
 												<label for="Firstname">First Name</label>
-												<small class="error" id="firstname-required"></small>
+												<small class="error" id="Lastname-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'" required>
 												<label for="Middlename">Middle Name</label>
-												<small class="error" id="middlename-required"></small>
+												<small class="error" id="Middlename-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'" required>
 												<label for="Nickname">Nickname</label>
-												<small class="error" id="nickname-required"></small>
+												<small class="error" id="Nickname-required"></small>
 											</div>
 											<div class="input-field col s12">
 												<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'" required> <!-- originally date type, OC ito haha -->
 												<label for="Birthdate">Birthdate</label>
-												<small class="error" id="birthdate-required"></small>
+												<small class="error" id="Birthdate-required"></small>
 											</div>
-											';
-										?>
 									</div>
 									<div class="row">
-										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('fcpinfo', this.id)">SUBMIT</button>
+										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right fixbutton" type="submit" name="submit_cpinfo" id="submit_cpinfo" onclick="submit_form('."'".'fcpinfo'."'".', this.id)">SUBMIT</button>
 									</div>
 								</div>
 							</form>
+								';
+								mysqli_close($conn);
+							}
+							?>
+							<?php
+							if($_SESSION["memberType"] > 0) {
+								echo '
 							<form method="post" class="forms" id="fcoinfo">
 								<div id="coinfo" style="display: none;">
 									<div class="row">
 										<!-- page 1 -->
-										<div id="coinfo_page1">
-										<?php
+										<div id="coinfo_page1">';
 										// database connection variables
 
 										$servername = "localhost";
@@ -914,12 +924,11 @@
 												<label for="Profession">Profession/Occupation</label>
 												<small class="error" id="Profession-required">This field is required.</small>
 											</div>';
-											?>
+											echo '
 										</div>
 
 										<!-- page 2 -->
-										<div id="coinfo_page2" style="display: none;">
-										<?php
+										<div id="coinfo_page2" style="display: none;">';
 										// database connection variables
 
 										$servername = "localhost";
@@ -1004,8 +1013,7 @@
 											<div class="input-field col s12 spouse">
 												<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
 												<label for="SpouseBirthdate">Birthdate</label>
-											</div>';
-										?>
+											</div>
 										</div>
 									</div>
 									<div class="row">
@@ -1015,10 +1023,13 @@
 										</div>&nbsp; &nbsp;
 										<label id="coinfo_page"></label> <!-- Change when page number adjusts -->
 										<button class="waves-effect waves-light btn profile-next-or-submit-button col s2 right" type="button" name="submit_coinfo" id="coinfo_next">NEXT</button>
-										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'coinfo')" style="margin-right: 10px; display: none;">BACK</button>
+										<button class="waves-effect waves-light btn col s2 right" type="button" name="submit_back" id="coinfo_back" onclick="pagination(0,'."'".'coinfo'."'".')" style="margin-right: 10px; display: none;">BACK</button>
 									</div>
 								</div>
-							</form>
+							</form>';
+							mysqli_close($conn);
+							}
+										?>
 							<?php
 							if($_SESSION["memberType"] > 0) {
 							echo '
@@ -1257,9 +1268,209 @@
 								if($_SESSION["memberType"] == 0) {
 									echo '
 										<form method="post" id="fregister">
-											<div id="register" style="display: none;">
+											<div id="register">
 												<div class="row">
 													<div id="register_page1">
+														<h3 class="center">Personal Information</h3>';
+															$conn = mysqli_connect($servername, $username, $password, $dbname);
+															if (!$conn) {
+																die("Connection failed: " . mysqli_connect_error());
+															}
+															$query = "SELECT lastName, firstName, middleName, nickName, birthdate FROM member_tbl WHERE memberID = ".$_SESSION['userid'];
+															$result = mysqli_query($conn, $query);
+															if(mysqli_num_rows($result) > 0) {
+																while($row = mysqli_fetch_assoc($result)) {
+																	$lastname = $row["lastName"];
+																	$firstname = $row["firstName"];
+																	$middlename = $row["middleName"];
+																	$nickname = $row["nickName"];
+																	$birthdate = date("j F, Y", strtotime($row["birthdate"]));
+																	if(is_null($row["birthdate"]))
+																		$birthdate = "";
+																	//$birthdate = $row["birthdate"];
+																}
+															}
+															echo '
+														<div class="input-field col s12">
+															<input type="text" name="Lastname" id="Lastname" data-length="20" maxlength="20" value="'.$lastname.'" required>
+															<label for="Lastname">Last Name</label>
+															<small class="error" id="Lastname-required"></small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="Firstname" id="Firstname" data-length="20" maxlength="20" value="'.$firstname.'" required>
+															<label for="Firstname">First Name</label>
+															<small class="error" id="Firstname-required"></small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="Middlename" id="Middlename" data-length="20" maxlength="20" value="'.$middlename.'" required>
+															<label for="Middlename">Middle Name</label>
+															<small class="error" id="Middlename-required"></small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="Nickname" id="Nickname" data-length="20" maxlength="20" value="'.$nickname.'" required>
+															<label for="Nickname">Nickname</label>
+															<small class="error" id="Nickname-required"></small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" class="datepicker" id="Birthdate" name="Birthdate" value="'.$birthdate.'" required> <!-- originally date type, OC ito haha -->
+															<label for="Birthdate">Birthdate</label>
+															<small class="error" id="Birthdate-required"></small>
+														</div>
+															';
+												echo'</div>
+													<div id="register_page2" style="display: none;">
+														<h3 class="center">Other Information</h3>';
+														$query = "SELECT (SELECT CASE
+																		  WHEN gender = '0' THEN 'Male'
+																		  ELSE 'Female'
+																		  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+														$result = mysqli_query($conn, $query);
+														if(mysqli_num_rows($result) > 0) {
+															while($row = mysqli_fetch_assoc($result)) {
+																$gender = $row["gender"];
+																$male = "";
+																$female = "";
+																if($gender == "Male") $male = "checked";
+																else $female = "checked";
+																$selectedcivilstatus = array("", "", "", "", "", "", ""); // 0 is default
+																$civilstatus = $row["civilStatus"];
+																if($civilstatus == "Single") $selectedcivilstatus[1] = "selected";
+																else if($civilstatus == "Married") $selectedcivilstatus[2] = "selected";
+																else if($civilstatus == "Single Parent") $selectedcivilstatus[3] = "selected";
+																else if($civilstatus == "Annulled") $selectedcivilstatus[4] = "selected";
+																else if($civilstatus == "Separated") $selectedcivilstatus[5] = "selected";
+																else if($civilstatus == "Widow/er") $selectedcivilstatus[6] = "selected";
+																else $selectedcivilstatus[0] = "selected";
+																$citizenship = $row["citizenship"];
+																$contactnum = $row["contactNum"];
+																$emailad = $row["emailAd"];
+																$occupation = $row["occupation"];
+															}
+														}
+														echo '
+														<p style="margin-top: 40px;">
+															<label for="Gender" style="margin-left: 10px; font-size:15px;">Gender</label>
+															<input type="radio" id="Gender_Male" name="Gender" value="Male" '.$male.' disabled />
+															<label for="Gender_Male">Male</label>
+															<input type="radio" id="Gender_Female" name="Gender" value="Female" '.$female.' disabled />
+															<label for="Gender_Female">Female</label>
+														</p>
+														<div class="input-field col s12">
+															<input type="text" class="data-required" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" value="'.$citizenship.'" required>
+															<label for="Citizenship">Citizenship</label>
+															<small class="error" id="Citizenship-required">This field is required.</small>
+														</div>
+														<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
+															<div class="input-field col s12">
+																<select id="CivilStatus" name="CivilStatus">
+																	<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
+																	<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
+																	<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
+																	<option value="Single Parent" '.$selectedcivilstatus[3].'>Single Parent</option>
+																	<option value="Annulled" '.$selectedcivilstatus[4].'>Annulled</option>
+																	<option value="Separated" '.$selectedcivilstatus[5].'>Separated</option>
+																	<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
+																</select>
+																<label>Civil Status</label>
+															</div>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" class="data-required" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" value="'.$contactnum.'" placeholder="ex. 0912 345 6789" required>
+															<label for="MobileNumber" name="mobilenumber">Mobile Number</label>
+															<small class="error" id="MobileNumber-required">This field is required.</small>
+														</div>
+														<div class="input-field col s12">
+															<input type="email" class="data-required" name="Email" id="Email" data-length="30" maxlength="30" value="'.$emailad.'" required> <!-- increase size of email address -->
+															<label for="Email" data-error="Invalid email address">Email Address</label>
+															<small class="error" id="Email-required">This field is required.</small>
+															<small class="error" id="Invalid-Email">Invalid Email Address</small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" class="data-required" name="Profession" id="Profession" data-length="30" maxlength="30" value="'.$occupation.'" required>
+															<label for="Profession">Profession/Occupation</label>
+															<small class="error" id="Profession-required">This field is required.</small>
+														</div>';
+													echo'
+													</div>
+													<div id="register_page3" style="display: none;">';
+													$query = "SELECT (SELECT CASE
+																	  WHEN gender = '0' THEN 'Male'
+																	  ELSE 'Female'
+																	  END) AS gender, civilStatus, citizenship, contactNum, emailAd, occupation, homeAddress, homePhoneNumber, companyName, companyContactNum, companyAddress, schoolName, schoolContactNum, schoolAddress, spouseName, spouseContactNum, spouseBirthdate FROM member_tbl LEFT OUTER JOIN companydetails_tbl ON member_tbl.companyID = companydetails_tbl.companyID LEFT OUTER JOIN schooldetails_tbl ON member_tbl.schoolID = schooldetails_tbl.schoolID LEFT OUTER JOIN spousedetails_tbl ON member_tbl.spouseID = spousedetails_tbl.spouseID WHERE memberID = ".$_SESSION['userid'];
+													$result = mysqli_query($conn, $query);
+													if(mysqli_num_rows($result) > 0) {
+														while($row = mysqli_fetch_assoc($result)) {
+															$homeaddress = $row["homeAddress"];
+															$homephonenumber = $row["homePhoneNumber"];
+															$companyname = $row["companyName"];
+															$companycontactnum = $row["companyContactNum"];
+															$companyaddress = $row["companyAddress"];
+															$schoolname = $row["schoolName"];
+															$schoolcontactnum = $row["schoolContactNum"];
+															$schooladdress = $row["schoolAddress"];
+															$spousename = $row["spouseName"];
+															$spousecontactnum = $row["spouseContactNum"];
+															$spousebirthdate = date("j F, Y", strtotime($row["spouseBirthdate"]));
+															if(is_null($row["spouseBirthdate"]))
+																$spousebirthdate = "";
+														}
+													}
+													echo'
+														<h4 class="center">Home</h4>
+														<div class="input-field col s12">
+															<input type="text" class="data-required" name="HomeAddress" id="HomeAddress" data-length="50" maxlength="50" value="'.$homeaddress.'" required>
+															<label for="HomeAddress">Address</label>
+															<small class="error" id="HomeAddress-required">This field is required.</small>
+														</div>
+														<div class="input-field col s12">
+															<input type="text" name="HomePhoneNumber" id="HomePhoneNumber" data-length="18" maxlength="18" value="'.$homephonenumber.'">
+															<label for="HomePhoneNumber">Home Phone Number</label>
+														</div>
+														<h4 class="center company">Company</h4>
+														<div class="input-field col s12 company">
+															<input type="text" class="data-required" name="CompanyName" id="CompanyName" data-length="30" maxlength="30" value="'.$companyname.'" required>
+															<label for="CompanyName">Company Name</label>
+															<small class="error" id="CompanyName-required">This field is required.</small>
+														</div>
+														<div class="input-field col s12 company">
+															<input type="text" name="CompanyContactNum" id="CompanyContactNum" data-length="18" maxlength="18" value="'.$companycontactnum.'">
+															<label for="CompanyContactNum">Company Contact Number</label>
+														</div>
+														<div class="input-field col s12 company">
+															<input type="text" name="CompanyAddress" id="CompanyAddress" data-length="50" maxlength="50" value="'.$companyaddress.'">
+															<label for="CompanyAddress">Company Address</label>
+														</div>
+														<h4 class="center school">School</h4>
+														<div class="input-field col s12 school">
+															<input type="text" class="data-required" name="SchoolName" id="SchoolName" data-length="30" maxlength="30" value="'.$schoolname.'" required>
+															<label for="SchoolName">School Name</label>
+															<small class="error" id="SchoolName-required">This field is required.</small>
+														</div>
+														<div class="input-field col s12 school">
+															<input type="text" name="SchoolContactNum" id="SchoolContactNum" data-length="18" maxlength="18" value="'.$schoolcontactnum.'">
+															<label for="SchoolContactNum">School Contact Number</label>
+														</div>
+														<div class="input-field col s12 school">
+															<input type="text" name="SchoolAddress" id="SchoolAddress" data-length="50" maxlength="50" value="'.$schooladdress.'">
+															<label for="SchoolAddress">School Address</label>
+														</div>
+														<h4 class="center spouse">Spouse</h4>
+														<div class="input-field col s12 spouse">
+															<input type="text" class="data-required" name="SpouseName" id="SpouseName" data-length="30" maxlength="30" value="'.$spousename.'" required>
+															<label for="SpouseName">Spouse Name</label>
+															<small class="error" id="SpouseName-required">This field is required.</small>
+														</div>
+														<div class="input-field col s12 spouse">
+															<input type="text" name="SpouseMobileNumber" id="SpouseMobileNumber" data-length="18" maxlength="18" value="'.$spousecontactnum.'">
+															<label for="SpouseMobileNumber">Spouse Mobile Number</label>
+														</div>
+														<div class="input-field col s12 spouse">
+															<input type="text" class="datepicker" id="SpouseBirthdate" name="SpouseBirthdate" value="'.$spousebirthdate.'"> <!-- originally date type, OC ito haha -->
+															<label for="SpouseBirthdate">Birthdate</label>
+														</div>';
+											echo '
+													</div>
+													<div id="register_page4" style="display: none">
 														<h3 class="center">Preferences</h3>
 														<div class="input-field col s12">
 															<input type="text" name="Language" id="Language" data-length="50" maxlength="50" required>
@@ -1356,7 +1567,7 @@
 														</div>
 													</div>
 
-													<div id="register_page2" style="display: none;">
+													<div id="register_page5" style="display: none;">
 														<div class="input-field col s12">
 															<textarea id="receivedChrist" class="materialize-textarea" name="receivedChrist" data-length="300" maxlength="300"></textarea>
 															<label for="receivedChrist">When did you receive Christ as your Lord and Savior?</label>
@@ -1370,7 +1581,7 @@
 															<label for="regularlyAttendsAt">Where do you regularly attend?</label>
 														</div>
 													</div>
-													<div id="register_page3" style="display: none;">
+													<div id="register_page6" style="display: none;">
 														<h3 class="center">Choose a Dgroup Leader</h3>
 														<table class="cursor centered" id="table" style="margin-bottom: 20px;">
 															<thead>
@@ -1616,9 +1827,7 @@
 					}
 					else
 						echo '
-							$("#cpinfo").show();
-							$("#coinfo").hide();
-							$("#register").hide();
+							$("#register").show();
 						';
 				?>
 			}
@@ -1874,7 +2083,12 @@
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 		
 		$(document).ready(function() {
-			$('div#cpinfo small').text('This field is required.');
+			<?php
+				if($_SESSION["memberType"] == 0)
+					echo '$("#register_page1 small").text("This field is required.");';
+				else
+					echo '$("div#cpinfo small").text("This field is required.");';
+			?>
 		});
 
 		function disableDefaultRequired(elem) {
@@ -2073,12 +2287,44 @@
 			}
 		});
 
+		$('#register_page1, #register_page2, #register_page3').find('input, select').each(function() {
+			// disable pages 1-3 in register
+			$(this).prop("disabled", true);
+		});
+
 		$('#register_next').click(function(){
 			// default states
 			$('.error').hide();
 			var focused_element;
 			$(this).blur(); // no focus in button once clicked
 			var check_iteration = true;
+			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
+			$('.error').hide();
+			company.show();
+			school.show();
+			spouse.show();
+			$("#CompanyName").prop("required", true);
+			$("#SchoolName").prop("required", true);
+			$("#SpouseName").prop("required", true);
+
+			/* ===== SPOUSE VALIDATION ===== */
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
+				spouse.hide();
+				$(".spouse input").prop("required", false);
+				//$("h4").find(":contains('Spouse')").hide();
+				//$("[id^=Spouse], [for^=Spouse]").hide();
+			}
+
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
+			var professionid = "#Profession";
+			if($(professionid).val().toLowerCase() == "student") {
+				company.hide();
+				$(".company input").prop("required", false);
+			}
+			else {
+				school.hide();
+				$(".school input").prop("required", false);
+			}
 
 			// convert time values to timestamp
 			var start_time = $("#timepicker2opt1").val(), end_time = $("#timepicker2opt2").val();
@@ -2125,7 +2371,7 @@
 				check_iteration = false;
 			}
 			
-			if(getCurrentPage().split("_")[1] == 'page1') {
+			if(getCurrentPage().split("_")[1] == 'page4') {
 				if($('#DgroupType').val() == "Married") {
 					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
 						$('#DgroupType-nospouse').show();
@@ -2171,6 +2417,15 @@
 						disableDefaultRequired($(this));
 						check_iteration = false;
 					}
+					else if(this.id == "Email") {
+						if(!isValidEmailAddress($(this).val())) {
+							$('#Invalid-Email').show();
+							//$('#'+this.id).focus();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
 					else if(this.id == "Option1Day") {
 						if($(this).val() == null) {
 							$('small#'+this.id+'-required').show();
@@ -2209,7 +2464,7 @@
 				}
 				pagination(1, this.id.split("_")[0]);
 
-				if(getCurrentPage().split("_")[1] == 'page3' && !isCellActive){
+				if(getCurrentPage().split("_")[1] == 'page6' && !isCellActive){
 					//alert("hi");
 					$('#register_next').prop("disabled", true);
 				}
@@ -2265,42 +2520,22 @@
 						}
 					}
 					else if(e == 3){
-						if(all) {
-							if($('#gender_'+gd).text() != gender){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						gd++;
 					}
 					else if(e == 4) {
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
-						if(all) {
-							if($('#gender_'+a).text() != gender || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						a++;
 					}
@@ -2414,7 +2649,7 @@
 			$.ajax({
 				type: 'POST',
 				url: url,
-				data: 'submit_cpinfo=g&submit_coinfo=g&submit_register=g&'+$('#fcpinfo').serialize()+'&'+$('#fcoinfo').serialize()+'&'+$('#fregister').serialize(),
+				data: 'submit_register=g&'+$('#fregister').serialize(),
 				success: function(data) {
 					alert(data);
 					window.location.href = "dgroup.php";
@@ -2466,6 +2701,41 @@
 			}, 300, "swing");
 			elem.focus();
 		}
+		/*
+
+		var unsaved = false;
+
+		$(document).ready(function() {
+			unsaved = false;
+		});
+
+		$('input, select, textarea').change(function() {
+			unsaved = true;
+		});
+
+		$(window).bind('beforeunload', function() {
+		    if(unsaved){
+		        return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+		    }
+		});
+
+		$('[id^=sidenav]').click(function() {
+			if(unsaved) {
+				if(this.id[this.id.length - 1] != active_page) {
+					alert("Please save your changes.");
+					navigationForms(active_page);
+				}
+
+				var test = $(this);
+				$('[id^=sidenav]').each(function() {
+					if($(this) != test) {
+						$(this).off("click");
+						alert(1);
+					}
+				});
+			}
+		});
+		*/
 
 		/* ===== END ===== */
 	</script>
