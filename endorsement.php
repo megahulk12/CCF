@@ -686,6 +686,18 @@
 			$('#AgeBracket-label').text('Age Bracket - ('+values[0]+' - '+values[1]+')');
 		});
 
+		var civilstatus = "";
+		$(document).ready(function() {
+			var url = "get_civilstatus.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				success: function(data) {
+					civilstatus = data;
+				}
+			});
+		});
+
 		var validated = false;
 		$('#Eform').submit(function(e) {
 			if(validated) {

@@ -464,7 +464,7 @@
 					die("Connection failed: " . mysqli_connect_error());
 				}
 
-				$sql_events = "SELECT eventID, eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus >= 1 ORDER BY eventStartDay DESC";
+				$sql_events = "SELECT eventID, eventName, eventDescription, eventPicturePath, eventStartDay, eventEndDay, eventWeekly, eventStartTime, eventEndTime, eventSchedStatus FROM eventdetails_tbl WHERE eventStatus >= 1 AND eventStatus <= 2 ORDER BY eventStartDay DESC";
 				$result = mysqli_query($conn, $sql_events);
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
