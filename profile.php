@@ -1177,9 +1177,9 @@
 											$result = mysqli_query($conn, $query);
 											if(mysqli_num_rows($result) > 0) {
 												while($row = mysqli_fetch_assoc($result)) {
-													$receivedChrist = trim(preg_replace('/\s+/', '\n', $row["receivedChrist"]));
-													$attendCCF = trim(preg_replace('/\s+/', '\n', $row["attendCCF"]));
-													$regularlyAttendsAt = trim(preg_replace('/\s+/', '\n', $row["regularlyAttendsAt"]));
+													$receivedChrist = trim(preg_replace('/\r\n/', '\n', $row["receivedChrist"]));
+													$attendCCF = trim(preg_replace('/\r\n/', '\n', $row["attendCCF"]));
+													$regularlyAttendsAt = trim(preg_replace('/\r\n/', '\n', $row["regularlyAttendsAt"]));
 												}
 											}
 										echo '
@@ -1886,8 +1886,42 @@
 
 		var validated = false, cpass = false;
 		function submit_form(submit_id, submit_name) {
-			if(submit_name == "submit_register")
-				$('#'+submit_id).trigger("submit");
+			if(submit_name == "submit_register") {
+				$('#fregister').submit(function(e) {
+					if(validated) {
+						alert($(this).serialize());
+						// put ajax here
+						var preloader = '\
+							<div class="preloader-wrapper small active"> \
+								<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+									<div class="circle-clipper left"> \
+										<div class="circle"></div> \
+									</div><div class="gap-patch"> \
+										<div class="circle"></div> \
+									</div><div class="circle-clipper right"> \
+										<div class="circle"></div> \
+									</div> \
+								</div> \
+							</div> \
+						  ';
+						$('.profile-next-or-submit-button').html(preloader);
+						$('.profile-next-or-submit-button').prop("disabled", true);
+						var url =" update_profile.php";
+						$.ajax({
+							type: 'POST',
+							url: url,
+							data: 'submit_register=g&'+$(this).serialize(),
+							success: function(data) {
+								alert(data);
+								$('.profile-next-or-submit-button').text('Submit');
+								$('.profile-next-or-submit-button').prop("disabled", false);
+								window.location.href = "dgroup.php";
+							}
+						});
+					}
+					e.preventDefault();
+				});
+			}
 			else {
 				$('#'+submit_id).submit(function(e) {
 					if(validated) {
@@ -2650,21 +2684,6 @@
 					return false;
 				}
 			});
-		});
-
-		$('#fregister').submit(function(e) {
-			// put ajax here
-			var url =" update_profile.php";
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: 'submit_register=g&'+$('#fregister').serialize(),
-				success: function(data) {
-					alert(data);
-					window.location.href = "dgroup.php";
-				}
-			});
-			e.preventDefault();
 		});
 
 		/*

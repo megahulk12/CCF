@@ -598,11 +598,6 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
-								<input type="text" name="Citizenship" id="Citizenship" required>
-								<label for="Citizenship">Citizenship</label>
-								<small class="error" id="Citizenship-required">This field is required.</small>
-							</div>
-							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" required>
 								<label for="MobileNumber">Mobile Number</label>
 								<small class="error" id="MobileNumber-required">This field is required.</small>
