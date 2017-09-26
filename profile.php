@@ -655,7 +655,10 @@
 		var prev_active_page;
 		function defaultActive() {
 			document.getElementById('sidenav1').setAttribute("class", "waves-effect waves-light btn btn-side-nav side-nav-active");
-			setNavPage('register', 6);
+			<?php
+				if($_SESSION["memberType"] == 0)
+					echo 'setNavPage("register", 6);';
+			?>
 		}
 
 		function setActive(element) {
