@@ -586,12 +586,12 @@
 							<div class="input-field col s12">
 								<input type="date" class="datepicker" id="BaptismalDate" name="BaptismalDate" required>
 								<label for="BaptismalDate" class>When were you baptized?</label>
-								<small class="error" id="BaptismalDate-required"></small>
+								<small class="error" id="BaptismalDate-required">This field is required.</small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="BaptismalPlace" id="BaptismalPlace" data-length="50" maxlength="50" required>
 								<label for="BaptismalPlace">Where were you baptized?</label>
-								<small class="error" id="BaptismalPlace-required"></small>
+								<small class="error" id="BaptismalPlace-required">This field is required.</small>
 							</div>
 							<h4 class="center">DGROUP</h4>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
@@ -606,7 +606,10 @@
 										<option value="All">All (Men/Women)</option>
 									</select>
 									<label>Type of Dgroup</label>
-									<small class="error" id="DgroupType-required"></small>
+									<small class="error" id="DgroupType-required">Please choose one.</small>
+									<small class="error" id="DgroupType-nospouse">You are not legally married. Please pick a different Dgroup Type.</small>
+									<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
+									<small class="error" id="DgroupType-single">You are single. You cannot pick the Couples Dgroup Type.</small>
 								</div>
 							</div>
 							<div class="row">
@@ -631,27 +634,27 @@
 										<option value="Saturday">Saturday</option>
 									</select>
 									<label>Day</label>
-									<small class="error" id="MeetingDay-required"></small>
+									<small class="error" id="MeetingDay-required">Please choose one.</small>
 								</div>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
-								<small class="error" id="timepicker1opt1-required"></small>
+								<small class="error" id="timepicker1opt1-required">This field is required.</small>
 								<small class="error" id="timepicker1opt1-equaltime"></small>
 								<small class="error" id="timepicker1opt1-greatertime"></small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
-								<small class="error" id="timepicker1opt2-required"></small>
+								<small class="error" id="timepicker1opt2-required">This field is required.</small>
 								<small class="error" id="timepicker1opt2-equaltime"></small>
 								<small class="error" id="timepicker1opt2-greatertime"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
 								<label for="MeetingPlace">Place</label>
-								<small class="error" id="MeetingPlace-required"></small>
+								<small class="error" id="MeetingPlace-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
@@ -684,18 +687,6 @@
 		slider.noUiSlider.on('update', function(values, handle) {
 			// value[handle]
 			$('#AgeBracket-label').text('Age Bracket - ('+values[0]+' - '+values[1]+')');
-		});
-
-		var civilstatus = "";
-		$(document).ready(function() {
-			var url = "get_civilstatus.php";
-			$.ajax({
-				type: 'POST',
-				url: url,
-				success: function(data) {
-					civilstatus = data;
-				}
-			});
 		});
 
 		var validated = false;
@@ -749,7 +740,19 @@
 
 	<script>
 		 //this section is for notification approval of requests
-			 	
+		
+		var civilstatus = "";
+		$(document).ready(function() {
+			var url = "get_civilstatus.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				success: function(data) {
+					civilstatus = data;
+				}
+			});
+		});
+
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
 			swal({
@@ -876,7 +879,7 @@
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
 		$(document).ready(function() {
-			$('.error').text('This field is required.');
+			//$('.error').text('This field is required.');
 			$('.error-picture').text('Please choose a picture.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
@@ -902,7 +905,42 @@
 		$("#request").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			$(this).blur();
-			check_iteration = true;
+
+			if($('#DgroupType').val() == "Married") {
+				if(civilstatus == "Single" || civilstatus == "Single Parent" || civilstatus == "Annulled") {
+					$('#DgroupType-nospouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+			}
+			else if($('#DgroupType').val() == "Single") {
+				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
+					$('#DgroupType-spouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+			}
+			else if($('#DgroupType').val() == "Youth") {
+				if(civilstatus == "Married" || civilstatus == "Separated" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
+					$('#DgroupType-spouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+			}
+			else if($('#DgroupType').val() == "Couples"){
+				if(civilstatus == "Single" || civilstatus == "Single Parent"){
+					$('#DgroupType-single').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+			}
+			else if($('#DgroupType').val() == "Single Parents"){
+				if(civilstatus == "Married"){
+					$('#DgroupType-spouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+			}
 
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
