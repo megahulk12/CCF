@@ -70,9 +70,9 @@
 		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
 		$day1 = $_POST["Option1Day"];
 		$day2 = $_POST["Option2Day"];
-		$receivedChrist = $_POST["receivedChrist"];
-		$attendCCF = $_POST["attendCCF"];
-		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
+		$receivedChrist = addSlashes($_POST["receivedChrist"]);
+		$attendCCF = addSlashes($_POST["attendCCF"]);
+		$regularlyAttendsAt = addSlashes($_POST["regularlyAttendsAt"]);
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
@@ -103,22 +103,20 @@
 		$id = $_SESSION["userid"];
 		$dgroupid = $_POST["dgroupID"];
 
-		$language = $_POST["Language"];
 		$dateJoined = date("Y-m-d");
 
-		$opt1day = $_POST["Option1Day"];
-		$start1 = $_POST["timepicker1opt1"];
-		$end1 = $_POST["timepicker1opt2"];
+		$language = $_POST["Language"];
 		$venue1 = $_POST["Option1Venue"];
-
-		$opt2day = $_POST["Option2Day"];
-		$start2 = $_POST["timepicker2opt1"];
-		$end2 = $_POST["timepicker2opt2"];
 		$venue2 = $_POST["Option2Venue"];
-
-		$recchrist = $_POST["receivedChrist"];
-		$attccf = $_POST["attendCCF"];
-		$regattat = $_POST["regularlyAttendsAt"];
+		$timepicker1opt1 = date("H:i:s", strtotime($_POST["timepicker1opt1"]));
+		$timepicker1opt2 = date("H:i:s", strtotime($_POST["timepicker1opt2"]));
+		$timepicker2opt1 = date("H:i:s", strtotime($_POST["timepicker2opt1"]));
+		$timepicker2opt2 = date("H:i:s", strtotime($_POST["timepicker2opt2"]));
+		$day1 = $_POST["Option1Day"];
+		$day2 = $_POST["Option2Day"];
+		$receivedChrist = $_POST["receivedChrist"];
+		$attendCCF = $_POST["attendCCF"];
+		$regularlyAttendsAt = $_POST["regularlyAttendsAt"];
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
@@ -126,10 +124,12 @@
 		}
 
 		$sql_member = "UPDATE member_tbl SET memberType = 1 WHERE memberID = ".$_SESSION['userid'];
-		$sql_prefs = "UPDATE preferencedetails_tbl SET prefLanguage = '$language', prefDay1 = '$opt1day', prefDay2 = '$opt2day', prefVenue1 = '$venue1', prefVenue2 = '$venue2', prefStartTime1 = '$start1', prefEndTime1 = '$end1', prefStartTime2 = '$start2', prefEndTime2 = '$end2' WHERE prefID = ".getPrefID($id);
-		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES($id, $dgroupid, '$recchrist', '$attccf', '$regattat', '$dateJoined');";
+		$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
+		$sql_pref = "UPDATE member_tbl SET prefID = ".getCurrentPrefID();
+		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES($id, $dgroupid, '$receivedChrist', '$attendCCF', '$regularlyAttendsAt', '$dateJoined');";
 		mysqli_query($conn, $sql_member);
-		mysqli_query($conn, $sql_prefs);
+		mysqli_query($conn, $sql_preference);
+		mysqli_query($conn, $sql_pref);
 		mysqli_query($conn, $sql_dgmem);
 		mysqli_close($conn);
 	}

@@ -25,6 +25,7 @@
 	<head>
 		<!--nouislider-->
 		<link href="nouislider.css" rel="stylesheet" media="screen,projection">
+		<script src="nouislider.js"></script>
 	</head>
 	<style>
 		::selection {
@@ -608,22 +609,20 @@
 									<small class="error" id="DgroupType-required"></small>
 								</div>
 							</div>
-							<p class="range-field col s6">
-								<label id="AgeBracket1-label">Starting Age Bracket</label>
-								<input type="range" id="AgeBracket1" name="AgeBracket1" min="0" max="100">
-							</p>
-							<small class="error" id="AgeBracket2-equal"></small>
-							<p class="range-field col s6">
-								<label id="AgeBracket2-label">Ending Age Bracket</label>
-								<input type="range" id="AgeBracket2" name="AgeBracket2" min="0" max="100">
-							</p>
-							<small class="error" id="AgeBracket1-equal"></small>
+							<div class="row">
+								<div class="range-field col s12">
+									<label id="AgeBracket-label" for="AgeBracket">Age Bracket - ( - )</label>
+									<br>
+									<br>
+									<div id="AgeBracket"></div>
+								</div>
+							</div>
 							<h4 class="center">MEETING</h4>
 							<div class="row" style="margin-bottom: 0px;" id="Meeting">
 								<div class="input-field col s12">
 									<select id="MeetingDay" name="MeetingDay" required>
 										<option value="" disabled selected>Choose your option...</option>
-										<option value="Sunday">Sunnday</option>
+										<option value="Sunday">Sunday</option>
 										<option value="Monday">Monday</option>
 										<option value="Tuesday">Tuesday</option>
 										<option value="Wednesday">Wednesday</option>
@@ -639,15 +638,15 @@
 								<label for="timepicker1opt1">Start Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
 								<small class="error" id="timepicker1opt1-required"></small>
-								<small class="error" id="timepicker1opt1-equal"></small>
-								<small class="error" id="timepicker1opt1-greater"></small>
+								<small class="error" id="timepicker1opt1-equaltime"></small>
+								<small class="error" id="timepicker1opt1-greatertime"></small>
 							</div>
 							<div class="input-field col s6">
 								<label for="timepicker1opt2">End Time</label>
 								<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
 								<small class="error" id="timepicker1opt2-required"></small>
-								<small class="error" id="timepicker1opt2-equal"></small>
-								<small class="error" id="timepicker1opt2-greater"></small>
+								<small class="error" id="timepicker1opt2-equaltime"></small>
+								<small class="error" id="timepicker1opt2-greatertime"></small>
 							</div>
 							<div class="input-field col s12">
 								<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
@@ -664,68 +663,92 @@
 		</div>
 
 	</body>
-	<script src="nouislider.js">
-	</script>
 	<script>
-		var slider = document.getElementById('test-slider');
+
+		// slider events
+		var slider = document.getElementById('AgeBracket');
 		noUiSlider.create(slider, {
-			start: [20, 80],
+			start: [30, 70],
 			connect: true,
 			step: 1,
 			orientation: 'horizontal', // 'horizontal' or 'vertical'
 			range: {
 			 'min': 0,
 			 'max': 100
-			}
+			},
+			format: wNumb({
+				decimals: 0
+			})
 		});
-		$('#Eform').submit(function(e) {
-			var url="request.php";
-			var preloader = '\
-				<div class="preloader-wrapper small active spinner-notif"> \
-					<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
-						<div class="circle-clipper left"> \
-							<div class="circle"></div> \
-						</div><div class="gap-patch"> \
-							<div class="circle"></div> \
-						</div><div class="circle-clipper right"> \
-							<div class="circle"></div> \
-						</div> \
-					</div> \
-				</div> \
-			  ';
-			  $('#request').html(preloader);
-			  $('#request').prop("disabled", true);
+
+		slider.noUiSlider.on('update', function(values, handle) {
+			// value[handle]
+			$('#AgeBracket-label').text('Age Bracket - ('+values[0]+' - '+values[1]+')');
+		});
+
+		var civilstatus = "";
+		$(document).ready(function() {
+			var url = "get_civilstatus.php";
 			$.ajax({
-				type: "POST",
+				type: 'POST',
 				url: url,
-				data: 'request=g&'+$('#Eform').serialize(), 
 				success: function(data) {
-				  $('#request').html("SUBMIT");
-				  $('#request').prop("disabled", false);
-					swal({
-						title: "Success!",
-						text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
-						type: "success",
-						allowEscapeKey: true
-					},
-						function() { window.location.href = "index.php"; }
-					);
+					civilstatus = data;
 				}
 			});
+		});
+
+		var validated = false;
+		$('#Eform').submit(function(e) {
+			if(validated) {
+				var url="request.php";
+				var preloader = '\
+					<div class="preloader-wrapper small active spinner-notif"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
+						</div> \
+					</div> \
+				  ';
+				$('#request').html(preloader);
+				$('#request').prop("disabled", true);
+				var start_age = splitAgeBracket(0, slider.noUiSlider.get());
+				var end_age = splitAgeBracket(1, slider.noUiSlider.get());
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: 'request=g&'+$('#Eform').serialize()+'&startAgeBracket='+start_age+'&endAgeBracket='+end_age, 
+					success: function(data) {
+						alert(data);
+						$('#request').html("SUBMIT");
+						$('#request').prop("disabled", false);
+						swal({
+							title: "Success!",
+							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+							type: "success",
+							allowEscapeKey: true
+						},
+							function() { window.location.href = "index.php"; }
+						);
+					}
+				});
+			}
 			e.preventDefault();
 		});
+
+		function splitAgeBracket(index, string) {
+			string = String(string);
+			return string.split(",")[index];
+		}
 	</script>
 
 	<script>
-		function endorsementComplete() {
-			swal({
-				title: "Congratulations!",
-				text: "You are now a Dgroup leader!",
-				type: "success",
-				allowEscapeKey: true
-			});
-		}
-			 //this section is for notification approval of requests
+		 //this section is for notification approval of requests
 			 	
 		function approval() {
 			 $('.dropdown-button').dropdown('close');
@@ -851,16 +874,12 @@
 		//--------------------------hello, code to ni pogi hehe----------------------------//
 
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
-		$('[id$=required]').text("This field is required.");
-		$('[id$=greater]').text('Start Time should be before than End Time.');
-		$('[id$=equal], [id$=equaldate]').text('Both should not be equal.');
 
 		$(document).ready(function() {
 			$('.error').text('This field is required.');
 			$('.error-picture').text('Please choose a picture.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
-			$('[id$=greaterdate]').text('Start Date should be before than End Date.');
 		});
 
 		function disableDefaultRequired(elem) {
@@ -885,28 +904,6 @@
 			$(this).blur();
 			check_iteration = true;
 
-			// convert time values to timestamp
-			var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
-			d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-			//d = "2015-03-25";
-			start_time = spaceAMPM(start_time);
-			end_time = spaceAMPM(end_time);
-			start_time = new Date(d + " " + start_time);
-			end_time = new Date(d + " " + end_time);
-			start_time = start_time.getTime();
-			end_time = end_time.getTime();
-			if(start_time > end_time) {
-				$("[id$=greater]").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
-
-			if(start_time == end_time && !($('[id^=timepicker1]').val() == "")) {
-				$("#timepicker1opt1-equal").show();
-				$("#timepicker1opt2-equal").show();
-				focused_element = $("#timepicker1opt1");
-				check_iteration = false;
-			}
 			$($('form#Eform').find('input, select').reverse()).each(function(){
 				if($(this).prop('required')) {
 					if($(this).val() == "") {
@@ -930,37 +927,37 @@
 							disableDefaultRequired($(this));
 							check_iteration = false;
 						}
-				}
+					}
 					else if($(this).is('select')) {
-							if($(this).val() == null) {
-								$("small#"+this.id+"-required").show();
-								focused_element = $(this);
-								disableDefaultRequired($(this));
-								check_iteration = false;
-							}
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
 					}
-				}
-				else if($(this).is('[id^=timepicker]')) {
-					// convert time values to timestamp; TIME VALIDATION
-					var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
-					d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
-					//d = "2015-03-25";
-					start_time = spaceAMPM(start_time);
-					end_time = spaceAMPM(end_time);
-					start_time = new Date(d + " " + start_time);
-					end_time = new Date(d + " " + end_time);
-					start_time = start_time.getTime();
-					end_time = end_time.getTime();
-					if((start_time > end_time) && !($('#timepicker1opt2').val() == "")) {
-						$("[id$=greatertime]").show();
-						focused_element = $("#timepicker1opt1");
-						check_iteration = false;
-					}
+					else if($(this).is('[id^=timepicker]')) {
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('[id^=timepicker]').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
 
-					if((start_time == end_time) && !($('[id^=timepicker]').val() == "")) {
-						$("[id$=equaltime]").show();
-						focused_element = $("#timepicker1opt1");
-						check_iteration = false;
+						if((start_time == end_time) && !($('[id^=timepicker]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
 					}
 				}
 			});
@@ -969,21 +966,9 @@
 				scrollTo(focused_element); // scrolls to focused element
 
 			if(check_iteration) {
-				confirmvalidated = true;
-				if(checkLastPage()) {
-					confirmvalidated = false;
-				}
-				pagination(1);
+				validated = true;
 			}
 		});
-
-		function checkLastPage() {
-			var currentpageid = getCurrentPage(), pagelength = currentpageid.length, pagenumber = currentpageid.charAt(pagelength-1);
-			pagenumber++; // page that is after the previous
-			var lastpage = currentpageid.slice(0, pagelength - 1) + pagenumber;
-			if($('#'+lastpage).length > 0) return false;
-			else return true;
-		}
 
 		function removeLeadingZero(time_value) {
 			return time_value.slice(1, time_value.length);
@@ -997,8 +982,6 @@
 			return time_value;
 		}
 
-
-
 		/*
 		 *		INFORMATION ABOUT WILDCARDS
 		 *		^=<string> --> elements starting with <string>
@@ -1007,17 +990,6 @@
 		 */
 		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
 		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
-
-		$("[id$=back]").click(function() {
-			confirmvalidated = true;
-		});
-
-		$("[id$=next], [id$=back]").click(function() {
-			if(confirmvalidated) {
-				animateBodyScrollTop();
-				confirmvalidated = false;
-			}
-		});
 
 		function animateBodyScrollTop() {
 			$("body").animate({

@@ -577,11 +577,6 @@
 									<small class="error" id="Gender-required" style="margin-left: 11; position: relative; top: 10px;">Please select one.</small>
 								</div>
 							</p>
-							<div class="input-field col s12">
-								<input type="text" name="Citizenship" id="Citizenship" data-length="20" maxlength="20" required>
-								<label for="Citizenship">Citizenship</label>
-								<small class="error" id="Citizenship-required">This field is required.</small>
-							</div>
 							<div class="row" style="margin-bottom: 0px;"> <!-- margin-bottom removes gap at the bottom of the control -->
 								<div class="input-field col s12">
 									<select id="CivilStatus" name="CivilStatus" required>
@@ -594,7 +589,7 @@
 										<option value="Widow/er">Widow/er</option>
 									</select>
 									<label>Civil Status</label>
-									<small class="error" id="CivilStatus-required">This field is required.</small>
+									<small class="error" id="CivilStatus-required">Please choose one.</small>
 								</div>
 							</div>
 							<!--<div class="input-field col s12">
