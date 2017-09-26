@@ -691,7 +691,7 @@
 						</div>
 					</div>
 					<div id="page5" style="display: none">
-						<h3 class="center">Congratulations!!</h3>
+						<h3 class="center">Congratulations!</h3>
 						<h5 class="center"> Thank you for your registration! Kindly click the submit button to proceed.</h5>
 					</div>
 					<div class="row">
