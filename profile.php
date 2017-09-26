@@ -1507,7 +1507,7 @@
 																		<option value="Saturday">Saturday</option>
 																	</select>
 																	<label>Day</label>
-																	<small class="error" id="Option1Day-required">This field is required.</small>
+																	<small class="error" id="Option1Day-required">Please choose one.</small>
 																</div>
 															</div>
 															<div class="input-field col s6">
@@ -1543,7 +1543,7 @@
 																	<option value="Saturday">Saturday</option>
 																</select>
 																<label>Day</label>
-																<small class="error" id="Option2Day-required">This field is required.</small>
+																<small class="error" id="Option2Day-required">Please choose one.</small>
 															</div>
 														</div>
 															<div class="input-field col s6">

@@ -625,40 +625,18 @@
 					<div id="page4" style="display: none;">
 						<h3 class="center">Account</h3>
 						<div class="row">
-							<?php
-								// database connection variable
-
-								$servername = "localhost";
-								$username = "root";
-								$password = "root";
-								$dbname = "dbccf";
-								$conn = mysqli_connect($servername, $username, $password, $dbname);
-								if (!$conn) {
-									die("Connection failed: " . mysqli_connect_error());
-								}
-								$query = "SELECT username FROM member_tbl ";
-								$result = mysqli_query($conn, $query);
-								if(mysqli_num_rows($result) > 0) {
-									while($row = mysqli_fetch_assoc($result)) {
-										$username = $row["username"];
-									}
-								}
-								//checking if username exist
-							echo '
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
 								<input type="text" name="username" id="username" data-length="16" maxlength="16" required>
 								<label for="username">Username</label>
-								<small class="error-with-icon" id="noInput">This field is required.</small>
+								<small class="error-with-icon" id="username-required">This field is required.</small>
 								<small class="error-with-icon" id="notusername">This username is already taken.</small>
 							</div>
-							'; // originally having a value of own password
-							?>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="password" data-length="16" maxlength="16" required>
+								<input type="password" name="password" id="password" data-length="16" maxlength="16" required>
 								<label for="password">Password</label>
-								<small class="error" id="password-required">This field is required.</small>
+								<small class="error-with-icon" id="password-required">This field is required.</small>
 							</div>
 						</div>
 					</div>
