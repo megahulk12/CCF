@@ -693,7 +693,14 @@
 								<label for="password">Password</label>
 								<small class="error-with-icon" id="password-required">This field is required.</small>
 							</div>
-						</div>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
+								<input type="password" name="confirm-password" id="confirm-password" data-length="16" maxlength="16" required>
+								<label for="confirm-password">Confirm New Password</label>
+								<small class="error-with-icon" id="confirm-password-required">This field is required.</small>
+								<small class="error-with-icon" id="checkpass-required">Passwords do not match.</small>
+							</div>
+					</div>
 					</div>
 					<div id="page5" style="display: none">
 						<h3 class="center">Congratulations!</h3>
@@ -806,15 +813,6 @@
 			})(), true);
 		}
 
-		/*var pass = $("#password").val();
-		var confirmpass = $("#confirm-password").val();
-		if(confirmpass!=pass) {
-			$("small#confirmpass-required").hide();
-			$("small#checkpass-required").show();
-			$("input#confirm-password").focus();
-			check_iteration = false;
-		}*/
-
 		var check_iteration = true, check_username = true, focused_element;
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
@@ -896,6 +894,17 @@
 					}
 				}
 			});
+
+			var pass = $("#password").val();
+			var confirmpass = $("#confirm-password").val();
+			if(confirmpass!=pass) {
+				if(confirmpass!="") {
+					$("small#checkpass-required").show();
+					focused_element = $('#confirm-password');
+					disableDefaultRequired($('#confirm-password'));
+					check_iteration = false;
+				}
+			}
 
 			if(check_username)
 				nextPage();
