@@ -1940,6 +1940,12 @@
 				company.hide();
 				$(".company input").prop("required", false);
 			}
+			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
+				company.hide();
+				$(".company input").prop("required", false);
+				school.hide();
+				$(".school input").prop("required", false);
+			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
