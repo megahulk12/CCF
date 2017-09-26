@@ -1510,7 +1510,7 @@
 																		<option value="Saturday">Saturday</option>
 																	</select>
 																	<label>Day</label>
-																	<small class="error" id="Option1Day-required">This field is required.</small>
+																	<small class="error" id="Option1Day-required">Please choose one.</small>
 																</div>
 															</div>
 															<div class="input-field col s6">
@@ -1546,7 +1546,7 @@
 																	<option value="Saturday">Saturday</option>
 																</select>
 																<label>Day</label>
-																<small class="error" id="Option2Day-required">This field is required.</small>
+																<small class="error" id="Option2Day-required">Please choose one.</small>
 															</div>
 														</div>
 															<div class="input-field col s6">
@@ -2323,6 +2323,12 @@
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+			}
+			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
+				company.hide();
+				$(".company input").prop("required", false);
+				school.hide();
+				$(".school input").prop("required", false);
 			}
 			else {
 				school.hide();
