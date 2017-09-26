@@ -13,7 +13,16 @@
 		// database member_tbl field variables
 		// child table fields
 		$companyname = $_POST["CompanyName"];
+		$companyaddress = $_POST["CompanyAddress"];
+		$companycontactnum = $_POST["CompanyContactNum"];
 		$schoolname = $_POST["SchoolName"];
+		$schooladdress = $_POST["SchoolAddress"];
+		$schoolcontactnum = $_POST["SchoolContactNum"];
+		$spousename = $_POST["SpouseName"];
+		$spousemobilenumber = $_POST["SpouseMobileNumber"];
+		$spousebirthdate = date("Y-m-d", strtotime($_POST["SpouseBirthdate"]));
+		if($spousebirthdate=="")
+			$spousebirthdate="";
 
 		// parent table fields
 		$firstname = $_POST["Firstname"];
@@ -30,6 +39,8 @@
 		}
 		$civilstatus = $_POST["CivilStatus"];
 		$mobilenumber = $_POST["MobileNumber"];
+		$homeaddress = $_POST["HomeAddress"];
+		$homephonenumber = $_POST["HomePhoneNumber"];
 		$profession = $_POST["Profession"];
 		$dateJoined = date("Y-m-d");
 		$dgorupmemberstatus = 1;
@@ -39,7 +50,12 @@
 
 		$checkCompanyID = false;
 		$checkSchoolID = false;
+		$checkSpouseID = false;
 		$checkMemberID = false;
+
+
+		$email = $_POST["EmailAd"];
+		$citizenship = $_POST["Citizenship"];
 
 		$conn = mysqli_connect($servername, $username, $password, $dbname);
 		if (!$conn) {
@@ -48,41 +64,25 @@
 
 		$companyIDField = "";
 		$schoolIDField = "";
-		if($companyname != ""){
-			$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
-			$checkCompanyID = true;
-			$companyIDField = ", companyID";
-			mysqli_query($conn, $sql_company);
-			/*
-			if (mysqli_query($conn, $sql_company)) {
-				echo '
-				<script>
-					Materialize.toast("Company Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-			*/
-		}
-		if($schoolname != "") {
-			$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
-			$checkSchoolID = true;
-			$schoolIDField = ", schoolID";
-			mysqli_query($conn, $sql_school);
-			/*
-			if (mysqli_query($conn, $sql_school)) {
-				echo '
-				<script>
-					Materialize.toast("School Details Inserted", 3000);
-				</script>';
-			}
-			else {
-				mysqli_error($conn);
-			}
-			*/
-		}
-		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, contactNum, occupation, dateJoined, username, password, companyID, schoolID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$mobilenumber', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", $memberType);";
+		$spouseIDField = "";
+		$preferenceIDField = "";
+
+		$sql_company = "INSERT INTO companydetails_tbl(companyName, companyContactNum, companyAddress) VALUES('$companyname', '$companyaddress', '$companycontactnum');";
+		$checkCompanyID = true;
+		$companyIDField = ", companyID";
+		mysqli_query($conn, $sql_company);
+
+		$sql_school = "INSERT INTO schooldetails_tbl(schoolName, schoolContactNum, schoolAddress) VALUES('$schoolname', '$schooladdress', '$schoolcontactnum');";
+		$checkSchoolID = true;
+		$schoolIDField = ", schoolID";
+		mysqli_query($conn, $sql_school);
+
+		$sql_spouse = "INSERT INTO spousedetails_tbl(spouseName, spouseContactNum, spouseBirthdate) VALUES('$spousename', '$spousemobilenumber', '$spousebirthdate');";
+		$checkSpouseID = true;
+		$spouseIDField = ", spouseID";
+		mysqli_query($conn, $sql_spouse);
+
+		$sql_parent = "INSERT INTO member_tbl(firstName, middleName, lastName, nickName, birthdate, gender, civilStatus, citizenship, homeAddress, homePhoneNumber, contactNum, emailAd, occupation, dateJoined, username, password, companyID, schoolID, spouseID, memberType) VALUES('$firstname', '$middlename', '$lastname', '$nickname', '$birthdate', '$gender', '$civilstatus', '$citizenship', '$homeaddress', '$homephonenumber', '$mobilenumber', '$email', '$profession', '$dateJoined', '$regusername', '$regpassword', ".getCompanyID($checkCompanyID).", ".getSchoolID($checkSchoolID).", ".getSpouseID($checkSpouseID).", $memberType);";
 		$checkMemberID = true;
 		mysqli_query($conn, $sql_parent);
 		/*
@@ -151,6 +151,30 @@
 		}
 		if($checkSchoolID)
 			return $schoolID;
+		else
+			return "NULL";
+	}
+
+	function getSpouseID($checkSpouseID) { // gets the recently added company id
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT spouseID FROM spousedetails_tbl ORDER BY spouseID DESC LIMIT 1";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$spouseID = $row["spouseID"];
+			}
+		}
+		if($checkSpouseID)
+			return $spouseID;
 		else
 			return "NULL";
 	}
@@ -444,7 +468,33 @@
 		.error {
 			color: #ff3333;
 		}
-		/* ============================END=========================== */  
+		/* ============================END=========================== */ 
+
+		/* ===== PRELOADER ===== */
+		.preloader-wrapper.small {
+			width: 24px;
+			height: 24px;
+		}
+
+		.preloader-wrapper.small-username {
+			width: 15px;
+			height: 15px;
+		}
+
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.spinner-notif {
+			position: relative;
+			left: 190px; /* half of width of notif list*/
+			top: 100px; /* half of height of notif list*/
+		}
+
+		.spinner-color-notif {
+			border-color: #777;
+		}
+		/* ===== END ===== */ 
 	</style>
 
 	<script>
@@ -543,6 +593,11 @@
 								</div>
 							</div>
 							<div class="input-field col s12">
+								<input type="text" name="Citizenship" id="Citizenship" required>
+								<label for="Citizenship">Citizenship</label>
+								<small class="error" id="Citizenship-required">This field is required.</small>
+							</div>
+							<div class="input-field col s12">
 								<input type="text" name="MobileNumber" id="MobileNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57 //only numbers on keypress" data-length="18" maxlength="18" required>
 								<label for="MobileNumber">Mobile Number</label>
 								<small class="error" id="MobileNumber-required">This field is required.</small>
@@ -620,42 +675,24 @@
 					<div id="page4" style="display: none;">
 						<h3 class="center">Account</h3>
 						<div class="row">
-							<?php
-								// database connection variable
-
-								$servername = "localhost";
-								$username = "root";
-								$password = "root";
-								$dbname = "dbccf";
-								$conn = mysqli_connect($servername, $username, $password, $dbname);
-								if (!$conn) {
-									die("Connection failed: " . mysqli_connect_error());
-								}
-								$query = "SELECT username FROM member_tbl ";
-								$result = mysqli_query($conn, $query);
-								if(mysqli_num_rows($result) > 0) {
-									while($row = mysqli_fetch_assoc($result)) {
-										$username = $row["username"];
-									}
-								}
-								//checking if username exist
-							echo '
 							<div class="input-field col s12">
 								<i class="material-icons prefix">account_circle</i> <!-- person_outline -->
 								<input type="text" name="username" id="username" data-length="16" maxlength="16" required>
 								<label for="username">Username</label>
-								<small class="error-with-icon" id="noInput">This field is required.</small>
+								<small class="error-with-icon" id="username-required">This field is required.</small>
 								<small class="error-with-icon" id="notusername">This username is already taken.</small>
 							</div>
-							'; // originally having a value of own password
-							?>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">lock</i> <!-- lock_outline -->
-								<input type="password" name="password" data-length="16" maxlength="16" required>
+								<input type="password" name="password" id="password" data-length="16" maxlength="16" required>
 								<label for="password">Password</label>
-								<small class="error" id="password-required">This field is required.</small>
+								<small class="error-with-icon" id="password-required">This field is required.</small>
 							</div>
 						</div>
+					</div>
+					<div id="page5" style="display: none">
+						<h3 class="center">Congratulations!!</h3>
+						<h5 class="center"> Thank you for your registration! Kindly click the submit button to proceed.</h5>
 					</div>
 					<div class="row">
 						<div class="progress col s6 left" style=" margin-left: 10px;">
@@ -674,7 +711,7 @@
 	<!-- scripts -->
 
 	<script>
-		var currentpage = 1, no_of_pages=4, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
+		var currentpage = 1, no_of_pages=5, percentage=(currentpage/no_of_pages)*100, currentprogress=percentage;
 
 		// initialization of profress bar controls
 		document.getElementById('page').innerHTML = document.getElementById('page').innerHTML + "Page "+currentpage+" of "+no_of_pages;
@@ -751,6 +788,7 @@
 			});
 			*/
 		}
+
 		/*----------------------code ni paolo---------------------------------------*/
 		$('.error, .error-with-icon').hide(); // by default, hide all error classes
 
@@ -854,6 +892,11 @@
 				}
 			});
 
+			if(check_username)
+				nextPage();
+		});
+
+		function nextPage() {
 			if(!check_iteration) // checks if there is mali in form
 				scrollTo(focused_element); // scrolls to focused element
 
@@ -864,7 +907,7 @@
 				}
 				pagination(1);
 			}
-		});
+		}
 
 		function checkUsername() {
 			// when username error appears, it will be display:none if next is clicked
@@ -906,7 +949,7 @@
 							setTimeout(function() {
 								$('#next').prop("disabled", false);
 								check_username = true;
-								//nextPage();
+								nextPage();
 							}, 1000);
 						}
 						else {
