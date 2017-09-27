@@ -11,6 +11,11 @@
 			<li class="divider"></li>
 			<li><a href="ministry.php"><i class="material-icons prefix>">people</i>Ministry</a></li>
 			';
+			if(getEndorsementStatus($_SESSION['userid']) != "" && $_SESSION['memberType'] == 1)
+				echo '
+			<li class="divider"></li>
+	  		<li><a href="my-endorsement.php"><i class="material-icons prefix>">library_books</i>My Endorsement</a></li>
+			';
 	  	if($_SESSION["memberType"] >= 2 ) {
 	  		echo '
 			<li class="divider"></li>

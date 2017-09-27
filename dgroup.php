@@ -516,7 +516,7 @@
     <div id="response"></div>
     <div class="container">
       <?php 
-	      if(getEndorsementStatus(getDgroupMemberID($_SESSION['userid'])) == "" && $_SESSION["memberType"] == 1) { //checks if dgroup member and if endorsement has not been made
+	      if(getEndorsementStatus($_SESSION['userid']) == "" && $_SESSION["memberType"] == 1) { //checks if dgroup member and if endorsement has not been made
 		      echo '
 		      <form method="post">
 		        <button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="request_leader" type="button" name="request_leader" onclick = "window.location.href = '."'".'endorsement.php'."'".'"><font color = "white">I WANT TO BE A DGROUP LEADER</font></button>
