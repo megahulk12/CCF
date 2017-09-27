@@ -422,6 +422,10 @@
 			height: 24px;
 		}
 
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+
 		.spinner-notif {
 			position: relative;
 			left: 190px; /* half of width of notif list*/
@@ -431,6 +435,7 @@
 		.spinner-color-notif {
 			border-color: #777;
 		}
+		/* ===== END ===== */
 
 		.input-field div.error {
 			font-size: 0.8rem;
@@ -466,6 +471,11 @@
 			background-color: #16A5B8;
 		}
 		/* ===== END ===== */
+
+		#preloader {
+			position: relative;
+			width: 0 !important;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -579,6 +589,19 @@
 		<div class="row">
 			<div class="col s12 z-depth-4 card-panel">
 				<form method="post" class="endorsement" id="Eform"> <!--if php is applied, action value will then become the header -->
+					<div id="preloader" style="visibility: hidden">
+						<div class="preloader-wrapper small active">
+							<div class="spinner-layer spinner-blue-only spinner-color-theme">
+								<div class="circle-clipper left">
+									<div class="circle"></div>
+								</div><div class="gap-patch">
+									<div class="circle"></div>
+								</div><div class="circle-clipper right">
+									<div class="circle"></div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div id="page1">
 						<h3 class="center">ENDORSEMENT FORM</h3>
 						<h4 class="center">BAPTISMAL</h4>
@@ -659,7 +682,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="request" id="request">SUBMIT</button>
+						<button class="waves-effect waves-light btn col s2 right fixbutton profile-next-or-submit-button" type="submit" name="request" id="request" disabled>REVISE</button>
 					</div>
 				</form>
 			</div>
@@ -692,10 +715,10 @@
 		var validated = false;
 		$('#Eform').submit(function(e) {
 			if(validated) {
-				var url="request.php";
+				var url="request_my-endorsement.php";
 				var preloader = '\
-					<div class="preloader-wrapper small active spinner-notif"> \
-						<div class="spinner-layer spinner-blue-only spinner-color-notif"> \
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
 							<div class="circle-clipper left"> \
 								<div class="circle"></div> \
 							</div><div class="gap-patch"> \
@@ -713,18 +736,17 @@
 				$.ajax({
 					type: "POST",
 					url: url,
-					data: 'request=g&'+$('#Eform').serialize()+'&startAgeBracket='+start_age+'&endAgeBracket='+end_age, 
+					data: 'revise=g&'+$('#Eform').serialize()+'&startAgeBracket='+start_age+'&endAgeBracket='+end_age, 
 					success: function(data) {
-						alert(data);
-						$('#request').html("SUBMIT");
+						$('#request').html("REVISE");
 						$('#request').prop("disabled", false);
 						swal({
 							title: "Success!",
-							text: "Request submitted!\nPlease wait for your Dgroup leader to assess your request.",
+							text: "Endorsement form updated!\nPlease wait for your Dgroup leader to assess your request.",
 							type: "success",
 							allowEscapeKey: true
 						},
-							function() { window.location.href = "index.php"; }
+							function() { window.location.reload(); }
 						);
 					}
 				});
@@ -735,6 +757,56 @@
 		function splitAgeBracket(index, string) {
 			string = String(string);
 			return string.split(",")[index];
+		}
+
+		$(document).ready(function() {
+			var url = "request_my-endorsement.php";
+			$('#page1').animate({opacity: 0.2}, 300);
+			preload();
+			$('button').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$.ajax({
+				type: 'POST',
+				url: url,
+				dataType: 'json',
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$('#page1').animate({opacity: 1}, 300);
+					$('button').removeAttr("disabled");
+					disableForm(false);
+					$('#AgeBracket').removeAttr("disabled");
+					$("#BaptismalDate").val(data.baptismaldate);
+					$("#BaptismalPlace").val(data.baptismalplace);
+					$("#DgroupType").val(data.dgrouptype);
+					var agebracket = data.agebracket;
+					var start_age = agebracket.split("-")[0];
+					var end_age = agebracket.split("-")[1];
+					slider.noUiSlider.set([start_age, end_age]);
+					$('#MeetingDay').val(data.day);
+					$('#timepicker1opt1').val(data.starttime);
+					$('#timepicker1opt2').val(data.endtime);
+					$('#MeetingPlace').val(data.place);
+
+
+					$('select').material_select();
+					Materialize.updateTextFields();
+				}
+			});
+		});
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#Eform').width()/2);
+			$('#preloader').css("top", $('#Eform').height()/2);
+			disableForm(true);
+		}
+
+		function disableForm(flag) {
+			$('#Eform').children().find('input, select').each(function() {
+				$(this).prop("disabled", flag);
+			});
+
+			$('#AgeBracket').attr("disabled", "");
 		}
 	</script>
 

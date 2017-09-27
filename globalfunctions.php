@@ -201,7 +201,7 @@
 		return $notificationType;
 	}
 
-	function getEndorsementID() {
+	function getCurrentEndorsementID() {
 		// database connection variables
 
 		$servername = "localhost";
@@ -224,7 +224,7 @@
 		return $endorsementID;
 	}
 
-	function getEndorsementStatus($dgmemberID) {
+	function getEndorsementID($id) {
 		// database connection variables
 
 		$servername = "localhost";
@@ -237,7 +237,30 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
-		$sql_endorsement = "SELECT endorsementStatus FROM endorsement_tbl WHERE dgmemberID = $dgmemberID";
+		$sql_endorsement = "SELECT endorsementID FROM endorsement_tbl LEFT OUTER JOIN discipleshipgroupmembers_tbl ON dgmemberID = dgroupmemberID LEFT OUTER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberID = $id";
+		$result = mysqli_query($conn, $sql_endorsement);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$endorsementID = $row["endorsementID"];
+			}
+		}
+		return $endorsementID;
+	}
+
+	function getEndorsementStatus($id) {
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+
+		$sql_endorsement = "SELECT endorsementStatus FROM endorsement_tbl LEFT OUTER JOIN discipleshipgroupmembers_tbl ON dgmemberID = dgroupmemberID LEFT OUTER JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberID = $id";
 		$result = mysqli_query($conn, $sql_endorsement);
 		$endorsementStatus = "";
 		if(mysqli_num_rows($result) > 0) {
