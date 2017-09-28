@@ -3,16 +3,16 @@
 <html xmlns = ″http://www.w3.org/1999/xhtml″>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="../resources/CCF.ico">
-	<link href="../materialize/css/materialize.css" rel="stylesheet">
-	<script src="../jquery-3.2.1.min.js"></script>
-	<script src="../materialize/js/materialize.js"></script>
-	<script src="../universal.js"></script>
-	<link href="../universal.css" rel="stylesheet">
+    <link rel="shortcut icon" href="resources/CCF.ico">
+	<link href="materialize/css/materialize.css" rel="stylesheet">
+	<script src="jquery-3.2.1.min.js"></script>
+	<script src="materialize/js/materialize.js"></script>
+	<script src="universal.js"></script>
+	<link href="universal.css" rel="stylesheet">
 
 	<!-- for alerts -->
-	<script src="../alerts/dist/sweetalert-dev.js"></script>
-	<link rel="stylesheet" type="text/css" href="../alerts/dist/sweetalert.css">
+	<script src="alerts/dist/sweetalert-dev.js"></script>
+	<link rel="stylesheet" type="text/css" href="alerts/dist/sweetalert.css">
 
 	<title>Christ's Commission Fellowship</title>
 	<style>
@@ -66,7 +66,7 @@
 		}
 		@font-face {
 			font-family: proxima-nova;
-			src: url(../ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
+			src: url(ccf-fonts/proxima/PROXIMANOVA-BOLD.otf);
 			font-weight: bold;
 		}
 
@@ -461,10 +461,10 @@
 		<nav style="margin-bottom: 50px;">
 			<div class="container">
 			    <div class="nav-wrapper">
-			      	<a href="../index.php" class="brand-logo"><img src="../resources/CCF Logos6" id="logo"/></a>
+			      	<a href="index.php" class="brand-logo"><img src="resources/CCF Logos6" id="logo"/></a>
 			      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<li><a href="../events.php">EVENTS</a></li>
-						<li><a href="../ministries.php">MINISTRIES</a></li>
+						<li><a href="events.php">EVENTS</a></li>
+						<li><a href="ministries.php">MINISTRIES</a></li>
 			     	 </ul>
 			    </div>
 			</div>
@@ -483,7 +483,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col 16 s8">
-					<img src="../resources/CCF Logos7.png" />
+					<img src="resources/CCF Logos7.png" />
 				</div>
 				<div class="col 14 offset-12 s4">
 					<p class="footer-cpyrght">
