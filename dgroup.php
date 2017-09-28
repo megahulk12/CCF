@@ -13,6 +13,8 @@
 	<script src="materialize/js/materialize.js"></script>
 	<script src="universal.js"></script>
 	<link href="universal.css" rel="stylesheet">
+	<link href="materialize/timepicker/_old/css/materialize.clockpicker.css" rel="stylesheet" media="screen,projection">
+	<script src="materialize/timepicker/src/js/materialize.clockpicker.js"></script>
 
 	<!-- for alerts -->
 	<script src="alerts/dist/sweetalert-dev.js"></script>
@@ -447,6 +449,10 @@
 			height: 24px;
 		}
 
+		.spinner-color-theme {
+			border-color: rgba(0, 0, 0, 0.4);
+		}
+
 		.spinner-notif {
 			position: relative;
 			left: 190px; /* half of width of notif list*/
@@ -456,7 +462,54 @@
 		.spinner-color-notif {
 			border-color: #777;
 		}
+
+		#preloader {
+			position: relative;
+			width: 0 !important;
+		}
 		/* ===== END ===== */
+
+		.error {
+			color: #ff3333;
+		}
+
+		/* ============================OVERRIDE CUSTOM MATERIALIZE STYLES=========================== */  
+		/* input custom colors*/
+		/*Text inputs*/
+		input:not([type]):focus:not([readonly]),
+		input[type=text]:focus:not([readonly]),
+		input[type=password]:focus:not([readonly]),
+		input[type=email]:focus:not([readonly]),
+		input[type=url]:focus:not([readonly]),
+		input[type=time]:focus:not([readonly]),
+		input[type=date]:focus:not([readonly]),
+		input[type=datetime]:focus:not([readonly]),
+		input[type=datetime-local]:focus:not([readonly]),
+		input[type=tel]:focus:not([readonly]),
+		input[type=number]:focus:not([readonly]),
+		input[type=search]:focus:not([readonly]),
+		textarea.materialize-textarea:focus:not([readonly]) {
+			border-bottom: 1px solid #16A5B8;
+			box-shadow: 0 1px 0 0 #16A5B8;
+		}
+
+		input:not([type]):focus:not([readonly])+label,
+		input[type=text]:focus:not([readonly])+label,
+		input[type=password]:focus:not([readonly])+label,
+		input[type=email]:focus:not([readonly])+label,
+		input[type=url]:focus:not([readonly])+label,
+		input[type=time]:focus:not([readonly])+label,
+		input[type=date]:focus:not([readonly])+label,
+		input[type=datetime]:focus:not([readonly])+label,
+		input[type=datetime-local]:focus:not([readonly])+label,
+		input[type=tel]:focus:not([readonly])+label,
+		input[type=number]:focus:not([readonly])+label,
+		input[type=search]:focus:not([readonly])+label,
+		textarea.materialize-textarea:focus:not([readonly])+label {
+			color: #16A5B8;
+		}
+
+		/* ===================== END ===================== */
 	</style>
 
 	<script type="text/javascript">
@@ -465,21 +518,23 @@
 				event.stopPropagation(); // this event stops closing the notification page when clicked upon
 			});
 			$('.modal').modal();
-
-			// slider events
-			var slider = document.getElementById('AgeBracket');
-			noUiSlider.create(slider, {
-				start: [30, 70],
-				connect: true,
-				step: 1,
-				orientation: 'horizontal', // 'horizontal' or 'vertical'
-				range: {
-				 'min': 0,
-				 'max': 100
-				},
-				format: wNumb({
-					decimals: 0
-				})
+			$('select').material_select();
+			$('.datepicker').pickadate({
+				selectMonths: true, // Creates a dropdown to control month
+				selectYears: 50, // Creates a dropdown of 15 years to control year
+				formatSubmit: 'yyyy-mm-dd',
+				max: true
+			});
+			$('.timepicker').pickatime({
+				default: 'now', // Set default time
+				fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+				twelvehour: true, // Use AM/PM or 24-hour format
+				donetext: 'DONE', // text for done-button
+				cleartext: 'Clear', // text for clear-button
+				canceltext: 'Cancel', // Text for cancel-button
+				autoclose: false, // automatic close timepicker
+				ampmclickable: false, // make AM PM clickable
+				aftershow: function(){} //Function for after opening timepicker
 			});
 		});
 	</script>
@@ -645,7 +700,7 @@
 					if($_SESSION["memberType"] >= 2) { // assuming all high positions are already a Dgroup Leader
 						echo '
 				<div id="own-dgroup">
-					<button class="waves-effect waves-light btn col s2 right dgroup-leader-button" id="edit-dgroup" type="button" name="edit-dgroup" data-target="edit-dgroup-form">EDIT THIS DGROUP</button>
+					<button class="waves-effect waves-light btn col s2 right dgroup-leader-button tooltipped" id="edit-dgroup" type="button" name="edit-dgroup" data-target="edit-dgroup-form-modal" data-position="top" data-tooltip="Edit Dgroup Details"><i class="material-icons">edit</i></button>
 					<h3>My Discipleship Group</h3>
 					<dd><h6>'.$sched.'</h6></dd>
 					<table id="own-dgroup" class="centered dgroup-table-spacing">
@@ -677,28 +732,100 @@
 				</div>';
 
 					echo '
-					';
-					}
-				}
-			?>
-		</div>
 
-		<div id="edit-dgroup-form" class="modal modal-fixed-footer">
+		<div id="edit-dgroup-form-modal" class="modal modal-fixed-footer">
+			<div id="preloader" style="visibility: hidden">
+				<div class="preloader-wrapper small active">
+					<div class="spinner-layer spinner-blue-only spinner-color-theme">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div><div class="gap-patch">
+							<div class="circle"></div>
+						</div><div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="modal-content">
-				<form method="post" id="edit-dgroup">
+				<form method="post" id="edit-dgroup-form">
+				<h4 id="form-header">Edit My Dgroup</h4>
 				<div class="row">
-					<div class="range-field col s12">
-						<label id="AgeBracket-label" for="AgeBracket">Age Bracket - ( - )</label>
-						<br>
-						<br>
-						<div id="AgeBracket"></div>
+					<div>
+						<div class="input-field col s12" id="Dgroup">
+							<select id="DgroupType" name="DgroupType" required>
+								<option value="" disabled selected>Choose your option...</option>
+								<option value="Youth">Youth</option>
+								<option value="Singles">Singles</option>
+								<option value="Single Parents">Single Parents</option>
+								<option value="Married">Married</option>
+								<option value="Couples">Couples</option>
+								<option value="All">All (Men/Women)</option>
+							</select>
+							<label>Type of Dgroup</label>
+							<small class="error choose" id="DgroupType-required"></small>
+							<small class="error" id="DgroupType-nospouse"></small>
+							<small class="error" id="DgroupType-spouse"></small>
+							<small class="error" id="DgroupType-single"></small>
+						</div>
+					</div>
+					<div>
+						<div class="range-field col s12">
+							<label id="AgeBracket-label" for="AgeBracket">Age Bracket - ( - )</label>
+							<br>
+							<br>
+							<div id="AgeBracket"></div>
+						</div>
+					</div>
+					&nbsp;
+					<h4 class="center">MEETING</h4>
+					<div style="margin-bottom: 0px;" id="Meeting">
+						<div class="input-field col s12">
+							<select id="MeetingDay" name="MeetingDay" required>
+								<option value="" disabled selected>Choose your option...</option>
+								<option value="Sunday">Sunday</option>
+								<option value="Monday">Monday</option>
+								<option value="Tuesday">Tuesday</option>
+								<option value="Wednesday">Wednesday</option>
+								<option value="Thursday">Thursday</option>
+								<option value="Friday">Friday</option>
+								<option value="Saturday">Saturday</option>
+							</select>
+							<label>Day</label>
+							<small class="error choose" id="MeetingDay-required"></small>
+						</div>
+					</div>
+					<div class="input-field col s6">
+						<label for="timepicker1opt1">Start Time</label>
+						<input type="date" class="timepicker" name="timepicker1opt1" id="timepicker1opt1" required>
+						<small class="error" id="timepicker1opt1-required"></small>
+						<small class="error" id="timepicker1opt1-equaltime"></small>
+						<small class="error" id="timepicker1opt1-greatertime"></small>
+					</div>
+					<div class="input-field col s6">
+						<label for="timepicker1opt2">End Time</label>
+						<input type="date" class="timepicker" name="timepicker1opt2" id="timepicker1opt2" required>
+						<small class="error" id="timepicker1opt2-required"></small>
+						<small class="error" id="timepicker1opt2-equaltime"></small>
+						<small class="error" id="timepicker1opt2-greatertime"></small>
+					</div>
+					<div class="input-field col s12">
+						<input type="text" name="MeetingPlace" id="MeetingPlace" data-length="50" maxlength="50" required>
+						<label for="MeetingPlace">Place</label>
+						<small class="error" id="MeetingPlace-required"></small>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button class="modal-action waves-effect btn-flat" type="submit" name="edit" id="edit">Done</button>
+				<button class="modal-close waves-effect btn-flat" type="button" name="cancel" id="cancel">Cancel</button>
 				</form>
 			</div>
+		</div>
+					';
+					}
+				}
+			?>
 		</div>
 	</body>
 
@@ -959,6 +1086,312 @@
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhttp.send("seen");
 		}
+
+		// slider events
+		var slider = document.getElementById('AgeBracket');
+		noUiSlider.create(slider, {
+			start: [30, 70],
+			connect: true,
+			step: 1,
+			orientation: 'horizontal', // 'horizontal' or 'vertical'
+			range: {
+			 'min': 0,
+			 'max': 100
+			},
+			format: wNumb({
+				decimals: 0
+			})
+		});
+
+		slider.noUiSlider.on('update', function(values, handle) {
+			// value[handle]
+			$('#AgeBracket-label').text('Age Bracket - ('+values[0]+' - '+values[1]+')');
+		});
+
+		var validated = false;
+		$('#edit-dgroup-form').submit(function(e) {
+			if(validated) {
+				var url="request_dgroup.php";
+				var preloader = '\
+					<div class="preloader-wrapper small active"> \
+						<div class="spinner-layer spinner-blue-only spinner-color-theme"> \
+							<div class="circle-clipper left"> \
+								<div class="circle"></div> \
+							</div><div class="gap-patch"> \
+								<div class="circle"></div> \
+							</div><div class="circle-clipper right"> \
+								<div class="circle"></div> \
+							</div> \
+						</div> \
+					</div> \
+				  ';
+				$('#edit').html(preloader);
+				$('#edit').prop("disabled", true);
+				var start_age = splitAgeBracket(0, slider.noUiSlider.get());
+				var end_age = splitAgeBracket(1, slider.noUiSlider.get());
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: 'edit-dgroup=g&'+$(this).serialize()+'&startAgeBracket='+start_age+'&endAgeBracket='+end_age, 
+					success: function(data) {
+						$('#edit').html("DONE");
+						$('#edit').prop("disabled", false);
+						swal({
+							title: "Success!",
+							text: "Details of your Dgroup has been updated.",
+							type: "success",
+							allowEscapeKey: true
+						},
+							function() { window.location.reload(); }
+						);
+					}
+				});
+			}
+			e.preventDefault();
+		});
+
+		function splitAgeBracket(index, string) {
+			string = String(string);
+			return string.split(",")[index];
+		}
+
+
+		//--------------------------hello, code to ni pogi hehe----------------------------//
+
+		$('.error').hide(); // by default, hide all error classes
+
+		$(document).ready(function() {
+			$('.error').text('This field is required.');
+			$('.choose').text('Please choose one.');
+			$('#DgroupType-spouse').text('Not all your members are legally married. Please pick a different Dgroup Type.');
+			$('#DgroupType-nospouse').text('Some of your members are legally married. Please pick a different Dgroup Type.');
+			$('#DgroupType-single').text('Some of your members are still single. Please pick a different Dgroup Type.');
+			$('[id$=greatertime]').text('Start Time should be before than End Time.');
+			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
+		});
+
+		function disableDefaultRequired(elem) {
+			// disable default required tooltips
+			document.addEventListener('invalid', (function () {
+			    return function (e) {
+			        e.preventDefault();
+			    };
+			})(), true);
+		}
+
+		$("[id^=timepicker]").change(function() {
+			var time_value = $(this).val();
+			if(time_value.charAt(0) == '0') {
+				$(this).val(removeLeadingZero(time_value));
+			}
+		});
+		
+		var civilstatus = "";
+		$(document).ready(function() {
+			var url = "get_civilstatus.php";
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'dgroup=g',
+				success: function(data) {
+					civilstatus = data.split(" ");
+				}
+			});
+		});
+
+		var check_iteration = true, focused_element;
+		$("#edit").click(function(){
+			$('.error, .error-with-icon').hide(); // by default, hide all error classes
+			$(this).blur();
+			check_iteration = true;
+
+			$($('#edit-dgroup-form').find('input, select').reverse()).each(function(){
+				if($(this).prop("required")) {
+					if($(this).val() == "") {
+						$('small#'+this.id+'-required').show();
+						focused_element = $(this);
+						disableDefaultRequired($(this));
+						check_iteration = false;
+					}
+					else if($(this).is('select')) {
+						if($(this).val() == null) {
+							$("small#"+this.id+"-required").show();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if($(this).is('[id^=timepicker]')) {
+						// convert time values to timestamp; TIME VALIDATION
+						var start_time = $("#timepicker1opt1").val(), end_time = $("#timepicker1opt2").val();
+						d = (new Date()).getYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate();
+						//d = "2015-03-25";
+						start_time = spaceAMPM(start_time);
+						end_time = spaceAMPM(end_time);
+						start_time = new Date(d + " " + start_time);
+						end_time = new Date(d + " " + end_time);
+						start_time = start_time.getTime();
+						end_time = end_time.getTime();
+						if((start_time > end_time) && !($('[id^=timepicker]').val() == "")) {
+							$("[id$=greatertime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
+
+						if((start_time == end_time) && !($('[id^=timepicker]').val() == "")) {
+							$("[id$=equaltime]").show();
+							focused_element = $("#timepicker1opt1");
+							check_iteration = false;
+						}
+					}
+				}
+			});
+
+			for(var i = 0; i < civilstatus.length-1; i++) {
+				if($('#DgroupType').val() == "Married") {
+					if(civilstatus[i] == "Single" || civilstatus[i] == "Single Parent" || civilstatus[i] == "Annulled") {
+						$('#DgroupType-nospouse').show();
+						focused_element = $('#DgroupType');
+						disableDefaultRequired($('#DgroupType'));
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Single") {
+					if(civilstatus[i] == "Married" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						disableDefaultRequired($('#DgroupType'));
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Youth") {
+					if(civilstatus[i] == "Married" || civilstatus[i] == "Separated" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Annulled") {
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						disableDefaultRequired($('#DgroupType'));
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Couples"){
+					if(civilstatus[i] == "Single" || civilstatus[i] == "Single Parent"){
+						$('#DgroupType-single').show();
+						focused_element = $('#DgroupType');
+						disableDefaultRequired($('#DgroupType'));
+						check_iteration = false;
+					}
+				}
+				else if($('#DgroupType').val() == "Single Parents"){
+					if(civilstatus[i] == "Married"){
+						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						disableDefaultRequired($('#DgroupType'));
+						check_iteration = false;
+					}
+				}
+			}
+
+			if(!check_iteration) // checks if there is mali in form
+				scrollTo(focused_element); // scrolls to focused element
+
+			if(check_iteration) {
+				validated = true;
+			}
+		});
+
+		$('#edit-dgroup').click(function() {
+			var url = "request_dgroup.php";
+			$('.modal-content').animate({opacity: 0.2}, 300);
+			preload();
+			$('.modal-footer #edit').prop("disabled", true);
+			$("#preloader").css("visibility", "visible");
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: 'get-dgroup=g',
+				dataType: 'json',
+				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					$('.modal-content').animate({opacity: 1}, 300);
+					$('.modal-footer #edit').prop("disabled", false);
+					disableForm(false);
+					$('#DgroupType').val(data.dgrouptype);
+					var agebracket = data.agebracket;
+					var start_age = agebracket.split("-")[0];
+					var end_age = agebracket.split("-")[1];
+					slider.noUiSlider.set([start_age, end_age]);
+					$('#MeetingDay').val(data.day);
+					$('#timepicker1opt1').val(data.starttime);
+					$('#timepicker1opt2').val(data.endtime);
+					$('#MeetingPlace').val(data.place);
+
+					$('select').material_select();
+					Materialize.updateTextFields();
+				}
+			});
+		});
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#edit-dgroup-form-modal').width()/2);
+			$('#preloader').css("top", $('#edit-dgroup-form-modal').height()/2);
+			disableForm(true);
+		}
+
+		function disableForm(flag) {
+			$('#edit-dgroup-form').children().find('input').each(function() {
+				$(this).prop("disabled", flag);
+			});
+
+			if(flag)
+				$('#AgeBracket').attr("disabled", "");
+			else
+				$('#AgeBracket').removeAttr("disabled");
+		}
+
+		function removeLeadingZero(time_value) {
+			return time_value.slice(1, time_value.length);
+		}
+
+		function spaceAMPM(time_value) {
+			// puts a space before AM or PM for formatting purposes
+			// Date constructor won't accept spaces like 8:24PM; it should be 8:24 PM
+			time_value = time_value.replace("AM", " AM");
+			time_value = time_value.replace("PM", " PM");
+			return time_value;
+		}
+
+		/*
+		 *		INFORMATION ABOUT WILDCARDS
+		 *		^=<string> --> elements starting with <string>
+		 *		$=<string> --> elements ending with <string>
+		 *
+		 */
+		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
+		var confirmvalidated = false; // confirms if every form is verified and validated; set flag to true if validated, same as validated flag
+
+		function animateBodyScrollTop() {
+			$(".modal-content").animate({
+				scrollTop: 0
+			}, 300, "swing");
+		}
+
+		function getCurrentPosition(elem) {
+		// gets the current top position of an element relative to the document
+			var offset = elem.offset();
+			return offset.top;
+		}
+
+		function scrollTo(elem) {
+			var positionscroll = parseInt(getCurrentPosition(elem));
+			var positionscrolltop = positionscroll - 200;
+		// this function also serves for when focusing an element, it scrolls to that particular element
+			$(".modal-content").animate({
+				scrollTop: positionscrolltop
+			}, 300, "swing");
+			elem.focus();
+		}
+
+		/* ===== END ===== */
 	</script>
 
 	<script>

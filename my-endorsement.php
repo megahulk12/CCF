@@ -623,7 +623,7 @@
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Youth">Youth</option>
 										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
+										<option value="Single Parents">Single Parents</option>
 										<option value="Married">Married</option>
 										<option value="Couples">Couples</option>
 										<option value="All">All (Men/Women)</option>
@@ -774,7 +774,6 @@
 					$('#page1').animate({opacity: 1}, 300);
 					$('button').removeAttr("disabled");
 					disableForm(false);
-					$('#AgeBracket').removeAttr("disabled");
 					$("#BaptismalDate").val(data.baptismaldate);
 					$("#BaptismalPlace").val(data.baptismalplace);
 					$("#DgroupType").val(data.dgrouptype);
@@ -786,7 +785,6 @@
 					$('#timepicker1opt1').val(data.starttime);
 					$('#timepicker1opt2').val(data.endtime);
 					$('#MeetingPlace').val(data.place);
-
 
 					$('select').material_select();
 					Materialize.updateTextFields();
@@ -802,11 +800,14 @@
 		}
 
 		function disableForm(flag) {
-			$('#Eform').children().find('input, select').each(function() {
+			$('#feedback-form').children().find('input').each(function() {
 				$(this).prop("disabled", flag);
 			});
 
-			$('#AgeBracket').attr("disabled", "");
+			if(flag)
+				$('#AgeBracket').attr("disabled", "");
+			else
+				$('#AgeBracket').removeAttr("disabled");
 		}
 	</script>
 

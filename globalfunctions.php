@@ -398,6 +398,28 @@
 		return $schedID;
 	}
 
+	function getLeaderSchedID($id) {
+		// database connection variables
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "root";
+		$dbname = "dbccf";
+		
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		if (!$conn) {
+			die("Connection failed: " . mysqli_connect_error());
+		}
+		$query = "SELECT scheduledmeeting_tbl.schedID FROM scheduledmeeting_tbl LEFT OUTER JOIN discipleshipgroup_tbl ON scheduledmeeting_tbl.schedID = discipleshipgroup_tbl.schedID WHERE dgleader = $id";
+		$result = mysqli_query($conn, $query);
+		if(mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {
+				$schedID = $row["schedID"];
+			}
+		}
+		return $schedID;
+	}
+
 	function notifCount(){
 		// <!---------------------------------code ni paolo------------------------------------>
 		$servername = "localhost";
