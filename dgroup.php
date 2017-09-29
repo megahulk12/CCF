@@ -1175,6 +1175,7 @@
 			$('.choose').text('Please choose one.');
 			$('#DgroupType-spouse').text('Not all your members are legally married. Please pick a different Dgroup Type.');
 			$('#DgroupType-nospouse').text('Some of your members are legally married. Please pick a different Dgroup Type.');
+            $('#DgroupType-separated').text('Your sttll legally married. Please pick a different Dgroup Type');
 			$('#DgroupType-single').text('Some of your members are still single. Please pick a different Dgroup Type.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
@@ -1258,29 +1259,35 @@
 			});
 
 			for(var i = 0; i < civilstatus.length-1; i++) {
+        //alert(civilstatus[i]);
 				if($('#DgroupType').val() == "Married") {
 					if(civilstatus[i] == "Single" || civilstatus[i] == "Single Parent" || civilstatus[i] == "Annulled") {
-						$('#DgroupType-nospouse').show();
+						$('#DgroupType-spouse').show();
 						focused_element = $('#DgroupType');
 						disableDefaultRequired($('#DgroupType'));
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Single") {
-					if(civilstatus[i] == "Married" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Annulled") {
-						$('#DgroupType-spouse').show();
+					if(civilstatus[i] == "Married" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Separated") {
+						$('#DgroupType-nospouse').show();
 						focused_element = $('#DgroupType');
 						disableDefaultRequired($('#DgroupType'));
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Youth") {
-					if(civilstatus[i] == "Married" || civilstatus[i] == "Separated" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Annulled") {
-						$('#DgroupType-spouse').show();
+					if(civilstatus[i] == "Married" || civilstatus[i] == "Widow/er" || civilstatus[i] == "Annulled") {
+						$('#DgroupType-nospouse').show();
 						focused_element = $('#DgroupType');
 						disableDefaultRequired($('#DgroupType'));
 						check_iteration = false;
 					}
+                    else if(civilstatus == "Separated"){
+                        $('#DgroupType-separated').show();
+                        focused_element = $('#DgroupType');
+                        check_iteration = false;
+                    }
 				}
 				else if($('#DgroupType').val() == "Couples"){
 					if(civilstatus[i] == "Single" || civilstatus[i] == "Single Parent"){
@@ -1298,6 +1305,7 @@
 						check_iteration = false;
 					}
 				}
+                //alert(check_iteration);
 			}
 
 			if(!check_iteration) // checks if there is mali in form

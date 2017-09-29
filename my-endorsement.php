@@ -637,6 +637,7 @@
 									<small class="error" id="DgroupType-nospouse"></small>
 									<small class="error" id="DgroupType-spouse"></small>
 									<small class="error" id="DgroupType-single"></small>
+									<small class="error" id="DgroupType-separated"></small>
 								</div>
 							</div>
 							<div class="row">
@@ -960,6 +961,7 @@
 			$('.choose').text('Please choose one.');
 			$('#DgroupType-spouse').text('You are not legally married. Please pick a different Dgroup Type.');
 			$('#DgroupType-nospouse').text('You are legally married. Please pick the Married Dgroup Type.');
+			$('#DgroupType-separated').text('Your sttll legally married. Please pick a different Dgroup Type');
 			$('#DgroupType-single').text('You are single. You cannot pick the Couples Dgroup Type.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
@@ -989,21 +991,26 @@
 
 			if($('#DgroupType').val() == "Married") {
 				if(civilstatus == "Single" || civilstatus == "Single Parent" || civilstatus == "Annulled") {
-					$('#DgroupType-nospouse').show();
+					$('#DgroupType-spouse').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
 			}
 			else if($('#DgroupType').val() == "Single") {
 				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
-					$('#DgroupType-spouse').show();
+					$('#DgroupType-nospouse').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
 			}
 			else if($('#DgroupType').val() == "Youth") {
-				if(civilstatus == "Married" || civilstatus == "Separated" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
-					$('#DgroupType-spouse').show();
+				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
+					$('#DgroupType-nospouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+				else if(civilstatus == "Separated"){
+					$('#DgroupType-separated').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
