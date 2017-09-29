@@ -18,12 +18,9 @@
 		mysqli_close($conn);
 	}
 	else if(isset($_POST['approve'])) {
-		$eventHead = $_POST["EventHead"];
-		$sql_event_approved = "UPDATE eventdetails_tbl SET eventHeadID = $eventHead, eventStatus = 1 WHERE eventID = $id";
+		$sql_event_approved = "UPDATE eventdetails_tbl SET eventStatus = 1 WHERE eventID = $id";
 		mysqli_query($conn, $sql_event_approved);
-		$sql_promote = "UPDATE member_tbl SET memberType = 3 WHERE memberID = ".getEventHeadID($id);
-		mysqli_query($conn, $sql_promote);
-		$notificationdesc = "You are now the head of the event ".getEventName($id)." and is now open for people to view and join.";
+		$notificationdesc = getEventName($id)." has been approved and is now open for people to view and join.";
 		$sql_notifications = "UPDATE notifications_tbl SET notificationStatus = 2 WHERE eventID = ".$id;
 		mysqli_query($conn, $sql_notifications);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, eventID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getEventHeadID($id).", $id, '$notificationdesc', 1)";

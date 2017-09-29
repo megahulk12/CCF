@@ -515,10 +515,6 @@
 			color: #fff;
 		}
 		/* ===== END ===== */
-
-		.error {
-			color: #ff3333;
-		}
 	</style>
 
 	<script type="text/javascript">
@@ -589,9 +585,6 @@
 			$("#preloader").css("visibility", "visible");
 			$('#form-header').animate({opacity: 0.2}, 400);
 			$("#page1").animate({opacity: 0.2}, 400);
-
-			// for the ministry head
-			$('#EventHead').prop("disabled", false);
 			$.ajax({
 				type: "POST",
 				url: url,
@@ -677,7 +670,7 @@
 				$(title_elem).text(val);
 				$(title_elem).animate({opacity: 1});
 				$("#page1").animate({opacity: 1});
-			}, 200);
+			}, 400);
 		}
 	</script>
 
@@ -887,33 +880,6 @@
 												<textarea id="Remarks" class="materialize-textarea" name="Remarks"></textarea>
 												<label for="Remarks">Remarks</label>
 											</div>
-											<div class="input-field col s12" id="Event_Head">
-												<select id="EventHead" name="EventHead" required>
-													<option value="" disabled selected>Assign an Event Head...</option>
-													<?php
-
-														$conn = mysqli_connect($servername, $username, $password, $dbname);
-														if (!$conn) {
-															die("Connection failed: " . mysqli_connect_error());
-														}
-														$query = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType = 2 ORDER BY dg12LeaderName ASC";
-														$result = mysqli_query($conn, $query);
-														if(mysqli_num_rows($result) > 0) {
-															while($row = mysqli_fetch_assoc($result)) {
-																$id = $row["dg12Leader"];
-																$fullname = $row["dg12LeaderName"];
-																if(!checkIfMinistryHead($id))
-																	echo '
-														<option value="'.$id.'">'.$fullname.'</option>
-																	';
-															}
-														}
-														mysqli_close($conn);
-													?>
-												</select>
-												<label>D12 Leaders</label>
-												<small class="error" id="EventHead-required"></small>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -1035,7 +1001,7 @@
 			$.ajax({
 				type: "POST",
 				url: url,
-				data: "id="+$('#eventID').val()+"&EventHead="+$('#EventHead').val()+"&approve",
+				data: "id="+$('#eventID').val()+"&approve",
 				success: function(data) {
 					$('.fixbutton').text('Approve');
 					$('.fixbutton').prop("disabled", false);
@@ -1051,75 +1017,6 @@
 			});
 			e.preventDefault();
 		});
-
-		$('.error').hide();
-
-		$(document).ready(function() {
-			$('.error').text("Please choose one.");
-		});
-
-		function disableDefaultRequired(elem) {
-			// disable default required tooltips
-			document.addEventListener('invalid', (function () {
-			    return function (e) {
-			        e.preventDefault();
-			    };
-			})(), true);
-		}
-
-		$('#approve').click(function() {
-			$('.error').hide();
-			$(this).blur();
-			var check_iteration = true, focused_element;
-
-			$($("#event-requests").find('select').reverse()).each(function() {
-				if($(this).prop("required")) {
-					if($(this).val() == null) {
-						$("small#"+this.id+"-required").show();
-						focused_element = $(this).parent();
-						disableDefaultRequired($(this));
-						check_iteration = false;
-					}
-				}
-			});
-
-			if(!check_iteration)
-				scrollTo(focused_element);
-			
-			if(check_iteration) {
-				validated = true;
-			}
-		});
-
-		/*
-		 *		INFORMATION ABOUT WILDCARDS
-		 *		^=<string> --> elements starting with <string>
-		 *		$=<string> --> elements ending with <string>
-		 *
-		 */
-		/* ===== SMOOTH SCROLLING EVENT HANDLER ===== */
-
-		function animateBodyScrollTop() {
-			$("body").animate({
-				scrollTop: 0
-			}, 300, "swing");
-		}
-
-		function getCurrentPosition(elem) {
-		// gets the current top position of an element relative to the document
-			var offset = elem.offset();
-			return offset.top;
-		}
-
-		function scrollTo(elem) {
-			var positionscroll = parseInt(getCurrentPosition(elem));
-			var positionscrolltop = positionscroll - 200;
-		// this function also serves for when focusing an element, it scrolls to that particular element
-			$("body").animate({
-				scrollTop: positionscrolltop
-			}, 300, "swing");
-			elem.focus();
-		}
 
 		function checkIfSingle() {
 			if(document.getElementById('SingleDay').checked) {

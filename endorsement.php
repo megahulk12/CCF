@@ -1,7 +1,7 @@
 <?php
 	include('session.php');
 	include('globalfunctions.php');
-	if($_SESSION["memberType"] != 1 || !(getEndorsementStatus($_SESSION['userid']) == "" && $_SESSION["memberType"] == 1)) {
+	if($_SESSION["memberType"] != 1) {
 		header("Location: error.php");
 		exit();
 	}
