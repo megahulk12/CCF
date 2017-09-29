@@ -82,7 +82,7 @@
 		// notificationType: 
 		// 0 = endorsement; 1 = event; 2 = ministry;
 		$notificationDesc = $_SESSION['firstName']." ".$_SESSION['lastName']." is requesting for your approval to be a Dgroup Leader";
-		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".getEndorsementID().", '$notificationDesc', 0, 0, 1);";
+		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationStatus, notificationType, request) VALUES(".$_SESSION['userid'].", ".getDgroupLeaderID($_SESSION['userid']).", ".getCurrentEndorsementID().", '$notificationDesc', 0, 0, 1);";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
 	}
