@@ -113,6 +113,7 @@
 			else if($dgrouptype==2) $dgrouptype = "Single Parents ($gender)";
 			else if($dgrouptype==3) $dgrouptype = "Married ($gender)";
 			else if($dgrouptype==4) $dgrouptype = "Couples ($gender)";
+			else if($dgrouptype==5) $dgrouptype = "All ($gender)";
 			$day = $row["schedDay"];
 			$start_time = date("g:i A", strtotime($row["start_time"]));
 			$end_time = date("g:i A", strtotime($row["end_time"]));
@@ -163,7 +164,7 @@
 	}	
 
 	//$sql_d12Leaders = "SELECT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName, discipleshipgroupmembers_tbl.memberID AS dgLeader, CONCAT_WS(' ', firstName, lastName) AS dgLeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE member_tbl.memberType = (SELECT memberType FROM member_tbl WHERE member_tbl.memberID = dgLeader AND member_tbl.memberType = 2) ORDER BY dg12Leader ASC";
-	$sql_d12Leaders = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType = 2 ORDER BY dg12Leader ASC";
+	$sql_d12Leaders = "SELECT DISTINCT dgleader AS dg12Leader, (SELECT CONCAT_WS(' ', firstName, lastName) AS fullname FROM member_tbl WHERE member_tbl.memberID = dg12Leader) AS dg12LeaderName FROM discipleshipgroup_tbl JOIN discipleshipgroupmembers_tbl ON discipleshipgroup_tbl.dgroupID = discipleshipgroupmembers_tbl.dgroupID JOIN member_tbl ON discipleshipgroupmembers_tbl.memberID = member_tbl.memberID WHERE memberType >= 2 ORDER BY dg12Leader ASC";
 	$result = mysqli_query($conn, $sql_d12Leaders);
 
 	if(mysqli_num_rows($result) > 0) {
@@ -202,7 +203,7 @@
 	$excel->setActiveSheetIndex(3);
 
 	// Add some data; generate columns
-	$columns = array("Dgroup Leader", "Last Name", "First Name", "Middle Initial", "Gender", "Civil Status", "Birthdate", "Mobile Number", "Landline", "Email Address", "Member Type");
+	$columns = array("Dgroup Leader", "Last Name", "First Name", "Middle Name", "Gender", "Civil Status", "Birthdate", "Mobile Number", "Landline", "Email Address", "Member Type");
 	$column_excel = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K");
 	for($i = 0; $i < count($columns); $i++) {
 		$membersinfo

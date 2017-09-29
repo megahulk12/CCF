@@ -903,7 +903,7 @@
 											</div>
 											<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
 												<div class="input-field col s12">
-													<select id="CivilStatus" name="CivilStatus">
+													<select id="CivilStatus" name="CivilStatus" required>
 														<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
 														<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
 														<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
@@ -913,6 +913,7 @@
 														<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
 													</select>
 													<label>Civil Status</label>
+													<small class="error" id="CivilStatus-required">Please choose one.</small>
 												</div>
 											</div>
 											<div class="input-field col s12">
@@ -1369,7 +1370,7 @@
 														</div>
 														<div class="row" style="margin: 0"> <!-- all selects must be margin: 0 -->
 															<div class="input-field col s12">
-																<select id="CivilStatus" name="CivilStatus">
+																<select id="CivilStatus" name="CivilStatus" required>
 																	<option value="" disabled '.$selectedcivilstatus[0].'>Choose your option...</option>
 																	<option value="Single" '.$selectedcivilstatus[1].'>Single</option>
 																	<option value="Married" '.$selectedcivilstatus[2].'>Married</option>
@@ -1379,6 +1380,7 @@
 																	<option value="Widow/er" '.$selectedcivilstatus[6].'>Widow/er</option>
 																</select>
 																<label>Civil Status</label>
+																<small class="error" id="CivilStatus-required">Please choose one.</small>
 															</div>
 														</div>
 														<div class="input-field col s12">
@@ -2203,6 +2205,8 @@
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 				school.hide();
 				$(".school input").prop("required", false);
 				$('.school input').val("");
@@ -2215,7 +2219,7 @@
 				$('.school input').blur();
 			}
 
-			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
+			$($('form#fcoinfo #'+getCurrentPage()).find('input, select').reverse()).each(function() {
 			// [FRONT-END] iterate to show error classes to required fields
 			// [BACK-END] iterate to check blank fields and other factors before going to next pages
 				if($(this).prop('required')) {
@@ -2230,6 +2234,14 @@
 						if(!isValidEmailAddress($(this).val())) {
 							$('#Invalid-Email').show();
 							//$('#'+this.id).focus();
+							focused_element = $(this);
+							disableDefaultRequired($(this));
+							check_iteration = false;
+						}
+					}
+					else if(this.id == "CivilStatus") {
+						if($(this).val() == null) {
+							$('small#'+this.id+'-required').show();
 							focused_element = $(this);
 							disableDefaultRequired($(this));
 							check_iteration = false;

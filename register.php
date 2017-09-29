@@ -1268,6 +1268,8 @@
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 				school.hide();
 				$(".school input").prop("required", false);
 				$('.school input').val("");

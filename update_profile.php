@@ -127,10 +127,13 @@
 		$sql_preference = "INSERT INTO preferencedetails_tbl(prefLanguage, prefVenue1, prefVenue2, prefStartTime1, prefEndTime1, prefStartTime2, prefEndTime2, prefDay1, prefDay2) VALUES('$language', '$venue1', '$venue2', '$timepicker1opt1', '$timepicker1opt2', '$timepicker2opt1', '$timepicker2opt2', '$day1', '$day2');";
 		$sql_pref = "UPDATE member_tbl SET prefID = ".getCurrentPrefID();
 		$sql_dgmem = "INSERT INTO discipleshipgroupmembers_tbl(memberID, dgroupID, receivedChrist, attendCCF, regularlyAttendsAt, dateJoinedAsDgroupMember) VALUES($id, $dgroupid, '$receivedChrist', '$attendCCF', '$regularlyAttendsAt', '$dateJoined');";
+		$notificationdesc = "Congratulations! You are now a Dgroup Member!";
+		$sql_congratulations = "INSERT INTO notifications_tbl(receivermemberID, notificationDesc, notificationType) VALUES($id, '$notificationdesc', 0)";
 		mysqli_query($conn, $sql_member);
 		mysqli_query($conn, $sql_preference);
 		mysqli_query($conn, $sql_pref);
 		mysqli_query($conn, $sql_dgmem);
+		mysqli_query($conn, $sql_congratulations);
 		mysqli_close($conn);
 	}
 	echo 1;
