@@ -393,7 +393,7 @@
 		}
 
 		.spinner-color-theme {
-			border-color: rgba(0, 0, 0, 0.2);
+			border-color: rgba(0, 0, 0, 0.4);
 		}
 
 		.spinner-notif {
@@ -404,6 +404,11 @@
 
 		.spinner-color-notif {
 			border-color: #777;
+		}
+
+		#preloader {
+			position: relative;
+			width: 0 !important;
 		}
 		/* ===== END ===== */
 
@@ -1312,6 +1317,19 @@
 			?>
 		<!-- Modal Structure -->
 		<div id="feedback-form-modal" class="modal modal-fixed-footer">
+			<div id="preloader" style="visibility: hidden">
+				<div class="preloader-wrapper small active">
+					<div class="spinner-layer spinner-blue-only spinner-color-theme">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div><div class="gap-patch">
+							<div class="circle"></div>
+						</div><div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="modal-content">
 				<h4 id="feedback-form-header"><?php echo $name; ?> Feedback Form</h4>
 				<form method="post" id="feedback-form">
@@ -1637,8 +1655,9 @@
 			var id = this.id.split("_")[1];
 			var name = $('#name_'+id).text();
 			$('#feedback-form-header').text(name+"'s Feedback Form");
-			disableForm(true);
-			$('#feedback-form').animate({opacity: 0.1}, 300);
+			$('#feedback-form').animate({opacity: 0.2}, 300);
+			preload();
+			$("#preloader").css("visibility", "visible");
 			var url = "feedback.php";
 			$.ajax({
 				type: 'POST',
@@ -1646,6 +1665,7 @@
 				data: "get-feedback=g&id="+id,
 				dataType: 'json',
 				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
 					$('#feedback-form').animate({opacity: 1}, 300);
 					$('#themeRate').val(data.themerate);
 					$('#theme-label').text("Theme - "+data.themerate);
@@ -1670,8 +1690,9 @@
 			var id = this.id.split("_")[1];
 			var name = $('#archivedname_'+id).text();
 			$('#feedback-form-header').text(name+"'s Feedback Form");
-			disableForm(true);
-			$('#feedback-form').animate({opacity: 0.1}, 300);
+			preload();
+			$('#feedback-form').animate({opacity: 0.2}, 300);
+			$("#preloader").css("visibility", "visible");
 			var url = "feedback.php";
 			$.ajax({
 				type: 'POST',
@@ -1679,6 +1700,8 @@
 				data: "get-archivedfeedback=g&id="+id,
 				dataType: 'json',
 				success: function(data) {
+					$("#preloader").css("visibility", "hidden");
+					disableForm(false);
 					$('#feedback-form').animate({opacity: 1}, 300);
 					$('#themeRate').val(data.themerate);
 					$('#theme-label').text("Theme - "+data.themerate);
@@ -1698,6 +1721,13 @@
 				}
 			});
 		});
+
+		function preload() {
+			$("#preloader").css("visibility", "hidden");
+			$('#preloader').css("left", $('#feedback-form-modal').width()/2);
+			$('#preloader').css("top", $('#feedback-form-modal').height()/2);
+			disableForm(true);
+		}
 
 		function disableForm(flag) {
 			$('#feedback-form').children().find('input, textarea').each(function() {

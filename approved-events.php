@@ -1,6 +1,10 @@
 <?php
 	include('session.php');
 	include('globalfunctions.php');
+	if($_SESSION["memberType"] != 3){
+		header("Location: error.php");
+		exit();
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -717,7 +721,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND eventStatus = 1 OR eventStatus = 2 ORDER BY eventName ASC;";
+										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventHeadID = ".$_SESSION['userid']." AND (eventStatus = 1 OR eventStatus = 2) ORDER BY eventName ASC;";
 										$result = mysqli_query($conn, $query);
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {

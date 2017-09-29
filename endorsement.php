@@ -1,6 +1,10 @@
 <?php
 	include('session.php');
 	include('globalfunctions.php');
+	if($_SESSION["memberType"] != 1 || !(getEndorsementStatus($_SESSION['userid']) == "" && $_SESSION["memberType"] == 1)) {
+		header("Location: error.php");
+		exit();
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -600,7 +604,7 @@
 										<option value="" disabled selected>Choose your option...</option>
 										<option value="Youth">Youth</option>
 										<option value="Singles">Singles</option>
-										<option value="Single_Parents">Single Parents</option>
+										<option value="Single Parents">Single Parents</option>
 										<option value="Married">Married</option>
 										<option value="Couples">Couples</option>
 										<option value="All">All (Men/Women)</option>
@@ -610,6 +614,7 @@
 									<small class="error" id="DgroupType-nospouse"></small>
 									<small class="error" id="DgroupType-spouse"></small>
 									<small class="error" id="DgroupType-single"></small>
+									<small class="error" id="DgroupType-separated"></small>
 								</div>
 							</div>
 							<div class="row">
@@ -876,13 +881,14 @@
 
 		//--------------------------hello, code to ni pogi hehe----------------------------//
 
-		$('.error, .error-with-icon').hide(); // by default, hide all error classes
+		$('.error').hide(); // by default, hide all error classes
 
 		$(document).ready(function() {
 			$('.error').text('This field is required.');
 			$('.choose').text('Please choose one.');
 			$('#DgroupType-spouse').text('You are not legally married. Please pick a different Dgroup Type.');
 			$('#DgroupType-nospouse').text('You are legally married. Please pick the Married Dgroup Type.');
+			$('#DgroupType-separated').text('Your sttll legally married. Please pick a different Dgroup Type');
 			$('#DgroupType-single').text('You are single. You cannot pick the Couples Dgroup Type.');
 			$('[id$=greatertime]').text('Start Time should be before than End Time.');
 			$('[id$=equaltime], [id$=equaldate]').text('Both should not be equal.');
@@ -912,21 +918,26 @@
 
 			if($('#DgroupType').val() == "Married") {
 				if(civilstatus == "Single" || civilstatus == "Single Parent" || civilstatus == "Annulled") {
-					$('#DgroupType-nospouse').show();
+					$('#DgroupType-spouse').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
 			}
 			else if($('#DgroupType').val() == "Single") {
-				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
-					$('#DgroupType-spouse').show();
+				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Separated") {
+					$('#DgroupType-nospouse').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}
 			}
 			else if($('#DgroupType').val() == "Youth") {
-				if(civilstatus == "Married" || civilstatus == "Separated" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
+				if(civilstatus == "Married" || civilstatus == "Widow/er" || civilstatus == "Annulled") {
 					$('#DgroupType-spouse').show();
+					focused_element = $('#DgroupType');
+					check_iteration = false;
+				}
+				else if(civilstatus == "Separated"){
+					$('#DgroupType-separated').show();
 					focused_element = $('#DgroupType');
 					check_iteration = false;
 				}

@@ -1,6 +1,10 @@
 <?php 
 	include('session.php');
 	include('globalfunctions.php');
+	if($_SESSION["memberType"] == 5) {
+		header("Location: error.php");
+		exit();
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -1495,6 +1499,7 @@
 																	<small class="error" id="DgroupType-nospouse">You are not legally married. Please pick a different Dgroup Type.</small>
 																	<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
 																	<small class="error" id="DgroupType-single">You are single. You cannot pick the Couples Dgroup Type.</small>
+																	<small class="error" id="DgroupType-separated">Your sttll legally married. Please pick a different Dgroup Type.</small>
 																</div>
 															<h5 class="center">Option 1</h5>
 															<div class="row" style="margin: 0;">
@@ -1889,7 +1894,7 @@
 			if(submit_name == "submit_register") {
 				$('#fregister').submit(function(e) {
 					if(validated) {
-						alert($(this).serialize());
+						//alert($(this).serialize());
 						// put ajax here
 						var preloader = '\
 							<div class="preloader-wrapper small active"> \
@@ -1912,7 +1917,7 @@
 							url: url,
 							data: 'submit_register=g&'+$(this).serialize(),
 							success: function(data) {
-								alert(data);
+								//alert(data);
 								$('.profile-next-or-submit-button').text('Submit');
 								$('.profile-next-or-submit-button').prop("disabled", false);
 								window.location.href = "dgroup.php";
@@ -2181,6 +2186,8 @@
 			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
+				$('.spouse input').val("");
+				$('.spouse input').blur();
 				//$("h4").find(":contains('Spouse')").hide();
 				//$("[id^=Spouse], [for^=Spouse]").hide();
 			}
@@ -2190,16 +2197,22 @@
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 			}
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 
 			$($('form#fcoinfo #'+getCurrentPage()).find('input').reverse()).each(function() {
@@ -2348,6 +2361,8 @@
 			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
+				$('.spouse input').val("");
+				$('.spouse input').blur();
 				//$("h4").find(":contains('Spouse')").hide();
 				//$("[id^=Spouse], [for^=Spouse]").hide();
 			}
@@ -2357,16 +2372,24 @@
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 			}
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 
 			// convert time values to timestamp
@@ -2417,21 +2440,26 @@
 			if(getCurrentPage().split("_")[1] == 'page4') {
 				if($('#DgroupType').val() == "Married") {
 					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
-						$('#DgroupType-nospouse').show();
+						$('#DgroupType-spouse').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Single") {
 					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
-						$('#DgroupType-spouse').show();
+						$('#DgroupType-nospouse').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Youth") {
 					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
-						$('#DgroupType-spouse').show();
+						$('#DgroupType-nospouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+					else if($(civilstatusid).val() == "Separated"){
+						$('#DgroupType-separated').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}

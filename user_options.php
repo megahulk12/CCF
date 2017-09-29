@@ -56,11 +56,15 @@
 			<li class="divider"></li>
 			<li><a href="manage-accounts.php"><i class="material-icons prefix>">supervisor_account</i>Manage Accounts</a></li>
 			<li class="divider"></li>
-	  		<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
-			<li class="divider"></li>
 	  		<li><a href="event-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Event Requests</a></li>
 			<li class="divider"></li>
 	  		<li><a href="ministry-requests.php"><i class="material-icons prefix>">assignment_turned_in</i>Ministry Requests</a></li>
+			<li class="divider"></li>
+	  		<li><a href="quarterlyreports.php"><i class="material-icons prefix>">library_books</i>Quarterly Reports</a></li>
+	  		<li class="divider"></li>
+		  	<li><a href="event-summary-reports.php"><i class="material-icons prefix>">library_books</i>Event Summaries</a></li>
+	  		<li class="divider"></li>
+		  	<li><a href="ministry-summary-reports.php"><i class="material-icons prefix>">library_books</i>Ministry Summaries</a></li>
 			';
 		
 		echo '

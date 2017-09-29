@@ -1,6 +1,10 @@
 <?php
 	include('session.php');
 	include('globalfunctions.php');
+	if($_SESSION["memberType"] != 5){
+		header("Location: error.php");
+		exit();
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -652,7 +656,7 @@
 				$(title_elem).text(val);
 				$(title_elem).animate({opacity: 1});
 				$("#page1").animate({opacity: 1});
-			}, 400);
+			}, 200);
 		}
 	</script>
 
@@ -844,9 +848,10 @@
 															while($row = mysqli_fetch_assoc($result)) {
 																$id = $row["dg12Leader"];
 																$fullname = $row["dg12LeaderName"];
-																echo '
-													<option value="'.$id.'">'.$fullname.'</option>
-																';
+																if(!checkIfEventHead($id))
+																	echo '
+														<option value="'.$id.'">'.$fullname.'</option>
+																	';
 															}
 														}
 														mysqli_close($conn);

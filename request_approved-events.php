@@ -60,7 +60,7 @@
 			else
 				$target_file = $target_dir.removeExtension(basename($_FILES["EventPicture"]["name"])).uniqid().'.'.$imageFileType;
 
-			if($_FILES["EventPicture"]["size"] > 20000000) { // limits the size of image
+			if($_FILES["EventPicture"]["size"] > 200000000) { // limits the size of image
 				echo "File is too large.";
 				$confirmUpload = false;
 			}

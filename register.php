@@ -876,6 +876,7 @@
 									<label>Type of Dgroup</label>
 									<small class="error" id="DgroupType-required">Please choose one.</small>
 									<small class="error" id="DgroupType-nospouse">You are not legally married. Please pick a different Dgroup Type.</small>
+									<small class="error" id="DgroupType-separated">Your sttll legally married. Please pick a different Dgroup Type.</small>
 									<small class="error" id="DgroupType-spouse">You are legally married. Please pick the Married Dgroup Type.</small>
 									<small class="error" id="DgroupType-single">You are single. You cannot pick the Couples Dgroup Type.</small>
 								</div>
@@ -1247,31 +1248,37 @@
 
 
 			/* ===== SPOUSE VALIDATION ===== */
-			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
+				$('.spouse input').val("");
+				$('.spouse input').blur();
 				//$("h4").find(":contains('Spouse')").hide();
 				//$("[id^=Spouse], [for^=Spouse]").hide();
 			}
 
-			/* ===== COMPANY AND SCHOOL VALIDATION ===== */ //nandito na din kung unemployed ka
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
 			var professionid = "#Profession";
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 			}
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
-
 			// TIMEPICKER VALIDATION
 
 			if(getCurrentPage() == 'page4') {			
@@ -1324,21 +1331,26 @@
 
 				if($('#DgroupType').val() == "Married") {
 					if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
-						$('#DgroupType-nospouse').show();
+						$('#DgroupType-spouse').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Single") {
 					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
-						$('#DgroupType-spouse').show();
+						$('#DgroupType-nospouse').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}
 				}
 				else if($('#DgroupType').val() == "Youth") {
-					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Separated" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
+					if($(civilstatusid).val() == "Married" || $(civilstatusid).val() == "Widow/er" || $(civilstatusid).val() == "Annulled") {
 						$('#DgroupType-spouse').show();
+						focused_element = $('#DgroupType');
+						check_iteration = false;
+					}
+					else if($(civilstatusid).val() == "Separated"){
+						$('#DgroupType-separated').show();
 						focused_element = $('#DgroupType');
 						check_iteration = false;
 					}
@@ -1660,42 +1672,22 @@
 						}
 					}
 					else if(e == 3){
-						if(all) {
-							if($('#gender_'+gd).text() != gender){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						gd++;
 					}
 					else if(e == 4) {
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
-						if(all) {
-							if($('#gender_'+a).text() != gender || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						a++;
 					}

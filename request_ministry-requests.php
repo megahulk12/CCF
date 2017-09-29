@@ -12,7 +12,7 @@
 	}
 
 	if(isset($_POST['notify'])) {
-		$notificationdesc = "You have received some remarks about ".getMinistryName($id).".<br>Remarks: ".$_POST['notifvalue'];
+		$notificationdesc = "You have received some remarks about ".getMinistryName($id).".<br>Remarks: ".addSlashes($_POST['notifvalue']);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, ministryID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMinistryHeadID($id).", $id, '$notificationdesc', 1)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);

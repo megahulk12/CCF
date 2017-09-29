@@ -824,29 +824,36 @@
 			check_iteration = true;
 
 			/* ===== SPOUSE VALIDATION ===== */
-			var civilstatusid = "#CivilStatus"
-			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled") {
+			if($(civilstatusid).val() == "Single" || $(civilstatusid).val() == "Single Parent" || $(civilstatusid).val() == "Annulled" || $(civilstatusid).val() == "Widow/er") {
 				spouse.hide();
 				$(".spouse input").prop("required", false);
+				$('.spouse input').val("");
+				$('.spouse input').blur();
 				//$("h4").find(":contains('Spouse')").hide();
 				//$("[id^=Spouse], [for^=Spouse]").hide();
 			}
 
-			/* ===== COMPANY AND SCHOOL VALIDATION ===== */ //nandito na din kung unemployed ka
+			/* ===== COMPANY AND SCHOOL VALIDATION ===== */
 			var professionid = "#Profession";
 			if($(professionid).val().toLowerCase() == "student") {
 				company.hide();
 				$(".company input").prop("required", false);
+				$('.company input').val("");
+				$('.company input').blur();
 			}
 			else if($(professionid).val().toLowerCase() == "unemployed" || $(professionid).val().toLowerCase() == "freelancer"){
 				company.hide();
 				$(".company input").prop("required", false);
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 			else {
 				school.hide();
 				$(".school input").prop("required", false);
+				$('.school input').val("");
+				$('.school input').blur();
 			}
 
 			//alert("hi");

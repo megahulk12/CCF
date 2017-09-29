@@ -1,6 +1,10 @@
 <?php
 	include('session.php'); 
 	include('globalfunctions.php');
+	if($_SESSION["memberType"] != 2){
+		header("Location: error.php");
+		exit();
+	}
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -749,7 +753,7 @@
 														<option value="" disabled selected>Choose your option...</option>
 														<option value="Youth">Youth</option>
 														<option value="Singles">Singles</option>
-														<option value="Single_Parents">Single Parents</option>
+														<option value="Single Parents">Single Parents</option>
 														<option value="Married">Married</option>
 														<option value="Couples">Couples</option>
 														<option value="All">All (Men/Women)</option>

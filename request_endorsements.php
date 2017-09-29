@@ -12,7 +12,7 @@
 	}
 
 	if(isset($_POST['notify'])) {
-		$notificationdesc = "Your have received some remarks about your endorsement. <br> Remarks: ".$_POST['notifvalue'];
+		$notificationdesc = "Your have received some remarks about your endorsement. <br> Remarks: ".addSlashes($_POST['notifvalue']);
 		$sql_notifications = "INSERT INTO notifications_tbl(memberID, receivermemberID, endorsementID, notificationDesc, notificationType) VALUES(".$_SESSION['userid'].", ".getMemberIDFromDgroupMembers(getDgroupMemberIDFromEndorsement($id)).", $id, '$notificationdesc', 0)";
 		mysqli_query($conn, $sql_notifications);
 		mysqli_close($conn);
@@ -52,7 +52,7 @@
 				$dgtype = $row["edgroupType"];
 				if($dgtype == 0) $dgtype = "Youth";
 				else if($dgtype == 1) $dgtype = "Singles";
-				else if($dgtype == 2) $dgtype = "Single_Parents";
+				else if($dgtype == 2) $dgtype = "Single Parents";
 				else if($dgtype == 3) $dgtype = "Married";
 				else if($dgtype == 4) $dgtype = "Couples";
 				$agebracket = $row["ageBracket"];
