@@ -809,6 +809,7 @@
 		}
 
 		var check_iteration = true, check_username = true, focused_element;
+		var civilstatusid = "#CivilStatus";
 		$("#next").click(function(){
 			$('.error, .error-with-icon').hide(); // by default, hide all error classes
 			var company = $(".company"), school = $(".school"), spouse = $(".spouse");
