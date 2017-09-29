@@ -960,6 +960,7 @@
 					contentType: false,
 					processData: false,
 					success: function(data) {
+						alert(data);
 						$('.fixbutton').text('Revise');
 						$('.fixbutton').prop("disabled", false);
 						swal({
