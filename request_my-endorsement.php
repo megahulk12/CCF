@@ -13,7 +13,7 @@
 		$dgrouptype = $_POST["DgroupType"];
 		if($dgrouptype=="Youth") $dgrouptype = 0;
 		else if($dgrouptype=="Singles") $dgrouptype = 1;
-		else if($dgrouptype=="Single_Parents") $dgrouptype = 2;
+		else if($dgrouptype=="Single Parents") $dgrouptype = 2;
 		else if($dgrouptype=="Married") $dgrouptype = 3;
 		else if($dgrouptype=="Couples") $dgrouptype = 4;
 		else if($dgrouptype=="All") $dgrouptype = 5;
@@ -49,7 +49,7 @@
 				$dgrouptype = $row["edgroupType"];
 				if($dgrouptype == 0) $dgrouptype = "Youth";
 				else if($dgrouptype == 1) $dgrouptype = "Singles";
-				else if($dgrouptype == 2) $dgrouptype = "Single Parent";
+				else if($dgrouptype == 2) $dgrouptype = "Single Parents";
 				else if($dgrouptype == 3) $dgrouptype = "Married";
 				else if($dgrouptype == 4) $dgrouptype = "Couples";
 				else if($dgrouptype == 5) $dgrouptype = "All";

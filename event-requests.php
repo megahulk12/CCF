@@ -724,7 +724,8 @@
 							<table class="centered">
 								<thead>
 									<tr>
-										<th>Event Name(s)</th>
+										<th>Proponent's Name</th>
+										<th>Event Name</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -734,7 +735,7 @@
 											die("Connection failed: " . mysqli_connect_error());
 										}
 
-										$query = "SELECT eventID, eventName FROM eventdetails_tbl WHERE eventStatus = 0 ORDER BY eventName ASC;";
+										$query = "SELECT eventID, CONCAT_WS(' ', firstName, lastName) AS fullname, eventName FROM eventdetails_tbl LEFT OUTER JOIN member_tbl ON eventHeadID = memberID WHERE eventStatus = 0 ORDER BY eventName ASC;";
 										/* for new event notif purposes
 										$new = "SELECT eventID FROM notifications_tbl WHERE notificationType = 1 AND request = 1 AND notificationStatus = 0;";
 										$result = mysqli_query($conn, $new);
@@ -749,6 +750,7 @@
 										if(mysqli_num_rows($result) > 0) {
 											while($row = mysqli_fetch_assoc($result)) {
 												$eventID = $row["eventID"];
+												$fullname = $row["fullname"];
 												$eventname = $row["eventName"];
 												/* for new event notif purposes
 												if($eventID == $notificationsEventID) 
@@ -761,6 +763,7 @@
 												*/
 												echo '
 												<tr id="row_'.$eventID.'" onclick="cellActive(this.id)">
+												    <td>'.$fullname.'</td>
 												    <td>'.$eventname.'</td>
 												</tr>
 												';

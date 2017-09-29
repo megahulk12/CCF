@@ -1,7 +1,7 @@
 <?php
 	include('session.php'); 
 	include('globalfunctions.php');
-	if($_SESSION["memberType"] == 0 || $_SESSION["memberType"] == 1){
+	if($_SESSION["memberType"] != 2){
 		header("Location: error.php");
 		exit();
 	}

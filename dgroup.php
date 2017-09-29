@@ -1,10 +1,9 @@
 <?php
 	include('session.php'); 
 	include('globalfunctions.php');
-  if($_SESSION["memberType"] == 0){
-    header("Location: error.php");
-    exit();
-  }
+	if($_SESSION["memberType"] == 0 || $_SESSION["memberType"] == 5) {
+		header("Location: error.php");
+		exit();
 ?>
 <?xml version = ″1.0″?>
 <!DOCTYPE html PUBLIC ″-//w3c//DTD XHTML 1.1//EN″ “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
@@ -1091,26 +1090,32 @@
 			xhttp.send("seen");
 		}
 
-		// slider events
-		var slider = document.getElementById('AgeBracket');
-		noUiSlider.create(slider, {
-			start: [30, 70],
-			connect: true,
-			step: 1,
-			orientation: 'horizontal', // 'horizontal' or 'vertical'
-			range: {
-			 'min': 0,
-			 'max': 100
-			},
-			format: wNumb({
-				decimals: 0
-			})
-		});
+		<?php
+			if($_SESSION['memberType'] >= 2) {
+				echo '
+					// slider events
+					var slider = document.getElementById("AgeBracket");
+					noUiSlider.create(slider, {
+						start: [30, 70],
+						connect: true,
+						step: 1,
+						orientation: "horizontal",
+						range: {
+						 "min": 0,
+						 "max": 100
+						},
+						format: wNumb({
+							decimals: 0
+						})
+					});
 
-		slider.noUiSlider.on('update', function(values, handle) {
-			// value[handle]
-			$('#AgeBracket-label').text('Age Bracket - ('+values[0]+' - '+values[1]+')');
-		});
+					slider.noUiSlider.on("update", function(values, handle) {
+						// value[handle]
+						$("#AgeBracket-label").text("Age Bracket - ("+values[0]+" - "+values[1]+")");
+					});
+				';
+			}
+		?>
 
 		var validated = false;
 		$('#edit-dgroup-form').submit(function(e) {

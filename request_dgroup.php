@@ -14,7 +14,7 @@
 			while($row = mysqli_fetch_assoc($result)) {
 				$dgrouptype = $row["dgroupType"];
 				if($dgrouptype == 0) $dgrouptype = "Youth";
-				else if($dgrouptype == 1) $dgrouptype = "Single";
+				else if($dgrouptype == 1) $dgrouptype = "Singles";
 				else if($dgrouptype == 2) $dgrouptype = "Single Parents";
 				else if($dgrouptype == 3) $dgrouptype = "Married";
 				else if($dgrouptype == 4) $dgrouptype = "Couples";

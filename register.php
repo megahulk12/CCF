@@ -1660,42 +1660,22 @@
 						}
 					}
 					else if(e == 3){
-						if(all) {
-							if($('#gender_'+gd).text() != gender){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+gd).text() != gender || $(this).text() != dgrouptype){
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						gd++;
 					}
 					else if(e == 4) {
 						start_age = parseInt($(this).text().split("-")[0]);
 						end_age = parseInt($(this).text().split("-")[1]);
-						if(all) {
-							if($('#gender_'+a).text() != gender || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+						if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
+							$(this).parent().hide();
 						}
 						else {
-							if($('#gender_'+a).text() != gender || $('#dgrouptype_'+a).text() != dgrouptype || (age < start_age || age > end_age)) {
-								$(this).parent().hide();
-							}
-							else {
-								$(this).parent().show();
-							}
+							$(this).parent().show();
 						}
 						a++;
 					}
