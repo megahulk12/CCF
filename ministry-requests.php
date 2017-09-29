@@ -656,7 +656,7 @@
 				$(title_elem).text(val);
 				$(title_elem).animate({opacity: 1});
 				$("#page1").animate({opacity: 1});
-			}, 400);
+			}, 200);
 		}
 	</script>
 
@@ -848,9 +848,10 @@
 															while($row = mysqli_fetch_assoc($result)) {
 																$id = $row["dg12Leader"];
 																$fullname = $row["dg12LeaderName"];
-																echo '
-													<option value="'.$id.'">'.$fullname.'</option>
-																';
+																if(!checkIfEventHead($id))
+																	echo '
+														<option value="'.$id.'">'.$fullname.'</option>
+																	';
 															}
 														}
 														mysqli_close($conn);
